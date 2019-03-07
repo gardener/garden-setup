@@ -13,6 +13,27 @@
 # limitations under the License.
 
 ---
-component:
-  imports:
-    - tiller
+ingresscontroller: (( &temporary ))
+env:
+landscape: (( &temporaray ))
+settings: (( &temporary ))
+
+temp:
+  <<: (( &temporary ))
+  command: 
+    - "kubectl"
+    - "--kubeconfig"
+    - (( lookup_file(landscape.clusters.[0].kubeconfig, env.ROOTDIR).[0] ))
+    - "-n"
+    - (( .ingresscontroller.namespace ))
+    - "get"
+    - "service"
+    - (( .ingresscontroller.values.name ))
+    - "-o"
+    - "json"
+  target: (( sync( exec_uncached( command ), defined(value.status.loadBalancer.ingress.[0]), value.status.loadBalancer.ingress.[0], 120 ) ))
+
+export:
+  type: (( defined( .temp.target.ip ) ? "A" :"CNAME" ))
+  address: (( .temp.target.ip || .temp.target.hostname ))
+  ingress_domain: (( .settings.ingress_domain ))

@@ -13,7 +13,19 @@
 # limitations under the License.
 
 ---
-settings: (( &temporary ))
+landscape: (( &temporary ))
 
-export: 
-  ingress_domain: (( .settings.ingress_domain ))
+plugins:
+  - helm: ingresscontroller
+
+settings:
+  ingress_domain: (( "ingress." landscape.clusters.[0].domain ))
+
+ingresscontroller:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: chart
+  name: "nginx-ingress-controller"
+  namespace: "kube-system" # for yet unknown reason, only kube-system works ...
+  values:
+    name: (( .ingresscontroller.name ))
+    dns: (( "*." .settings.ingress_domain ))

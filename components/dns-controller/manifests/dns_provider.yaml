@@ -12,25 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "SERVICEACCOUNT" {
-  description = "ServiceAccount"
-  type        = "string"
-}
-variable "PROJECT" {
-  type = "string"
-}
-variable "HOSTED_ZONE_ID" {
-  type = "string"
-}
-
-variable "DNS_NAME" {
-  type = "string"
-}
-
-variable "RECORD_TYPE" {
-  type = "string"
-}
-
-variable "RECORD_VALUE" {
-  type = "string"
-}
+apiVersion: dns.gardener.cloud/v1alpha1
+kind: DNSProvider
+metadata:
+  name: (( values.provider.name ))
+  namespace: (( values.namespace ))
+spec:
+  type: (( values.type ))
+  secretRef:
+    name: (( values.secret_name ))
+  domains:
+    include:
+    - (( values.domain ))

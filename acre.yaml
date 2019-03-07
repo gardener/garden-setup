@@ -25,6 +25,8 @@ landscape:
     dashboard:
       <<: (( merge ))
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.28.0" ))
+    dns_controller:
+      tag: "0.2.0-master"
   networks:
   iaas:
   etcd:

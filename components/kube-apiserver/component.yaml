@@ -15,7 +15,7 @@
 ---
 component:
   imports:
-    - ingress_controller: ingress-controller/dns
+    - ingress_controller: ingress-controller
     - etcd: etcd/cluster
     - identity
     - namespace

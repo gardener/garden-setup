@@ -13,15 +13,3 @@
 # limitations under the License.
 
 ---
-landscape: (( &temporary ))
-
-plugins:
-  - helm: ingresscontroller
-
-ingresscontroller:
-  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
-  source: chart
-  name: "nginx-ingress-controller"
-  namespace: "kube-system" # for yet unknown reason, only kube-system works ...
-  values:
-    name: (( .ingresscontroller.name ))
