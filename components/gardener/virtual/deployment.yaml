@@ -1,0 +1,211 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+utilities: (( &temporary ))
+
+spec:
+  <<: (( &temporary ))
+  ca:
+    commonName: ca-gardener
+    privateKey: (( .state.gardener_ca.key ))
+    isCA: true
+    usage:
+      - Signature
+      - KeyEncipherment
+    hosts:
+      - ca-gardener
+  apiserver:
+    name: "gardener-apiserver"
+    commonName: (( name ".garden.svc.cluster.local" ))
+    publicKey: (( .state.gardener_apiserver.pub ))
+    caCert: (( .state.gardener_ca.cert ))
+    caPrivateKey: (( .state.gardener_ca.key ))
+    validity: 87600
+    usage:
+      - ServerAuth
+      - Signature
+      - KeyEncipherment
+    hosts: (( utilities.svcHosts(name, landscape.namespace) ))
+  controllermanager:
+    name: "gardener-controller-manager"
+    commonName: (( name ".garden.svc.cluster.local" ))
+    publicKey: (( .state.gardener_controller_manager.pub ))
+    caCert: (( .state.gardener_ca.cert ))
+    caPrivateKey: (( .state.gardener_ca.key ))
+    validity: 87600
+    usage:
+      - ServerAuth
+      - Signature
+      - KeyEncipherment
+    hosts: (( utilities.svcHosts(name, landscape.namespace) ))
+
+
+state:
+  gardener_ca:
+    key: (( x509genkey() ))
+    pub: (( x509publickey(key) ))
+    cert: (( x509cert(.spec.ca) ))
+  gardener_apiserver:
+    key: (( x509genkey(2048) ))
+    pub: (( x509publickey(key) ))
+    cert: (( x509cert(.spec.apiserver) ))
+  gardener_controller_manager:
+    key: (( x509genkey(2048) ))
+    pub: (( x509publickey(key) ))
+    cert: (( x509cert(.spec.controllermanager) ))
+
+plugins:
+  - git:
+    - gardener_git
+  - helm:
+    - gardener
+    - template
+  - kubectl:
+    - kubectl_apply
+
+kubectl_apply:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+  files:
+      - "gardener/rendered_charts.yaml"
+
+gardener_git:
+  <<: (( .landscape.versions.gardener ))
+  repo: "https://github.com/gardener/gardener.git"
+  files:
+    - "charts"
+
+gardener:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: "gardener_git/repo/charts/gardener/charts/application"
+  name: "gardener"
+  namespace: "garden"
+  values:
+    global:
+      apiserver:
+        kubeconfig: dummy
+        caBundle: (( .state.gardener_ca.cert ))
+        enabled: true
+        etcd:
+          servers: (( join(",",.imports.etcd.exports.endpoints.main) ))
+          useSidecar: false
+          caBundle: (( .imports.etcd.exports.cacert ))
+          tls:
+            crt: (( .imports.etcd.exports.cert ))
+            key: (( .imports.etcd.exports.key ))
+        featureGates: {}
+        groupPriorityMinimum: 10000
+        image:
+          pullPolicy: (( defined(.gardener_git.tag) -and .gardener_git.tag == "latest" ? "Always" :"IfNotPresent" ))
+          repository: eu.gcr.io/gardener-project/gardener/apiserver
+          tag: (( .gardener_git.tag || ~~ ))
+        insecureSkipTLSVerify: false
+        replicaCount: 1
+        resources:
+          limits:
+            cpu: 300m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        serviceAccountName: gardener-apiserver
+        tls:
+          crt: (( .state.gardener_apiserver.cert ))
+          key: (( .state.gardener_apiserver.key ))
+        versionPriority: 20
+      controller:
+        kubeconfig: dummy
+        additionalVolumeMounts: []
+        additionalVolumes: []
+        alertingSMTP: []
+        config:
+          clientConnection:
+            acceptContentTypes: application/json
+            burst: 130
+            contentType: application/json
+            qps: 100
+          controllers:
+            backupInfrastructure:
+              concurrentSyncs: 20
+              syncPeriod: 24h
+            seed:
+              concurrentSyncs: 5
+              reserveExcessCapacity: false
+              syncPeriod: 1m
+            shoot:
+              concurrentSyncs: 20
+              retryDuration: 24h
+              syncPeriod: 1h
+            shootCare:
+              concurrentSyncs: 5
+              conditionThresholds:
+                apiServerAvailable: 1m
+                controlPlaneHealthy: 1m
+                everyNodeReady: 5m
+                systemComponentsHealthy: 1m
+              syncPeriod: 30s
+            shootMaintenance:
+              concurrentSyncs: 5
+            shootQuota:
+              concurrentSyncs: 5
+              syncPeriod: 60m
+          featureGates: {}
+          leaderElection:
+            leaderElect: true
+            leaseDuration: 15s
+            renewDeadline: 10s
+            resourceLock: configmaps
+            retryPeriod: 2s
+          logLevel: info
+          server:
+            http:
+              bindAddress: 0.0.0.0
+              port: 2718
+            https:
+              bindAddress: 0.0.0.0
+              port: 2719
+              tls:
+                caBundle: (( .state.gardener_ca.cert ))
+                crt: (( .state.gardener_controller_manager.cert ))
+                key: (( .state.gardener_controller_manager.key ))
+        defaultDomains:
+          - credentials: (( .landscape.dns.credentials ))
+            domain: (( "shoot." .landscape.clusters.[0].domain ))
+            provider: (( .landscape.dns.type ))
+            hostedZoneID: (( .landscape.dns.hostedZoneID ))
+        enabled: true
+        image:
+          pullPolicy: (( defined(.gardener_git.tag) -and .gardener_git.tag == "latest" ? "Always" :"IfNotPresent" ))
+          repository: eu.gcr.io/gardener-project/gardener/controller-manager
+          tag: (( .gardener_git.tag || ~~ ))
+        internalDomain:
+          credentials: (( .landscape.dns.credentials ))
+          domain: (( "internal." .landscape.clusters.[0].domain ))
+          provider: (( .landscape.dns.type ))
+          hostedZoneID: (( .landscape.dns.hostedZoneID ))
+        replicaCount: 1
+        resources:
+          limits:
+            cpu: 750m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        serviceAccountName: gardener-controller-manager
+      deployment:
+        virtualGarden:
+          clusterIP: (( min_ip(.landscape.networks.services) + 20 ))
+          enabled: true

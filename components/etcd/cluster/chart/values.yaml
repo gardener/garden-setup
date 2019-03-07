@@ -1,0 +1,113 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: etcd
+replicas: 1
+
+images:
+  etcd: quay.io/coreos/etcd:v3.3.10
+  etcd-backup-restore: eu.gcr.io/gardener-project/gardener/etcdbrctl:0.4.1
+
+backup:
+  schedule: "0 */24 * * *" # cron standard schedule
+  maxBackups: 7 # Maximum number of backups to keep (may change in future)
+  storageProvider: ""  # Abs,Gcs,S3,Swift empty means no backup,
+  secretData: {}
+  storageContainer: ""
+  env: []         # Follow comments below
+  volumeMounts: []
+
+tls:
+  ca:
+    crt: ca-certificate
+  server:
+    crt: server-certificate
+    key: server-key
+  client:
+    crt: client-certificate
+    key: client-key
+
+# Aws S3 storage configuration
+# Note: No volumeMounts variable needed
+# storageProvider: "S3"
+# env:
+# - name: "AWS_REGION"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "region"
+# - name: "AWS_SECRET_ACCESS_KEY"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "secretAccessKey"
+# - name: "AWS_ACCESS_KEY_ID
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "accessKeyID"
+
+# Azure ABS storage configuration
+# Note: No volumeMounts needed
+# storageProvider: "ABS"
+# env:
+# - name: "STORAGE_ACCOUNT"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "storage-account"
+# - name: "STORAGE_KEY"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "storage-key"
+
+# Google Cloud storage configuration
+# storageProvider: "GCS"
+# env:
+# - name: "GOOGLE_APPLICATION_CREDENTIALS"
+#   value: "/root/.gcp/serviceaccount.json"
+# volumeMount:
+# - name: etcd-backup
+#   mountPath: "/root/.gcp/"
+
+# Openstack Swift configuration
+# Note: No volumeMounts variable needed
+# storageProvider: "Swift"
+# env:
+# - name: "OS_AUTH_URL"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "authURL"
+# - name: "OS_DOMAIN_NAME"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "domainName"
+# -	name: "OS_USERNAME"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "username"
+# - name: "OS_PASSWORD"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "password"
+# - name: "OS_TENANT_NAME"
+#   valueFrom:
+#     secretKeyRef:
+#       name: etcd-backup
+#       key: "tenantName"

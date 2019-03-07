@@ -1,0 +1,256 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garden-kube-apiserver
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: garden
+    component: kube-apiserver
+spec:
+  revisionHistoryLimit: 0
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: garden
+      component: kube-apiserver
+  template:
+    metadata:
+      annotations:
+        checksum/secret-kube-aggregator-ca: {{ include (print $.Template.BasePath "/secret-kube-aggregator-ca.yaml") . | sha256sum }}
+        checksum/secret-kube-aggregator-client: {{ include (print $.Template.BasePath "/secret-kube-aggregator-client-tls.yaml") . | sha256sum }}
+        checksum/secret-kube-apiserver-ca: {{ include (print $.Template.BasePath "/secret-kube-apiserver-ca.yaml") . | sha256sum }}
+        checksum/secret-kube-apiserver-server: {{ include (print $.Template.BasePath "/secret-kube-apiserver-server-tls.yaml") . | sha256sum }}
+        checksum/secret-kube-apiserver-basic-auth: {{ include (print $.Template.BasePath "/secret-kube-apiserver-basic-auth.yaml") . | sha256sum }}
+        checksum/secret-kube-controller-manager-client: {{ include (print $.Template.BasePath "/secret-kube-controller-manager-tls.yaml") . | sha256sum }}
+        checksum/secret-service-account-key: {{ include (print $.Template.BasePath "/secret-service-account-key.yaml") . | sha256sum }}
+        checksum/secret-identity-ca: {{ include (print $.Template.BasePath "/secret-identity-ca.yaml") . | sha256sum }}
+      labels:
+        app: garden
+        component: kube-apiserver
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - garden
+                - key: component
+                  operator: In
+                  values:
+                  - kube-apiserver
+      tolerations:
+      - effect: NoExecute
+        operator: Exists
+      containers:
+      - name: kube-apiserver
+        image: {{ index .Values.images "hyperkube" }}
+        imagePullPolicy: IfNotPresent
+        command:
+        - /hyperkube
+        - apiserver
+        - --enable-admission-plugins=Priority,NamespaceLifecycle,LimitRanger,PodSecurityPolicy,ServiceAccount,NodeRestriction,DefaultStorageClass,Initializers,DefaultTolerationSeconds,ResourceQuota,StorageObjectInUseProtection,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
+        - --disable-admission-plugins=PersistentVolumeLabel
+        - --allow-privileged=true
+        - --anonymous-auth=false
+        - --authorization-mode=Node,RBAC
+        - --basic-auth-file=/srv/kubernetes/auth/basic_auth.csv
+        - --client-ca-file=/srv/kubernetes/ca/ca.crt
+        - --enable-aggregator-routing=true
+        - --enable-bootstrap-token-auth=true
+        - --etcd-cafile=/srv/kubernetes/etcd/ca/ca.crt
+        - --etcd-certfile=/srv/kubernetes/etcd/client/tls.crt
+        - --etcd-keyfile=/srv/kubernetes/etcd/client/tls.key
+        - --etcd-servers={{ .Values.etcd.main.endpoints }}
+{{ if .Values.etcd.events.endpoints }}
+{{ end }}
+        - --kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP
+        - --insecure-port=0
+{{ if .Values.apiServer.oidcIssuerURL }}
+        - --oidc-issuer-url={{ .Values.apiServer.oidcIssuerURL }}
+        - --oidc-client-id=kube-kubectl
+        - --oidc-username-claim=email
+        - --oidc-groups-claim=groups
+        - --oidc-ca-file=/srv/kubernetes/identity-ca/ca.crt
+{{ end }}
+        - --profiling=false
+        - --proxy-client-cert-file=/srv/kubernetes/aggregator/tls.crt
+        - --proxy-client-key-file=/srv/kubernetes/aggregator/tls.key
+        - --requestheader-client-ca-file=/srv/kubernetes/aggregator-ca/ca.crt
+        - --requestheader-extra-headers-prefix=X-Remote-Extra-
+        - --requestheader-group-headers=X-Remote-Group
+        - --requestheader-username-headers=X-Remote-User
+        - --runtime-config=admissionregistration.k8s.io/v1alpha1
+        - --secure-port=443
+        - --service-cluster-ip-range=100.64.0.0/13
+        - --service-account-key-file=/srv/kubernetes/service-account-key/service_account.key
+        - --tls-cert-file=/srv/kubernetes/apiserver/tls.crt
+        - --tls-private-key-file=/srv/kubernetes/apiserver/tls.key
+        - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+        - --v=2
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /healthz
+            port: 443
+            httpHeaders:
+            - name: Authorization
+              value: Basic {{ printf "admin:%s" .Values.tls.kubeAPIServer.basicAuthPassword | b64enc }}
+          successThreshold: 1
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /healthz
+            port: 443
+            httpHeaders:
+            - name: Authorization
+              value: Basic {{ printf "admin:%s" .Values.tls.kubeAPIServer.basicAuthPassword | b64enc }}
+          successThreshold: 1
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 15
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        ports:
+        - name: https
+          containerPort: 443
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1200m
+            memory: 2000Mi
+          requests:
+            cpu: 200m
+            memory: 512Mi
+        volumeMounts:
+        - name: ca-kube-apiserver
+          mountPath: /srv/kubernetes/ca
+        - name: ca-etcd
+          mountPath: /srv/kubernetes/etcd/ca
+        - name: ca-front-proxy
+          mountPath: /srv/kubernetes/aggregator-ca
+        - name: etcd-client-tls
+          mountPath: /srv/kubernetes/etcd/client
+        - name: kube-apiserver
+          mountPath: /srv/kubernetes/apiserver
+        - name: service-account-key
+          mountPath: /srv/kubernetes/service-account-key
+        - name: kube-apiserver-basic-auth
+          mountPath: /srv/kubernetes/auth
+        - name: kube-aggregator
+          mountPath: /srv/kubernetes/aggregator
+        - name: etcssl
+          mountPath: /etc/ssl
+          readOnly: true
+        - name: ssl-certs-hosts
+          mountPath: /usr/share/ca-certificates
+          readOnly: true
+        - name: ca-identity
+          mountPath: /srv/kubernetes/identity-ca
+      - name: kube-controller-manager
+        image: {{ index .Values.images "hyperkube" }}
+        imagePullPolicy: IfNotPresent
+        command:
+        - /hyperkube
+        - controller-manager
+        - --cluster-signing-cert-file=/srv/kubernetes/ca/ca.crt
+        - --cluster-signing-key-file=/srv/kubernetes/ca/ca.key
+        - --controllers=namespace,serviceaccount,serviceaccount-token,clusterrole-aggregation,garbagecollector
+        - --authorization-kubeconfig=/srv/kubernetes/controller-manager/kubeconfig
+        - --authentication-kubeconfig=/srv/kubernetes/controller-manager/kubeconfig
+        - --kubeconfig=/srv/kubernetes/controller-manager/kubeconfig
+        - --root-ca-file=/srv/kubernetes/ca/ca.crt
+        - --service-account-private-key-file=/srv/kubernetes/service-account-key/service_account.key
+        - --use-service-account-credentials=true
+        - --v=2
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /healthz
+            port: 10252
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 128Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - name: ca-kube-apiserver
+          mountPath: /srv/kubernetes/ca
+        - name: kube-controller-manager
+          mountPath: /srv/kubernetes/controller-manager
+        - name: service-account-key
+          mountPath: /srv/kubernetes/service-account-key
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: ca-kube-apiserver
+        secret:
+          secretName: garden-kube-apiserver-ca
+      - name: ca-identity
+        secret:
+          secretName: identity-ca
+      - name: ca-etcd
+        secret:
+          secretName: {{ .Values.etcd.secretNames.ca | default "garden-etcd-ca" }}
+      - name: ca-front-proxy
+        secret:
+          secretName: garden-kube-aggregator-ca
+      - name: kube-apiserver
+        secret:
+          secretName: garden-kube-apiserver
+      - name: kube-controller-manager
+        secret:
+          secretName: garden-kube-controller-manager
+      - name: etcd-client-tls
+        secret:
+          secretName: {{ .Values.etcd.secretNames.client | default "garden-etcd-client" }}
+      - name: kube-apiserver-basic-auth
+        secret:
+          secretName: garden-kube-apiserver-basic-auth
+      - name: service-account-key
+        secret:
+          secretName: garden-service-account-key
+      - name: kube-aggregator
+        secret:
+          secretName: garden-kube-aggregator
+      - name: etcssl
+        hostPath:
+          path: /etc/ssl
+      - name: ssl-certs-hosts
+        hostPath:
+          path: /usr/share/ca-certificates

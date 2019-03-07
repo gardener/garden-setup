@@ -1,0 +1,409 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    heritage: Tiller
+    release: addons
+  name: nginx-ingress
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - nodes
+      - pods
+      - secrets
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    heritage: Tiller
+    release: addons
+  name: nginx-ingress
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-ingress
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    component: "controller"
+    heritage: Tiller
+    release: addons
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+data:
+  enable-vts-status: "false"
+  server-name-hash-bucket-size: "256"
+  use-proxy-protocol: "false"
+  worker-processes: "2"
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: nginx-ingress
+      component: "controller"
+      release: addons
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    component: "controller"
+    heritage: Tiller
+    release: addons
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  revisionHistoryLimit: 0
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-ingress
+      component: "controller"
+      release: addons
+  template:
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+      labels:
+        app: nginx-ingress
+        component: "controller"
+        release: addons
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - nginx-ingress
+                - key: component
+                  operator: In
+                  values:
+                  - controller
+                - key: release
+                  operator: In
+                  values:
+                  - addons
+      priorityClassName: system-cluster-critical
+      containers:
+        - name: {{ .Values.name }}
+          image: quay.io/kubernetes-ingress-controller/{{ .Values.name }}:0.20.0
+          imagePullPolicy: "IfNotPresent"
+          args:
+          - /{{ .Values.name }}
+          - --default-backend-service={{ .Release.Namespace }}/nginx-ingress-k8s-backend
+          - --enable-ssl-passthrough=true
+          - --publish-service={{ .Release.Namespace }}/{{ .Values.name }}
+          - --election-id=ingress-controller-leader
+          - --ingress-class=nginx
+          - --update-status=true
+          - --annotations-prefix=nginx.ingress.kubernetes.io
+          - --configmap={{ .Release.Namespace }}/{{ .Values.name }}
+          securityContext:
+            capabilities:
+                drop:
+                - ALL
+                add:
+                - NET_BIND_SERVICE
+            # www-data -> 33
+            runAsUser: 33
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      hostNetwork: false
+      serviceAccountName: nginx-ingress
+      terminationGracePeriodSeconds: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    component: "controller"
+    heritage: Tiller
+    release: addons
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    app: nginx-ingress
+    component: "controller"
+    release: addons
+  type: "LoadBalancer"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    component: "nginx-ingress-k8s-backend"
+    heritage: Tiller
+    release: addons
+  name: nginx-ingress-k8s-backend
+  namespace: {{ .Release.Namespace }}
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-ingress
+      component: "nginx-ingress-k8s-backend"
+      release: addons
+  template:
+    metadata:
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+      labels:
+        app: nginx-ingress
+        component: "nginx-ingress-k8s-backend"
+        release: addons
+    spec:
+      priorityClassName: system-cluster-critical
+      securityContext:
+        runAsUser: 65534
+        fsGroup: 65534
+      containers:
+        - name: nginx-ingress-k8s-backend
+          image: eu.gcr.io/gardener-project/gardener/ingress-default-backend:0.7.0
+          imagePullPolicy: "IfNotPresent"
+          args:
+          livenessProbe:
+            httpGet:
+              path: /healthy
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            {}
+      terminationGracePeriodSeconds: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    component: "nginx-ingress-k8s-backend"
+    heritage: Tiller
+    release: addons
+  name: nginx-ingress-k8s-backend
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: nginx-ingress
+    component: "nginx-ingress-k8s-backend"
+    release: addons
+  type: "ClusterIP"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    heritage: Tiller
+    release: addons
+  name: nginx-ingress
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - namespaces
+      - pods
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    resourceNames:
+      - ingress-controller-leader-nginx
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - create
+      - get
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    heritage: Tiller
+    release: addons
+  name: nginx-ingress
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nginx-ingress
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: nginx-ingress
+    chart: nginx-ingress-0.8.0
+    heritage: Tiller
+    release: addons
+  name: nginx-ingress
+  namespace: {{ .Release.Namespace }}

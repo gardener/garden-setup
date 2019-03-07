@@ -1,0 +1,64 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+<<: (( &template ))
+gcp:
+  constraints:
+    dnsProviders:
+    - name: (( values.dns.type ))
+    - name: unmanaged
+    kubernetes:
+      versions: (( values.kubernetes.versions ))
+    zones: (( values.provider.zones ))
+    machineImages:
+    - name: CoreOS
+      image: projects/coreos-cloud/global/images/coreos-stable-1745-7-0-v20180614
+    machineTypes:
+    - name: n1-standard-2
+      cpu: "2"
+      gpu: "0"
+      memory: 7500Mi
+      usable: true
+    - name: n1-standard-4
+      cpu: "4"
+      gpu: "0"
+      memory: 15Gi
+      usable: true
+    - name: n1-standard-8
+      cpu: "8"
+      gpu: "0"
+      memory: 30Gi
+      usable: true
+    - name: n1-standard-16
+      cpu: "16"
+      gpu: "0"
+      memory: 60Gi
+      usable: true
+    - name: n1-standard-32
+      cpu: "32"
+      gpu: "0"
+      memory: 120Gi
+      usable: true
+    - name: n1-standard-64
+      cpu: "64"
+      gpu: "0"
+      memory: 240Gi
+      usable: false
+    volumeTypes:
+    - name: pd-standard
+      class: standard
+      usable: true
+    - name: pd-ssd
+      class: premium
+      usable: false

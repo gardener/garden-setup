@@ -1,0 +1,98 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+
+plugins:
+  - git: dashboard_git
+  - helm: dashboard
+  - kubectl: rbac
+  - -echo: "==================================================================="
+  - -echo: (( "Dashboard URL -> " spec.dashboard_url ))
+  - -echo: "==================================================================="
+
+dashboard_git:
+  <<: (( .landscape.versions.dashboard ))
+  repo: "https://github.com/gardener/dashboard.git"
+  files:
+    - "charts"
+
+dashboard:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: "dashboard_git/repo/charts/gardener-dashboard"
+  name: "dashboard"
+  namespace: (( .landscape.namespace ))
+  values:
+    apiServerUrl: (( imports.kube_apiserver.export.apiserver_url ))
+    hosts:
+      - (( imports.identity.export.dashboard_dns ))
+    image:
+      tag: (( .dashboard_git.tag || ~~ ))
+    oidc:
+      issuerUrl: (( imports.identity.export.issuer_url ))
+      ca: (( imports.identity.export.ca.crt ))
+      redirectUri: (( imports.identity.export.dashboard_url "/callback" ))
+    tls:
+      crt: (( imports.identity.export.server.crt ))
+      key: (( imports.identity.export.server.key ))
+    kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
+
+util:
+  <<: (( &temporary ))
+  userbindings: ((|users|->map[users|user|->*spec.subject] ))
+
+spec:
+  dashboard_url: (( "https://" imports.identity.export.dashboard_dns ))
+  subject:
+    <<: (( &template ))
+    apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: (( user ))
+  users: (( map[.landscape.identity.users|v|->v.email]))
+
+rbac:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+  manifests:
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        labels:
+          garden.sapcloud.io/role: admins
+        name: garden-administrators
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: garden.sapcloud.io:system:project-member
+      subjects: (( util.userbindings(spec.users) ))
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: garden.sapcloud.io:system:project-creation
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: garden.sapcloud.io:system:project-creation
+      subjects: (( util.userbindings(spec.users) ))
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        annotations:
+        name: garden.sapcloud.io:system:administrators
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: garden.sapcloud.io:system:administrators
+      subjects: (( util.userbindings(["system:kube-aggregator"] spec.users) ))
