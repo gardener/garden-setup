@@ -1,0 +1,65 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+utilities: (( &temporary ))
+
+plugins:
+  - kubectl
+
+kubectl:
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "crds.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "rbac.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "controller.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "provider_secret.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "dns_provider.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
+
+providers:
+  <<: (( &temporary ))
+  aws-route53:
+    <<: (( &template ))
+    name: aws
+    credentials:
+      AWS_ACCESS_KEY_ID: (( landscape.dns.credentials.accessKeyID ))
+      AWS_SECRET_ACCESS_KEY: (( landscape.dns.credentials.secretAccessKey ))
+  google-clouddns:
+    <<: (( &template ))
+    name: google
+    credentials:
+      serviceaccount.json: (( landscape.dns.credentials.["serviceaccount.json"] ))
+  azure-dns:
+    <<: (( &template ))
+    name: azure
+    credentials:
+      AZURE_CLIENT_ID: (( landscape.dns.credentials.clientID ))
+      AZURE_CLIENT_SECRET: (( landscape.dns.credentials.clientSecret ))
+      AZURE_SUBSCRIPTION_ID: (( landscape.dns.credentials.subscriptionID ))
+      AZURE_TENANT_ID: (( landscape.dns.credentials.tenantID ))
+
+spec:
+  <<: (( &temporary ))
+  version: (( .landscape.versions.dns_controller.tag ))
+  namespace: "kube-system"
+  identifier: (( "dns-controller_" landscape.name ))
+  type: (( .landscape.dns.type ))
+  hosted_zone: (( .landscape.dns.hostedZoneID ))
+  domain: (( .landscape.clusters.[0].domain ))
+  secret_name: (( "dns-controller-" provider.name ))
+  dns_rbac_name: dns-controller
+  controllers:
+    - dnssources
+    - (( type ))
+  provider: (( *eval( "providers." type ) ))

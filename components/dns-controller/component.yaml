@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ACCESS_KEY: (( config.credentials.accessKeyID ))
-SECRET_KEY: (( config.credentials.secretAccessKey ))
-REGION: (( config.credentials.region ))
+---
+component:
+  stubs:
+    - plugins/kubectl/utilities.yaml

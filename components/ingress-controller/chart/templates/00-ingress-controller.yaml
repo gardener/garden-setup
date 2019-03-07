@@ -244,6 +244,9 @@ metadata:
     component: "controller"
     heritage: Tiller
     release: addons
+  annotations:
+    "dns.gardener.cloud/dnsnames": {{ .Values.dns | quote }}
+    "dns.gardener.cloud/ttl": {{ .Values.ttl | default "120" | quote }}
   name: {{ .Values.name }}
   namespace: {{ .Release.Namespace }}
 spec:
