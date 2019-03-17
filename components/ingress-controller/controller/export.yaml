@@ -15,7 +15,7 @@
 ---
 ingresscontroller: (( &temporary ))
 env:
-landscape: (( &temporaray ))
+landscape: (( &temporary ))
 
 temp:
   <<: (( &temporary ))

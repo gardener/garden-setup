@@ -32,23 +32,13 @@ injector:
   injectall: (( |list|->map[list|c|->merge(c, _.stub)] ))
   stub:
     config:
-      redirectURI: (( &inject(spec.callbackUrl) ))
+      redirectURI: (( &inject(settings.callbackUrl) ))
 
 spec:
   <<: (( &temporary ))
-  ca:
-    commonName: "identity:ca"
-    hosts: "identity:ca"
-    privateKey: (( state.ca.key ))
-    isCA: true
-    usage:
-      - Signature
-      - KeyEncipherment
+
   server:
     commonName: "identity"
-    publicKey: (( state.server.pub ))
-    caCert: (( state.ca.cert ))
-    caPrivateKey: (( state.ca.key ))
     validity: 87600
     usage:
       - ServerAuth
@@ -58,25 +48,29 @@ spec:
       - localhost
       - "127.0.0.1"
       - <<: (( utilities.svcHosts("identity-service",landscape.namespace) ))
-      - (( .spec.identity_dns ))
-      - (( .spec.dashboard_dns ))
-  dashboardClientSecret: (( .landscape.identity.dashboardClientSecret || exec( "bash", "-c", "cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1" ) ))
-  kubectlClientSecret: (( .landscape.identity.kubectlClientSecret || exec( "bash", "-c", "cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1" ) ))
-  issuerUrl: (( .landscape.identity.issuerUrl || "https://" .spec.dashboard_dns "/oidc" ))
+      - (( .settings.identity_dns ))
+      - (( .settings.dashboard_dns ))
+
+  passwords:
+    input: (( landscape.identity.users || [] ))
+    value:
+      <<: (( &template ))
+      state: (( map[input|v|->{ "email"=v.email, "username"=v.username, "hash"=( v.hash || bcrypt(v.password) ) }] ))
+
+settings:
+  issuerUrl: (( .landscape.identity.issuerUrl || "https://" dashboard_dns "/oidc" ))
   callbackUrl: (( issuerUrl "/callback" ))
-  dashboardUrl: (( "https://" .spec.dashboard_dns ))
+  dashboardUrl: (( "https://" dashboard_dns ))
   identity_dns: (( "identity." .imports.ingress_dns.export.ingress_domain ))
   dashboard_dns: (( "gardener." .imports.ingress_dns.export.ingress_domain ))
 
 state:
-  ca:
-    key: (( x509genkey() ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(spec.ca) ))
-  server:
-    key: (( x509genkey(2048) ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(spec.server) ))
+  <<: (( &state(merge none) ))
+  ca: (( utilities.certs.selfSignedCA("identity:ca", false) ))
+  server: (( utilities.certs.keyCertForCA(spec.server, ca, false) ))
+  staticPasswords: (( utilities.state.standard(spec.passwords, false) ))
+  dashboardClientSecret: (( utilities.certs.secret(landscape.identity.dashboardClientSecret || ~, 32, false) ))
+  kubectlClientSecret: (( utilities.certs.secret(landscape.identity.kubectlClientSecret || ~, 32, false) ))
 
 identity:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
@@ -84,16 +78,16 @@ identity:
   name: "identity"
   namespace: (( .landscape.namespace ))
   values:
-    dashboardClientSecret: (( .spec.dashboardClientSecret ))
-    kubectlClientSecret: (( .spec.kubectlClientSecret ))
+    dashboardClientSecret: (( .state.dashboardClientSecret.value ))
+    kubectlClientSecret: (( .state.kubectlClientSecret.value ))
     dashboardOrigins:
-      - (( .spec.dashboardUrl ))
+      - (( .settings.dashboardUrl ))
     hosts:
-      - (( .spec.dashboard_dns ))
-    issuerUrl: (( .spec.issuerUrl ))
+      - (( .settings.dashboard_dns ))
+    issuerUrl: (( .settings.issuerUrl ))
     connectors: (( injector.injectall(.landscape.identity.connectors || []) ))
-    staticPasswords: (( map[(landscape.identity.users || [])|v|->{ "email"=v.email, "username"=v.username, "hash"=( v.hash || bcrypt(v.password) ) }] ))
+    staticPasswords: (( state.staticPasswords.value ))
     tls:
-      crt: (( .state.server.cert ))
-      key: (( .state.server.key ))
+      crt: (( .state.server.value.cert ))
+      key: (( .state.server.value.key ))
 

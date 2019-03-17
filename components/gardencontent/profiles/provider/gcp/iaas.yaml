@@ -22,7 +22,7 @@ gcp:
       versions: (( values.kubernetes.versions ))
     zones: (( values.provider.zones ))
     machineImages:
-    - name: CoreOS
+    - name: coreos
       image: projects/coreos-cloud/global/images/coreos-stable-1745-7-0-v20180614
     machineTypes:
     - name: n1-standard-2

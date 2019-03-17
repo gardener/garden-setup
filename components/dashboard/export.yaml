@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ---
-spec: (( &temporary ))
+settings: (( &temporary ))
 
 export:
-  url: (( spec.dashboard_url ))
+  url: (( settings.dashboard_url ))

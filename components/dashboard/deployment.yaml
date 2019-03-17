@@ -21,7 +21,7 @@ plugins:
   - helm: dashboard
   - kubectl: rbac
   - -echo: "==================================================================="
-  - -echo: (( "Dashboard URL -> " spec.dashboard_url ))
+  - -echo: (( "Dashboard URL -> " settings.dashboard_url ))
   - -echo: "==================================================================="
 
 dashboard_git:
@@ -44,7 +44,7 @@ dashboard:
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))
       ca: (( imports.identity.export.ca.crt ))
-      redirectUri: (( imports.identity.export.dashboard_url "/callback" ))
+      redirectUri: (( settings.dashboard_url "/callback" ))
     tls:
       crt: (( imports.identity.export.server.crt ))
       key: (( imports.identity.export.server.key ))
@@ -54,8 +54,11 @@ util:
   <<: (( &temporary ))
   userbindings: ((|users|->map[users|user|->*spec.subject] ))
 
-spec:
+settings:
   dashboard_url: (( "https://" imports.identity.export.dashboard_dns ))
+
+spec:
+  <<: (( &temporary ))
   subject:
     <<: (( &template ))
     apiGroup: rbac.authorization.k8s.io

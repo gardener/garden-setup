@@ -14,17 +14,17 @@
 
 ---
 state: (( &temporary ))
-spec: (( &temporary ))
+settings: (( &temporary ))
 
 export:
   ca:
-    crt: (( .state.ca.cert ))
-    key: (( .state.ca.key ))
+    crt: (( .state.ca.value.cert ))
+    key: (( .state.ca.value.key ))
   server:
-    crt: (( .state.server.cert ))
-    key: (( .state.server.key ))
-  issuer_url: (( .spec.issuerUrl ))
-  callback_url: (( .spec.callbackUrl ))
-  identity_dns: (( .spec.identity_dns ))
-  dashboard_url: (( .spec.dashboardUrl ))
-  dashboard_dns: (( .spec.dashboard_dns ))
+    crt: (( .state.server.value.cert ))
+    key: (( .state.server.value.key ))
+  issuer_url: (( .settings.issuerUrl ))
+  callback_url: (( .settings.callbackUrl ))
+  identity_dns: (( .settings.identity_dns ))
+  dashboard_url: (( .settings.dashboardUrl ))
+  dashboard_dns: (( .settings.dashboard_dns ))

@@ -39,6 +39,6 @@ variable "RECORD_VALUE" {
 }
 
 variable "REGION" {
-    description = "Region of the GCS bucket"
+    description = "AWS Region"
     type = "string"
 }

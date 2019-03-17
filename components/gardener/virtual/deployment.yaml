@@ -19,21 +19,9 @@ utilities: (( &temporary ))
 
 spec:
   <<: (( &temporary ))
-  ca:
-    commonName: ca-gardener
-    privateKey: (( .state.gardener_ca.key ))
-    isCA: true
-    usage:
-      - Signature
-      - KeyEncipherment
-    hosts:
-      - ca-gardener
   apiserver:
     name: "gardener-apiserver"
     commonName: (( name ".garden.svc.cluster.local" ))
-    publicKey: (( .state.gardener_apiserver.pub ))
-    caCert: (( .state.gardener_ca.cert ))
-    caPrivateKey: (( .state.gardener_ca.key ))
     validity: 87600
     usage:
       - ServerAuth
@@ -43,9 +31,6 @@ spec:
   controllermanager:
     name: "gardener-controller-manager"
     commonName: (( name ".garden.svc.cluster.local" ))
-    publicKey: (( .state.gardener_controller_manager.pub ))
-    caCert: (( .state.gardener_ca.cert ))
-    caPrivateKey: (( .state.gardener_ca.key ))
     validity: 87600
     usage:
       - ServerAuth
@@ -55,18 +40,10 @@ spec:
 
 
 state:
-  gardener_ca:
-    key: (( x509genkey() ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(.spec.ca) ))
-  gardener_apiserver:
-    key: (( x509genkey(2048) ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(.spec.apiserver) ))
-  gardener_controller_manager:
-    key: (( x509genkey(2048) ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(.spec.controllermanager) ))
+  <<: (( &state(merge none) ))
+  gardener_ca: (( utilities.certs.selfSignedCA("ca-gardener", false) ))
+  gardener_apiserver: (( utilities.certs.keyCertForCA(spec.apiserver, gardener_ca, false) ))
+  gardener_controller_manager: (( utilities.certs.keyCertForCA(spec.controllermanager, gardener_ca, false) ))
 
 plugins:
   - git:
@@ -80,7 +57,7 @@ plugins:
 kubectl_apply:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
   files:
-      - "gardener/rendered_charts.yaml"
+    - "gardener/rendered_charts.yaml"
 
 gardener_git:
   <<: (( .landscape.versions.gardener ))
@@ -97,7 +74,7 @@ gardener:
     global:
       apiserver:
         kubeconfig: dummy
-        caBundle: (( .state.gardener_ca.cert ))
+        caBundle: (( .state.gardener_ca.value.cert ))
         enabled: true
         etcd:
           servers: (( join(",",.imports.etcd.exports.endpoints.main) ))
@@ -123,8 +100,8 @@ gardener:
             memory: 100Mi
         serviceAccountName: gardener-apiserver
         tls:
-          crt: (( .state.gardener_apiserver.cert ))
-          key: (( .state.gardener_apiserver.key ))
+          crt: (( .state.gardener_apiserver.value.cert ))
+          key: (( .state.gardener_apiserver.value.key ))
         versionPriority: 20
       controller:
         kubeconfig: dummy
@@ -178,9 +155,9 @@ gardener:
               bindAddress: 0.0.0.0
               port: 2719
               tls:
-                caBundle: (( .state.gardener_ca.cert ))
-                crt: (( .state.gardener_controller_manager.cert ))
-                key: (( .state.gardener_controller_manager.key ))
+                caBundle: (( .state.gardener_ca.value.cert ))
+                crt: (( .state.gardener_controller_manager.value.cert ))
+                key: (( .state.gardener_controller_manager.value.key ))
         defaultDomains:
           - credentials: (( .landscape.dns.credentials ))
             domain: (( "shoot." .landscape.clusters.[0].domain ))

@@ -64,6 +64,8 @@ plugins:
   - helm:
     - gardener
   - gardenready
+  - kubectl:
+    - extension_controllers
 
 gardenready:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
@@ -83,3 +85,21 @@ gardener:
         kubeconfig: (( asjson(.kubeconfigs.apiserver.config) ))
       controller:
         kubeconfig: (( asjson(.kubeconfigs.controller.config) ))
+
+extension_controllers: (( map[extension_controllers_values|n,v|-> utilities.kubectl.generate( __ctx.DIR "/extension-controllers/" n, imports.kube_apiserver.export.kubeconfig, v )] ))
+
+extension_controllers_values:
+  <<: (( &temporary ))
+  controllerregistration_coreos:
+    concurrentSyncs: 25
+    image:
+      tag: 0.4.0
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 20m
+        memory: 64Mi
+  controllerregistration_coreos_alicloud:
+    <<: (( controllerregistration_coreos ))

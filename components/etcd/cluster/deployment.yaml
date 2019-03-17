@@ -31,24 +31,16 @@ plugins:
     - etcd.events
 
 spec:
-  <<: (( &local ))
+  <<: (( &temporary ))
+
   providertypes:
     gcs: GCS
     s3: S3
     abs: ABS
     swift: Swift
-  ca:
-    commonName: garden:ca:etcd
-    privateKey: (( state.ca.key ))
-    isCA: true
-    usage:
-      - Signature
-      - KeyEncipherment
+
   server:
     commonName: garden:etcd-server:etcd
-    publicKey: (( state.server.pub ))
-    caCert: (( state.ca.cert ))
-    caPrivateKey: (( state.ca.key ))
     validity: 87600
     usage:
       - ServerAuth
@@ -60,11 +52,9 @@ spec:
       - garden-etcd-events-0
       - <<: (( utilities.svcHosts("garden-etcd-events", landscape.namespace) ))
       - localhost
+
   client:
     commonName: garden:etcd-client:etcd
-    publicKey: (( state.client.pub ))
-    caCert: (( state.ca.cert ))
-    caPrivateKey: (( state.ca.key ))
     validity: 87600
     usage:
       - ServerAuth
@@ -72,19 +62,11 @@ spec:
       - KeyEncipherment
 
 state:
-  ca:
-    key: (( x509genkey() ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(spec.ca) ))
-  server:
-    key: (( x509genkey(2048) ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(spec.server) ))
-  client:
-    key: (( x509genkey(2048) ))
-    pub: (( x509publickey(key) ))
-    cert: (( x509cert(spec.client) ))
-
+  <<: (( &state(merge none) ))
+  ca:      (( utilities.certs.selfSignedCA("garden:ca:etcd", false) ))
+  server:  (( utilities.certs.keyCertForCA(spec.server, ca, false) ))
+  client:  (( utilities.certs.keyCertForCA(spec.client, ca, false) ))
+  
 etcd:
   main:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
@@ -110,14 +92,14 @@ etcd:
 
       tls:
         ca:
-          crt: (( state.ca.cert ))
-          key: (( state.ca.key ))
+          crt: (( state.ca.value.cert ))
+          key: (( state.ca.value.key ))
         server:
-          crt: (( state.server.cert ))
-          key: (( state.server.key ))
+          crt: (( state.server.value.cert ))
+          key: (( state.server.value.key ))
         client:
-          crt: (( state.client.cert ))
-          key: (( state.client.key ))
+          crt: (( state.client.value.cert ))
+          key: (( state.client.value.key ))
 
   events:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
@@ -134,21 +116,12 @@ etcd:
 
       tls:
         ca:
-          crt: (( state.ca.cert ))
-          key: (( state.ca.key ))
+          crt: (( state.ca.value.cert ))
+          key: (( state.ca.value.key ))
         server:
-          crt: (( state.server.cert ))
-          key: (( state.server.key ))
+          crt: (( state.server.value.cert ))
+          key: (( state.server.value.key ))
         client:
-          crt: (( state.client.cert ))
-          key: (( state.client.key ))
+          crt: (( state.client.value.cert ))
+          key: (( state.client.value.key ))
 
-exports:
-  cacert: (( state.ca.cert ))
-  cert: (( state.client.cert ))
-  key: (( state.client.key ))
-  endpoints:
-    main:
-    - (( "https://" etcd.main.values.name "." .landscape.namespace ".svc:2379" ))
-    events:
-    - (( "https://" etcd.events.values.name "." .landscape.namespace ".svc:2379" ))

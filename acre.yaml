@@ -19,6 +19,10 @@ landscape:
   clusters: (( defined(landscape.cluster) ? [ landscape.cluster ] :error("no cluster definition found") ))
   components: []
   versions:
+    gardener: 
+      tag: "0.18.0"
+    dashboard: 
+      tag: "1.28.0"
   networks:
   iaas:
   etcd:

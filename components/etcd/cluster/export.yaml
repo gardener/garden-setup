@@ -13,4 +13,16 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
+state: (( &temporary ))
+etcd: (( &temporary ))
+
 exports:
+  cacert: (( state.ca.value.cert ))
+  cert: (( state.client.value.cert ))
+  key: (( state.client.value.key ))
+  endpoints:
+    main:
+    - (( "https://" etcd.main.values.name "." .landscape.namespace ".svc:2379" ))
+    events:
+    - (( "https://" etcd.events.values.name "." .landscape.namespace ".svc:2379" ))

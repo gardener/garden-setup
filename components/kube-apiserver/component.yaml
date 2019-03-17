@@ -21,3 +21,5 @@ component:
 
   stubs:
     - lib/templates/utilities.yaml
+    - lib/templates/state.yaml
+    - lib/templates/certs.yaml

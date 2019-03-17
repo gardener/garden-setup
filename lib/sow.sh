@@ -12,4 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-state:
+################################################################################
+# sow command extensions for garden
+################################################################################
+
+CMD_k() {
+  local kubeconfig
+  local data
+  local n=0
+  if [[ "$1" =~ ^[0-9]+$ ]]; then
+    n="$1"
+    shift
+  fi
+  getRequiredValue data "landscape.clusters["$n"].kubeconfig" CONFIGJSON
+
+  if [[ "$data" = /* ]]; then
+    kubeconfig="$1"
+  else
+    kubeconfig="$ROOT/$data"
+  fi
+
+  kubectl --kubeconfig "$kubeconfig" "$@"
+}
+
+CMD_kg() {
+  local kubeconfig="$EXPORT/kube-apiserver/kubeconfig"
+  if [ ! -f "$kubeconfig" ]; then
+    fail "kube api server not yet deployed"
+  fi
+  kubectl --kubeconfig "$kubeconfig" "$@"
+}
+

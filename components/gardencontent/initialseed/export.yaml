@@ -16,4 +16,4 @@
 kubectl: (( &temporary ))
 
 export:
-  profile: (( kubectl.[0].manifests.CloudProfile.metadata.name ))
+  profile: (( select[kubectl.[0].manifests|v|->v.kind == "CloudProfile"][0].metadata.name ))
