@@ -42,7 +42,7 @@ core:
         name: (( values.secretname ))
         namespace: (( values.namespace ))
       type: Opaque
-      data: (( utilities.secretdata(landscape.iaas.creds) ))
+      data: (( utilities.secretdata(landscape.iaas.credentials) ))
     - apiVersion: garden.sapcloud.io/v1beta1
       kind: Project
       metadata:

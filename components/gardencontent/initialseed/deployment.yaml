@@ -33,7 +33,7 @@ providerconfig:
     type: (( landscape.dns.type ))
   iaas:
     profileconfig: (( read(__ctx.DIR "/provider/" name "/iaas.yaml", "import") ))
-    credentials: (( landscape.iaas.creds ))
+    credentials: (( landscape.iaas.credentials ))
   seed:
     region: (( landscape.iaas.region ))
     zones: (( landscape.iaas.zones ))
