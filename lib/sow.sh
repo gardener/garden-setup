@@ -35,7 +35,7 @@ CMD_k() {
   kubectl --kubeconfig "$kubeconfig" "$@"
 }
 
-CMD_kg() {
+CMD_kv() {
   local kubeconfig="$EXPORT/kube-apiserver/kubeconfig"
   if [ ! -f "$kubeconfig" ]; then
     fail "kube api server not yet deployed"
@@ -43,3 +43,10 @@ CMD_kg() {
   kubectl --kubeconfig "$kubeconfig" "$@"
 }
 
+CMD_kvg() {
+  CMD_kv -n garden "$@"
+}
+
+CMD_kg() {
+  CMD_k -n garden "$@"
+}
