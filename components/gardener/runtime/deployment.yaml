@@ -86,11 +86,24 @@ gardener:
       controller:
         kubeconfig: (( asjson(.kubeconfigs.controller.config) ))
 
-extension_controllers: (( map[extension_controllers_values|n,v|-> utilities.kubectl.generate( __ctx.DIR "/extension-controllers/" n, imports.kube_apiserver.export.kubeconfig, v )] ))
+extension_controllers: (( map[extension_controllers_values|n,v|-> utilities.kubectl.generate( extension_controllers_func.extPath( n ) "main.yaml", imports.kube_apiserver.export.kubeconfig, v )] ))
+
+extension_controllers_func:
+  <<: (( &temporary ))
+  ignore:
+    - .git
+  _joinPath: (( |p,c|-> p == "" ? c :(p "/" c) ))
+  files: (( |d,p|->map[list_files(_._joinPath(d,p))|v|->contains(_.ignore, v) ? ~ :_._joinPath( p, v )] sum[map[list_dirs(d "/" p)|d|-> contains(_.ignore,d) ? ~ :d]|[]|s,v|->s _.files(d,_._joinPath(p, v))] ))
+  extPath: (( |n|-> __ctx.DIR "/extension-controllers/" n "/" ))
+  chartConfig: (( |path|-> archive( sum[extension_controllers_func.files( path, "" )|{}|s,e|->s { e = { "data" = read( path "/" e, "text" ) } }], "targz" ) ))
 
 extension_controllers_values:
   <<: (( &temporary ))
   controllerregistration_coreos:
+    temp: 
+      <<: (( &temporary ))
+      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
+      chart: (( extension_controllers_func.chartConfig( path ) ))
     concurrentSyncs: 25
     image:
       tag: 0.4.0
@@ -102,4 +115,17 @@ extension_controllers_values:
         cpu: 20m
         memory: 64Mi
   controllerregistration_coreos_alicloud:
-    <<: (( controllerregistration_coreos ))
+    temp: 
+      <<: (( &temporary ))
+      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
+      chart: (( extension_controllers_func.chartConfig( path ) ))
+    concurrentSyncs: 25
+    image:
+      tag: 0.4.0
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 20m
+        memory: 64Mi

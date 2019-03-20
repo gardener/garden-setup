@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gardener-extension-os-coreos-alicloud
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: gardener-extension-os-coreos-alicloud
+    helm.sh/chart: gardener-extension-os-coreos-alicloud
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gardener-extension-os-coreos-alicloud
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gardener-extension-os-coreos-alicloud
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: gardener-extension-os-coreos-alicloud
+      containers:
+      - name: gardener-extension-os-coreos-alicloud
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+        - /gardener-extension-hyper
+        - os-coreos-alicloud-controller-manager
+        - --max-concurrent-reconciles={{ .Values.concurrentSyncs }}
+        env:
+        - name: LEADER_ELECTION_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}

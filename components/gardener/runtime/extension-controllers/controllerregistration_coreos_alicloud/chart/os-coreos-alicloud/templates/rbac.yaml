@@ -1,0 +1,67 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gardener-extension-os-coreos-alicloud
+  labels:
+    app.kubernetes.io/name: gardener-extension-os-coreos-alicloud
+    helm.sh/chart: gardener-extension-os-coreos-alicloud
+    app.kubernetes.io/instance: {{ .Release.Name }}
+rules:
+- apiGroups:
+  - extensions.gardener.cloud
+  resources:
+  - operatingsystemconfigs
+  - operatingsystemconfigs/status
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - events
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  resourceNames:
+  - os-coreos-alicloud-leader-election
+  verbs:
+  - get
+  - watch
+  - update
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: gardener-extension-os-coreos-alicloud
+  labels:
+    app.kubernetes.io/name: gardener-extension-os-coreos-alicloud
+    helm.sh/chart: gardener-extension-os-coreos-alicloud
+    app.kubernetes.io/instance: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: gardener-extension-os-coreos-alicloud
+subjects:
+- kind: ServiceAccount
+  name: gardener-extension-os-coreos-alicloud
+  namespace: {{ .Release.Namespace }}

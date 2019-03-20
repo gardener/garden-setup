@@ -1,0 +1,8 @@
+image:
+  repository: eu.gcr.io/gardener-project/gardener/gardener-extension-hyper
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources: {}
+
+concurrentSyncs: 5

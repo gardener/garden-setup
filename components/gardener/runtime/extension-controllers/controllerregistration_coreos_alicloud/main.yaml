@@ -1,0 +1,13 @@
+apiVersion: core.gardener.cloud/v1alpha1
+kind: ControllerRegistration
+metadata:
+  name: os-coreos-alicloud
+spec:
+  deployment:
+    providerConfig:
+      chart: (( settings.temp.chart ))
+      values: (( settings ))
+    type: helm
+  resources:
+  - kind: OperatingSystemConfig
+    type: coreos-alicloud
