@@ -19,10 +19,12 @@ landscape:
   clusters: (( defined(landscape.cluster) ? [ landscape.cluster ] :error("no cluster definition found") ))
   components: []
   versions:
-    gardener: 
-      tag: "0.18.0"
-    dashboard: 
-      tag: "1.28.0"
+    gardener:
+      <<: (( merge ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.18.0" ))
+    dashboard:
+      <<: (( merge ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.28.0" ))
   networks:
   iaas:
   etcd:
