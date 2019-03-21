@@ -14,12 +14,3 @@
 
 ---
 component:
-  imports:
-    - tiller
-    - backupinfra: etcd/backupinfra
-    - namespace
-
-  stubs:
-    - lib/templates/utilities.yaml
-    - lib/templates/state.yaml
-    - lib/templates/certs.yaml

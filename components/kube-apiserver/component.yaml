@@ -18,6 +18,7 @@ component:
     - ingress_controller: ingress-controller/dns
     - etcd: etcd/cluster
     - identity
+    - namespace
 
   stubs:
     - lib/templates/utilities.yaml
