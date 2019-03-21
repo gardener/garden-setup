@@ -13,13 +13,16 @@
 # limitations under the License.
 
 ---
-component:
-  imports:
-    - tiller
-    - backupinfra: etcd/backupinfra
-    - namespace
+landscape: (( &temporary ))
 
-  stubs:
-    - lib/templates/utilities.yaml
-    - lib/templates/state.yaml
-    - lib/templates/certs.yaml
+plugins:
+  - kubectl
+
+kubectl:
+  kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: Namespace
+      metadata:
+        labels:
+        name: (( .landscape.namespace ))
