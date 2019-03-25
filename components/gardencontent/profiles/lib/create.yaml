@@ -25,6 +25,7 @@ utilities:
     - aws
     - gcp
     - openstack
+    - azure
     profilespecs: (( sum[knownproviders|{}|s,v|->s {v=read(__ctx.DIR "/../provider/" v "/iaas.yaml", "yaml")}] ))
     manifestfile: (( __ctx.DIR "/../manifests/manifest.yaml" ))
     create: (( |providertype,providername,providerconfig|->utilities.kubectl.generate(_.manifestfile, imports.kube_apiserver.export.kubeconfig, *_.values) ))
