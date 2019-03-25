@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -e
+
+TESTRUN_PATH="$LANDSCAPE_REPO_PATH/setup/test/testruns/cron"
+
+mkdir -p /tm
+/cc/utils/cli.py config attribute --cfg-type kubernetes --cfg-name testmachinery-internal --key kubeconfig > /tm/kubeconfig
+
+# timeout to 6h
+/testrunner run-testrun \
+    --tm-kubeconfig-path=/tm/kubeconfig \
+    --timeout=21600 \
+    --interval=60 \
+    -f $TESTRUN_PATH

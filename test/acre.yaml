@@ -1,0 +1,53 @@
+credentials:
+  serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
+
+
+############################################################################
+
+landscape:
+  name: test-gardener-oq
+
+  versions:
+    gardener:
+      tag: (( env( "GARDENER_VERSION" ) || "1.18.1" ))
+    dashboard:
+      branch: master
+
+  cluster:
+    kubeconfig: ./kubeconfig
+    domain: setup.oq.gcp.dev.k8s.ondemand.com
+    iaas: gcp
+    region: europe-west1
+
+  networks:
+    nodes: 10.254.0.0/19
+    pods: 10.255.0.0/17
+    services: 10.255.128.0/17
+
+  iaas:
+    region: (( cluster.region ))
+    zones:
+      - (( cluster.region "-b"))
+      - (( cluster.region "-c"))
+      - (( cluster.region "-d"))
+    creds:
+      <<: (( .credentials ))
+
+  etcd:
+    backup:
+      type: gcs
+      region: europe-west1
+      credentials:
+        <<: (( .credentials ))
+
+  dns:
+    type: google-clouddns
+    hostedZoneID: gcp-dev-k8s-ondemand-com
+    credentials:
+      <<: (( .credentials ))
+
+  identity:
+    users:
+      - email: "admin@example.com"
+        username: "example"
+        password: (( rand("A-Z", 10) ))

@@ -1,0 +1,15 @@
+kind: TestDefinition
+metadata:
+  name: upgrade-garden
+spec:
+  owner: DL_5C5BE3E2970B9F404D0E2F50@sap.com
+  recipientsOnFailure:
+  - DL_5C5BE3E2970B9F404D0E2F50@sap.com
+
+  description: Upgrades a garden cluster
+
+  activeDeadlineSeconds: 1200
+
+  command: [bash, -c]
+  args: ["./test/scripts/upgrade"]
+  image: eu.gcr.io/gardener-project/gardener/testmachinery/sow
