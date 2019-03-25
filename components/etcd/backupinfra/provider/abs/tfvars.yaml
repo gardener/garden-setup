@@ -1,0 +1,6 @@
+CLIENT_ID: (( config.credentials.clientID ))
+CLIENT_SECRET: (( config.credentials.clientSecret ))
+TENANT_ID: (( config.credentials.tenantID ))
+SUBSCRIPTION_ID: (( config.credentials.subscriptionID ))
+RESOURCE_GROUP: (( config.resourceGroup ))
+STORAGE_ACCOUNT_NAME: (( "garden" rand("0-9", 10) ))

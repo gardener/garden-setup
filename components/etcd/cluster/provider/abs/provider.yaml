@@ -1,0 +1,7 @@
+env:
+  - name: "STORAGE_ACCOUNT"
+    value: (( imports.backupinfra.export.azureStorageAccountName ))
+  - name: "STORAGE_KEY"
+    value: (( imports.backupinfra.export.azureStorageAccessKey ))
+
+volumeMounts: []

@@ -36,7 +36,7 @@ providerconfig:
     credentials: (( landscape.iaas.credentials ))
   seed:
     region: (( landscape.iaas.region ))
-    zones: (( landscape.iaas.zones ))
+    zones: (( landscape.iaas.zones || ~~ ))
     ingressdomain: (( imports.ingress_dns.export.ingress_domain ))
     kubeconfig: (( read(env.ROOTDIR "/" .cleanup.kubeconfig, "text") ))
     networks: (( landscape.networks ))

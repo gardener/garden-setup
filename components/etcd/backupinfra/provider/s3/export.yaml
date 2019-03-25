@@ -1,0 +1,1 @@
+bucketname: (( data.terraform.modules.[0].outputs.bucketName.value ))

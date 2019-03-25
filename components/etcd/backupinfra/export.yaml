@@ -11,10 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+env: (( &temporary ))
+landscape: (( &temporary ))
 
 data:
   <<: (( &temporary ))
-  terraform: (( read(env("STATEDIR") "/terraform/terraform.tfstate", "yaml") ))
+  terraform: (( read(env.STATEDIR "/terraform/terraform.tfstate", "yaml") ))
 
 export:
-  bucketname: (( data.terraform.modules.[0].outputs.bucketName.value ))
+  <<: (( read( __ctx.DIR "/provider/" landscape.etcd.backup.type "/export.yaml", "yaml" ) ))
