@@ -22,8 +22,7 @@ plugins:
   - helm: identity
 
 identity_git:
-  <<: (( .landscape.versions.dashboard ))
-  repo: "https://github.com/gardener/dashboard.git"
+  <<: (( .landscape.versions.identity ))
   files:
     - "charts"
 
@@ -78,6 +77,10 @@ identity:
   name: "identity"
   namespace: (( .landscape.namespace ))
   values:
+    image:
+      repository: (( .identity_git.image_repo || ~~ ))
+      tag: (( .identity_git.image_tag || ~~ ))
+      pullPolicy: (( defined( tag ) -and tag == "latest" ? "Always" :"IfNotPresent" ))
     dashboardClientSecret: (( .state.dashboardClientSecret.value ))
     kubectlClientSecret: (( .state.kubectlClientSecret.value ))
     dashboardOrigins:
