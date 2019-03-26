@@ -61,7 +61,6 @@ kubectl_apply:
 
 gardener_git:
   <<: (( .landscape.versions.gardener ))
-  repo: "https://github.com/gardener/gardener.git"
   files:
     - "charts"
 
@@ -86,9 +85,9 @@ gardener:
         featureGates: {}
         groupPriorityMinimum: 10000
         image:
-          pullPolicy: (( defined(.gardener_git.tag) -and .gardener_git.tag == "latest" ? "Always" :"IfNotPresent" ))
-          repository: eu.gcr.io/gardener-project/gardener/apiserver
-          tag: (( .gardener_git.tag || ~~ ))
+          pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
+          repository: (( .gardener_git.apiserver.image_repo ))
+          tag: (( .gardener_git.apiserver.image_tag || ~~ ))
         insecureSkipTLSVerify: false
         replicaCount: 1
         resources:
@@ -165,9 +164,9 @@ gardener:
             hostedZoneID: (( .landscape.dns.hostedZoneID ))
         enabled: true
         image:
-          pullPolicy: (( defined(.gardener_git.tag) -and .gardener_git.tag == "latest" ? "Always" :"IfNotPresent" ))
-          repository: eu.gcr.io/gardener-project/gardener/controller-manager
-          tag: (( .gardener_git.tag || ~~ ))
+          pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
+          repository: (( .gardener_git.controller_manager.image_repo ))
+          tag: (( .gardener_git.controller_manager.image_tag || ~~ ))
         internalDomain:
           credentials: (( .landscape.dns.credentials ))
           domain: (( "internal." .landscape.clusters.[0].domain ))

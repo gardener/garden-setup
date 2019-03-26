@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: dns-controller-manager
-        image: (( "eu.gcr.io/gardener-project/dns-controller-manager:" values.version ))
+        image: (( values.image_repo ":" values.image_tag ))
         imagePullPolicy: "Always"
         args:
         - (( "--controllers=" join( ",", values.controllers ) ))

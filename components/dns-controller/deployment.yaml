@@ -51,7 +51,8 @@ providers:
 
 spec:
   <<: (( &temporary ))
-  version: (( .landscape.versions.dns_controller.tag ))
+  image_tag: (( .landscape.versions.dns_controller.image_tag ))
+  image_repo: (( .landscape.versions.dns_controller.image_repo ))
   namespace: "kube-system"
   identifier: (( "dns-controller_" landscape.name ))
   type: (( .landscape.dns.type ))
