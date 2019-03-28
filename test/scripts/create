@@ -1,0 +1,20 @@
+#! /bin/bash -e
+
+SOURCE_PATH="$(realpath .)"
+
+# change working directory and add garden-setup as crop
+# secrets (kubeconfig and gcloud) are mounted to /tmp/garden
+cd /tmp/garden
+ln -S $SOURCE_PATH ./crop
+cp $SOURCE_PATH/test/acre.yaml .
+
+sow order -A
+sow deploy -A
+
+cp -R ./export/kube-apiserver/kubeconfig $TM_KUBECONFIG_PATH/gardener.config
+
+mkdir -p $TM_KUBECONFIG_PATH/setup
+cp -R ./state $TM_KUBECONFIG_PATH/setup
+cp -R ./export $TM_KUBECONFIG_PATH/setup
+cp -R ./gen $TM_KUBECONFIG_PATH/setup
+

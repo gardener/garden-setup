@@ -1,0 +1,15 @@
+kind: TestDefinition
+metadata:
+  name: create-garden
+spec:
+  owner: DL_5C5BE3E2970B9F404D0E2F50@sap.com
+  recipientsOnFailure:
+  - DL_5C5BE3E2970B9F404D0E2F50@sap.com
+
+  description: Create a garden cluster
+
+  activeDeadlineSeconds: 1200
+
+  command: [bash, -c]
+  args: ["./test/scripts/create"]
+  image: eu.gcr.io/gardener-project/gardener/testmachinery/sow
