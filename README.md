@@ -62,13 +62,7 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
 
     This will create a kubeconfig that uses basic auth. It will be created at the path specified in your `acre.yaml` file.
 
-1. Open a second terminal window and make sure that your `KUBECONFIG` environment variable is set:
-
-    ```bash
-    export KUBECONFIG=<path to your kubeconfig file>
-    ```
-
-1. In the new terminal window, enter the following command to watch the progress of the Gardener installation:
+1. Open a second terminal window and enter the following command to watch the progress of the Gardener installation:
 
     ```bash
     watch -d kubectl -n garden get pods,ingress,sts,svc
