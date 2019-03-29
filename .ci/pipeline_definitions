@@ -4,15 +4,15 @@ garden-setup:
     integration-test:
       traits:
         scheduling:
-        suppress_parallel_execution: true
-      version:
-        preprocess:
-          'inject-commit-hash'
-        inject_effective_version: true
-      notifications:
-        default:
-          on_error:
-            triggering_policy: 'only_first'
+          suppress_parallel_execution: true
+        version:
+          preprocess:
+            'inject-commit-hash'
+          inject_effective_version: true
+        notifications:
+          default:
+            on_error:
+              triggering_policy: 'only_first'
       steps:
         test:
           image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:0.33.0
