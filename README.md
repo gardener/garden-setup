@@ -5,15 +5,16 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
 
 ## Prerequisites
 
-* The installation is based on tools available for Linux (**VERSION?**)
+* The installation was tested on Linux and MacOS 
 * You need to have the following tools installed:
   * [Docker](https://docs.docker.com/install/)
   * [git](https://git-scm.com/downloads)
   * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * You need a *base cluster*. Currently, the installation tools supports to install Gardener on the following Kubernetes clusters:
   * [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster) on Google Cloud Platform (GCP)
-  * [Kubernetes on Amazon Web Services (AWS)](https://docs.aws.amazon.com/eks/)  **[JH: Is EKS the right AWS option to install Gardener?]**
+  * [Kubernetes on Amazon Web Services (AWS)](https://docs.aws.amazon.com/eks/)  oder Kops
   * [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/) on Microsoft Azure
+* Your base cluster needs at least 4 nodes with a size of 8GB for each node
 * You need a service account for the virtual machine instance of your IaaS provider where your Kubernetes version runs.
 * You need to have permissions to access your base cluster's private key.
 * You are connected to your Kubernetes cluster (environment variable `KUBECONFIG` is set).
@@ -27,13 +28,13 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
 
     ```bash
     # setup for calling sow via the wrapper
-    git clone "https://github.com/mandelsoft/sow"
+    git clone "https://github.com/gardener/sow"
     cd sow
     make # will build and tag the image
     export PATH=$PATH:$PWD/docker/bin
     ```
 
-    > The wrapper script starts `sow` in a Docker container, mounts parts of your file system into that container so `sow` can persist the state somewhere **[JH:Where?]**, executes the sow command with the given arguments, and then exits and removes the container again. If you prefer to have all tools installed locally instead of using the Docker image, see [Install sow with dependencies]().
+    > The wrapper script starts `sow` in a Docker container, mounts parts of your file system into that container so `sow` can persist the state somewhere **[landscape directory]**, executes the sow command with the given arguments, and then exits and removes the container again. If you prefer to have all tools installed locally instead of using the Docker image, see [Install sow with dependencies]().
 
 1. Create a directory for your Gardener landscape and clone this repository in a subdirectory called `crop`:
 
@@ -73,7 +74,7 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
     sow deploy -A
     ```
 
-`sow` will now start to install Gardener in your base cluster. The installation can take about 30 minutes. To check if the installation is finished ... **[JH: What is a good indicator for this?]**.
+`sow` will now start to install Gardener in your base cluster. The installation can take about 30 minutes. To check if the installation is finished ... **[JH: What is a good indicator for this? Dashboard is deployed last] Prompt -> Installer fertig**.
 
 More information: [Most Important Commands and Directories](#most-important-commands-and-directories)
 
@@ -188,7 +189,7 @@ iaas:
     - <major region>-<minor region>-<zone>          # Example: europe-west1-d
   credentials:                                      # credentials to get access to the seed cluster through service account
 ```
-Contains the information where Gardener will create seed clusters. By default, the *initialseed* component will create a seed resource using your base cluster as seed cluster. **[JH: Is this the default even if users provide different region details above compared to `landscape.cluster.region`?]**
+Contains the information where Gardener will create seed clusters. By default, the *initial seed* component will create a seed resource using your base cluster as seed cluster. **[JH: Is this the default even if users provide different region details above compared to `landscape.cluster.region`?] -> Issue?**
 
 | Field | Type | Description | Example |Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:--------|
