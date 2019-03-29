@@ -5,26 +5,26 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
 
 ## Prerequisites
 
-* The installation was tested on Linux and MacOS 
+* The installation was tested on Linux and MacOS
 * You need to have the following tools installed:
   * [Docker](https://docs.docker.com/install/)
   * [git](https://git-scm.com/downloads)
   * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * You need a *base cluster*. Currently, the installation tools supports to install Gardener on the following Kubernetes clusters:
   * [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster) on Google Cloud Platform (GCP)
-  * [Kubernetes on Amazon Web Services (AWS)](https://docs.aws.amazon.com/eks/)  oder Kops
+  * [Elastic Container Service for Kubernetes (EKS)](https://docs.aws.amazon.com/eks/) or [Kubernetes Operations (kops)](https://github.com/kubernetes/kops) on Amazon Web Services (AWS)
   * [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/) on Microsoft Azure
 * Your base cluster needs at least 4 nodes with a size of 8GB for each node
-* You need a service account for the virtual machine instance of your IaaS provider where your Kubernetes version runs.
-* You need to have permissions to access your base cluster's private key.
-* You are connected to your Kubernetes cluster (environment variable `KUBECONFIG` is set).
+* You need a service account for the virtual machine instance of your IaaS provider where your Kubernetes version runs
+* You need to have permissions to access your base cluster's private key
+* You are connected to your Kubernetes cluster (environment variable `KUBECONFIG` is set)
   * [Viewing kubeconfig (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#viewing_kubeconfig)
   * [Create a kubeconfig for Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html)
   * [Use Azure role-based access controls to define access to the Kubernetes configuration file in Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/control-kubeconfig-access)
 
 ## Procedure
 
-1. Clone the `sow` repository and build a Docker image that contains the command line tool [sow](https://github.com/mandelsoft/sow) and all tools `sow` requires. Once the image is built and you have added the path to our [wrapper script](https://github.com/gardener/sow/blame/master/docker/bin/sow) to your `PATH` variable you can call `sow` on the command line.
+1. Clone the `sow` repository and build a Docker image that contains the command line tool [sow](https://github.com/gardener/sow) and all tools `sow` requires. Once the image is built and you have added the path to our [wrapper script](https://github.com/gardener/sow/blame/master/docker/bin/sow) to your `PATH` variable you can call `sow` on the command line.
 
     ```bash
     # setup for calling sow via the wrapper
@@ -34,14 +34,14 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
     export PATH=$PATH:$PWD/docker/bin
     ```
 
-    > The wrapper script starts `sow` in a Docker container, mounts parts of your file system into that container so `sow` can persist the state somewhere **[landscape directory]**, executes the sow command with the given arguments, and then exits and removes the container again. If you prefer to have all tools installed locally instead of using the Docker image, see [Install sow with dependencies]().
+    > The wrapper script starts `sow` in a Docker container, executes the sow command with the given arguments, and then exits and removes the container again. The script also mounts parts of your file system into that container to allow `sow` to persist the state in directory `landscape` which you will create in the next step.
 
-1. Create a directory for your Gardener landscape and clone this repository in a subdirectory called `crop`:
+1. Create a directory for your Gardener landscape and clone this repository into a subdirectory called `crop`:
 
     ```bash
     mkdir landscape
     cd landscape
-    git clone "https://github.com/afritzler/garden-setup" crop
+    git clone "https://github.com/gardener/garden-setup" crop
     ```
 
 1. In your landscape folder, create a configuration file called `acre.yaml`. The structure of the configuration file is described [below](#configuration-file-acreyaml).
@@ -55,14 +55,20 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
     1. Download the GKE kubeconfig:
 
         ```bash
-        gcloud container clusters get-credentials your_cluster --zone your_zone --project your_project
+        gcloud container clusters get-credentials <your_cluster> --zone <your_zone> --project <your_project>
         ```
 
     1. Call `crop/bin/convertkubeconfig 3.1`. When asked for credentials, enter the ones that the GKE dashboard shows when clicking on `show credentials`.
 
     This will create a kubeconfig that uses basic auth. It will be created at the path specified in your `acre.yaml` file.
 
-1. Open a second terminal window and enter the following command to watch the progress of the Gardener installation:
+1. Open a second terminal window and make sure that your `KUBECONFIG` environment variable is set:
+
+    ```bash
+    export KUBECONFIG=<path to your kubeconfig file>
+    ```
+
+1. In the new terminal window, enter the following command to watch the progress of the Gardener installation:
 
     ```bash
     watch -d kubectl -n garden get pods,ingress,sts,svc
@@ -74,7 +80,14 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
     sow deploy -A
     ```
 
-`sow` will now start to install Gardener in your base cluster. The installation can take about 30 minutes. To check if the installation is finished ... **[JH: What is a good indicator for this? Dashboard is deployed last] Prompt -> Installer fertig**.
+`sow` now starts to install Gardener in your base cluster. The installation can take about 30 minutes. `sow` prints out status messages to the terminal window so that you can check the state of the installation. The other terminal window will show the newly created Kubernetes resources after a while and if their deployment was successful (their status should be `Running`). Finally, the Gardener dashboard is deployed. The last status message before `sow` exits is something like this:
+```bash
+===================================================================
+Dashboard URL -> https://gardener.ingress.<value of `landscape.cluster.domain`>
+===================================================================
+generating exports
+*** species dashboard deployed
+```  
 
 More information: [Most Important Commands and Directories](#most-important-commands-and-directories)
 
@@ -85,12 +98,6 @@ This file will be evaluated using `spiff`, a dynamic templating language for yam
 <pre>
 landscape:
   <a href="#landscapename">name</a>: &lt;URL-friendly name&gt;                       # Gardener managed k8s landscape name
-
-  <a href="#landscapeversions">versions</a>:
-    gardener:
-      tag: "0.18.0"
-    dashboard:
-      tag: "1.28.0"
 
   <a href="#landscapecluster">cluster</a>:                                          # Information about your base cluster
     kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to folder `landscape`
@@ -113,12 +120,12 @@ landscape:
 
   <a href="#landscapeetcd">etcd</a>:
     backup:
-      type: &lt;gcs|s3&gt;                    # type of blob storage (gcs/s3/...)
+      type: &lt;gcs|s3&gt;                    # type of blob storage
       region: (( iaas.region ))         # region of blob storage (default: same as above)
       credentials: (( iaas.creds ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
   <a href="#landscapedns">dns</a>:
-    type:                                     # dns provider (google-clouddns/aws-route53/...)
+    type: &lt;google-clouddns|aws-route53&gt;        # dns provider
     hostedZoneID:                             # hosted zone id for chosen domain
     credentials:                              # credentials for the dns provider
 
@@ -139,16 +146,6 @@ landscape:
   name: <URL-friendly name>                       # Gardener managed k8s landscape name
 ```
 Arbitrary name for your landscape. Will partly be used for naming of resources, for example, the etcd buckets.
-
-### landscape.versions
-```yaml
-versions:
-  gardener:
-    tag: "0.18.0"
-  dashboard:
-    tag: "1.28.0"
-```
-These fields should become obsolete in future versions of the installation tool. Determines which versions of `gardener` and `dashboard` should be checked out from the corresponding git repository for installation. Both accept either a `tag` field (to specify a version) or a `branch` field (to specify a git branch).
 
 ### landscape.cluster
 ```yaml
@@ -189,7 +186,7 @@ iaas:
     - <major region>-<minor region>-<zone>          # Example: europe-west1-d
   credentials:                                      # credentials to get access to the seed cluster through service account
 ```
-Contains the information where Gardener will create seed clusters. By default, the *initial seed* component will create a seed resource using your base cluster as seed cluster. **[JH: Is this the default even if users provide different region details above compared to `landscape.cluster.region`?] -> Issue?**
+Contains the information where Gardener will create seed clusters. By default, the *initial* seed component will create a seed resource using your base cluster as seed cluster.
 
 | Field | Type | Description | Example |Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:--------|
@@ -205,7 +202,7 @@ The service account credentials will be used to give Gardener access to your bas
 ```yaml
 etcd:
   backup:
-    type: <gcs|s3>                    # type of blob storage (gcs/s3/...)
+    type: <gcs|s3>                    # type of blob storage
     region: (( iaas.region ))         # region of blob storage (default: same as above)
     credentials: (( iaas.creds ))     # credentials for the blob storage's IaaS provider (default: same as above)
 ```
@@ -221,7 +218,7 @@ Configuration of what blob storage to use for the etcd key-value store. If your 
 ### landscape.dns
 ```yaml
 dns:
-  type:                                     # dns provider (google-clouddns/aws-route53/...)
+  type: <google-clouddns|aws-route53>       # dns provider
   hostedZoneID:                             # hosted zone id for chosen domain
   credentials:                              # credentials for the dns provider
 ```
