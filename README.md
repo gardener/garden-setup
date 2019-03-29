@@ -119,7 +119,7 @@ landscape:
       credentials: (( iaas.creds ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
   <a href="#landscapedns">dns</a>:
-    type: &lt;google-clouddns|aws-route53&gt;        # dns provider
+    type: &lt;google-clouddns|aws-route53&gt;       # dns provider
     hostedZoneID:                             # hosted zone id for chosen domain
     credentials:                              # credentials for the dns provider
 
