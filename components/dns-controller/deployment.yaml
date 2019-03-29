@@ -63,4 +63,4 @@ spec:
   controllers:
     - dnssources
     - (( type ))
-  provider: (( *eval( "providers." type ) ))
+  provider: (( *providers.[type] ))

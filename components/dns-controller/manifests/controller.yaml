@@ -49,3 +49,4 @@ spec:
         resources:
           {}
       terminationGracePeriodSeconds: 120
+      serviceAccountName: (( values.dns_rbac_name ))
