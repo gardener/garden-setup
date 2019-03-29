@@ -168,7 +168,7 @@ networks:                                 # CIDR IP ranges of base cluster
 ```
 CIDR ranges of your base cluster.
 
-Finding out CIDR ranges of your cluster is not trivial, as e.g. GKE only tells you a "pod address range", which is actually a combination of pod and service CIDR. However, since the `kubernetes` service typically has the first IP of the service IP range and most methods to get a kubernetes cluster tell you at least something about the CIDRs, it is usually possible to find out the CIDRs with a little bit of educated guessing.
+Finding out CIDR ranges of your cluster is not trivial. For example, GKE only tells you a "pod address range" which is actually a combination of pod and service CIDR. However, since the `kubernetes` service typically has the first IP of the service IP range and most methods to get a kubernetes cluster tell you at least something about the CIDRs, it is usually possible to find out the CIDRs with a little bit of educated guessing.
 
 ### landscape.iaas
 ```yaml
