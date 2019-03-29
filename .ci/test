@@ -5,7 +5,7 @@ set -e
 TESTRUN_PATH="$LANDSCAPE_REPO_PATH/setup/test/testruns/cron"
 
 mkdir -p /tm
-/cc/utils/cli.py config attribute --cfg-type kubernetes --cfg-name testmachinery-internal --key kubeconfig > /tm/kubeconfig
+/cc/utils/cli.py config attribute --cfg-type kubernetes --cfg-name testmachinery --key kubeconfig > /tm/kubeconfig
 
 # timeout to 6h
 /testrunner run-testrun \
