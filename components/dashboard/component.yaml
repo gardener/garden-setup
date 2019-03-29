@@ -16,6 +16,6 @@
 component:
   imports:
     - identity
-    - gardener: gardener/runtime
+    - gardener: gardener/extensions
     - ingress_dns: ingress-controller
     - kube_apiserver: kube-apiserver

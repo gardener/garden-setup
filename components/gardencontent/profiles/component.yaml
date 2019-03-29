@@ -16,7 +16,7 @@
 component:
   imports:
     - gardener_virtual: gardener/virtual
-    - gardener_runtime: gardener/runtime
+    - gardener_runtime: gardener/extensions
     - ingress_dns: ingress-controller
     - kube_apiserver: kube-apiserver
 

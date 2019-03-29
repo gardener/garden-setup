@@ -1,0 +1,9 @@
+---
+component:
+  imports:
+    - gardener: gardener/runtime
+    - kube_apiserver: "kube-apiserver"
+    - namespace
+
+  stubs:
+    - plugins/kubectl/utilities.yaml
