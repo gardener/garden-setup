@@ -50,3 +50,7 @@ CMD_kvg() {
 CMD_kg() {
   CMD_k -n garden "$@"
 }
+
+CMD_url() {
+  cat "$EXPORT/dashboard/dashboard_url"
+}

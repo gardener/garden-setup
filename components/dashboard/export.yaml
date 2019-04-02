@@ -17,3 +17,7 @@ settings: (( &temporary ))
 
 export:
   url: (( settings.dashboard_url ))
+
+files:
+  dashboard_url:
+    data: (( export.url ))
