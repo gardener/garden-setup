@@ -5,7 +5,7 @@ SOURCE_PATH="$(realpath .)"
 # change working directory and add garden-setup as crop
 # secrets (kubeconfig and gcloud) are mounted to /tmp/garden
 cd /tmp/garden
-ln -S $SOURCE_PATH ./crop
+ln -s $SOURCE_PATH ./crop
 cp $SOURCE_PATH/test/acre.yaml .
 
 cp -R $TM_KUBECONFIG_PATH/setup/* .
