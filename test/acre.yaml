@@ -30,7 +30,7 @@ landscape:
       - (( cluster.region "-b"))
       - (( cluster.region "-c"))
       - (( cluster.region "-d"))
-    creds:
+    credentials:
       <<: (( .credentials ))
 
   etcd:
