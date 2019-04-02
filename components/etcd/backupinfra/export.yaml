@@ -19,4 +19,4 @@ data:
   terraform: (( read(env.STATEDIR "/terraform/terraform.tfstate", "yaml") ))
 
 export:
-  <<: (( read( __ctx.DIR "/provider/" landscape.etcd.backup.type "/export.yaml", "yaml" ) ))
+  <<: (( read( __ctx.DIR "/provider/" landscape.etcd.backup.type "/export.yaml", "import" ) ))
