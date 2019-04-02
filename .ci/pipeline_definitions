@@ -15,4 +15,4 @@ garden-setup:
               triggering_policy: 'only_first'
       steps:
         test:
-          image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:0.33.0
+          image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:stable
