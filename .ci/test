@@ -2,7 +2,9 @@
 
 set -e
 
-TESTRUN_PATH="$LANDSCAPE_REPO_PATH/setup/test/testruns/cron"
+SOURCE_PATH="$(readlink -f "$(dirname ${0})/..")"
+
+TESTRUN_PATH="$SOURCE_PATH/test/testrun.yaml"
 
 mkdir -p /tm
 /cc/utils/cli.py config attribute --cfg-type kubernetes --cfg-name testmachinery --key kubeconfig > /tm/kubeconfig
