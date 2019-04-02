@@ -64,6 +64,10 @@ plugins:
   - helm:
     - gardener
   - gardenready
+  - shoot-check
+
+shoot-check:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
 gardenready:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))

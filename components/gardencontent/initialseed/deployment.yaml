@@ -21,6 +21,12 @@ env: (( &temporary ))
 plugins:
   - cleanup
   - kubectl
+  - shoot-check
+
+shoot-check:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+  seeds:
+    - (( providerconfig.name ))
 
 cleanup:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))

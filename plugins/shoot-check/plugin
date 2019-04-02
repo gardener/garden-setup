@@ -28,6 +28,9 @@ deploy() {
     verbose "Nothing to do on deploy."
 }
 
+# fail if shoots are found
+# if a namespace is given, only look in that namespace for shoots
+# if one or more seeds are given, filter for shoots that use one of these seeds
 delete() {
     if [ -n ${namespace:-""} ]; then
         nsmod="-n $namespace"
@@ -37,8 +40,10 @@ delete() {
     shoots=
     seed=
     if [ ${#seeds[@]} -eq 0 ]; then
-        shoots=$(kubectl get shoots $nsmod --no-headers 2> "$dir/error_log.txt") || fail $(cat "$dir/error_log.txt")
+        # if no seeds are specified
+        shoots=$(kubectl get shoots $nsmod --no-headers 2> "$dir/error_log.txt") || fail $(cat "$dir/error_log.txt") # don't show "No resources found." message
     else
+        # if seeds are specified
         for s in ${seeds[@]}; do
             shoots=$(kubectl get shoots $nsmod --field-selector spec.cloud.seed=$s 2> "$dir/error_log.txt") || fail $(cat "$dir/error_log.txt")
             if [ -n "$shoots" ]; then
@@ -48,6 +53,7 @@ delete() {
         done
     fi
     if [ -n "$shoots" ]; then
+        # a shoot has been found
         if [ -n ${namespace:-""} ]; then
             nsmsg=" in namespace '$namespace'"
         else

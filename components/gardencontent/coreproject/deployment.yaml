@@ -18,8 +18,13 @@ landscape: (( &temporary ))
 utilities: (( &temporary ))
 
 plugins:
-  kubectl:
-    - core
+  - kubectl:
+      - core
+  - shoot-check
+
+shoot-check:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+  namespace: (( values.namespace ))
 
 values:
   projectname: core

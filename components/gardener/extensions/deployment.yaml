@@ -5,6 +5,10 @@ utilities: (( &temporary ))
 plugins:
   - kubectl:
     - extension_controllers
+  - shoot-check
+
+shoot-check:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
 extension_controllers: (( map[extension_controllers_values|n,v|-> utilities.kubectl.generate( extension_controllers_func.extPath( n ) "main.yaml", imports.kube_apiserver.export.kubeconfig, v )] ))
 
