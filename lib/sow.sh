@@ -54,3 +54,37 @@ CMD_kg() {
 CMD_url() {
   cat "$EXPORT/dashboard/dashboard_url"
 }
+
+# dummy method to easily execute a command within the sow image
+CMD_exec() {
+  bash -c "$@"
+}
+
+# convert GCP kubeconfig to basic auth format
+# replaces(!) the kubeconfig specified in acre.yaml
+# optional argument: which kubeconfig, if several are given in acre.yaml
+CMD_convertkubeconfig() {
+  local kubeconfig
+  local data
+  local n=0
+  if [[ "$1" =~ ^[0-9]+$ ]]; then
+    n="$1"
+    shift
+  fi
+  getRequiredValue data "landscape.clusters["$n"].kubeconfig" CONFIGJSON
+
+  if [[ "$data" = /* ]]; then
+    kubeconfig="$1"
+  else
+    kubeconfig="$ROOT/$data"
+  fi
+
+  echo -n "Username: "
+  read username
+
+  echo -n "Password: "
+  read -s password
+
+  local tmp=$(spiff merge --json "$kubeconfig" | jq -r '.users[0].user={username:"'"$username"'",password:"'"$password"'"}')
+  echo -n "$tmp" > "$kubeconfig"
+}
