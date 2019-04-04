@@ -53,6 +53,18 @@ extension_controllers_values:
       requests:
         cpu: 20m
         memory: 64Mi
+  dns_external:
+    temp:
+      <<: (( &temporary ))
+      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
+      chart: (( extension_controllers_func.chartConfig( path ) ))
+    createCRDs: false
+    image:
+      tag: 0.3.0
+    configuration:
+      poolSize: 20
+      identifier: ""
+      serverPortHttp: 8080
 
 state:
   <<: (( &state(merge none) ))

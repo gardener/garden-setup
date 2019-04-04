@@ -42,7 +42,6 @@ landscape:
 
   dns:
     type: google-clouddns
-    hostedZoneID: gcp-dev-k8s-ondemand-com
     credentials:
       <<: (( .credentials ))
 

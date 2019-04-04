@@ -1,0 +1,22 @@
+---
+apiVersion: core.gardener.cloud/v1alpha1
+kind: ControllerRegistration
+metadata:
+  name: dns-external
+spec:
+  resources:
+  - kind: DNSProvider
+    type: aws-route53
+  - kind: DNSProvider
+    type: alicloud-dns
+  - kind: DNSProvider
+    type: azure-dns
+  - kind: DNSProvider
+    type: google-clouddns
+  - kind: DNSProvider
+    type: openstack-designate
+  deployment:
+    type: helm
+    providerConfig:
+      chart: (( settings.temp.chart ))
+      values: (( settings ))

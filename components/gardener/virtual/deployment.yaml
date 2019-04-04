@@ -39,6 +39,23 @@ spec:
     hosts: (( utilities.svcHosts(name, landscape.namespace) ))
 
 
+dns_credentials:
+  <<: (( &temporary ))
+  aws-route53:
+    <<: (( &template ))
+    AWS_ACCESS_KEY_ID: (( base64( landscape.dns.credentials.accessKeyID ) ))
+    AWS_SECRET_ACCESS_KEY: (( base64( landscape.dns.credentials.secretAccessKey ) ))
+  google-clouddns:
+    <<: (( &template ))
+    serviceaccount.json: (( base64( landscape.dns.credentials.["serviceaccount.json"] ) ))
+  azure-dns:
+    <<: (( &template ))
+    AZURE_CLIENT_ID: (( base64( landscape.dns.credentials.clientID ) ))
+    AZURE_CLIENT_SECRET: (( base64( landscape.dns.credentials.clientSecret ) ))
+    AZURE_SUBSCRIPTION_ID: (( base64( landscape.dns.credentials.subscriptionID ) ))
+    AZURE_TENANT_ID: (( base64( landscape.dns.credentials.tenantID ) ))
+
+
 state:
   <<: (( &state(merge none) ))
   gardener_ca: (( utilities.certs.selfSignedCA("ca-gardener", false) ))
@@ -158,20 +175,18 @@ gardener:
                 crt: (( .state.gardener_controller_manager.value.cert ))
                 key: (( .state.gardener_controller_manager.value.key ))
         defaultDomains:
-          - credentials: (( .landscape.dns.credentials ))
+          - credentials: (( *.dns_credentials.[provider] ))
             domain: (( "shoot." .landscape.clusters.[0].domain ))
             provider: (( .landscape.dns.type ))
-            hostedZoneID: (( .landscape.dns.hostedZoneID ))
         enabled: true
         image:
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
           repository: (( .gardener_git.controller_manager.image_repo ))
           tag: (( .gardener_git.controller_manager.image_tag || ~~ ))
         internalDomain:
-          credentials: (( .landscape.dns.credentials ))
+          credentials: (( *.dns_credentials.[provider] ))
           domain: (( "internal." .landscape.clusters.[0].domain ))
           provider: (( .landscape.dns.type ))
-          hostedZoneID: (( .landscape.dns.hostedZoneID ))
         replicaCount: 1
         resources:
           limits:
