@@ -80,14 +80,13 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
     sow deploy -A
     ```
 
-`sow` now starts to install Gardener in your base cluster. The installation can take about 30 minutes. `sow` prints out status messages to the terminal window so that you can check the state of the installation. The other terminal window will show the newly created Kubernetes resources after a while and if their deployment was successful (their status should be `Running`). Finally, the Gardener dashboard is deployed. The last status message before `sow` exits is something like this:
-```bash
-===================================================================
-Dashboard URL -> https://gardener.ingress.<value of `landscape.cluster.domain`>
-===================================================================
-generating exports
-*** species dashboard deployed
-```  
+1. `sow` now starts to install Gardener in your base cluster. The installation can take about 30 minutes. `sow` prints out status messages to the terminal window so that you can check the status of the installation. The other terminal window will show the newly created Kubernetes resources after a while and if their deployment was successful. Wait until the last component is deployed and all created Kubernetes resources are in status `Running`.
+
+1. Use the following command to find out the URL of the Gardener dashboard.
+
+    ```bash
+    sow url
+    ```
 
 More information: [Most Important Commands and Directories](#most-important-commands-and-directories)
 
@@ -97,13 +96,13 @@ This file will be evaluated using `spiff`, a dynamic templating language for yam
 
 <pre>
 landscape:
-  <a href="#landscapename">name</a>: &lt;URL-friendly name&gt;                       # Gardener managed k8s landscape name
+  <a href="#landscapename">name</a>: &lt;Identifier&gt;                       # general Gardener landscape identifier, for example, `my-gardener`
 
   <a href="#landscapecluster">cluster</a>:                                          # Information about your base cluster
     kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to folder `landscape`
     domain: &lt;prefix&gt;.&lt;cluster domain&gt;               # Unique basis domain for DNS entries
     iaas: &lt;gcp|aws|azure&gt;                           # iaas provider (coming soon: openstack|alicloud)
-    region: &lt;major region&gt;-&lt;minor region&gt;           # Example: europe-west1
+    region: &lt;major region&gt;-&lt;minor region&gt;           # Example (gcp, aws): europe-west1; example (Azure): westeurope
 
   <a href="#landscapenetworks">networks</a>:                                         # <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR IP ranges</a> of base cluster
     nodes: &lt;CIDR IP range&gt;                                  
@@ -113,9 +112,9 @@ landscape:
   <a href="#landscapeiaas">iaas</a>:
     region: &lt;major region&gt;-&lt;minor region&gt;      # region that Gardener will use for seed clusters
     zones:
-      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
-      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c     
-      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
+      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example (gcp, aws): europe-west1-b
+      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example (gcp, aws): europe-west1-c     
+      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example (gcp, aws): europe-west1-d
     credentials:                               # credentials to get access to the seed cluster through service account
 
   <a href="#landscapeetcd">etcd</a>:
@@ -143,9 +142,9 @@ landscape:
 ### landscape.name
 ```yaml
 landscape:
-  name: <URL-friendly name>                       # Gardener managed k8s landscape name
+  name: <Identifier>                       # general Gardener landscape identifier, for example, `my-gardener`
 ```
-Arbitrary name for your landscape. Will partly be used for naming of resources, for example, the etcd buckets.
+Arbitrary name for your landscape. The name will be part of the names for resources, for example, the etcd buckets.
 
 ### landscape.cluster
 ```yaml
@@ -192,11 +191,52 @@ Contains the information where Gardener will create seed clusters. By default, t
 |:------|:--------|:--------|:--------|:--------|
 |`region`|IaaS provider specific|Region where Gardener will create seed clusters and shoot clusters. | `europe-west1`|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
 |`zones`|IaaS provider specific|Zones where Gardener will create seed clusters and shoot clusters. |`europe-west1-b`|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
-|`creds`|IaaS provider specific|Service account credentials in a provider-specific format. | `serviceaccount.json: { <credentials> }` (GCP) | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
+|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format. | See table with yaml keys below. | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
 
 The service account credentials will be used to give Gardener access to your base cluster:
 * To create a secret that will be used on the Gardener dashboard to create shoot clusters.
 * The control plane of the seed clusters will use this secret to store the etcd backups of the shoot clusters.
+
+Use the following yaml keys depending on your provider:
+
+| Provider | Yaml Key Excerpt |
+|:---------|:-----------------|
+| AWS | <pre> <br>    credentials: ...<br/>      region: ...<br/>      accessKeyID: ...<br/>      secretAccessKey: ...<br/> </pre> |
+
+
+
+
+
+|
+
+#### Amazon Web Services Credentials
+
+```yaml
+    credentials: ...
+      region: ...
+      accessKeyID: ...
+      secretAccessKey: ...
+```
+#### Google Cloud Platform Credentials
+```yaml
+    credentials:
+      serviceaccount.json: |
+      {
+        "type": "...",
+        "project_id": "...",
+        ...
+      }
+```
+
+#### Azure Credentials
+```yaml
+    credentials:
+      clientID: ...
+      clientSecret: ...
+      subscriptionID: ...
+      tenantID: ...
+```
+
 
 ### landscape.etcd
 ```yaml
