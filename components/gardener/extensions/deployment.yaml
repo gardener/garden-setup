@@ -59,8 +59,9 @@ extension_controllers_values:
       path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
       chart: (( extension_controllers_func.chartConfig( path ) ))
     createCRDs: false
+    fullnameOverride: seed-dns-controller-manager
     image:
-      tag: 0.3.0
+      tag: 0.3.2
     configuration:
       poolSize: 20
       identifier: ""

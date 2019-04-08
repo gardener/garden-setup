@@ -18,7 +18,8 @@ landscape: (( &temporary ))
 utilities: (( &temporary ))
 
 settings:
-  dns-class: garden-setup
+  naming: garden-setup
+  dns-class: (( naming ))
 
 plugins:
   - kubectl
@@ -60,8 +61,8 @@ spec:
   identifier: (( "setup.gardener.cloud/" landscape.name ))
   type: (( .landscape.dns.type ))
   domain: (( .landscape.clusters.[0].domain ))
-  secret_name: (( "dns-controller-" provider.name ))
-  dns_rbac_name: setup-dns-controller
+  secret_name: (( settings.naming "-dns-controller-manager-" provider.name ))
+  dns_rbac_name: (( settings.naming "-dns-controller-manager" ))
   dns-class: (( settings.dns-class ))
   controllers:
     - dnssources
