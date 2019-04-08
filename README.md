@@ -68,7 +68,13 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
     watch -d kubectl -n garden get pods,ingress,sts,svc
     ```
 
-1. In your first terminal window, use the following command to deploy Gardener on your base cluster:
+1. In your first terminal window, use the following command to check in which order the components will be installed. Nothing will be deployed yet and you can test this way if your syntax in `acre.yaml` is correct:
+
+    ```bash
+    sow order -A
+    ```
+
+1. If there are no error messages, use the following command to deploy Gardener on your base cluster:
 
     ```bash
     sow deploy -A
@@ -197,6 +203,7 @@ The service account credentials will be used to give Gardener access to your bas
 etcd:
   backup:
     type: <gcs|s3>                    # type of blob storage
+    resourceGroup:                    # Azure specific, see below
     region: (( iaas.region ))         # region of blob storage (default: same as above)
     credentials: (( iaas.creds ))     # credentials for the blob storage's IaaS provider (default: same as above)
 ```
@@ -205,6 +212,7 @@ Configuration of what blob storage to use for the etcd key-value store. If your 
 | Field | Type | Description | Example&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:---------|
 |`backup.type`|Fixed value| Type of your blob store. Supported blob stores: `gcs` ([Google Cloud Storage](https://cloud.google.com/storage/)), and `s3` ([Amazon S3](https://aws.amazon.com/s3/)).|`gcs`|n.a.|
+|`backup.resourceGroup`|  |  |  |  |
 |`backup.region`|IaaS provider specific|Region of blob storage. |`(( iaas.region ))` |[GCP (overview)](https://cloud.google.com/docs/geography-and-regions), [AWS (overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
 |`backup.credentials`|IaaS provider specific|Service account credentials in a provider-specific format. |`(( iaas.creds ))` |[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
 
