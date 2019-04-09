@@ -24,7 +24,7 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
 
 ## Procedure
 
-To install Gardener in your base cluster, a command line tool [sow](https://github.com/gardener/sow) is used. It depends on other tools to be installed. To make it simple, we have created a Docker image `` that already contains `sow` and all required tools. All you have to do is to execute a [wrapper script](https://github.com/gardener/sow/tree/master/docker/bin) to start `sow` in a Docker container (Docker will download the image from [eu.gcr.io/gardener-project/sow](http://eu.gcr.io/gardener-project/sow) if it is not available locally yet). Docker will execute the sow command with the given arguments, and then exits and removes the container again.
+To install Gardener in your base cluster, a command line tool [sow](https://github.com/gardener/sow) is used. It depends on other tools to be installed. To make it simple, we have created a Docker image that already contains `sow` and all required tools. To execute `sow` you call a [wrapper script](https://github.com/gardener/sow/tree/master/docker/bin) which starts `sow` in a Docker container (Docker will download the image from [eu.gcr.io/gardener-project/sow](http://eu.gcr.io/gardener-project/sow) if it is not available locally yet). Docker executes the sow command with the given arguments, and mounts parts of your file system into that container so that `sow` can read configuration files for the installation of Gardener components, and can persist the state of your installation. After `sow`'s execution Docker removes the container again.
 
 1. Clone the `sow` repository and add the path to our [wrapper script](https://github.com/gardener/sow/tree/master/docker/bin) to your `PATH` variable so you can call `sow` on the command line.
 
@@ -35,7 +35,7 @@ To install Gardener in your base cluster, a command line tool [sow](https://gith
     export PATH=$PATH:$PWD/docker/bin
     ```
 
-1. Create a directory for your Gardener landscape and clone this repository into a subdirectory called `crop`:
+1. Create a directory `landscape` for your Gardener landscape and clone this repository into a subdirectory called `crop`:
 
     ```bash
     cd ..
@@ -54,8 +54,8 @@ To install Gardener in your base cluster, a command line tool [sow](https://gith
         gcloud container clusters get-credentials <your_cluster> --zone <your_zone> --project <your_project>
         ```
 
-    1. Save the GKE kubeconfig in a local file (for example `kubekonfig`) in your `landscape` folder. Make sure that you reference this file in the configuration file `acre.yaml` that is created in the next step.
-    > The filename and path should be *different* from the file you set in your `KUBECONFIG` environment variable.
+    1. Save the GKE kubeconfig in a local file (for example `kubekonfig`) in your `landscape` folder. Make sure that you assign this file to field `landscape.cluster.kubeconfig` in the configuration file `acre.yaml` that is created in the next step.
+    > The filename and path you will use in file `acre.yaml` should be *different* from the file you have set in your `KUBECONFIG` environment variable.
 
 1. In your `landscape` folder, create a configuration file called `acre.yaml`. The structure of the configuration file is described [below](#configuration-file-acreyaml).
 
@@ -114,7 +114,7 @@ landscape:
 
   <a href="#landscapeiaas">iaas</a>:
     region: &lt;major region&gt;-&lt;minor region&gt;      # region that Gardener will use for seed clusters
-    zones:                                                       # Remove zones block for providers other than GCP or AWS
+    zones:                                     # Remove zones block for providers other than GCP or AWS
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c     
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
@@ -122,9 +122,9 @@ landscape:
 
   <a href="#landscapeetcd">etcd</a>:
     backup:
-      type: &lt;gcs|s3&gt;                    # type of blob storage
-      resourceGroup:                # Azure specific, see below
-      region: (( iaas.region ))         # region of blob storage (default: same as above)
+      type: &lt;gcs|s3&gt;                           # type of blob storage
+      resourceGroup:                          # Azure specific, see below
+      region: (( iaas.region ))                # region of blob storage (default: same as above)
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
   <a href="#landscapedns">dns</a>:
@@ -267,16 +267,17 @@ These are the most important `sow` commands for deploying and deleting component
 
 | Command&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Use              |
 |:------------------------------|:-----------------|
-| `sow help`| Displays a command overview for sow |
-| `sow order -a <component>` | Displays all dependencies of a given component (in the order they should be deployed in) |
-| `sow deploy -a <component>` | Deploys a component and all of its dependencies |
-| `sow delete -a <component>` | Deletes a component and all components that depend on it (including transitive dependencies) |
-|`sow deploy <component>`|Deploys a single component. The deployment will fail if the dependencies have not been deployed before. |
 |`sow <component>`| Same as `sow deploy <component>`.|
 |`sow delete <component>`|Deletes a single component|
-|`sow order -A`|Displays the order in which all components can be deployed|
-|`sow deploy -A`|Deploys all components in the order specified by `sow order -A`|
 |`sow delete -A`|Deletes all components in the inverse order|
+|`sow delete -a <component>` | Deletes a component and all components that depend on it (including transitive dependencies) |
+|`sow deploy <component>`|Deploys a single component. The deployment will fail if the dependencies have not been deployed before. |
+|`sow deploy -A`|Deploys all components in the order specified by `sow order -A`|
+|`sow deploy -a <component>` | Deploys a component and all of its dependencies |
+|`sow help`| Displays a command overview for sow |
+|`sow order -a <component>` | Displays all dependencies of a given component (in the order they should be deployed in) |
+|`sow order -A`|Displays the order in which all components can be deployed|
+|`sow url`| Displays the URL for the Gardener dashboard (after a successful installation)|
 
 ### Directories
 After using sow to deploy the components, you will notice that there are new directories inside your landscape folder:
