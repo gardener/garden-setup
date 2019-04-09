@@ -245,6 +245,9 @@ metadata:
     heritage: Tiller
     release: addons
   annotations:
+{{- if .Values.dnsclass }}
+    "dns.gardener.cloud/class": {{ .Values.dnsclass | quote }}
+{{- end }}
     "dns.gardener.cloud/dnsnames": {{ .Values.dns | quote }}
     "dns.gardener.cloud/ttl": {{ .Values.ttl | default "120" | quote }}
   name: {{ .Values.name }}

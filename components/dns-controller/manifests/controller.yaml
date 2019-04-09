@@ -35,6 +35,7 @@ spec:
         - (( "--controllers=" join( ",", values.controllers ) ))
         - (( "--identifier=" values.identifier ))
         - (( ( "--ttl=" values.ttl ) || ~~ ))
+        - (( ( "--dns-class=" values.dns-class ) || ~~ ))
         - (( "--server-port-http=" ( values.server_port || 8080 ) ))
         livenessProbe:
           httpGet:

@@ -17,6 +17,8 @@ kind: DNSProvider
 metadata:
   name: (( values.provider.name ))
   namespace: (( values.namespace ))
+  annotations: (( { "dns.gardener.cloud/class"=values.dns-class} || ~ ))
+  
 spec:
   type: (( values.type ))
   secretRef:

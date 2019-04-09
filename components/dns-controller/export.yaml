@@ -13,3 +13,7 @@
 # limitations under the License.
 
 ---
+settings: (( &temporary ))
+
+export:
+  dns-class: (( settings.dns-class ))
