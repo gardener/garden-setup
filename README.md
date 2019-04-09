@@ -122,9 +122,9 @@ landscape:
 
   <a href="#landscapeetcd">etcd</a>:
     backup:
-      type: &lt;gcs|s3&gt;                           # type of blob storage
+      type: &lt;gcs|s3&gt;                          # type of blob storage
       resourceGroup:                          # Azure specific, see below
-      region: (( iaas.region ))                # region of blob storage (default: same as above)
+      region: (( iaas.region ))               # region of blob storage (default: same as above)
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
   <a href="#landscapedns">dns</a>:
@@ -156,7 +156,7 @@ cluster:                                            # Information about your bas
   kubeconfig: <relative path + filename>            # Path to your `kubeconfig` file, relative to folder `landscape`   
   domain: <prefix>.<cluster domain>                 # Unique basis domain for DNS entries
   iaas: <gcp|aws|azure>                             # IaaS provider (coming soon: openstack|alicloud)
-  region: <major region>-<minor region>             # Example: europe-west1
+  region: <major region>-<minor region>             # Example (gcp, aws): europe-west1; example (Azure): westeurope
 ```
 
 Information about your base cluster, where the Gardener will be deployed on.
@@ -193,9 +193,9 @@ Contains the information where Gardener will create seed clusters. By default, t
 
 | Field | Type | Description | Examples |Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:--------|
-|`region`|IaaS provider specific|Region where Gardener will create seed clusters and shoot clusters. The convention to use &lt;major region&gt;-&lt;minor region&gt; does not apply to all providers.| `europe-west1` (GCP)<br/><br/>`eu-west-1` (AWS) <br/><br/> `westeurope` (Azure)|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html); [Azure (Overview)](https://azure.microsoft.com/en-us/global-infrastructure/geographies/)|
+|`region`|IaaS provider specific|Region where Gardener will create seed clusters and shoot clusters. The convention to use &lt;major region&gt;-&lt;minor region&gt; does not apply to all providers.<br/><br/>In Azure, use [az account list-locations](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations) to find out the location name (`name` attribute = lower case name without spaces). | `europe-west1` (GCP)<br/><br/>`eu-west-1` (AWS) <br/><br/> `westeurope` (Azure)|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html); [Azure (Overview)](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), [Azure (HowTo)](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations)|
 |`zones`|IaaS provider specific|Zones where Gardener will create seed clusters and shoot clusters. This block is only required for GCP or AWS. |`europe-west1-b` (GCP)<br/></br>|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
-|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format. | See table with yaml keys below. | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
+|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format. | See table with yaml keys below. | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal)|
 
 The service account credentials will be used to give Gardener access to your base cluster:
 * To create a secret that will be used on the Gardener dashboard to create shoot clusters.
@@ -223,9 +223,9 @@ Configuration of what blob storage to use for the etcd key-value store. If your 
 | Field | Type | Description | Example&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:---------|
 |`backup.type`|Fixed value| Type of your blob store. Supported blob stores: `gcs` ([Google Cloud Storage](https://cloud.google.com/storage/)), `s3` ([Amazon S3](https://aws.amazon.com/s3/)), and `abs`[Azure Blob Storage](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview).|`gcs`|n.a.|
-|`backup.resourceGroup`|IaaS provider specific |Azure specific. Create an Azure blob store first which uses a resource group. Provide the resource group here. | `my-Azure-RG` | [Azure](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?tabs=azure-portal)(HowTo) |
+|`backup.resourceGroup`|IaaS provider specific |Azure specific. Create an Azure blob store first which uses a resource group. Provide the resource group here. | `my-Azure-RG` | [Azure](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?tabs=azure-portal) (HowTo) |
 |`backup.region`|IaaS provider specific|Region of blob storage. |`(( iaas.region ))` |[GCP (overview)](https://cloud.google.com/docs/geography-and-regions), [AWS (overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
-|`backup.credentials`|IaaS provider specific|Service account credentials in a provider-specific format. |`(( iaas.creds ))` |[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
+|`backup.credentials`|IaaS provider specific|Service account credentials in a provider-specific format. |`(( iaas.creds ))` |[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/rest/api/storageservices/authorization-for-the-azure-storage-services)|
 
 
 ### landscape.dns
@@ -259,6 +259,12 @@ identity:
 Configures the identity provider that allows access to the Gardener dashboard. The easiest method is to provide a list of `users`, each containing `email`, `username`, and either a clear-text `password` or a bcrypted `hash` of the password.
 You can then login into the dashboard using one of the specified email/password combinations.
 
+## Uninstall Gardener
+
+1. Run `sow delete -A` to delete all components from your base Kubernetes cluster in inverse order.
+
+1. During the deletion, the corresponding contents in directories `gen`, `export`, and `state` in your `landscape` directory are deleted automatically as well.
+
 ## Most Important Commands and Directories
 
 ### Commands
@@ -284,10 +290,6 @@ After using sow to deploy the components, you will notice that there are new dir
 
 | Directory               | Use              |
 |:------------------------|:-----------------|
-| `gen`| Temporary files that are created during the deployment of components, e.g. generated manifests. |
-| `export` | Allows communication (exports and imports) between components.It also contains the kubeconfig for the virtual cluster that handles the Gardener resources. |
-| `state` | Important state information of the components is stored here, e.g. the terraform state and generated certificates. It is crucial that this directory is not deleted while the landscape is active. While the contents of the *export* and *gen* folders will be overwritten when a component is deployed again, the contents of *state* will be reused instead. In some cases, it is necessary to delete the state of a component before deploying it again, for example if you want to create new certificates for it.|
-
-#### Deleting Directories
-The `gen` directory can be safely deleted at any time, except *during* the deployment of a component.
-Best practise is to delete all of the directories *after* tearing a landscape down *before* setting it up anew and - in case of `export` and `state` - **only** then. Although sometimes it might be necessary to delete the state/export of a specific component in order to redeploy it.
+| `gen`| Temporary files that are created during the deployment of components, for example, generated manifests. |
+| `export` | Allows communication (exports and imports) between components. It also contains the kubeconfig for the virtual cluster that handles the Gardener resources. |
+| `state` | Important state information of the components is stored here, for example, the terraform state and generated certificates. It is crucial that this directory is not deleted while the landscape is active. While the contents of the *export* and *gen* folders will be overwritten when a component is deployed again, the contents of *state* will be reused instead. In some cases, it is necessary to delete the state of a component before deploying it again, for example if you want to create new certificates for it.|
