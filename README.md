@@ -50,7 +50,7 @@ To install Gardener in your base cluster, a command line tool [sow](https://gith
     gcloud container clusters get-credentials <your_cluster> --zone <your_zone> --project <your_project>
     ```
 
-1. It is recommended to save your `kubeconfig` in your `landscape` directory. For the remaining steps we will assume that you saved it using file path `landscape/kubeconfig`.
+1. Save your `kubeconfig` somewhere in your `landscape` directory. For the remaining steps we will assume that you saved it using file path `landscape/kubeconfig`.
 
 1. In your `landscape` directory, create a configuration file called `acre.yaml`. The structure of the configuration file is described [below](#configuration-file-acreyaml). Note that the relative file path `./kubeconfig` file must be specified in field `landscape.cluster.kubeconfig` in the configuration file.
 
