@@ -124,7 +124,7 @@ landscape:
   <a href="#landscapeetcd">etcd</a>:
     backup:
       type: &lt;gcs|s3&gt;                          # type of blob storage
-      resourceGroup:                          # Azure specific, see below
+      resourceGroup:                          # Azure resource group you would like to use for your backup
       region: (( iaas.region ))               # region of blob storage (default: same as above)
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
@@ -236,13 +236,13 @@ dns:
   hostedZoneID:                             # hosted zone id for chosen domain
   credentials:                              # credentials for the dns provider
 ```
-Configuration for the Domain Name Service (DNS) provider. If your IaaS provider offers a DNS you can use the same values for `dns.credentials` as for `iaas.creds` above by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff.
+Configuration for the Domain Name Service (DNS) provider. If your IaaS provider also offers a DNS service and if the hosted zone for selected DNS base name in `landscape.cluster.domain` is owned by your IaaS account you can use the same values for `dns.credentials` as for `iaas.creds` above by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff. If they belong to another account (or to another IaaS provider) the appropriate credentials (and their type) have to be configured.
 
 | Field | Type | Description | Example |IaaS Provider Documentation
 |:------|:--------|:--------|:--------|:------------|
 |`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), and `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)).|`google-clouddns`|n.a.|
 |`hostendZoneID`| k8s domain| The domain of your base cluster (replace dots with dashes).|`gcp.dev.k8s.jacksgrocerystore.com`|[GCP](https://cloud.google.com/sdk/gcloud/reference/dns/managed-zones/list), [AWS](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ListInfoOnHostedZone.html)|
-|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format.|`(( iaas.creds ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
+|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format.|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
 
 
 ### landscape.identity
