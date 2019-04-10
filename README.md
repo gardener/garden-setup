@@ -114,12 +114,12 @@ landscape:
     services: &lt;CIDR IP range&gt;                             
 
   <a href="#landscapeiaas">iaas</a>:
-    region: &lt;major region&gt;-&lt;minor region&gt;      # region that Gardener will use for seed clusters
+    region: &lt;major region&gt;-&lt;minor region&gt;      # region for initial seed cluster
     zones:                                     # Remove zones block for providers other than GCP or AWS
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c     
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
-    credentials:                               # credentials to get access to the seed cluster through service account
+    credentials:                               # Provide access to IaaS layer used for creating resources for shoot clusters
 
   <a href="#landscapeetcd">etcd</a>:
     backup:
@@ -183,24 +183,24 @@ Finding out CIDR ranges of your cluster is not trivial. For example, GKE only te
 ### landscape.iaas
 ```yaml
 iaas:
-  region: <major region>-<minor region>             # region that Gardener will use for seed clusters
+  region: <major region>-<minor region>             # region for initial seed cluster
   zones:                                            # Remove zones block for providers other than GCP or AWS
     - <major region>-<minor region>-<zone>          # Example: europe-west1-b
     - <major region>-<minor region>-<zone>          # Example: europe-west1-c     
     - <major region>-<minor region>-<zone>          # Example: europe-west1-d
-  credentials:                                      # credentials to get access to the seed cluster through service account
+  credentials:                                      # Provide access to IaaS layer used for creating resources for shoot clusters
 ```
-Contains the information where Gardener will create seed clusters. By default, the *initial* seed component will create a seed resource using your base cluster as seed cluster.
+Contains the information where Gardener will create intial seed cluster and a default profile to create shoot cluster. By default, the *initial* seed component will create a seed resource using your base cluster as seed cluster. Other seed clusters and profiles can be added after the installation.
 
 | Field | Type | Description | Examples |Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:--------|
-|`region`|IaaS provider specific|Region where Gardener will create seed clusters and shoot clusters. The convention to use &lt;major region&gt;-&lt;minor region&gt; does not apply to all providers.<br/><br/>In Azure, use [az account list-locations](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations) to find out the location name (`name` attribute = lower case name without spaces). | `europe-west1` (GCP)<br/><br/>`eu-west-1` (AWS) <br/><br/> `westeurope` (Azure)|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html); [Azure (Overview)](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), [Azure (HowTo)](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations)|
-|`zones`|IaaS provider specific|Zones where Gardener will create seed clusters and shoot clusters. This block is only required for GCP or AWS. |`europe-west1-b` (GCP)<br/></br>|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
-|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format. | See table with yaml keys below. | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal)|
+|`region`|IaaS provider specific|Region for the initial seed cluster. The convention to use &lt;major region&gt;-&lt;minor region&gt; does not apply to all providers.<br/><br/>In Azure, use [az account list-locations](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations) to find out the location name (`name` attribute = lower case name without spaces). | `europe-west1` (GCP)<br/><br/>`eu-west-1` (AWS) <br/><br/> `westeurope` (Azure)|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html); [Azure (Overview)](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), [Azure (HowTo)](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations)|
+|`zones`|IaaS provider specific|Zones for the initial seed cluster. This block is only required for GCP or AWS. |`europe-west1-b` (GCP)<br/></br>|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
+|`credentials`|IaaS provider specific|Credentials in a provider-specific format. | See table with yaml keys below. | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal)|
 
-The service account credentials will be used to give Gardener access to your base cluster:
+The credentials will be used to give Gardener access to the IaaS layer:
 * To create a secret that will be used on the Gardener dashboard to create shoot clusters.
-* The control plane of the seed clusters will use this secret to store the etcd backups of the shoot clusters.
+* To allow the control plane of the seed clusters to store the etcd backups of the shoot clusters.
 
 Use the following yaml keys depending on your provider (excerpts):
 
