@@ -1,0 +1,40 @@
+landscape:
+  name: my-gardener
+
+  cluster:
+    kubeconfig: ./kubeconfig
+    domain: prefix.mydomain.org
+    iaas: <gcp/aws/azure>
+    region: europe-west1
+
+  networks:
+    nodes: <node CIDR>
+    pods: <pod CIDR>
+    services: <service CIDR>
+
+  iaas:
+    region: (( cluster.region ))
+    zones:
+      - europe-west1-b
+      - europe-west1-c
+      - europe-west1-d
+    credentials:
+      # your credentials here
+
+  etcd:
+    backup:
+      type: <gcs/s3/abs>
+      region: europe-west1
+      credentials:
+        # your credentials here
+
+  dns:
+    type: <google-clouddns/aws-route53/azure-dns>
+    credentials:
+      # your credentials here
+
+  identity:
+    users:
+      - email: "admin@mydomain.org"
+        username: "Admin"
+        password: "MyHardPassword123$"
