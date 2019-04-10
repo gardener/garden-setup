@@ -61,7 +61,7 @@ extension_controllers_values:
     createCRDs: false
     fullnameOverride: seed-dns-controller-manager
     image:
-      tag: 0.3.2
+      tag: 0.3.3
     configuration:
       poolSize: 20
       identifier: ""
