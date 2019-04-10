@@ -44,30 +44,31 @@ To install Gardener in your base cluster, a command line tool [sow](https://gith
     git clone "https://github.com/gardener/garden-setup" crop
     ```
 
-1. If you created the base cluster using GKE you need to convert your `KUBECONFIG` to one that uses basic authentication with Google-specific configuration parameters:
+1. If you don't have your `kubekonfig` stored locally somewhere yet, download it. For example, for GKE you would use the following command:
 
-    1. Set your `KUBECONFIG` environment variable to a file that does not exist.
+    ```bash
+    gcloud container clusters get-credentials <your_cluster> --zone <your_zone> --project <your_project>
+    ```
 
-    1. Download the GKE kubeconfig:
+1. It is recommended to save your `kubeconfig` in your `landscape` directory. For the remaining steps we will assume that you saved it using file path `landscape/kubeconfig`.
 
-        ```bash
-        gcloud container clusters get-credentials <your_cluster> --zone <your_zone> --project <your_project>
-        ```
+1. In your `landscape` directory, create a configuration file called `acre.yaml`. The structure of the configuration file is described [below](#configuration-file-acreyaml). Note that the relative file path `./kubeconfig` file must be specified in field `landscape.cluster.kubeconfig` in the configuration file.
 
-    1. Save the GKE kubeconfig in a local file (for example `kubekonfig`) in your `landscape` folder. Make sure that you assign this file to field `landscape.cluster.kubeconfig` in the configuration file `acre.yaml` that is created in the next step.
-    > The filename and path you will use in file `acre.yaml` should be *different* from the file you have set in your `KUBECONFIG` environment variable.
+    > Do not use file `acre.yaml` in directory `crop`. This file is used internally by the installation tool.
 
-1. In your `landscape` folder, create a configuration file called `acre.yaml`. The structure of the configuration file is described [below](#configuration-file-acreyaml).
+1. If you created the base cluster using GKE convert your `kubeconfig` file to one that uses basic authentication with Google-specific configuration parameters:
 
-    > Do not use file `acre.yaml` in folder `crop`. This file is used internally by the installation tool.
-
-1. If you created the base cluster using GKE, execute `sow convertkubeconfig`. When asked for credentials, enter the ones that the GKE dashboard shows when clicking on `show credentials`.
+    ```bash
+    sow convertkubeconfig
+    ```
+    When asked for credentials, enter the ones that the GKE dashboard shows when clicking on `show credentials`.
 
     `sow` will replace the file specified in `landscape.cluster.kubeconfig` of your `acre.yaml` file by a kubeconfig file that uses basic authentication.
 
-1. Open a second terminal window and enter the following command to watch the progress of the Gardener installation:
+1. Open a second terminal window which current directory is your `landscape` directory. Set the KUBECONFIG variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
 
     ```bash
+    export KUBECONFIG=./kubeconfig
     watch -d kubectl -n garden get pods,ingress,sts,svc
     ```
 
@@ -102,7 +103,7 @@ landscape:
   <a href="#landscapename">name</a>: &lt;Identifier&gt;                       # general Gardener landscape identifier, for example, `my-gardener`
 
   <a href="#landscapecluster">cluster</a>:                                          # Information about your base cluster
-    kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to folder `landscape`
+    kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to directory `landscape`
     domain: &lt;prefix&gt;.&lt;cluster domain&gt;               # Unique basis domain for DNS entries
     iaas: &lt;gcp|aws|azure&gt;                           # iaas provider (coming soon: openstack|alicloud)
     region: &lt;major region&gt;-&lt;minor region&gt;           # Example (gcp, aws): europe-west1; example (Azure): westeurope
@@ -153,7 +154,7 @@ Arbitrary name for your landscape. The name will be part of the names for resour
 ### landscape.cluster
 ```yaml
 cluster:                                            # Information about your base cluster
-  kubeconfig: <relative path + filename>            # Path to your `kubeconfig` file, relative to folder `landscape`   
+  kubeconfig: <relative path + filename>            # Path to your `kubeconfig` file, relative to directory `landscape`   
   domain: <prefix>.<cluster domain>                 # Unique basis domain for DNS entries
   iaas: <gcp|aws|azure>                             # IaaS provider (coming soon: openstack|alicloud)
   region: <major region>-<minor region>             # Example (gcp, aws): europe-west1; example (Azure): westeurope
@@ -163,7 +164,7 @@ Information about your base cluster, where the Gardener will be deployed on.
 
 | Field | Type | Description | Example |
 |:------|:--------|:--------|:--------|
-|`kubeconfig`|File path| Path to your kubeconfig, relative to your landscape folder. It is recommended to create a kubeconfig file in your landscape folder to be able to sync all files relevant for your installation with a git repository.| `./kubeconfig` |
+|`kubeconfig`|File path| Path to your kubeconfig, relative to your landscape directory. It is recommended to create a kubeconfig file in your landscape directory to be able to sync all files relevant for your installation with a git repository.| `./kubeconfig` |
 |`domain`| Unique name| Basis domain for DNS entries. As a best practice, use an individual prefix together with the cluster domain of your base cluster.|`vedge.gcp.dev.k8s.jacksgrocerystore.com`|
 |`iaas`| Fixed value | IaaS provider you would like to install Gardener on. | `gcp` |
 |`region`|IaaS provider specific| Region where your Kubernetes base cluster is deployed. | `europe-west1` (GCP)|
@@ -286,10 +287,10 @@ These are the most important `sow` commands for deploying and deleting component
 |`sow url`| Displays the URL for the Gardener dashboard (after a successful installation)|
 
 ### Directories
-After using sow to deploy the components, you will notice that there are new directories inside your landscape folder:
+After using sow to deploy the components, you will notice that there are new directories inside your landscape directory:
 
 | Directory               | Use              |
 |:------------------------|:-----------------|
 | `gen`| Temporary files that are created during the deployment of components, for example, generated manifests. |
 | `export` | Allows communication (exports and imports) between components. It also contains the kubeconfig for the virtual cluster that handles the Gardener resources. |
-| `state` | Important state information of the components is stored here, for example, the terraform state and generated certificates. It is crucial that this directory is not deleted while the landscape is active. While the contents of the *export* and *gen* folders will be overwritten when a component is deployed again, the contents of *state* will be reused instead. In some cases, it is necessary to delete the state of a component before deploying it again, for example if you want to create new certificates for it.|
+| `state` | Important state information of the components is stored here, for example, the terraform state and generated certificates. It is crucial that this directory is not deleted while the landscape is active. While the contents of the *export* and *gen* directorys will be overwritten when a component is deployed again, the contents of *state* will be reused instead. In some cases, it is necessary to delete the state of a component before deploying it again, for example if you want to create new certificates for it.|
