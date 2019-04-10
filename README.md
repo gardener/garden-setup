@@ -65,7 +65,7 @@ To install Gardener in your base cluster, a command line tool [sow](https://gith
 
     `sow` will replace the file specified in `landscape.cluster.kubeconfig` of your `acre.yaml` file by a kubeconfig file that uses basic authentication.
 
-1. Open a second terminal window which current directory is your `landscape` directory. Set the KUBECONFIG variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
+1. Open a second terminal window which current directory is your `landscape` directory. Set the `KUBECONFIG` environment variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
 
     ```bash
     export KUBECONFIG=./kubeconfig
