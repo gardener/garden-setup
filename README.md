@@ -241,7 +241,7 @@ Configuration for the Domain Name Service (DNS) provider. If your IaaS provider 
 | Field | Type | Description | Example |IaaS Provider Documentation
 |:------|:--------|:--------|:--------|:------------|
 |`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), and `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)).|`google-clouddns`|n.a.|
-|`hostendZoneID`| k8s domain| The domain of your base cluster (replace dots with dashes).|`gcp.dev.k8s.jacksgrocerystore.com`|[GCP](https://cloud.google.com/sdk/gcloud/reference/dns/managed-zones/list), [AWS](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ListInfoOnHostedZone.html)|
+|`hostedZoneID`| k8s domain| The domain of your base cluster (replace dots with dashes).|`gcp.dev.k8s.jacksgrocerystore.com`|[GCP](https://cloud.google.com/sdk/gcloud/reference/dns/managed-zones/list), [AWS](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ListInfoOnHostedZone.html)|
 |`credentials`|IaaS provider specific|Service account credentials in a provider-specific format.|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
 
 
