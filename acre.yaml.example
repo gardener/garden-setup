@@ -30,6 +30,7 @@ landscape:
 
   dns:
     type: <google-clouddns/aws-route53/azure-dns>
+    hostedZoneID: <hosted zone id>
     credentials:
       # your credentials here
 
