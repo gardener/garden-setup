@@ -5,7 +5,6 @@ landscape:
     kubeconfig: ./kubeconfig
     domain: prefix.mydomain.org
     iaas: <gcp/aws/azure>
-    region: europe-west1
 
   networks:
     nodes: <node CIDR>
@@ -13,7 +12,7 @@ landscape:
     services: <service CIDR>
 
   iaas:
-    region: (( cluster.region ))
+    region: europe-west1
     zones:
       - europe-west1-b
       - europe-west1-c

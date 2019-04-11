@@ -106,7 +106,6 @@ landscape:
     kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to directory `landscape`
     domain: &lt;prefix&gt;.&lt;cluster domain&gt;               # Unique basis domain for DNS entries
     iaas: &lt;gcp|aws|azure&gt;                           # iaas provider (coming soon: openstack|alicloud)
-    region: &lt;major region&gt;-&lt;minor region&gt;           # Example (gcp, aws): europe-west1; example (Azure): westeurope
 
   <a href="#landscapenetworks">networks</a>:                                         # <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR IP ranges</a> of base cluster
     nodes: &lt;CIDR IP range&gt;                                  
@@ -157,7 +156,6 @@ cluster:                                            # Information about your bas
   kubeconfig: <relative path + filename>            # Path to your `kubeconfig` file, relative to directory `landscape`   
   domain: <prefix>.<cluster domain>                 # Unique basis domain for DNS entries
   iaas: <gcp|aws|azure>                             # IaaS provider (coming soon: openstack|alicloud)
-  region: <major region>-<minor region>             # Example (gcp, aws): europe-west1; example (Azure): westeurope
 ```
 
 Information about your base cluster, where the Gardener will be deployed on.
@@ -167,7 +165,6 @@ Information about your base cluster, where the Gardener will be deployed on.
 |`kubeconfig`|File path| Path to your kubeconfig, relative to your landscape directory. It is recommended to create a kubeconfig file in your landscape directory to be able to sync all files relevant for your installation with a git repository.| `./kubeconfig` |
 |`domain`| Unique name| Basis domain for DNS entries. As a best practice, use an individual prefix together with the cluster domain of your base cluster.|`vedge.gcp.dev.k8s.jacksgrocerystore.com`|
 |`iaas`| Fixed value | IaaS provider you would like to install Gardener on. | `gcp` |
-|`region`|IaaS provider specific| Region where your Kubernetes base cluster is deployed. | `europe-west1` (GCP)|
 
 ### landscape.networks
 ```yaml
