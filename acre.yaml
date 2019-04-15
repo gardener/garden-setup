@@ -49,6 +49,10 @@ landscape:
       image_repo: "eu.gcr.io/gardener-project/dns-controller-manager"
   iaas:
   etcd:
+    backup:
+      type: (( .backup_type_mapping[iaas.type] ))
+      region: (( iaas.region ))
+      credentials: (( iaas.credentials ))
   identity:
   dns:
     type: (( .dns_type_mapping[iaas.type] ))
@@ -60,3 +64,9 @@ dns_type_mapping:
   gcp: google-clouddns
   aws: aws-route53
   azure: azure-dns
+
+backup_type_mapping:
+  <<: (( &temporary ))
+  gcp: gcs
+  aws: s3
+  azure: abs
