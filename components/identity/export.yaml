@@ -28,3 +28,4 @@ export:
   identity_dns: (( .settings.identity_dns ))
   dashboard_url: (( .settings.dashboardUrl ))
   dashboard_dns: (( .settings.dashboard_dns ))
+  dashboardClientSecret: (( .state.dashboardClientSecret.value ))

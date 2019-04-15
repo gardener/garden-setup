@@ -36,6 +36,7 @@ dashboard:
   namespace: (( .landscape.namespace ))
   values:
     apiServerUrl: (( imports.kube_apiserver.export.apiserver_url ))
+    sessionSecret: (( rand("[:alnum:]", 30) ))
     hosts:
       - (( imports.identity.export.dashboard_dns ))
     image:
@@ -45,7 +46,8 @@ dashboard:
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))
       ca: (( imports.identity.export.ca.crt ))
-      redirectUri: (( settings.dashboard_url "/callback" ))
+      redirectUri: (( settings.dashboard_url "/auth/callback" ))
+      clientSecret: (( imports.identity.export.dashboardClientSecret ))
     tls:
       crt: (( imports.identity.export.server.crt ))
       key: (( imports.identity.export.server.key ))
