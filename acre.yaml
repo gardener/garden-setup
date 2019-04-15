@@ -14,6 +14,7 @@
 
 landscape:
   name: (( error("landscape name required") ))
+  domain:
   namespace: garden
   cluster: (( &local(~~) ))
   clusters: (( defined(landscape.cluster) ? [ landscape.cluster ] :error("no cluster definition found") ))
@@ -46,7 +47,6 @@ landscape:
       <<: (( merge ))
       image_tag: "0.4.0-master"
       image_repo: "eu.gcr.io/gardener-project/dns-controller-manager"
-  networks:
   iaas:
   etcd:
   identity:

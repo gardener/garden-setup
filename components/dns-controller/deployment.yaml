@@ -60,7 +60,7 @@ spec:
   namespace: "kube-system"
   identifier: (( "setup.gardener.cloud/" landscape.name ))
   type: (( .landscape.dns.type ))
-  domain: (( .landscape.clusters.[0].domain ))
+  domain: (( .landscape.domain ))
   secret_name: (( settings.naming "-dns-controller-manager-" provider.name ))
   dns_rbac_name: (( settings.naming "-dns-controller-manager" ))
   dns-class: (( settings.dns-class ))

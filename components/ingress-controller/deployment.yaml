@@ -20,7 +20,7 @@ plugins:
   - helm: ingresscontroller
 
 settings:
-  ingress_domain: (( "ingress." landscape.clusters.[0].domain ))
+  ingress_domain: (( "ingress." landscape.domain ))
 
 ingresscontroller:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
