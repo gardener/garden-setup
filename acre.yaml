@@ -51,4 +51,12 @@ landscape:
   etcd:
   identity:
   dns:
+    type: (( .dns_type_mapping[iaas.type] ))
+    credentials: (( iaas.credentials ))
   profiles: (( [] ))
+
+dns_type_mapping:
+  <<: (( &temporary ))
+  gcp: google-clouddns
+  aws: aws-route53
+  azure: azure-dns

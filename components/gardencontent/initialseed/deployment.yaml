@@ -33,7 +33,7 @@ cleanup:
   namespace: (( landscape.namespace ))
 
 providerconfig:
-  name: (( landscape.clusters.[0].iaas ))
+  name: (( landscape.iaas.type ))
   namespace: (( landscape.namespace ))
   dns:
     type: (( landscape.dns.type ))
