@@ -16,8 +16,10 @@ landscape:
   name: (( error("landscape name required") ))
   domain:
   namespace: garden
-  cluster: (( &local(~~) ))
-  clusters: (( defined(landscape.cluster) ? [ landscape.cluster ] :error("no cluster definition found") ))
+  cluster:
+    kubeconfig: ./kubeconfig
+    networks: ~
+  clusters: (( valid(landscape.cluster.networks) ? [ landscape.cluster ] :error("no cluster definition found") ))
   components: []
   versions:
     gardener:
