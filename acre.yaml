@@ -51,12 +51,15 @@ landscape:
       image_repo: "eu.gcr.io/gardener-project/dns-controller-manager"
   iaas:
   etcd:
+    <<: (( merge ))
     backup:
+      <<: (( merge ))
       type: (( .backup_type_mapping[iaas.type] ))
       region: (( iaas.region ))
       credentials: (( iaas.credentials ))
   identity:
   dns:
+    <<: (( merge ))
     type: (( .dns_type_mapping[iaas.type] ))
     credentials: (( iaas.credentials ))
   profiles: (( [] ))
