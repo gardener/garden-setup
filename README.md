@@ -101,18 +101,17 @@ This file will be evaluated using `spiff`, a dynamic templating language for yam
 <pre>
 landscape:
   <a href="#landscapename">name</a>: &lt;Identifier&gt;                       # general Gardener landscape identifier, for example, `my-gardener`
+  domain: &lt;prefix&gt;.&lt;cluster domain&gt;        # Unique basis domain for DNS entries
 
   <a href="#landscapecluster">cluster</a>:                                          # Information about your base cluster
-    kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to directory `landscape`
-    domain: &lt;prefix&gt;.&lt;cluster domain&gt;               # Unique basis domain for DNS entries
-    iaas: &lt;gcp|aws|azure&gt;                           # iaas provider (coming soon: openstack|alicloud)
-
-  <a href="#landscapenetworks">networks</a>:                                         # <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR IP ranges</a> of base cluster
-    nodes: &lt;CIDR IP range&gt;                                  
-    pods: &lt;CIDR IP range&gt;                                   
-    services: &lt;CIDR IP range&gt;                             
+    kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to directory `landscape` (defaults to `./kubeconfig`)
+    <a href="#landscapenetworks">networks</a>:                                         # <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR IP ranges</a> of base cluster
+      nodes: &lt;CIDR IP range&gt;
+      pods: &lt;CIDR IP range&gt;
+      services: &lt;CIDR IP range&gt;
 
   <a href="#landscapeiaas">iaas</a>:
+    type: &lt;gcp|aws|azure&gt;                      # iaas provider (coming soon: openstack|alicloud)
     region: &lt;major region&gt;-&lt;minor region&gt;      # region for initial seed cluster
     zones:                                     # Remove zones block for providers other than GCP or AWS
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
@@ -120,16 +119,16 @@ landscape:
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
     credentials:                               # Provide access to IaaS layer used for creating resources for shoot clusters
 
-  <a href="#landscapeetcd">etcd</a>:
+  <a href="#landscapeetcd">etcd</a>:                                       # optional, default values based on `landscape.iaas`
     backup:
       type: &lt;gcs|s3&gt;                          # type of blob storage
       resourceGroup:                          # Azure resource group you would like to use for your backup
       region: (( iaas.region ))               # region of blob storage (default: same as above)
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
-  <a href="#landscapedns">dns</a>:
-    type: &lt;google-clouddns|aws-route53&gt;       # dns provider
-    credentials:                              # credentials for the dns provider
+  <a href="#landscapedns">dns</a>:                                              # optional, default values based on `landscape.iaas`
+    type: &lt;google-clouddns|aws-route53|azure-dns&gt;   # dns provider
+    credentials: (( iaas.credentials ))             # credentials for the dns provider
 
   <a href="#landscapeidentity">identity</a>:
     users:
@@ -149,36 +148,33 @@ landscape:
 ```
 Arbitrary name for your landscape. The name will be part of the names for resources, for example, the etcd buckets.
 
+### landscape.domain
+```yaml
+  domain: <prefix>.<cluster domain>                 # Unique basis domain for DNS entries
+```
+Basis domain for DNS entries. As a best practice, use an individual prefix together with the cluster domain of your base cluster.
+
 ### landscape.cluster
 ```yaml
 cluster:                                            # Information about your base cluster
   kubeconfig: <relative path + filename>            # Path to your `kubeconfig` file, relative to directory `landscape`   
-  domain: <prefix>.<cluster domain>                 # Unique basis domain for DNS entries
-  iaas: <gcp|aws|azure>                             # IaaS provider (coming soon: openstack|alicloud)
+  networks:                                 # CIDR IP ranges of base cluster
+    nodes: <CIDR IP range>
+    pods: <CIDR IP range>
+    services: <CIDR IP range>
 ```
 
 Information about your base cluster, where the Gardener will be deployed on.
 
-| Field | Type | Description | Example |
-|:------|:--------|:--------|:--------|
-|`kubeconfig`|File path| Path to your kubeconfig, relative to your landscape directory. It is recommended to create a kubeconfig file in your landscape directory to be able to sync all files relevant for your installation with a git repository.| `./kubeconfig` |
-|`domain`| Unique name| Basis domain for DNS entries. As a best practice, use an individual prefix together with the cluster domain of your base cluster.|`vedge.gcp.dev.k8s.jacksgrocerystore.com`|
-|`iaas`| Fixed value | IaaS provider you would like to install Gardener on. | `gcp` |
+`landscape.cluster.kubeconfig` contains the path to your kubeconfig, relative to your landscape directory. It is recommended to create a kubeconfig file in your landscape directory to be able to sync all files relevant for your installation with a git repository. This value is optional and will default to `./kubeconfig` if not specified.
 
-### landscape.networks
-```yaml
-networks:                                 # CIDR IP ranges of base cluster
-  nodes: <CIDR IP range>                                  
-  pods: <CIDR IP range>                                   
-  services: <CIDR IP range>
-```
-CIDR ranges of your base cluster.
-
+`landscape.cluster.networks` contains the CIDR ranges of your base cluster.
 Finding out CIDR ranges of your cluster is not trivial. For example, GKE only tells you a "pod address range" which is actually a combination of pod and service CIDR. However, since the `kubernetes` service typically has the first IP of the service IP range and most methods to get a kubernetes cluster tell you at least something about the CIDRs, it is usually possible to find out the CIDRs with a little bit of educated guessing.
 
 ### landscape.iaas
 ```yaml
 iaas:
+  type: <gcp|aws|azure>                             # IaaS provider (coming soon: openstack|alicloud)
   region: <major region>-<minor region>             # region for initial seed cluster
   zones:                                            # Remove zones block for providers other than GCP or AWS
     - <major region>-<minor region>-<zone>          # Example: europe-west1-b
@@ -190,6 +186,7 @@ Contains the information where Gardener will create intial seed cluster and a de
 
 | Field | Type | Description | Examples |Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:--------|
+|`type`| Fixed value | IaaS provider you would like to install Gardener on. | `gcp` |
 |`region`|IaaS provider specific|Region for the initial seed cluster. The convention to use &lt;major region&gt;-&lt;minor region&gt; does not apply to all providers.<br/><br/>In Azure, use [az account list-locations](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations) to find out the location name (`name` attribute = lower case name without spaces). | `europe-west1` (GCP)<br/><br/>`eu-west-1` (AWS) <br/><br/> `westeurope` (Azure)|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html); [Azure (Overview)](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), [Azure (HowTo)](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations)|
 |`zones`|IaaS provider specific|Zones for the initial seed cluster. This block is only required for GCP or AWS. |`europe-west1-b` (GCP)<br/></br>|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
 |`credentials`|IaaS provider specific|Credentials in a provider-specific format. | See table with yaml keys below. | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal)|
@@ -208,7 +205,7 @@ Use the following yaml keys depending on your provider (excerpts):
 
 ### landscape.etcd
 ```yaml
-etcd:
+etcd:                                   # optional, default values based on `landscape.iaas`
   backup:
     type: <gcs|s3|abs>                  # type of blob storage
     resourceGroup: ...                  # Azure resource group you would like to use for your backup
@@ -216,6 +213,7 @@ etcd:
     credentials: (( iaas.credentials )) # credentials for the blob storage's IaaS provider (default: same as above)
 ```
 Configuration of what blob storage to use for the etcd key-value store. If your IaaS provider offers a blob storage you can use the same values for `etc.backup.region` and `etc.backup.credentials` as above for `iaas.region` and `iaas.credentials` correspondingly by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff.
+If you remove single values or the whole block, the missing values will be set to defaults derived from `landscape.iaas`. The `resourceGroup` cannot be defaulted and must be specified.
 
 | Field | Type | Description | Example&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:---------|
@@ -227,16 +225,17 @@ Configuration of what blob storage to use for the etcd key-value store. If your 
 
 ### landscape.dns
 ```yaml
-dns:
-  type: <google-clouddns|aws-route53>       # dns provider
-  credentials:                              # credentials for the dns provider
+dns:                                              # optional, default values based on `landscape.iaas`
+  type: <google-clouddns|aws-route53|azure-dns>   # dns provider
+  credentials:                                    # credentials for the dns provider
 ```
 Configuration for the Domain Name Service (DNS) provider. If your IaaS provider also offers a DNS service you can use the same values for `dns.credentials` as for `iaas.creds` above by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff. If they belong to another account (or to another IaaS provider) the appropriate credentials (and their type) have to be configured.
+Similar to `landscape.etcd`, missing values will be set to defaults based on the values given in `landscape.iaas`.
 
 | Field | Type | Description | Example |IaaS Provider Documentation
 |:------|:--------|:--------|:--------|:------------|
-|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), and `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)).|`google-clouddns`|n.a.|
-|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format.|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts)|
+|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)), and `azure-dns` ([Azure DNS](https://azure.microsoft.com/de-de/services/dns/)).|`google-clouddns`|n.a.|
+|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format.|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/azure-stack/user/azure-stack-create-service-principals)|
 
 
 ### landscape.identity
@@ -271,9 +270,12 @@ These are the most important `sow` commands for deploying and deleting component
 |`sow <component>`| Same as `sow deploy <component>`.|
 |`sow delete <component>`|Deletes a single component|
 |`sow delete -A`|Deletes all components in the inverse order|
+|`sow delete all`|Same as `sow delete -A`|
 |`sow delete -a <component>` | Deletes a component and all components that depend on it (including transitive dependencies) |
 |`sow deploy <component>`|Deploys a single component. The deployment will fail if the dependencies have not been deployed before. |
 |`sow deploy -A`|Deploys all components in the order specified by `sow order -A`|
+|`sow deploy -An`|Deploys all components that are not deployed yet|
+|`sow deploy all`|Same as `sow deploy -A`|
 |`sow deploy -a <component>` | Deploys a component and all of its dependencies |
 |`sow help`| Displays a command overview for sow |
 |`sow order -a <component>` | Displays all dependencies of a given component (in the order they should be deployed in) |
