@@ -19,7 +19,7 @@ landscape:
   cluster:
     kubeconfig: ./kubeconfig
     networks: ~
-  clusters: (( valid(landscape.cluster.networks) ? [ landscape.cluster ] :error("no cluster definition found") ))
+  clusters: (( valid(landscape.cluster.networks) ? [ landscape.cluster ] :error("no cluster networks definition found") ))
   components: []
   versions:
     gardener:
@@ -75,3 +75,70 @@ backup_type_mapping:
   gcp: gcs
   aws: s3
   azure: abs
+
+validation:
+  <<: (( &temporary ))
+  is_in: (( |e,l|-> [contains(l, e), "valid", "invalid value '" e "'"] ))
+  types:
+    iaas:
+      gcp: 
+        - mapfield
+        - serviceaccount.json
+      aws:
+        - and
+        - - mapfield
+          - accessKeyID
+        - - mapfield
+          - secretAccessKey
+      azure:
+        - and
+        - - mapfield
+          - clientID
+        - - mapfield
+          - clientSecret
+        - - mapfield
+          - subscriptionID
+        - - mapfield
+          - tenantID
+    etcd_backup:
+      gcs: (( iaas.gcp ))
+      s3: (( iaas.aws ))
+      abs: (( iaas.azure ))
+    dns:
+      google-clouddns: (( iaas.gcp ))
+      aws-route53: (( iaas.aws ))
+      azure-dns: (( iaas.azure ))
+  landscape_name: (( validate( landscape.name, "dnslabel" ) ))
+  domain: (( validate( landscape.domain, "dnsdomain" ) ))
+  cidrs: (( validate( landscape.clusters[0].networks, ["mapfield", "nodes", "cidr"], ["mapfield", "pods", "cidr"], ["mapfield", "services", "cidr"] ) ))
+  iaas_type: (( validate( landscape.iaas.type, [is_in, keys( types.iaas )] ) ))
+  iaas_creds: (( validate( landscape.iaas.credentials, types.iaas[landscape.iaas.type] ) ))
+  etcd_backup_type: (( validate( landscape.etcd.backup.type, [is_in, keys( types.etcd_backup )] ) ))
+  etcd_backup_creds: (( validate( landscape.etcd.backup.credentials, types.etcd_backup[landscape.etcd.backup.type] ) ))
+  azure_resource_group: (( landscape.etcd.backup.type == "abs" ? validate( landscape.etcd.backup, ["mapfield", "resourceGroup"] ) :~ ))
+  dns_type: (( validate( landscape.dns.type, [is_in, keys( types.dns )] ) ))
+  dns_creds: (( validate( landscape.dns.credentials, types.dns[landscape.dns.type] ) ))
+  identity:
+    userspec:
+      - and
+      - - mapfield
+        - email
+        - - match
+          - "[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*@[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)+$"
+      - - mapfield
+        - username
+      - - or
+        - - mapfield
+          - password
+        - - mapfield
+          - hash
+    connectorspec:
+      - and
+      - - mapfield
+        - type
+      - - mapfield
+        - id
+      - - mapfield
+        - name
+    identityspec: (( |id|-> [valid( id.users || id.connectors ), "valid", "identity config needs to contain either 'users' or 'connectors' (or both)"] ))
+    validator: (( validate( landscape.identity, identityspec, ["optionalfield", "users", ["list", identity.userspec]], ["optionalfield", "connectors", ["list", identity.connectorspec]] ) ))
