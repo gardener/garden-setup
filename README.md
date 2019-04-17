@@ -199,7 +199,7 @@ Use the following yaml keys depending on your provider (excerpts):
 
 | AWS  | GCP | Azure |
 |:--------------|:--------------|:--------------|
-|<pre>    credentials: <br/>      region: ...<br/>      accessKeyID: ...<br/>      secretAccessKey: ... </pre> |<pre>    credentials: <br/>      serviceaccount.json: &#124;<br/>      {</br>        "type": "...",</br>        "project_id": "...",</br>        ...</br>      }</pre>|<pre>    credentials:<br/>      clientID: ...<br/>      clientSecret: ...<br/>      subscriptionID: ...<br/>      tenantID: ...</pre>|
+|<pre>    credentials: <br/>      accessKeyID: ...<br/>      secretAccessKey: ... </pre> |<pre>    credentials: <br/>      serviceaccount.json: &#124;<br/>      {</br>        "type": "...",</br>        "project_id": "...",</br>        ...</br>      }</pre>|<pre>    credentials:<br/>      clientID: ...<br/>      clientSecret: ...<br/>      subscriptionID: ...<br/>      tenantID: ...</pre>|
 
 
 
