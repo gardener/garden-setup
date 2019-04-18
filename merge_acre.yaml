@@ -1,0 +1,25 @@
+# This file can be used to transform an old acre.yaml (before release 1.0.0) to a new acre.yaml.
+# Requirements: spiff++ v1.3.0 -> https://github.com/mandelsoft/spiff/releases/tag/v1.3.0
+# Usage:
+#   1. Rename your acre.yaml to acre_old.yaml (so you don't lose it in case something fails)
+#   2. Execute the command 'spiff merge ./merge_acre.yaml ../acre_old.yaml > ../acre.yaml' from within your 'crop' folder
+
+landscape:
+  name:
+  domain: (( stub( landscape.cluster.domain ) ))
+
+  cluster:
+    networks: (( stub( landscape.networks ) ))
+    kubeconfig: (( merge none // match( "^(\\./)?kubeconfig$", stub() ) == [] ? stub() :~~ ))
+
+  iaas:
+    type: (( stub( landscape.cluster.iaas ) ))
+    <<: (( merge ))
+
+  etcd: (( ~~ ))
+
+  dns: (( ~~ ))
+
+  versions: (( ~~ ))
+
+  identity:
