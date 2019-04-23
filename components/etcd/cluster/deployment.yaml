@@ -19,10 +19,9 @@ utilities: (( &temporary ))
 
 temp:
   <<: (( &temporary ))
-  type: (( landscape.etcd.backup.type ))
+  config: (( landscape.etcd.backup ))
   addon: (( read(dir "/provider.yaml") ))
-  dir: (( __ctx.DIR "/provider/" type ))
-  credentials: (( landscape.etcd.backup.credentials ))
+  dir: (( __ctx.DIR "/provider/" config.type ))
 
 plugins:
   - helm:
@@ -85,7 +84,7 @@ etcd:
         schedule: "0 */24 * * *" # cron standard schedule
         maxBackups: 7 # Maximum number of backups to keep (may change in future)
         storageProvider: (( spec.providertypes.[landscape.etcd.backup.type] ))  # Abs,Gcs,S3,Swift empty means no backup,
-        secretData: (( sum[temp.credentials|{}|c,k,v|->c {k=base64(v)}] ))
+        secretData: (( sum[temp.config.credentials|{}|c,k,v|->c {k=base64(v)}] ))
         storageContainer: (( imports.backupinfra.export.bucketname ))
         env: (( temp.addon.env ))
         volumeMounts: (( temp.addon.volumeMounts ))

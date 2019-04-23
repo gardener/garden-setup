@@ -14,10 +14,10 @@
 
 env:
   - name: "AWS_REGION"
-    value: (( credentials.region ))
+    value: (( config.region ))
   - name: "AWS_ACCESS_KEY_ID"
-    value: (( credentials.accessKeyID ))
+    value: (( config.credentials.accessKeyID ))
   - name: "AWS_SECRET_ACCESS_KEY"
-    value: (( credentials.secretAccessKey ))
+    value: (( config.credentials.secretAccessKey ))
 
 volumeMounts: []

@@ -16,10 +16,9 @@ landscape: (( &temporary ))
 
 temp:
   <<: (( &temporary ))
-  type: (( landscape.etcd.backup.type ))
-  addon: (( read(dir "/tfvars.yaml") ))
-  dir: (( __ctx.DIR "/provider/" type ))
   config: (( landscape.etcd.backup ))
+  addon: (( read(dir "/tfvars.yaml") ))
+  dir: (( __ctx.DIR "/provider/" config.type ))
 
 plugins:
   - terraform

@@ -176,7 +176,7 @@ gardener:
                 key: (( .state.gardener_controller_manager.value.key ))
         defaultDomains:
           - credentials: (( *.dns_credentials.[provider] ))
-            domain: (( "shoot." .landscape.clusters.[0].domain ))
+            domain: (( "shoot." .landscape.domain ))
             provider: (( .landscape.dns.type ))
         enabled: true
         image:
@@ -185,7 +185,7 @@ gardener:
           tag: (( .gardener_git.controller_manager.image_tag || ~~ ))
         internalDomain:
           credentials: (( *.dns_credentials.[provider] ))
-          domain: (( "internal." .landscape.clusters.[0].domain ))
+          domain: (( "internal." .landscape.domain ))
           provider: (( .landscape.dns.type ))
         replicaCount: 1
         resources:
@@ -198,5 +198,5 @@ gardener:
         serviceAccountName: gardener-controller-manager
       deployment:
         virtualGarden:
-          clusterIP: (( min_ip(.landscape.networks.services) + 20 ))
+          clusterIP: (( min_ip(.landscape.clusters.[0].networks.services) + 20 ))
           enabled: true

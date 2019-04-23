@@ -29,7 +29,7 @@ shoot-check:
 values:
   projectname: core
   namespace: garden-core
-  secretname: (( "core-" landscape.clusters.[0].iaas ))
+  secretname: (( "core-" landscape.iaas.type ))
 
 core:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
