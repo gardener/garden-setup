@@ -1,5 +1,12 @@
 #! /bin/bash -e
 
+copy_state() {
+    mkdir -p $TM_SHARED_PATH/setup
+    cp -R ./state $TM_SHARED_PATH/setup
+    cp -R ./export $TM_SHARED_PATH/setup
+    cp -R ./gen $TM_SHARED_PATH/setup
+}
+
 SOURCE_PATH="$(realpath .)"
 
 # change working directory and add garden-setup as crop
@@ -8,13 +15,12 @@ cd /tmp/garden
 ln -s $SOURCE_PATH ./crop
 cp $SOURCE_PATH/test/acre.yaml .
 
+trap copy_state EXIT
+
 sow order -A
-sow deploy -A
+sow -Dv deploy -A
 
 cp -R ./export/kube-apiserver/kubeconfig $TM_KUBECONFIG_PATH/gardener.config
 
-mkdir -p $TM_KUBECONFIG_PATH/setup
-cp -R ./state $TM_KUBECONFIG_PATH/setup
-cp -R ./export $TM_KUBECONFIG_PATH/setup
-cp -R ./gen $TM_KUBECONFIG_PATH/setup
+copy_state
 

@@ -1,5 +1,6 @@
 #! /bin/bash -e
 
+
 SOURCE_PATH="$(realpath .)"
 
 # change working directory and add garden-setup as crop
@@ -8,7 +9,7 @@ cd /tmp/garden
 ln -s $SOURCE_PATH ./crop
 cp $SOURCE_PATH/test/acre.yaml .
 
-cp -R $TM_KUBECONFIG_PATH/setup/* .
+cp -R $TM_SHARED_PATH/setup/* .
 
 sow order -A
 sow delete -A
