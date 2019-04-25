@@ -69,12 +69,14 @@ dns_type_mapping:
   gcp: google-clouddns
   aws: aws-route53
   azure: azure-dns
+  openstack: openstack-designate
 
 backup_type_mapping:
   <<: (( &temporary ))
   gcp: gcs
   aws: s3
   azure: abs
+  openstack: swift
 
 validation:
   <<: (( &temporary ))
@@ -100,18 +102,33 @@ validation:
           - subscriptionID
         - - mapfield
           - tenantID
+      openstack:
+        - and
+        - - mapfield
+          - domainName
+        - - mapfield
+          - tenantName
+        - - mapfield
+          - username
+        - - mapfield
+          - password
+        - - mapfield
+          - authURL
     etcd_backup:
       gcs: (( iaas.gcp ))
       s3: (( iaas.aws ))
       abs: (( iaas.azure ))
+      swift: (( iaas.openstack ))
     dns:
       google-clouddns: (( iaas.gcp ))
       aws-route53: (( iaas.aws ))
       azure-dns: (( iaas.azure ))
+      openstack-designate: (( iaas.openstack ))
   landscape_name: (( validate( landscape.name, "dnslabel" ) ))
   domain: (( validate( landscape.domain, "dnsdomain" ) ))
   cidrs: (( validate( landscape.clusters[0].networks, ["mapfield", "nodes", "cidr"], ["mapfield", "pods", "cidr"], ["mapfield", "services", "cidr"] ) ))
   iaas_type: (( validate( landscape.iaas.type, [is_in, keys( types.iaas )] ) ))
+  iaas_region: (( validate( landscape.iaas, ["mapfield", "region"] ) ))
   iaas_creds: (( validate( landscape.iaas.credentials, types.iaas[landscape.iaas.type] ) ))
   etcd_backup_type: (( validate( landscape.etcd.backup.type, [is_in, keys( types.etcd_backup )] ) ))
   etcd_backup_creds: (( validate( landscape.etcd.backup.credentials, types.etcd_backup[landscape.etcd.backup.type] ) ))
