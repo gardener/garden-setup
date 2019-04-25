@@ -101,7 +101,7 @@ This file will be evaluated using `spiff`, a dynamic templating language for yam
 <pre>
 landscape:
   <a href="#landscapename">name</a>: &lt;Identifier&gt;                       # general Gardener landscape identifier, for example, `my-gardener`
-  domain: &lt;prefix&gt;.&lt;cluster domain&gt;        # Unique basis domain for DNS entries
+  <a href="#landscapedomain">domain</a>: &lt;prefix&gt;.&lt;cluster domain&gt;        # Unique basis domain for DNS entries
 
   <a href="#landscapecluster">cluster</a>:                                          # Information about your base cluster
     kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to directory `landscape` (defaults to `./kubeconfig`)
@@ -111,9 +111,9 @@ landscape:
       services: &lt;CIDR IP range&gt;
 
   <a href="#landscapeiaas">iaas</a>:
-    type: &lt;gcp|aws|azure&gt;                      # iaas provider (coming soon: openstack|alicloud)
+    type: &lt;gcp|aws|azure|openstack&gt;            # iaas provider (coming soon: alicloud)
     region: &lt;major region&gt;-&lt;minor region&gt;      # region for initial seed cluster
-    zones:                                     # Remove zones block for providers other than GCP or AWS
+    zones:                                     # Remove zones block for Azure
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c     
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
@@ -121,14 +121,14 @@ landscape:
 
   <a href="#landscapeetcd">etcd</a>:                                       # optional, default values based on `landscape.iaas`
     backup:
-      type: &lt;gcs|s3&gt;                          # type of blob storage
+      type: &lt;gcs|s3|abs|swift&gt;               # type of blob storage
       resourceGroup:                          # Azure resource group you would like to use for your backup
       region: (( iaas.region ))               # region of blob storage (default: same as above)
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
-  <a href="#landscapedns">dns</a>:                                              # optional, default values based on `landscape.iaas`
-    type: &lt;google-clouddns|aws-route53|azure-dns&gt;   # dns provider
-    credentials: (( iaas.credentials ))             # credentials for the dns provider
+  <a href="#landscapedns">dns</a>:                                    # optional, default values based on `landscape.iaas`
+    type: &lt;google-clouddns|aws-route53|azure-dns|openstack-designate&gt;   # dns provider
+    credentials: (( iaas.credentials ))   # credentials for the dns provider
 
   <a href="#landscapeidentity">identity</a>:
     users:
@@ -144,21 +144,21 @@ landscape:
 ### landscape.name
 ```yaml
 landscape:
-  name: <Identifier>                       # general Gardener landscape identifier, for example, `my-gardener`
+  name: <Identifier>
 ```
 Arbitrary name for your landscape. The name will be part of the names for resources, for example, the etcd buckets.
 
 ### landscape.domain
 ```yaml
-  domain: <prefix>.<cluster domain>                 # Unique basis domain for DNS entries
+  domain: <prefix>.<cluster domain>
 ```
 Basis domain for DNS entries. As a best practice, use an individual prefix together with the cluster domain of your base cluster.
 
 ### landscape.cluster
 ```yaml
-cluster:                                            # Information about your base cluster
-  kubeconfig: <relative path + filename>            # Path to your `kubeconfig` file, relative to directory `landscape`   
-  networks:                                 # CIDR IP ranges of base cluster
+cluster:
+  kubeconfig: <relative path + filename>
+  networks:
     nodes: <CIDR IP range>
     pods: <CIDR IP range>
     services: <CIDR IP range>
@@ -174,13 +174,13 @@ Finding out CIDR ranges of your cluster is not trivial. For example, GKE only te
 ### landscape.iaas
 ```yaml
 iaas:
-  type: <gcp|aws|azure>                             # IaaS provider (coming soon: openstack|alicloud)
-  region: <major region>-<minor region>             # region for initial seed cluster
-  zones:                                            # Remove zones block for providers other than GCP or AWS
-    - <major region>-<minor region>-<zone>          # Example: europe-west1-b
-    - <major region>-<minor region>-<zone>          # Example: europe-west1-c     
-    - <major region>-<minor region>-<zone>          # Example: europe-west1-d
-  credentials:                                      # Provide access to IaaS layer used for creating resources for shoot clusters
+  type: <gcp|aws|azure|openstack>
+  region: <major region>-<minor region>
+  zones:
+    - <major region>-<minor region>-<zone>
+    - <major region>-<minor region>-<zone>
+    - <major region>-<minor region>-<zone>
+  credentials:
 ```
 Contains the information where Gardener will create intial seed cluster and a default profile to create shoot cluster. By default, the *initial* seed component will create a seed resource using your base cluster as seed cluster. Other seed clusters and profiles can be added after the installation.
 
@@ -197,27 +197,30 @@ The credentials will be used to give Gardener access to the IaaS layer:
 
 Use the following yaml keys depending on your provider (excerpts):
 
-| AWS  | GCP | Azure |
-|:--------------|:--------------|:--------------|
-|<pre>    credentials: <br/>      accessKeyID: ...<br/>      secretAccessKey: ... </pre> |<pre>    credentials: <br/>      serviceaccount.json: &#124;<br/>      {</br>        "type": "...",</br>        "project_id": "...",</br>        ...</br>      }</pre>|<pre>    credentials:<br/>      clientID: ...<br/>      clientSecret: ...<br/>      subscriptionID: ...<br/>      tenantID: ...</pre>|
+| <b>AWS</b>  | <b>GCP</b> |
+|:--------------|:--------------|
+|<pre>credentials: <br/>  accessKeyID: ...<br/>  secretAccessKey: ... </pre> |<pre>credentials: <br/>  serviceaccount.json: &#124;<br/>    {</br>      "type": "...",</br>      "project_id": "...",</br>      ...</br>    }</pre>
+| <b>Azure</b> | <b>Openstack</b> |
+|<pre>credentials:<br/>  clientID: ...<br/>  clientSecret: ...<br/>  subscriptionID: ...<br/>  tenantID: ...</pre>|<pre>credentials:<br/>  username: ...<br/>  password: ...<br/>  tenantName: ...<br/>  domainName: ...<br/>  authURL: ...</pre>|
 
+The openstack credentials additionally have an optional `region` field. It is only evaluated within the `dns` block (as `iaas` and `etcd.backup` have their own region fields, which will be used instead) and, if not specified, defaults to the value of `iaas.region`.
 
 
 ### landscape.etcd
 ```yaml
-etcd:                                   # optional, default values based on `landscape.iaas`
+etcd:
   backup:
-    type: <gcs|s3|abs>                  # type of blob storage
-    resourceGroup: ...                  # Azure resource group you would like to use for your backup
-    region: (( iaas.region ))           # region of blob storage (default: same as above)
-    credentials: (( iaas.credentials )) # credentials for the blob storage's IaaS provider (default: same as above)
+    type: <gcs|s3|abs|swift>
+    resourceGroup: ...
+    region: (( iaas.region ))
+    credentials: (( iaas.credentials ))
 ```
 Configuration of what blob storage to use for the etcd key-value store. If your IaaS provider offers a blob storage you can use the same values for `etc.backup.region` and `etc.backup.credentials` as above for `iaas.region` and `iaas.credentials` correspondingly by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff.
 If you remove single values or the whole block, the missing values will be set to defaults derived from `landscape.iaas`. The `resourceGroup` cannot be defaulted and must be specified.
 
 | Field | Type | Description | Example&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:---------|
-|`backup.type`|Fixed value| Type of your blob store. Supported blob stores: `gcs` ([Google Cloud Storage](https://cloud.google.com/storage/)), `s3` ([Amazon S3](https://aws.amazon.com/s3/)), and `abs` ([Azure Blob Storage](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview)).|`gcs`|n.a.|
+|`backup.type`|Fixed value| Type of your blob store. Supported blob stores: `gcs` ([Google Cloud Storage](https://cloud.google.com/storage/)), `s3` ([Amazon S3](https://aws.amazon.com/s3/)), `abs` ([Azure Blob Storage](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview)), and `swift` ([Openstack Swift](https://docs.openstack.org/swift/latest/)).|`gcs`|n.a.|
 |`backup.resourceGroup`|IaaS provider specific |Azure specific. Create an Azure blob store first which uses a resource group. Provide the resource group here. | `my-Azure-RG` | [Azure](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?tabs=azure-portal) (HowTo) |
 |`backup.region`|IaaS provider specific|Region of blob storage. |`(( iaas.region ))` |[GCP (overview)](https://cloud.google.com/docs/geography-and-regions), [AWS (overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
 |`backup.credentials`|IaaS provider specific|Service account credentials in a provider-specific format. |`(( iaas.creds ))` |[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/rest/api/storageservices/authorization-for-the-azure-storage-services)|
@@ -225,16 +228,16 @@ If you remove single values or the whole block, the missing values will be set t
 
 ### landscape.dns
 ```yaml
-dns:                                              # optional, default values based on `landscape.iaas`
-  type: <google-clouddns|aws-route53|azure-dns>   # dns provider
-  credentials:                                    # credentials for the dns provider
+dns:
+  type: <google-clouddns|aws-route53|azure-dns|openstack-designate>
+  credentials:
 ```
 Configuration for the Domain Name Service (DNS) provider. If your IaaS provider also offers a DNS service you can use the same values for `dns.credentials` as for `iaas.creds` above by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff. If they belong to another account (or to another IaaS provider) the appropriate credentials (and their type) have to be configured.
 Similar to `landscape.etcd`, missing values will be set to defaults based on the values given in `landscape.iaas`.
 
 | Field | Type | Description | Example |IaaS Provider Documentation
 |:------|:--------|:--------|:--------|:------------|
-|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)), and `azure-dns` ([Azure DNS](https://azure.microsoft.com/de-de/services/dns/)).|`google-clouddns`|n.a.|
+|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)), `azure-dns` ([Azure DNS](https://azure.microsoft.com/de-de/services/dns/)), and `openstack-designate` ([Openstack Designate](https://docs.openstack.org/designate/latest/)).|`google-clouddns`|n.a.|
 |`credentials`|IaaS provider specific|Service account credentials in a provider-specific format.|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/azure-stack/user/azure-stack-create-service-principals)|
 
 
@@ -242,12 +245,12 @@ Similar to `landscape.etcd`, missing values will be set to defaults based on the
 ```yaml
 identity:
   users:
-    - email:                                # email (used for Gardener dashboard login)
-      username:                             # username (displayed in Gardener dashboard)
-      password:                             # clear-text password (used for Gardener dashboard login)
-    - email:                                # see above
-      username:                             # see above
-      hash:                                 # bcrypted hash of password, see above
+    - email:
+      username:
+      password:
+    - email:
+      username:
+      hash:
 ```
 
 Configures the identity provider that allows access to the Gardener dashboard. The easiest method is to provide a list of `users`, each containing `email`, `username`, and either a clear-text `password` or a bcrypted `hash` of the password.
