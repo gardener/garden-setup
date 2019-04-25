@@ -52,6 +52,16 @@ providers:
       AZURE_CLIENT_SECRET: (( landscape.dns.credentials.clientSecret ))
       AZURE_SUBSCRIPTION_ID: (( landscape.dns.credentials.subscriptionID ))
       AZURE_TENANT_ID: (( landscape.dns.credentials.tenantID ))
+  openstack-designate:
+    <<: (( &template ))
+    name: openstack
+    credentials:
+      OS_AUTH_URL: (( landscape.dns.credentials.authURL ))
+      OS_REGION_NAME: (( landscape.dns.credentials.region || landscape.iaas.region ))
+      OS_USERNAME: (( landscape.dns.credentials.username ))
+      OS_PASSWORD: (( landscape.dns.credentials.password ))
+      OS_DOMAIN_NAME: (( landscape.dns.credentials.domainName ))
+      OS_PROJECT_NAME: (( landscape.dns.credentials.tenantName ))
 
 spec:
   <<: (( &temporary ))
