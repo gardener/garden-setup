@@ -54,6 +54,14 @@ dns_credentials:
     AZURE_CLIENT_SECRET: (( base64( landscape.dns.credentials.clientSecret ) ))
     AZURE_SUBSCRIPTION_ID: (( base64( landscape.dns.credentials.subscriptionID ) ))
     AZURE_TENANT_ID: (( base64( landscape.dns.credentials.tenantID ) ))
+  openstack-designate:
+    <<: (( &template ))
+    OS_AUTH_URL: (( base64( landscape.dns.credentials.authURL ) ))
+    OS_REGION_NAME: (( base64( landscape.dns.credentials.region || landscape.iaas.region ) ))
+    OS_USERNAME: (( base64( landscape.dns.credentials.username ) ))
+    OS_PASSWORD: (( base64( landscape.dns.credentials.password ) ))
+    OS_DOMAIN_NAME: (( base64( landscape.dns.credentials.domainName ) ))
+    OS_PROJECT_NAME: (( base64( landscape.dns.credentials.tenantName ) ))
 
 
 state:

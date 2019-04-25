@@ -12,8 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-floatingPools: (( landscape.iaas.floatingPools ))
-keystoneURL: (( landscape.iaas.credentials.authURL ))
-zones:
-- region: (( providerconfig.seed.region ))
-  names: (( providerconfig.seed.zones ))
+env:
+  - name: "OS_AUTH_URL"
+    value: (( config.credentials.authURL ))
+  - name: "OS_DOMAIN_NAME"
+    value: (( config.credentials.domainName ))
+  - name: "OS_USERNAME"
+    value: (( config.credentials.username ))
+  - name: "OS_PASSWORD"
+    value: (( config.credentials.password ))
+  - name: "OS_TENANT_NAME"
+    value: (( config.credentials.tenantName ))
+
+volumeMounts: []
