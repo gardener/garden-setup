@@ -15,7 +15,7 @@ rules:
   resources:
   - configmaps
   resourceNames:
-  - dns-controller-manager
+  - {{ include "external-dns-management.fullname" . }}
   verbs:
   - get
   - update

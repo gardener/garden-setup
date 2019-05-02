@@ -47,7 +47,7 @@ landscape:
       commit: (( dashboard.commit || ~~ ))
     dns_controller:
       <<: (( merge ))
-      image_tag: "0.4.0-master"
+      image_tag: "0.4.0"
       image_repo: "eu.gcr.io/gardener-project/dns-controller-manager"
   iaas:
   etcd:
