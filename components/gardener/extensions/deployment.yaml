@@ -1,6 +1,7 @@
 ---
 imports: (( &temporary ))
 utilities: (( &temporary ))
+landscape: (( &temporary ))
 
 plugins:
   - kubectl:
