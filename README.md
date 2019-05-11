@@ -11,6 +11,7 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
   * [git](https://git-scm.com/downloads)
   * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 * You need a *base cluster*. Currently, the installation tools supports to install Gardener on the following Kubernetes clusters:
+  * Kubernetes version >= 1.11 or enable the feature gate `CustomResourceSubresources` for 1.10 clusters
   * [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster) on Google Cloud Platform (GCP)
   * [Elastic Container Service for Kubernetes (EKS)](https://docs.aws.amazon.com/eks/) or [Kubernetes Operations (kops)](https://github.com/kubernetes/kops) on Amazon Web Services (AWS)
   * [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/) on Microsoft Azure
@@ -115,7 +116,7 @@ landscape:
     region: &lt;major region&gt;-&lt;minor region&gt;      # region for initial seed cluster
     zones:                                     # Remove zones block for Azure
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
-      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c     
+      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c
       - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
     credentials:                               # Provide access to IaaS layer used for creating resources for shoot clusters
 
