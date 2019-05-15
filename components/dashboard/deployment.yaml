@@ -52,6 +52,8 @@ dashboard:
       crt: (( imports.identity.export.server.crt ))
       key: (( imports.identity.export.server.key ))
     kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
+    frontendConfig:
+      seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
 
 util:
   <<: (( &temporary ))

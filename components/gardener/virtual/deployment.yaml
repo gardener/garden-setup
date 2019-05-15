@@ -17,6 +17,9 @@ imports: (( &temporary ))
 landscape: (( &temporary ))
 utilities: (( &temporary ))
 
+settings:
+  
+
 spec:
   <<: (( &temporary ))
   apiserver:
@@ -94,12 +97,15 @@ gardener:
   source: "gardener_git/repo/charts/gardener/charts/application"
   name: "gardener"
   namespace: "garden"
+  admissionControlYaml: "apiVersion: apiserver.k8s.io/v1alpha1\nkind: AdmissionConfiguration\nplugins:\n  - name: ShootSeedManager\n    configuration:\n      apiVersion: seedmanager.admission.config.gardener.cloud/v1alpha1\n      kind: Configuration\n      candidateDeterminationStrategy: "
+  admissionControlValue: (( .landscape.gardener.seedCandidateDeterminationStrategy || "SameRegion" ))
   values:
     global:
       apiserver:
         kubeconfig: dummy
         caBundle: (( .state.gardener_ca.value.cert ))
         enabled: true
+        admissionControlConfig: (( admissionControlYaml admissionControlValue ))
         etcd:
           servers: (( join(",",.imports.etcd.exports.endpoints.main) ))
           useSidecar: false
