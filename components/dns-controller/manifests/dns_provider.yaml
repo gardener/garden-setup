@@ -26,3 +26,4 @@ spec:
   domains:
     include:
     - (( values.domain ))
+  zones: (( values.zones || ~~ ))
