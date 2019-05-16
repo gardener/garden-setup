@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-floatingPools: (( landscape.iaas.floatingPools ))
+floatingPools: (( landscape.iaas.openstack.floatingPools ))
+loadBalancerProviders: (( landscape.iaas.openstack.loadBalancerProviders ))
+machineImages: (( landscape.iaas.openstack.machineImages ))
+machineTypes: (( landscape.iaas.openstack.machineTypes ))
 keystoneURL: (( landscape.iaas.credentials.authURL ))
 zones:
 - region: (( providerconfig.seed.region ))

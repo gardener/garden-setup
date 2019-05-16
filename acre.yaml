@@ -79,63 +79,106 @@ backup_type_mapping:
   azure: abs
   openstack: swift
 
+
+
+######################
+##### VALIDATION #####
+######################
+
 validation:
   <<: (( &temporary ))
   is_in: (( |e,l|-> [contains(l, e), "valid", "invalid value '" e "'"] ))
   types:
     iaas:
-      gcp: 
-        - mapfield
-        - serviceaccount.json
+      gcp:
+        credentials:
+          - mapfield
+          - serviceaccount.json
       aws:
-        - and
-        - - mapfield
-          - accessKeyID
-        - - mapfield
-          - secretAccessKey
+        credentials:
+          - and
+          - ["mapfield", "accessKeyID"]
+          - ["mapfield", "secretAccessKey"]
       azure:
-        - and
-        - - mapfield
-          - clientID
-        - - mapfield
-          - clientSecret
-        - - mapfield
-          - subscriptionID
-        - - mapfield
-          - tenantID
+        credentials:
+          - and
+          - ["mapfield", "clientID"]
+          - ["mapfield", "clientSecret"]
+          - ["mapfield", "subscriptionID"]
+          - ["mapfield", "tenantID"]
       openstack:
-        - and
-        - - mapfield
-          - domainName
-        - - mapfield
-          - tenantName
-        - - mapfield
-          - username
-        - - mapfield
-          - password
-        - - mapfield
-          - authURL
+        credentials:
+          - and
+          - ["mapfield", "domainName"]
+          - ["mapfield", "tenantName"]
+          - ["mapfield", "username"]
+          - ["mapfield", "password"]
+          - ["mapfield", "authURL"]
+        config:
+          - and
+          - - mapfield
+            - floatingPools
+            - - list
+              - ["mapfield", "name"]
+          - - mapfield
+            - machineImages
+            - - list
+              - - and
+                - ["mapfield", "name"]
+                - ["mapfield", "image"]
+          - - mapfield
+            - loadBalancerProviders
+            - - list
+              - ["mapfield", "name"]
+          - - mapfield
+            - machineTypes
+            - - list
+              - - and
+                - ["mapfield", "name"]
+                - ["mapfield", "cpu"]
+                - ["mapfield", "gpu"]
+                - ["mapfield", "memory"]
+                - ["mapfield", "usable"]
+                - ["mapfield", "volumeType"]
+                - ["mapfield", "volumeSize"]
     etcd_backup:
-      gcs: (( iaas.gcp ))
-      s3: (( iaas.aws ))
-      abs: (( iaas.azure ))
-      swift: (( iaas.openstack ))
+      gcs:
+        credentials:
+          (( iaas.gcp.credentials ))
+      s3:
+        credentials:
+          (( iaas.aws.credentials ))
+      abs:
+        credentials:
+          (( iaas.azure.credentials ))
+      swift:
+        credentials:
+          (( iaas.openstack.credentials ))
     dns:
-      google-clouddns: (( iaas.gcp ))
-      aws-route53: (( iaas.aws ))
-      azure-dns: (( iaas.azure ))
-      openstack-designate: (( iaas.openstack ))
+      google-clouddns:
+        credentials:
+          (( iaas.gcp.credentials ))
+      aws-route53:
+        credentials:
+          (( iaas.aws.credentials ))
+      azure-dns:
+        credentials:
+          (( iaas.azure.credentials ))
+      openstack-designate:
+        credentials:
+          (( iaas.openstack.credentials ))
   landscape_name: (( validate( landscape.name, "dnslabel" ) ))
   domain: (( validate( landscape.domain, "dnsdomain" ) ))
   cidrs: (( validate( landscape.clusters[0].networks, ["mapfield", "nodes", "cidr"], ["mapfield", "pods", "cidr"], ["mapfield", "services", "cidr"] ) ))
   iaas_type: (( validate( landscape.iaas.type, [is_in, keys( types.iaas )] ) ))
   iaas_region: (( validate( landscape.iaas, ["mapfield", "region"] ) ))
-  iaas_creds: (( validate( landscape.iaas.credentials, types.iaas[landscape.iaas.type] ) ))
+  iaas_creds: (( validate( landscape.iaas.credentials, types.iaas[landscape.iaas.type].credentials ) ))
   etcd_backup_type: (( validate( landscape.etcd.backup.type, [is_in, keys( types.etcd_backup )] ) ))
-  etcd_backup_creds: (( validate( landscape.etcd.backup.credentials, types.etcd_backup[landscape.etcd.backup.type] ) ))
+  etcd_backup_creds: (( validate( landscape.etcd.backup.credentials, types.etcd_backup[landscape.etcd.backup.type].credentials ) ))
   azure_resource_group: (( landscape.etcd.backup.type == "abs" ? validate( landscape.etcd.backup, ["mapfield", "resourceGroup"] ) :~ ))
+  openstack_config: (( landscape.iaas.type == "openstack" ? validate( landscape.iaas.openstack, types.iaas.openstack.config ) :~ ))
   dns_type: (( validate( landscape.dns.type, [is_in, keys( types.dns )] ) ))
-  dns_creds: (( validate( landscape.dns.credentials, types.dns[landscape.dns.type] ) ))
+  dns_creds: (( validate( landscape.dns.credentials, types.dns[landscape.dns.type].credentials ) ))
   identity:
     userspec:
       - and

@@ -21,26 +21,9 @@ openstack:
     floatingPools: (( values.provider.floatingPools ))
     kubernetes:
       versions: (( values.kubernetes.versions ))
-    loadBalancerProviders:
-    - name: haproxy
-    machineImages:
-    - name: coreos
-      image: coreos-2023.5.0
-    machineTypes:
-    - name: medium_2_4
-      cpu: "2"
-      gpu: "0"
-      memory: 4Gi
-      usable: true
-      volumeType: default
-      volumeSize: 20Gi
-    - name: medium_4_8
-      cpu: "4"
-      gpu: "0"
-      memory: 8Gi
-      usable: true
-      volumeType: default
-      volumeSize: 40Gi
+    loadBalancerProviders: (( values.provider.loadBalancerProviders ))
+    machineImages: (( values.provider.machineImages ))
+    machineTypes: (( values.provider.machineTypes ))
     zones: (( values.provider.zones ))
   keystoneURL: (( values.provider.keystoneURL ))
 # dhcpDomain: nova.local # DHCP domain of OpenStack system (only meaningful for Kubernetes 1.10.1, see https://github.com/kubernetes/kubernetes/pull/61890 for details)
