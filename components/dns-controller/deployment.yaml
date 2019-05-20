@@ -69,7 +69,7 @@ providers:
     name: openstack
     credentials:
       OS_AUTH_URL: (( landscape.dns.credentials.authURL ))
-      OS_REGION_NAME: (( landscape.dns.credentials.region || landscape.iaas.region ))
+      OS_REGION_NAME: (( landscape.dns.credentials.region ))
       OS_USERNAME: (( landscape.dns.credentials.username ))
       OS_PASSWORD: (( landscape.dns.credentials.password ))
       OS_DOMAIN_NAME: (( landscape.dns.credentials.domainName ))

@@ -202,9 +202,9 @@ Use the following yaml keys depending on your provider (excerpts):
 |:--------------|:--------------|
 |<pre>credentials: <br/>  accessKeyID: ...<br/>  secretAccessKey: ... </pre> |<pre>credentials: <br/>  serviceaccount.json: &#124;<br/>    {</br>      "type": "...",</br>      "project_id": "...",</br>      ...</br>    }</pre>
 | <b>Azure</b> | <b>Openstack</b> |
-|<pre>credentials:<br/>  clientID: ...<br/>  clientSecret: ...<br/>  subscriptionID: ...<br/>  tenantID: ...</pre>|<pre>credentials:<br/>  username: ...<br/>  password: ...<br/>  tenantName: ...<br/>  domainName: ...<br/>  authURL: ...</pre>|
+|<pre>credentials:<br/>  clientID: ...<br/>  clientSecret: ...<br/>  subscriptionID: ...<br/>  tenantID: ...</pre>|<pre>credentials:<br/>  username: ...<br/>  password: ...<br/>  tenantName: ...<br/>  domainName: ...<br/>  authURL: ...<br/>  region: ... # DNS only</pre>|
 
-The openstack credentials additionally have an optional `region` field. It is only evaluated within the `dns` block (as `iaas` and `etcd.backup` have their own region fields, which will be used instead) and, if not specified, defaults to the value of `iaas.region`.
+The `region` field in the openstack credentials is only evaluated within the `dns` block (as `iaas` and `etcd.backup` have their own region fields, which will be used instead).
 
 
 ### landscape.etcd
