@@ -14,6 +14,7 @@
 
 ---
 component:
+  active: false
   imports:
     - profiles: gardencontent/profiles
     - gardener_virtual: gardener/virtual

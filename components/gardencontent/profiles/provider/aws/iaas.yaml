@@ -14,339 +14,350 @@
 
 <<: (( &template ))
 aws:
+  <<: (( merge ))
   constraints:
-    dnsProviders:
-    - name: (( values.dns.type ))
-    - name: unmanaged
-    kubernetes:
-      versions: (( values.kubernetes.versions ))
-    machineImages:
-    - name: coreos
-      version: 2023.5.0
-    - name: suse-jeos
-      version: alpha-1
-    machineTypes:
-    - cpu: "2"
-      gpu: "0"
-      memory: 8Gi
-      name: m5.large
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 16Gi
-      name: m5.xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 32Gi
-      name: m5.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 64Gi
-      name: m5.4xlarge
-      usable: true
-    - cpu: "48"
-      gpu: "0"
-      memory: 192Gi
-      name: m5.12xlarge
-      usable: true
-    - cpu: "96"
-      gpu: "0"
-      memory: 384Gi
-      name: m5.24xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 8Gi
-      name: m4.large
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 16Gi
-      name: m4.xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 32Gi
-      name: m4.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 64Gi
-      name: m4.4xlarge
-      usable: true
-    - cpu: "40"
-      gpu: "0"
-      memory: 160Gi
-      name: m4.10xlarge
-      usable: true
-    - cpu: "64"
-      gpu: "0"
-      memory: 256Gi
-      name: m4.16xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 4Gi
-      name: c5.large
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 8Gi
-      name: c5.xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 16Gi
-      name: c5.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 32Gi
-      name: c5.4xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 5376Mi
-      name: c5n.large
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 21Gi
-      name: c5n.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 42Gi
-      name: c5n.4xlarge
-      usable: true
-    - cpu: "36"
-      gpu: "0"
-      memory: 96Gi
-      name: c5n.9xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "1"
-      memory: 61Gi
-      name: p3.2xlarge
-      usable: true
-    - cpu: "32"
-      gpu: "4"
-      memory: 244Gi
-      name: p3.8xlarge
-      usable: true
-    - cpu: "64"
-      gpu: "8"
-      memory: 488Gi
-      name: p3.16xlarge
-      usable: true
-    - cpu: "4"
-      gpu: "1"
-      memory: 61Gi
-      name: p2.xlarge
-      usable: true
-    - cpu: "32"
-      gpu: "8"
-      memory: 488Gi
-      name: p2.8xlarge
-      usable: true
-    - cpu: "64"
-      gpu: "16"
-      memory: 732Gi
-      name: p2.16xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 15616Mi
-      name: r4.large
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 31232Mi
-      name: r4.xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 61Gi
-      name: r4.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 122Gi
-      name: r4.4xlarge
-      usable: true
-    - cpu: "32"
-      gpu: "0"
-      memory: 244Gi
-      name: r4.8xlarge
-      usable: true
-    - cpu: "64"
-      gpu: "0"
-      memory: 488Gi
-      name: r4.16xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 16Gi
-      name: r5.large
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 32Gi
-      name: r5.xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 64Gi
-      name: r5.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 128Gi
-      name: r5.4xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 16Gi
-      name: r5a.large
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 32Gi
-      name: r5a.xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 64Gi
-      name: r5a.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 128Gi
-      name: r5a.4xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 16Gi
-      name: r5d.large
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 32Gi
-      name: r5d.xlarge
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 64Gi
-      name: r5d.2xlarge
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 128Gi
-      name: r5d.4xlarge
-      usable: true
-    - cpu: "64"
-      gpu: "0"
-      memory: 1952Gi
-      name: x1e.16xlarge
-      usable: true
-    - cpu: "128"
-      gpu: "0"
-      memory: 3904Gi
-      name: x1e.32xlarge
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 2Gi
-      name: t3.small
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 4Gi
-      name: t3.medium
-      usable: true
-    volumeTypes:
-    - class: standard
-      name: gp2
-      usable: true
-    zones:
-    - names:
-      - ap-northeast-1a
-      - ap-northeast-1c
-      - ap-northeast-1d
-      region: ap-northeast-1
-    - names:
-      - ap-northeast-2a
-      - ap-northeast-2c
-      region: ap-northeast-2
-    - names:
-      - ap-south-1a
-      - ap-south-1b
-      region: ap-south-1
-    - names:
-      - ap-southeast-1a
-      - ap-southeast-1b
-      - ap-southeast-1c
-      region: ap-southeast-1
-    - names:
-      - ap-southeast-2a
-      - ap-southeast-2b
-      - ap-southeast-2c
-      region: ap-southeast-2
-    - names:
-      - ca-central-1a
-      - ca-central-1b
-      region: ca-central-1
-    - names:
-      - eu-central-1a
-      - eu-central-1b
-      - eu-central-1c
-      region: eu-central-1
-    - names:
-      - eu-north-1a
-      - eu-north-1b
-      - eu-north-1c
-      region: eu-north-1
-    - names:
-      - eu-west-1a
-      - eu-west-1b
-      - eu-west-1c
-      region: eu-west-1
-    - names:
-      - eu-west-2a
-      - eu-west-2b
-      - eu-west-2c
-      region: eu-west-2
-    - names:
-      - eu-west-3a
-      - eu-west-3b
-      - eu-west-3c
-      region: eu-west-3
-    - names:
-      - sa-east-1a
-      - sa-east-1c
-      region: sa-east-1
-    - names:
-      - us-east-1a
-      - us-east-1b
-      - us-east-1c
-      - us-east-1d
-      - us-east-1e
-      - us-east-1f
-      region: us-east-1
-    - names:
-      - us-east-2a
-      - us-east-2b
-      - us-east-2c
-      region: us-east-2
-    - names:
-      - us-west-1a
-      - us-west-1c
-      region: us-west-1
-    - names:
-      - us-west-2a
-      - us-west-2b
-      - us-west-2c
-      - us-west-2d
-      region: us-west-2
+    <<: (( merge ))
+    dnsProviders: (( defaults.dnsProviders ))
+    kubernetes: (( values.kubernetes ))
+    machineImages: (( defaults.machineImages ))
+    machineTypes: (( defaults.machineTypes ))
+    volumeTypes: (( defaults.volumeTypes ))
+    zones: (( defaults.zones ))
+
+defaults:
+  <<: (( &temporary ))
+  dnsProviders:
+  - name: (( values.dns.type ))
+  - name: unmanaged
+  kubernetes:
+    versions: (( values.kubernetes.versions ))
+  machineImages:
+  - name: coreos
+    version: 2023.5.0
+  - name: suse-jeos
+    version: alpha-1
+  machineTypes:
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: m5.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: m5.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: m5.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: m5.4xlarge
+    usable: true
+  - cpu: "48"
+    gpu: "0"
+    memory: 192Gi
+    name: m5.12xlarge
+    usable: true
+  - cpu: "96"
+    gpu: "0"
+    memory: 384Gi
+    name: m5.24xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: m4.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: m4.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: m4.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: m4.4xlarge
+    usable: true
+  - cpu: "40"
+    gpu: "0"
+    memory: 160Gi
+    name: m4.10xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: m4.16xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: c5.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 8Gi
+    name: c5.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 16Gi
+    name: c5.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 32Gi
+    name: c5.4xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 5376Mi
+    name: c5n.large
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 21Gi
+    name: c5n.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 42Gi
+    name: c5n.4xlarge
+    usable: true
+  - cpu: "36"
+    gpu: "0"
+    memory: 96Gi
+    name: c5n.9xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "1"
+    memory: 61Gi
+    name: p3.2xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "4"
+    memory: 244Gi
+    name: p3.8xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "8"
+    memory: 488Gi
+    name: p3.16xlarge
+    usable: true
+  - cpu: "4"
+    gpu: "1"
+    memory: 61Gi
+    name: p2.xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "8"
+    memory: 488Gi
+    name: p2.8xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "16"
+    memory: 732Gi
+    name: p2.16xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 15616Mi
+    name: r4.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 31232Mi
+    name: r4.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 61Gi
+    name: r4.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 122Gi
+    name: r4.4xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 244Gi
+    name: r4.8xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 488Gi
+    name: r4.16xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: r5.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: r5.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: r5.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: r5.4xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: r5a.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: r5a.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: r5a.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: r5a.4xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: r5d.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: r5d.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: r5d.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: r5d.4xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 1952Gi
+    name: x1e.16xlarge
+    usable: true
+  - cpu: "128"
+    gpu: "0"
+    memory: 3904Gi
+    name: x1e.32xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 2Gi
+    name: t3.small
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: t3.medium
+    usable: true
+  volumeTypes:
+  - class: standard
+    name: gp2
+    usable: true
+  zones:
+  - names:
+    - ap-northeast-1a
+    - ap-northeast-1c
+    - ap-northeast-1d
+    region: ap-northeast-1
+  - names:
+    - ap-northeast-2a
+    - ap-northeast-2c
+    region: ap-northeast-2
+  - names:
+    - ap-south-1a
+    - ap-south-1b
+    region: ap-south-1
+  - names:
+    - ap-southeast-1a
+    - ap-southeast-1b
+    - ap-southeast-1c
+    region: ap-southeast-1
+  - names:
+    - ap-southeast-2a
+    - ap-southeast-2b
+    - ap-southeast-2c
+    region: ap-southeast-2
+  - names:
+    - ca-central-1a
+    - ca-central-1b
+    region: ca-central-1
+  - names:
+    - eu-central-1a
+    - eu-central-1b
+    - eu-central-1c
+    region: eu-central-1
+  - names:
+    - eu-north-1a
+    - eu-north-1b
+    - eu-north-1c
+    region: eu-north-1
+  - names:
+    - eu-west-1a
+    - eu-west-1b
+    - eu-west-1c
+    region: eu-west-1
+  - names:
+    - eu-west-2a
+    - eu-west-2b
+    - eu-west-2c
+    region: eu-west-2
+  - names:
+    - eu-west-3a
+    - eu-west-3b
+    - eu-west-3c
+    region: eu-west-3
+  - names:
+    - sa-east-1a
+    - sa-east-1c
+    region: sa-east-1
+  - names:
+    - us-east-1a
+    - us-east-1b
+    - us-east-1c
+    - us-east-1d
+    - us-east-1e
+    - us-east-1f
+    region: us-east-1
+  - names:
+    - us-east-2a
+    - us-east-2b
+    - us-east-2c
+    region: us-east-2
+  - names:
+    - us-west-1a
+    - us-west-1c
+    region: us-west-1
+  - names:
+    - us-west-2a
+    - us-west-2b
+    - us-west-2c
+    - us-west-2d
+    region: us-west-2

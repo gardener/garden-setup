@@ -34,4 +34,4 @@ deployment:
     - os-coreos-alicloud
     - os-suse-jeos
     - dns-external
-    - (( "provider-" .landscape.iaas.type ))
+    - (( "provider-" .landscape.iaas[0].type ))

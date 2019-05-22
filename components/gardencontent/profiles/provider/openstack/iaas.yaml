@@ -14,17 +14,25 @@
 
 <<: (( &template ))
 openstack:
+  <<: (( merge ))
   constraints:
-    dnsProviders:
-    - name: (( values.dns.type ))
-    - name: unmanaged
-    floatingPools: (( values.provider.floatingPools ))
-    kubernetes:
-      versions: (( values.kubernetes.versions ))
-    loadBalancerProviders: (( values.provider.loadBalancerProviders ))
-    machineImages: (( values.provider.machineImages ))
-    machineTypes: (( values.provider.machineTypes ))
-    zones: (( values.provider.zones ))
-  keystoneURL: (( values.provider.keystoneURL ))
+    <<: (( merge ))
+    dnsProviders: (( defaults.dnsProviders ))
+    floatingPools: (( values.config.floatingPools ))
+    kubernetes: (( values.kubernetes ))
+    loadBalancerProviders: (( values.config.loadBalancerProviders ))
+    machineImages: (( values.config.machineImages ))
+    machineTypes: (( values.config.machineTypes ))
+    zones: (( defaults.zones ))
+  keystoneURL: (( values.config.keystoneURL || values.credentials.authURL ))
 # dhcpDomain: nova.local # DHCP domain of OpenStack system (only meaningful for Kubernetes 1.10.1, see https://github.com/kubernetes/kubernetes/pull/61890 for details)
 # requestTimeout: 180s # Kubernetes OpenStack Cloudprovider Request Timeout
+
+defaults:
+  <<: (( &temporary ))
+  dnsProviders:
+  - name: (( values.dns.type ))
+  - name: unmanaged
+  zones:
+    - names: (( values.config.zones ))
+      region: (( values.config.region ))
