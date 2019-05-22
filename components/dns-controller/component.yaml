@@ -14,5 +14,7 @@
 
 ---
 component:
+  imports:
+    - tiller
   stubs:
     - plugins/kubectl/utilities.yaml

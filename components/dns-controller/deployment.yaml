@@ -19,15 +19,27 @@ utilities: (( &temporary ))
 
 settings:
   naming: garden-setup
+  fullname: (( naming "-dns-controller-manager" ))
   dns-class: (( naming ))
 
 plugins:
+  - git
+  - helm
   - kubectl
 
+git:
+  <<: (( .landscape.versions.dns-controller ))
+  files:
+    - "charts"
+
+helm:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: "git/repo/charts/external-dns-management"
+  name: (( settings.fullname ))
+  namespace: (( .spec.namespace ))
+  values: (( .spec.helm ))
+
 kubectl:
-  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "crds.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
-  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "rbac.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
-  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "controller.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
   - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "provider_secret.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
   - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "dns_provider.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
 
@@ -65,17 +77,21 @@ providers:
 
 spec:
   <<: (( &temporary ))
-  image_tag: (( .landscape.versions.dns_controller.image_tag ))
-  image_repo: (( .landscape.versions.dns_controller.image_repo ))
-  namespace: "kube-system"
-  identifier: (( "setup.gardener.cloud/" landscape.name ))
+  secret_name: (( settings.fullname "-" provider.name ))
   type: (( .landscape.dns.type ))
-  domain: (( .landscape.domain ))
-  secret_name: (( settings.naming "-dns-controller-manager-" provider.name ))
-  dns_rbac_name: (( settings.naming "-dns-controller-manager" ))
-  dns-class: (( settings.dns-class ))
-  controllers:
-    - dnssources
-    - (( type ))
   provider: (( *providers.[type] ))
+  domain: (( .landscape.domain ))
   zones: (( .landscape.dns.hostedZoneIDs || ~~ ))
+  namespace: "kube-system"
+  helm:
+    nameOverride: (( settings.fullname ))
+    fullnameOverride: (( settings.fullname ))
+    image:
+      tag: (( .landscape.versions.dns-controller.image_tag || ~~ ))
+      repository: (( .landscape.versions.dns-controller.image_repo || ~~ ))
+    createCRDs: true
+    configuration:
+      dnsClass: (( settings.dns-class ))
+      identifier: (( "setup.gardener.cloud/" .landscape.name ))
+      controllers: (( "dnssources," type ))
+      ttl: (( .landscape.dns.ttl || ~~ ))

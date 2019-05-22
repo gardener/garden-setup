@@ -31,7 +31,7 @@ extension_controllers_values:
       chart: (( extension_controllers_func.chartConfig( path ) ))
     concurrentSyncs: 25
     image:
-      tag: 0.4.0
+      tag: (( .landscape.versions.gardener.extensions.os-coreos.image_tag ))
     resources:
       limits:
         cpu: 100m
@@ -46,7 +46,7 @@ extension_controllers_values:
       chart: (( extension_controllers_func.chartConfig( path ) ))
     concurrentSyncs: 25
     image:
-      tag: 0.4.0
+      tag: (( .landscape.versions.gardener.extensions.os-coreos-alicloud.image_tag ))
     resources:
       limits:
         cpu: 100m
@@ -62,8 +62,8 @@ extension_controllers_values:
     createCRDs: false
     fullnameOverride: seed-dns-controller-manager
     image:
-      repo: (( .landscape.versions.dns_controller.image_repo ))
-      tag: (( .landscape.versions.dns_controller.image_tag ))
+      repo: (( .landscape.versions.gardener.extensions.dns-controller.image_repo ))
+      tag: (( .landscape.versions.gardener.extensions.dns-controller.image_tag ))
     configuration:
       poolSize: 20
       identifier: ""
