@@ -42,8 +42,8 @@ providerconfig:
   config: (( v ))
   seed:
     ingressdomain: (( imports.ingress_dns.export.ingress_domain ))
-    kubeconfig: (( asyaml( v.kubeconfig ) || read(env.ROOTDIR "/" landscape.clusters.[0].kubeconfig, "text") ))
-    networks: (( v.networks || landscape.clusters.[0].networks ))
+    kubeconfig: (( asyaml( v.cluster.kubeconfig ) || read(env.ROOTDIR "/" landscape.clusters.[0].kubeconfig, "text") ))
+    networks: (( v.cluster.networks || landscape.clusters.[0].networks ))
   secretname: (( name "-seed" ))
 
 kubectl: (( sum[landscape.iaas|[]|s,v|-> v.mode == "seed" ? s utilities.kubectl.generate( __ctx.DIR "/manifests/manifest.yaml", imports.kube_apiserver.export.kubeconfig, *providerconfig ) :s ] ))

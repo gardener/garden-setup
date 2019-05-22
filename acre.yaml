@@ -125,7 +125,7 @@ landscape:
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
       repo: "https://github.com/gardener/external-dns-management.git"
-  iaas:
+  iaas: (( merge none // map[ select[stub()|e|-> ( ! defined( e.mode ) ) -or ( e.mode != "inactive" ) ] |idx,v|-> v { "mode" = v.mode || "seed" } ] ))
   etcd:
     <<: (( merge ))
     backup:
@@ -155,25 +155,35 @@ backup_type_mapping:
   openstack: swift
 
 
-
 ######################
 ##### VALIDATION #####
 ######################
 
 validation:
   <<: (( &temporary ))
-  is_in: (( |e,l|-> [contains(l, e), "valid", "invalid value '" e "'"] ))
+
+  ### AUXILIARY FUNCTIONS ###
+  return_true: (( |x|-> true ))
+  instantiate_validator: (( |values,validator|-> *validator ))
+
+  ### VALIDATOR DEFINITIONS ###
   types:
     iaas:
       gcp:
         credentials:
           - mapfield
           - serviceaccount.json
+        config:
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
       aws:
         credentials:
           - and
           - ["mapfield", "accessKeyID"]
           - ["mapfield", "secretAccessKey"]
+        config:
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
       azure:
         credentials:
           - and
@@ -181,6 +191,8 @@ validation:
           - ["mapfield", "clientSecret"]
           - ["mapfield", "subscriptionID"]
           - ["mapfield", "tenantID"]
+        config:
+          - ["mapfield", "region"]
       openstack:
         credentials:
           - and
@@ -190,7 +202,6 @@ validation:
           - ["mapfield", "password"]
           - ["mapfield", "authURL"]
         config:
-          - and
           - - mapfield
             - floatingPools
             - - list
@@ -216,29 +227,38 @@ validation:
                 - ["mapfield", "usable"]
                 - ["mapfield", "volumeType"]
                 - ["mapfield", "volumeSize"]
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
     etcd_backup:
       gcs:
         credentials:
           (( iaas.gcp.credentials ))
+        config: (( return_true ))
       s3:
         credentials:
           (( iaas.aws.credentials ))
+        config: (( return_true ))
       abs:
         credentials:
           (( iaas.azure.credentials ))
+        config: ["mapfield", "resourceGroup"]
       swift:
         credentials:
           (( iaas.openstack.credentials ))
+        config: (( return_true ))
     dns:
       google-clouddns:
         credentials:
           (( iaas.gcp.credentials ))
+        config: (( return_true ))
       aws-route53:
         credentials:
           (( iaas.aws.credentials ))
+        config: (( return_true ))
       azure-dns:
         credentials:
           (( iaas.azure.credentials ))
+        config: (( return_true ))
       openstack-designate:
         credentials:
           (( iaas.openstack.credentials ))
@@ -250,7 +270,7 @@ validation:
       - and
       - ["mapfield", "name"]
       - ["mapfield", "type", ["valueset", (( keys( types.iaas ) ))]]
-      - ["mapfield", "mode", ["valueset", ["seed", "profile", "cloudprofile", "soil"]]]
+      - ["mapfield", "mode", ["valueset", ["seed", "profile", "cloudprofile"]]]
       - - optionalfield
         - credentials
         - (( types.iaas[values.type].credentials ))
@@ -258,7 +278,7 @@ validation:
     initial_seed:
       - <<: (( &template ))
       - and
-      - ["mapfield", "mode", ["valueset", ["seed", "soil"]]]
+      - ["mapfield", "mode", ["valueset", ["seed"]]]
       - - mapfield
         - credentials
         - (( types.iaas[values.type].credentials ))
@@ -268,6 +288,13 @@ validation:
       - - mapfield
         - credentials
         - (( types.iaas[values.type].credentials ))
+      - - mapfield
+        - cluster
+        - - and
+          - ["mapfield", "kubeconfig"]
+          - - mapfield
+            - networks
+            - (( validation.networks ))
     cloudprofile: (( &template( return_true ) ))
   networks:
     - and
@@ -277,7 +304,7 @@ validation:
 
   
   ### VALIDATIONS ###
-  # structure resembles structure of landscape
+  # structure resembles structure of landscape where possible
   ##### landscape.name
   name: (( validate( landscape.name, "dnslabel" ) ))
   ##### landscape.domain
@@ -288,9 +315,8 @@ validation:
   ##### landscape.iaas
   iaas: (( map[landscape.iaas|entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic) )] ))
   iaas_initial_seed: (( validate( landscape.iaas[0], validation.instantiate_validator(landscape.iaas[0], iaas_entry_validators.initial_seed) ) ))
-  iaas_seed_soil: (( map[landscape.iaas.[1..]|id,entry|-> entry.mode == "seed" -or entry.mode == "soil" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.seed) ) :~~ ] ))
+  iaas_seed: (( map[landscape.iaas.[1..]|id,entry|-> entry.mode == "seed" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.seed) ) :~~ ] ))
   iaas_cloudprofile: (( map[landscape.iaas.[1..]|id,entry|-> entry.mode == "profile" -or entry.mode == "cloudprofile" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.cloudprofile) ) :~~ ] ))
-  iaas_networks: (( map[landscape.iaas|id,entry|-> ( entry.mode == "seed" -or entry.mode == "soil" ) -and defined( entry.kubeconfig ) ? validate( entry, ["mapfield", "networks", validation.networks] ) :~~ ] ))
   ##### landscape.etcd
   etcd:
     backup:
@@ -315,17 +341,12 @@ validation:
       - - mapfield
         - username
       - - or
-        - - mapfield
-          - password
-        - - mapfield
-          - hash
+        - ["mapfield", "password"]
+        - ["mapfield", "hash"]
     connectorspec:
       - and
-      - - mapfield
-        - type
-      - - mapfield
-        - id
-      - - mapfield
-        - name
+      - ["mapfield", "type"]
+      - ["mapfield", "id"]
+      - ["mapfield", "name"]
     identityspec: (( |id|-> [valid( id.users || id.connectors ), "valid", "identity config needs to contain either 'users' or 'connectors' (or both)"] ))
     validator: (( validate( landscape.identity, identityspec, ["optionalfield", "users", ["list", identity.userspec]], ["optionalfield", "connectors", ["list", identity.connectorspec]] ) ))
