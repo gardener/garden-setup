@@ -1,0 +1,7 @@
+---
+component:
+  imports:
+    - tiller
+    - dns-controller
+
+  stubs: []
