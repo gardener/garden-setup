@@ -1,0 +1,32 @@
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+
+plugins: (( .imports.cert-controller.export.acmeServer.url == "self-signed" ? .plugins_self_signed :plugins_not_self_signed ))
+
+plugins_self_signed:
+  - -echo: "Using self-signed certificates, no solver deployment necessary."
+
+plugins_not_self_signed:
+  - git
+  - helm
+
+git:
+  <<: (( landscape.versions.cert-manager.cert-dns-bridge ))
+  files:
+    - charts
+
+helm:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: "git/repo/charts/certificate-dns-bridge"
+  name: certificate-dns-bridge
+  namespace: (( imports.cert-controller.export.namespace ))
+  values:
+    groupName: (( imports.cert-controller.export.groupName ))
+    solverName: (( imports.cert-controller.export.solverName ))
+    certManager:
+      namespace: (( imports.cert-controller.export.namespace ))
+      serviceAccountName: (( imports.cert-controller.export.serviceAccountName ))
+    image:
+      repository: (( landscape.versions.cert-manager.cert-dns-bridge.image_repo || ~~ ))
+      tag: (( landscape.versions.cert-manager.cert-dns-bridge.image_tag || ~~ ))
