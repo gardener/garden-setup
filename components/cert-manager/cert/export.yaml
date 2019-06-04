@@ -1,0 +1,37 @@
+---
+settings: (( &temporary ))
+landscape: (( &temporary ))
+env: (( &temporary ))
+
+wait_for_certificate:
+  <<: (( &temporary ))
+  check_command: 
+    - "kubectl"
+    - "--kubeconfig"
+    - (( lookup_file(landscape.clusters.[0].kubeconfig, env.ROOTDIR).[0] ))
+    - "-n"
+    - (( .settings.certificate.namespace ))
+    - "get"
+    - "certificate"
+    - (( .settings.certificate.name ))
+    - "-o"
+    - "json"
+  get_command:
+    - "kubectl"
+    - "--kubeconfig"
+    - (( lookup_file(landscape.clusters.[0].kubeconfig, env.ROOTDIR).[0] ))
+    - "-n"
+    - (( .settings.certificate.namespace ))
+    - "get"
+    - "secret"
+    - (( .settings.certificate.secret_name ))
+    - "-o"
+    - "json"
+  result: (( .settings.self-signed ? ~~ :sync( exec_uncached( check_command ), value.status.conditions[0].status == "True", wait_for_certificate.b64dall( exec( get_command ).data ), 600 ) ))
+  b64dall: (( |x|-> sum[x|{}|s,k,v|-> s {k=base64_decode(v)}] ))
+
+export:
+  <<: (( .settings ))
+  tls:
+    crt: (( .settings.self-signed ? .settings.tls.crt :wait_for_certificate.result["tls.crt"] ))
+    key: (( .settings.self-signed ? .settings.tls.key :wait_for_certificate.result["tls.key"] ))
