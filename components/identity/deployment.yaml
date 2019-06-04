@@ -36,20 +36,6 @@ injector:
 spec:
   <<: (( &temporary ))
 
-  server:
-    commonName: "identity"
-    validity: 87600
-    usage:
-      - ServerAuth
-      - ClientAuth
-      - KeyEncipherment
-    hosts:
-      - localhost
-      - "127.0.0.1"
-      - <<: (( utilities.svcHosts("identity-service",landscape.namespace) ))
-      - (( .settings.identity_dns ))
-      - (( .settings.dashboard_dns ))
-
   passwords:
     input: (( landscape.identity.users || [] ))
     value:
@@ -60,13 +46,11 @@ settings:
   issuerUrl: (( .landscape.identity.issuerUrl || "https://" dashboard_dns "/oidc" ))
   callbackUrl: (( issuerUrl "/callback" ))
   dashboardUrl: (( "https://" dashboard_dns ))
-  identity_dns: (( "identity." .imports.ingress_dns.export.ingress_domain ))
-  dashboard_dns: (( "gardener." .imports.ingress_dns.export.ingress_domain ))
+  identity_dns: (( .imports.cert.export.identity_dns ))
+  dashboard_dns: (( .imports.cert.export.dashboard_dns ))
 
 state:
   <<: (( &state(merge none) ))
-  ca: (( utilities.certs.selfSignedCA("identity:ca", false) ))
-  server: (( utilities.certs.keyCertForCA(spec.server, ca, false) ))
   staticPasswords: (( utilities.state.standard(spec.passwords, false) ))
   dashboardClientSecret: (( utilities.certs.secret(landscape.identity.dashboardClientSecret || ~, 32, false) ))
   kubectlClientSecret: (( utilities.certs.secret(landscape.identity.kubectlClientSecret || ~, 32, false) ))
@@ -90,7 +74,5 @@ identity:
     issuerUrl: (( .settings.issuerUrl ))
     connectors: (( injector.injectall(.landscape.identity.connectors || []) ))
     staticPasswords: (( state.staticPasswords.value ))
-    tls:
-      crt: (( .state.server.value.cert ))
-      key: (( .state.server.value.key ))
-
+    tlsSecretName: (( imports.cert.export.certificate.secret_name ))
+    tls: ~

@@ -17,3 +17,4 @@ settings: (( &temporary ))
 
 export:
   dns-class: (( settings.dns-class ))
+  namespace: (( settings.namespace ))

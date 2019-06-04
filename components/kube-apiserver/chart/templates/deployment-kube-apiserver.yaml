@@ -37,7 +37,9 @@ spec:
         checksum/secret-kube-apiserver-basic-auth: {{ include (print $.Template.BasePath "/secret-kube-apiserver-basic-auth.yaml") . | sha256sum }}
         checksum/secret-kube-controller-manager-client: {{ include (print $.Template.BasePath "/secret-kube-controller-manager-tls.yaml") . | sha256sum }}
         checksum/secret-service-account-key: {{ include (print $.Template.BasePath "/secret-service-account-key.yaml") . | sha256sum }}
+        {{- if .Values.tls.identity.ca }}
         checksum/secret-identity-ca: {{ include (print $.Template.BasePath "/secret-identity-ca.yaml") . | sha256sum }}
+        {{- end }}
       labels:
         app: garden
         component: kube-apiserver
@@ -90,7 +92,9 @@ spec:
         - --oidc-client-id=kube-kubectl
         - --oidc-username-claim=email
         - --oidc-groups-claim=groups
+        {{- if .Values.tls.identity.ca }}
         - --oidc-ca-file=/srv/kubernetes/identity-ca/ca.crt
+        {{- end }}
 {{ end }}
         - --profiling=false
         - --proxy-client-cert-file=/srv/kubernetes/aggregator/tls.crt
@@ -168,8 +172,10 @@ spec:
         - name: ssl-certs-hosts
           mountPath: /usr/share/ca-certificates
           readOnly: true
+        {{- if .Values.tls.identity.ca }}
         - name: ca-identity
           mountPath: /srv/kubernetes/identity-ca
+        {{- end }}
       - name: kube-controller-manager
         image: {{ index .Values.images "hyperkube" }}
         imagePullPolicy: IfNotPresent
@@ -220,9 +226,11 @@ spec:
       - name: ca-kube-apiserver
         secret:
           secretName: garden-kube-apiserver-ca
+      {{- if .Values.tls.identity.ca }}
       - name: ca-identity
         secret:
           secretName: identity-ca
+      {{- end }}
       - name: ca-etcd
         secret:
           secretName: {{ .Values.etcd.secretNames.ca | default "garden-etcd-ca" }}
