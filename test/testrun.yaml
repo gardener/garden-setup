@@ -12,7 +12,9 @@ spec:
     revision: master
 
   testFlow:
-  - - name: create-garden
+  - name: create-gardener
+    definition:
+      name: create-garden
       config:
       - name: GARDENER_VERSION
         type: env
@@ -32,7 +34,10 @@ spec:
             name: garden-test
             key: gcloud.json
 
-  - - name: upgrade-garden
+  - name: upgrade-gardener
+    dependsOn: [ create-gardener ]
+    definition:
+      name: upgrade-garden
       config:
       - name: GARDENER_VERSION
         type: env
@@ -52,7 +57,30 @@ spec:
             name: garden-test
             key: gcloud.json
 
-  - - name: delete-garden
+  - name: delete-gardener
+    dependsOn: [ upgrade-gardener ]
+    definition:
+      name: delete-garden
+      config:
+      - name: host-kubeconfig
+        type: file
+        path: "/tmp/garden/kubeconfig"
+        valueFrom:
+          secretKeyRef:
+            name: garden-test
+            key: kubeconfig
+      - name: gcloud
+        type: file
+        path: "/tmp/garden/gcloud.json"
+        valueFrom:
+          secretKeyRef:
+            name: garden-test
+            key: gcloud.json
+
+  onExit:
+  - name: delete-gardener
+    definition:
+      name: delete-garden
       config:
       - name: host-kubeconfig
         type: file
