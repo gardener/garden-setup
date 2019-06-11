@@ -14,6 +14,7 @@ SOURCE_PATH="$(realpath .)"
 cd /tmp/garden
 ln -s $SOURCE_PATH ./crop
 cp $SOURCE_PATH/test/acre.yaml .
+cp $TM_KUBECONFIG_PATH/host.config ./kubeconfig
 
 trap copy_state EXIT
 
