@@ -16,6 +16,7 @@
 imports: (( &temporary ))
 landscape: (( &temporary ))
 utilities: (( &temporary ))
+env: (( &temporary ))
 
 settings:
   
@@ -81,11 +82,29 @@ plugins:
     - template
   - kubectl:
     - kubectl_apply
+  - kubectl:
+    - garden_secret
 
 kubectl_apply:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
   files:
     - "gardener/rendered_charts.yaml"
+
+garden_secret:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: garden-secret
+        namespace: (( .landscape.namespace ))
+        labels:
+            runtime: garden
+        annotations:
+          clusterName: (( .landscape.name ))
+      type: Opaque
+      data:
+        kubeconfig: (( base64( read( .env.ROOTDIR "/" .landscape.clusters[0].kubeconfig, "text" ) ) ))
 
 gardener_git:
   <<: (( .landscape.versions.gardener ))
