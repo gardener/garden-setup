@@ -129,7 +129,6 @@ landscape:
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
       repo: "https://github.com/gardener/external-dns-management.git"
-  iaas: (( merge none // map[ select[stub()|e|-> ( ! defined( e.mode ) ) -or ( e.mode != "inactive" ) ] |idx,v|-> v { "mode" = v.mode || "seed" } ] ))
     cert-manager:
       controller:
         <<: (( merge ))
@@ -143,6 +142,7 @@ landscape:
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
         repo: "https://github.com/gardener/certificate-dns-bridge.git"
+  iaas: (( merge none // map[ select[stub()|e|-> ( ! defined( e.mode ) ) -or ( e.mode != "inactive" ) ] |idx,v|-> v { "mode" = v.mode || "seed" } ] ))
   etcd:
     <<: (( merge ))
     backup:
@@ -155,7 +155,7 @@ landscape:
   gardener: (( ~~ ))
   cert-manager:
     <<: (( merge ))
-    server: (( merge none // type( stub() ) == "map" ? stub() :{ "url" = stub() } ))
+    server: (( merge none // valid( stub() ) ? ( type( stub() ) == "map" ? stub() :{ "url" = stub() } ) :{"url" = "self-signed"} ))
   dns:
     <<: (( merge ))
     type: (( .dns_type_mapping[iaas[0].type] ))
@@ -186,6 +186,7 @@ validation:
   ### AUXILIARY FUNCTIONS ###
   return_true: (( |x|-> true ))
   instantiate_validator: (( |values,validator|-> *validator ))
+  email_regex: "[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*@[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)+$"
 
   ### VALIDATOR DEFINITIONS ###
   types:
@@ -324,6 +325,28 @@ validation:
     - ["mapfield", "nodes", "cidr"]
     - ["mapfield", "pods", "cidr"]
     - ["mapfield", "services", "cidr"]
+  cert-manager_validators:
+    basic:
+      - and
+      - - optionalfield
+        - email
+        - - match
+          - (( validation.email_regex ))
+      - - mapfield
+        - server
+        - - and
+          - - mapfield
+            - url
+            - - or
+              - ["valueset", ["self-signed", "staging", "live"]]
+              - dnsdomain
+          - - optionalfield
+            - ca
+            - ["and", [(( cert-manager_validators.selfsigned )), (( landscape.cert-manager.server.url ))], [(( cert-manager_validators.acme )), (( landscape.cert-manager.server.url ))]]
+    selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-manager.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
+    acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-manager.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
+    email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-manager.email' or 'landscape.identity.users[0].email' needs to be set"] ))
+
 
   
   ### VALIDATIONS ###
@@ -357,6 +380,8 @@ validation:
   gardener: (( defined( landscape.gardener ) ? validate( landscape.gardener, validation.gardener_validator ) :~~ ))
   ##### landscape.dashboard
   dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator ) :~~ ))
+  ##### landscape.certmanager
+  cert-manager: (( validate( landscape.cert-manager, validation.cert-manager_validators.basic, [validation.cert-manager_validators.email, landscape.identity] ) ))
   ##### landscape.identity TODO
   identity:
     userspec:
@@ -364,7 +389,7 @@ validation:
       - - mapfield
         - email
         - - match
-          - "[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*@[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)+$"
+          - (( validation.email_regex ))
       - - mapfield
         - username
       - - or
