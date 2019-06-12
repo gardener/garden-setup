@@ -21,3 +21,4 @@ component:
     - ingress_dns: ingress-controller
     - kube_apiserver: kube-apiserver
     - cert: cert-manager/cert
+    - cert-controller: cert-manager/controller

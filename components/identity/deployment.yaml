@@ -46,8 +46,8 @@ settings:
   issuerUrl: (( .landscape.identity.issuerUrl || "https://" dashboard_dns "/oidc" ))
   callbackUrl: (( issuerUrl "/callback" ))
   dashboardUrl: (( "https://" dashboard_dns ))
-  identity_dns: (( .imports.cert.export.identity_dns ))
-  dashboard_dns: (( .imports.cert.export.dashboard_dns ))
+  identity_dns: (( "identity." .imports.ingress-controller.export.ingress_domain ))
+  dashboard_dns: (( "gardener." .imports.ingress-controller.export.ingress_domain ))
 
 state:
   <<: (( &state(merge none) ))

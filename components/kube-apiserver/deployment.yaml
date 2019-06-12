@@ -107,7 +107,7 @@ kubeapiserver:
       kubeControllerManager: (( spec.KeyCert(.state.kube_apiserver_client_kube_controller_manager) ))
       serviceAccountKey: (( .state.service_account_key.value ))
       identity:
-        ca: (( .imports.cert.export.ca || ~~ ))
+        ca: (( .imports.cert-controller.export.ca.crt || ~~ ))
     etcd:
       main:
         endpoints: (( join(",",.imports.etcd.exports.endpoints.main) ))

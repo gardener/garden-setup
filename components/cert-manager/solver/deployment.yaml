@@ -2,7 +2,7 @@
 imports: (( &temporary ))
 landscape: (( &temporary ))
 
-plugins: (( .imports.cert-controller.export.acmeServer.url == "self-signed" ? .plugins_self_signed :plugins_not_self_signed ))
+plugins: (( .imports.cert-controller.export.self-signed ? .plugins_self_signed :plugins_not_self_signed ))
 
 plugins_self_signed:
   - -echo: "Using self-signed certificates, no solver deployment necessary."

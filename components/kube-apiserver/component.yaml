@@ -19,7 +19,7 @@ component:
     - etcd: etcd/cluster
     - identity
     - namespace
-    - cert: cert-manager/cert
+    - cert-controller: cert-manager/controller
 
   stubs:
     - lib/templates/utilities.yaml

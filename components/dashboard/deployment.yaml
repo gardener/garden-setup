@@ -38,19 +38,18 @@ dashboard:
     apiServerUrl: (( imports.kube_apiserver.export.apiserver_url ))
     sessionSecret: (( rand("[:alnum:]", 30) ))
     hosts:
-      - (( imports.cert.export.dashboard_dns ))
+      - (( imports.identity.export.dashboard_dns ))
     image:
       repository: (( .dashboard_git.image_repo || ~~ ))
       tag: (( .dashboard_git.image_tag || ~~ ))
       pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))
-      ca: (( imports.cert.export.ca || ~~ ))
+      ca: (( imports.cert-controller.export.ca.crt || ~~ ))
       redirectUri: (( settings.dashboard_url "/auth/callback" ))
       clientSecret: (( imports.identity.export.dashboardClientSecret ))
-    tls:
-      crt: (( imports.cert.export.tls.crt ))
-      key: (( imports.cert.export.tls.key ))
+    tlsSecretName: (( imports.cert.export.certificate.secret_name ))
+    tls: ~
     kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
     gitHub: (( .landscape.dashboard.gitHub || ~~ ))
     frontendConfig:
@@ -62,7 +61,7 @@ util:
   userbindings: ((|users|->map[users|user|->*spec.subject] ))
 
 settings:
-  dashboard_url: (( "https://" imports.cert.export.dashboard_dns ))
+  dashboard_url: (( "https://" imports.identity.export.dashboard_dns ))
 
 spec:
   <<: (( &temporary ))

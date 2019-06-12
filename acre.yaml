@@ -155,7 +155,7 @@ landscape:
   gardener: (( ~~ ))
   cert-manager:
     <<: (( merge ))
-    server: live
+    server: (( merge none // type( stub() ) == "map" ? stub() :{ "url" = stub() } ))
   dns:
     <<: (( merge ))
     type: (( .dns_type_mapping[iaas[0].type] ))
