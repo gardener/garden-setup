@@ -25,7 +25,7 @@ landscape:
     gardener:
       <<: (( merge ))
       repo: "https://github.com/gardener/gardener.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.22.0" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.23.0" ))
       apiserver:
         <<: (( merge ))
         image_repo: "eu.gcr.io/gardener-project/gardener/apiserver"
