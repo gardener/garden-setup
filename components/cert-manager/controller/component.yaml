@@ -3,6 +3,7 @@ component:
   imports:
     - tiller
     - dns-controller
+    - namespace
 
   stubs:
     - lib/templates/utilities.yaml

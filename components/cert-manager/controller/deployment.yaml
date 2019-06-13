@@ -29,7 +29,7 @@ plugins:
   - kubectl: namespace
   - kubectl: crds
   - helm
-  - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.server.url ))
+  - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
   - kubectl: issuer
 
 git:
