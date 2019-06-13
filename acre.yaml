@@ -35,13 +35,27 @@ landscape:
         image_repo: "eu.gcr.io/gardener-project/gardener/controller-manager"
         image_tag: (( valid( tag ) ? tag :~~ ))
       extensions:
-        dns-controller:
-          image_tag: (( versions.dns-controller.tag || "0.5.1" ))
-          image_repo: "eu.gcr.io/gardener-project/dns-controller-manager"
+        dns-external:
+          <<: (( merge ))
+          tag: (( valid( branch ) -or valid( commit ) ? ~~ :( .landscape.versions.dns-controller.tag || "0.5.5" ) ))
+          image_tag: (( versions.dns-controller.tag || "0.5.5" ))
+          image_repo: (( ~~ ))
+          repo: https://github.com/gardener/external-dns-management.git
+          chart_path: charts
         os-coreos:
-          image_tag: "0.5.0"
+          <<: (( merge ))
+          tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.6.5" ))
+          repo: https://github.com/gardener/gardener-extensions.git
+          chart_path: controllers/os-coreos/charts
+          image_tag: (( valid( tag ) ? tag :~~ ))
+          image_repo: (( ~~ ))
         os-coreos-alicloud:
-          image_tag: "0.5.0"
+          <<: (( merge ))
+          tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.6.5" ))
+          repo: https://github.com/gardener/gardener-extensions.git
+          chart_path: controllers/os-coreos-alicloud/charts
+          image_tag: (( valid( tag ) ? tag :~~ ))
+          image_repo: (( ~~ ))
     dashboard:
       <<: (( merge ))
       repo: "https://github.com/gardener/dashboard.git"
@@ -55,7 +69,7 @@ landscape:
       commit: (( dashboard.commit || ~~ ))
     dns-controller:
       <<: (( merge ))
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.5.1" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.5.5" ))
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
       repo: "https://github.com/gardener/external-dns-management.git"

@@ -5,5 +5,4 @@ component:
     - kube_apiserver: "kube-apiserver"
     - namespace
 
-  stubs:
-    - plugins/kubectl/utilities.yaml
+  stubs: []

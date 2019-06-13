@@ -1,74 +1,123 @@
 ---
 imports: (( &temporary ))
-utilities: (( &temporary ))
 landscape: (( &temporary ))
+env: (( &temporary ))
 
 plugins:
-  - kubectl:
-    - extension_controllers
+  - <<: (( sum[extensions|[]|s,n,v|-> s [{ "extension" = "extensions." n }]] ))
+  - kubectl
   - shoot-check
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
-extension_controllers: (( map[extension_controllers_values|n,v|-> utilities.kubectl.generate( extension_controllers_func.extPath( n ) "main.yaml", imports.kube_apiserver.export.kubeconfig, v )] ))
+extensions: (( sum[extensions_manifests|{}|s,n,v|-> s { n = *.spec_template }] ))
 
-extension_controllers_func:
+kubectl:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+  files: (( extensions.[*].manifest ))
+
+# this template gets evaluated for each entry in extensions_manifests
+spec_template:
+  <<: (( &temporary &template ))
+  name: (( n ))
+  version: (( &temporary( .landscape.versions.gardener.extensions[n] ) ))
+  repo: (( version.repo ))
+  tag: (( version.tag || ~~ ))
+  branch: (( version.branch || ~~ ))
+  commit: (( version.commit || ~~ ))
+  files:
+    - (( version.chart_path ))
+  manifest: (( "extensions." name "/manifest.yaml" ))
+  tmp_manifest_template: (( &temporary( *v ) ))
+  manifest_template: (( asyaml( tmp_manifest_template ) ))
+  chart_path: (( version.chart_path ))
+
+# the ControllerRegistration manifests
+# '<CHART>' will be replaced by the actual chart
+extensions_manifests:
   <<: (( &temporary ))
-  ignore:
-    - .git
-  _joinPath: (( |p,c|-> p == "" ? c :(p "/" c) ))
-  files: (( |d,p|->map[list_files(_._joinPath(d,p))|v|->contains(_.ignore, v) ? ~ :_._joinPath( p, v )] sum[map[list_dirs(d "/" p)|d|-> contains(_.ignore,d) ? ~ :d]|[]|s,v|->s _.files(d,_._joinPath(p, v))] ))
-  extPath: (( |n|-> __ctx.DIR "/extension-controllers/" n "/" ))
-  chartConfig: (( |path|-> archive( sum[extension_controllers_func.files( path, "" )|{}|s,e|->s { e = { "data" = read( path "/" e, "text" ) } }], "targz" ) ))
-
-extension_controllers_values:
-  <<: (( &temporary ))
-  controllerregistration_coreos:
-    temp: 
-      <<: (( &temporary ))
-      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
-      chart: (( extension_controllers_func.chartConfig( path ) ))
-    concurrentSyncs: 25
-    image:
-      tag: (( .landscape.versions.gardener.extensions.os-coreos.image_tag ))
-    resources:
-      limits:
-        cpu: 100m
-        memory: 256Mi
-      requests:
-        cpu: 20m
-        memory: 64Mi
-  controllerregistration_coreos_alicloud:
-    temp: 
-      <<: (( &temporary ))
-      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
-      chart: (( extension_controllers_func.chartConfig( path ) ))
-    concurrentSyncs: 25
-    image:
-      tag: (( .landscape.versions.gardener.extensions.os-coreos-alicloud.image_tag ))
-    resources:
-      limits:
-        cpu: 100m
-        memory: 256Mi
-      requests:
-        cpu: 20m
-        memory: 64Mi
-  dns_external:
-    temp:
-      <<: (( &temporary ))
-      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
-      chart: (( extension_controllers_func.chartConfig( path ) ))
-    createCRDs: false
-    fullnameOverride: seed-dns-controller-manager
-    image:
-      repo: (( .landscape.versions.gardener.extensions.dns-controller.image_repo ))
-      tag: (( .landscape.versions.gardener.extensions.dns-controller.image_tag ))
-    configuration:
-      poolSize: 20
-      identifier: ""
-      serverPortHttp: 8080
-
-state:
-  <<: (( &state(merge none) ))
-
+  os-coreos:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: os-coreos
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            concurrentSyncs: 25
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 64Mi
+        type: helm
+      resources:
+      - kind: OperatingSystemConfig
+        type: coreos
+  os-coreos-alicloud:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: os-coreos-alicloud
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            concurrentSyncs: 25
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 64Mi
+        type: helm
+      resources:
+      - kind: OperatingSystemConfig
+        type: coreos-alicloud
+  dns-external:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: dns-external
+    spec:
+      resources:
+      - kind: DNSProvider
+        type: aws-route53
+      - kind: DNSProvider
+        type: alicloud-dns
+      - kind: DNSProvider
+        type: azure-dns
+      - kind: DNSProvider
+        type: google-clouddns
+      - kind: DNSProvider
+        type: openstack-designate
+      deployment:
+        type: helm
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            createCRDs: false
+            fullnameOverride: seed-dns-controller-manager
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            configuration:
+              poolSize: 20
+              identifier: ""
+              serverPortHttp: 8080
