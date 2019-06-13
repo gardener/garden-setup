@@ -96,7 +96,7 @@ garden_secret:
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: garden-secret
+        name: garden-secret-runtime
         namespace: (( .landscape.namespace ))
         labels:
             runtime: garden
