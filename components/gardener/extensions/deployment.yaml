@@ -17,6 +17,15 @@ kubectl:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
   files: (( extensions.[*].manifest ))
 
+# a dummy config for openstack, so the provider can be created if no config is given in the acre.yaml
+openstack_dummy_config:
+  machineImages:
+  - cloudProfiles:
+    - image: coreos-2023.5.0
+      name: openstack
+    name: coreos
+    version: 2023.5.0
+
 # this template gets evaluated for each entry in extensions_manifests
 spec_template:
   <<: (( &temporary &template ))
@@ -307,3 +316,33 @@ extensions_manifests:
         type: gcp
       - kind: Worker
         type: gcp
+  provider-openstack:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-openstack
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config: (( .landscape.iaas.openstack.extensionConfig || .openstack_dummy_config ))
+            controllers:
+              infrastructure:
+                concurrentSyncs: 50
+                ignoreOperationAnnotation: false
+              worker:
+                concurrentSyncs: 50
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: openstack
+      - kind: Worker
+        type: openstack

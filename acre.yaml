@@ -191,7 +191,7 @@ validation:
             - - list
               - - and
                 - ["mapfield", "name"]
-                - ["mapfield", "image"]
+                - ["mapfield", "version"]
           - - mapfield
             - loadBalancerProviders
             - - list
