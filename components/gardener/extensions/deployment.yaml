@@ -89,6 +89,32 @@ extensions_manifests:
       resources:
       - kind: OperatingSystemConfig
         type: coreos-alicloud
+  os-suse-jeos:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: os-suse-jeos
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            concurrentSyncs: 20
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 64Mi
+        type: helm
+      resources:
+      - kind: OperatingSystemConfig
+        type: suse-jeos
   dns-external:
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
@@ -121,3 +147,163 @@ extensions_manifests:
               poolSize: 20
               identifier: ""
               serverPortHttp: 8080
+  provider-alicloud:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-alicloud
+    spec:
+      resources:
+      - kind: Infrastructure
+        type: alicloud
+      - kind: Worker
+        type: alicloud
+      deployment:
+        type: helm
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            config:
+              machineImages:
+              - displayName: coreos
+                id: coreos_2023_4_0_64_30G_alibase_20190319.vhd
+                name: coreos-alicloud
+                version: 2023.4.0
+            resources:
+              limits:
+                memory: 1Gi
+  provider-aws:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-aws
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config:
+              machineImages:
+              - name: coreos
+                regions:
+                - ami: ami-0d3a9785820124591
+                  name: ap-northeast-1
+                - ami: ami-03230b2fa6af112bf
+                  name: ap-northeast-2
+                - ami: ami-0b85fd1356963d2ee
+                  name: ap-south-1
+                - ami: ami-0f8a9aa9857d8af7e
+                  name: ap-southeast-1
+                - ami: ami-0e87752a1d331823a
+                  name: ap-southeast-2
+                - ami: ami-0c0100bac23bb1d39
+                  name: ca-central-1
+                - ami: ami-01e99c7e0a343d325
+                  name: cn-north-1
+                - ami: ami-0773341917796083a
+                  name: cn-northwest-1
+                - ami: ami-012abdf0d2781f0a5
+                  name: eu-central-1
+                - ami: ami-09fbda19ac2fc6c3f
+                  name: eu-north-1
+                - ami: ami-01f5fbceb7a9fa4d0
+                  name: eu-west-1
+                - ami: ami-069966bea0809e21d
+                  name: eu-west-2
+                - ami: ami-0194c504244182155
+                  name: eu-west-3
+                - ami: ami-0cd830cc037613a7d
+                  name: sa-east-1
+                - ami: ami-08e58b93705fb503f
+                  name: us-east-1
+                - ami: ami-03172282aaa2899be
+                  name: us-east-2
+                - ami: ami-0ff9e298ea0bacf53
+                  name: us-gov-east-1
+                - ami: ami-e7f59e86
+                  name: us-gov-west-1
+                - ami: ami-08d3e245ebf4d560f
+                  name: us-west-1
+                - ami: ami-0a4f49b2488e15346
+                  name: us-west-2
+                version: 2023.5.0
+              - name: suse-jeos
+                regions:
+                - ami: ami-07abe4613d2f3532c
+                  name: eu-central-1
+                version: alpha-1
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: aws
+      - kind: Worker
+        type: aws
+  provider-azure:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-azure
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config:
+              machineImages:
+              - name: coreos
+                offer: CoreOS
+                publisher: CoreOS
+                sku: Stable
+                version: 2023.5.0
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: azure
+      - kind: Worker
+        type: azure
+  provider-gcp:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-gcp
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config:
+              machineImages:
+              - image: projects/coreos-cloud/global/images/coreos-stable-2023-5-0-v20190312
+                name: coreos
+                version: 2023.5.0
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: gcp
+      - kind: Worker
+        type: gcp

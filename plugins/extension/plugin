@@ -28,8 +28,8 @@ deploy() {
   chart_name="chart.tar.b64"
   # create tar file
   (
-    cd "$dir/repo/$chart_path"
-    tar -cz * | base64 > "$dir/$chart_name"
+    cd "$dir/repo/$(dirname "$chart_path")"
+    tar -cz $(basename "$chart_path") | base64 > "$dir/$chart_name"
   )
   # replace '<CHART>' in the manifest template with the actual chart
   (
