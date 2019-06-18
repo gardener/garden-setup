@@ -68,7 +68,7 @@ spec:
         command:
         - /hyperkube
         - apiserver
-        - --enable-admission-plugins=Priority,NamespaceLifecycle,LimitRanger,PodSecurityPolicy,ServiceAccount,NodeRestriction,DefaultStorageClass,Initializers,DefaultTolerationSeconds,ResourceQuota,StorageObjectInUseProtection,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
+        - --enable-admission-plugins=Priority,NamespaceLifecycle,LimitRanger,PodSecurityPolicy,ServiceAccount,NodeRestriction,DefaultStorageClass,DefaultTolerationSeconds,ResourceQuota,StorageObjectInUseProtection,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
         - --disable-admission-plugins=PersistentVolumeLabel
         - --allow-privileged=true
         - --anonymous-auth=false
@@ -99,7 +99,6 @@ spec:
         - --requestheader-extra-headers-prefix=X-Remote-Extra-
         - --requestheader-group-headers=X-Remote-Group
         - --requestheader-username-headers=X-Remote-User
-        - --runtime-config=admissionregistration.k8s.io/v1alpha1
         - --secure-port=443
         - --service-cluster-ip-range=100.64.0.0/13
         - --service-account-key-file=/srv/kubernetes/service-account-key/service_account.key
