@@ -22,6 +22,9 @@ landscape:
   clusters: (( valid(landscape.cluster.networks) ? [ landscape.cluster ] :error("no cluster networks definition found") ))
   components: []
   versions:
+    kube-apiserver:
+      image_repo: k8s.gcr.io/hyperkube
+      image_tag: v1.14.3
     gardener:
       <<: (( merge ))
       repo: "https://github.com/gardener/gardener.git"

@@ -89,6 +89,8 @@ kubeapiserver:
   namespace: "garden"
   serviceName: (( name ))
   values:
+    images:
+      hyperkube: (( .landscape.versions.kube-apiserver.image_repo ":" .landscape.versions.kube-apiserver.image_tag ))
     apiServer:
       hostname: (( .settings.apiserver_dns ))
       serviceName: (( name ))
