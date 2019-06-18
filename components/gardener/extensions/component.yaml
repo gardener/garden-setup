@@ -1,4 +1,6 @@
 ---
+landscape: (( &temporary ))
+
 component:
   imports:
     - gardener: gardener/runtime
@@ -6,3 +8,30 @@ component:
     - namespace
 
   stubs: []
+
+  plugins:
+    - <<: (( sum[.extensions|[]|s,n,v|-> s [{ "git" = "extensions." n }]] ))
+
+# input for git plugin
+extensions: (( sum[.deployment.extensions|{}|s,n|-> s { n = *spec_template }] ))
+
+spec_template:
+  <<: (( &temporary &template ))
+  version: (( &temporary( .landscape.versions.gardener.extensions[n] ) ))
+  repo: (( version.repo ))
+  tag: (( version.tag || ~~ ))
+  branch: (( version.branch || ~~ ))
+  commit: (( version.commit || ~~ ))
+  files:
+    - (( version.chart_path ))
+
+deployment:
+  # which extensions should be deployed
+  # all need a matching node in landscape.versions.gardener.extensions in the acre.yaml file
+  # and a manifest template in extension_manifests in this component's deployment.yaml
+  extensions:
+    - os-coreos
+    - os-coreos-alicloud
+    - os-suse-jeos
+    - dns-external
+    - (( "provider-" .landscape.iaas.type ))

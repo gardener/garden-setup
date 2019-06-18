@@ -4,21 +4,34 @@ landscape: (( &temporary ))
 env: (( &temporary ))
 
 plugins:
-  - <<: (( sum[extensions|[]|s,n,v|-> s [{ "extension" = "extensions." n }]] ))
   - kubectl
   - shoot-check
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
-extensions: (( sum[extensions_manifests|{}|s,n,v|-> s { n = *.spec_template }] ))
+# list of extensions taken from component.yaml (deployment.extensions)
+extensions: (( &temporary ))
+
+# instantiated manifest templates
+rendered_extension_manifests: (( &temporary( sum[extensions|{}|s,n|-> s { n = *.spec_template }] ) ))
+
+# auxiliary functions
+extension_controllers_func:
+  <<: (( &temporary ))
+  ignore:
+    - .git
+  _joinPath: (( |p,c|-> p == "" ? c :(p "/" c) ))
+  files: (( |d,p|->map[list_files(_._joinPath(d,p))|v|->contains(_.ignore, v) ? ~ :_._joinPath( p, v )] sum[map[list_dirs(d "/" p)|d|-> contains(_.ignore,d) ? ~ :d]|[]|s,v|->s _.files(d,_._joinPath(p, v))] ))
+  chartConfig: (( |path,dir|-> archive( sum[extension_controllers_func.files( path, dir )|{}|s,e|->s { e = { "data" = read( path "/" e, "text" ) } }], "targz" ) ))
 
 kubectl:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
-  files: (( extensions.[*].manifest ))
+  manifests: (( rendered_extension_manifests.[*].manifest ))
 
 # a dummy config for openstack, so the provider can be created if no config is given in the acre.yaml
 openstack_dummy_config:
+  <<: (( &temporary ))
   machineImages:
   - cloudProfiles:
     - image: coreos-2023.5.0
@@ -26,27 +39,25 @@ openstack_dummy_config:
     name: coreos
     version: 2023.5.0
 
-# this template gets evaluated for each entry in extensions_manifests
+# this template gets evaluated for each entry in extension_manifests
 spec_template:
   <<: (( &temporary &template ))
-  name: (( n ))
   version: (( &temporary( .landscape.versions.gardener.extensions[n] ) ))
-  repo: (( version.repo ))
-  tag: (( version.tag || ~~ ))
-  branch: (( version.branch || ~~ ))
-  commit: (( version.commit || ~~ ))
-  files:
-    - (( version.chart_path ))
-  manifest: (( "extensions." name "/manifest.yaml" ))
-  tmp_manifest_template: (( &temporary( *v ) ))
-  manifest_template: (( asyaml( tmp_manifest_template ) ))
-  chart_path: (( version.chart_path ))
+  manifest: (( *.extension_manifests[n] ))
+  encoded_chart: (( &temporary( .extension_controllers_func.chartConfig( paths.prefix, paths.suffix ) ) ))
+  paths:
+    <<: (( &temporary ))
+    raw: (( env.GENDIR "/extensions." n "/repo/" version.chart_path ))
+    pos: (( lastindex( raw, "/" ) ))
+    prefix: (( substr( raw, 0, pos ) ))
+    suffix: (( substr( raw, pos + 1 ) ))
 
-# the ControllerRegistration manifests
-# '<CHART>' will be replaced by the actual chart
-extensions_manifests:
+extension_manifests:
   <<: (( &temporary ))
+
+########################################
   os-coreos:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -55,7 +66,7 @@ extensions_manifests:
     spec:
       deployment:
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             concurrentSyncs: 25
             image:
@@ -72,7 +83,10 @@ extensions_manifests:
       resources:
       - kind: OperatingSystemConfig
         type: coreos
+
+########################################
   os-coreos-alicloud:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -81,7 +95,7 @@ extensions_manifests:
     spec:
       deployment:
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             concurrentSyncs: 25
             image:
@@ -98,7 +112,10 @@ extensions_manifests:
       resources:
       - kind: OperatingSystemConfig
         type: coreos-alicloud
+
+########################################
   os-suse-jeos:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -107,7 +124,7 @@ extensions_manifests:
     spec:
       deployment:
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             concurrentSyncs: 20
             image:
@@ -124,7 +141,10 @@ extensions_manifests:
       resources:
       - kind: OperatingSystemConfig
         type: suse-jeos
+
+########################################
   dns-external:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -145,7 +165,7 @@ extensions_manifests:
       deployment:
         type: helm
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             createCRDs: false
             fullnameOverride: seed-dns-controller-manager
@@ -156,7 +176,10 @@ extensions_manifests:
               poolSize: 20
               identifier: ""
               serverPortHttp: 8080
+
+########################################
   provider-alicloud:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -171,7 +194,7 @@ extensions_manifests:
       deployment:
         type: helm
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             image:
               repo: (( version.image_repo || ~~ ))
@@ -185,7 +208,10 @@ extensions_manifests:
             resources:
               limits:
                 memory: 1Gi
+
+########################################
   provider-aws:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -194,7 +220,7 @@ extensions_manifests:
     spec:
       deployment:
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             config:
               machineImages:
@@ -258,7 +284,10 @@ extensions_manifests:
         type: aws
       - kind: Worker
         type: aws
+
+########################################
   provider-azure:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -267,7 +296,7 @@ extensions_manifests:
     spec:
       deployment:
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             config:
               machineImages:
@@ -288,7 +317,10 @@ extensions_manifests:
         type: azure
       - kind: Worker
         type: azure
+
+########################################
   provider-gcp:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -297,7 +329,7 @@ extensions_manifests:
     spec:
       deployment:
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             config:
               machineImages:
@@ -316,7 +348,10 @@ extensions_manifests:
         type: gcp
       - kind: Worker
         type: gcp
+
+########################################
   provider-openstack:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -325,7 +360,7 @@ extensions_manifests:
     spec:
       deployment:
         providerConfig:
-          chart: "<CHART>"
+          chart: (( encoded_chart ))
           values:
             config: (( .landscape.iaas.openstack.extensionConfig || .openstack_dummy_config ))
             controllers:
