@@ -22,61 +22,256 @@ azure:
       versions: (( values.kubernetes.versions ))
     machineImages:
     - name: coreos
-      publisher: CoreOS
-      offer: CoreOS
-      sku: Stable
-      version: 1911.5.0
+      version: 2023.5.0
     machineTypes:
-    - name: Standard_DS2_v2
-      cpu: "2"
-      gpu: "0"
-      memory: 7Gi
-      usable: true
-    - name: Standard_DS3_v2
-      cpu: "4"
-      gpu: "0"
-      memory: 14Gi
-      usable: true
-    - name: Standard_DS4_v2
-      cpu: "8"
-      gpu: "0"
-      memory: 28Gi
-      usable: true
-    - name: Standard_DS5_v2
-      cpu: "16"
-      gpu: "0"
-      memory: 56Gi
-      usable: false
-    - name: Standard_F2s
-      cpu: "2"
-      gpu: "0"
-      memory: 4Gi
-    - name: Standard_F4s
-      cpu: "4"
+    - cpu: "2"
       gpu: "0"
       memory: 8Gi
-    - name: Standard_F8s
-      cpu: "8"
+      name: Standard_D2_v3
+      usable: true
+    - cpu: "4"
       gpu: "0"
       memory: 16Gi
-    - name: Standard_F16s
-      cpu: "16"
+      name: Standard_D4_v3
+      usable: true
+    - cpu: "8"
       gpu: "0"
       memory: 32Gi
-    volumeTypes:
-    - name: standard
-      class: standard
+      name: Standard_D8_v3
       usable: true
-    - name: premium
-      class: premium
-      usable: false
-  countUpdateDomains:
-  - region: westeurope
-    count: 5
-  - region: eastus
-    count: 5
+    - cpu: "16"
+      gpu: "0"
+      memory: 64Gi
+      name: Standard_D16_v3
+      usable: true
+    - cpu: "32"
+      gpu: "0"
+      memory: 128Gi
+      name: Standard_D32_v3
+      usable: true
+    - cpu: "2"
+      gpu: "0"
+      memory: 8Gi
+      name: Standard_D2s_v3
+      usable: true
+    - cpu: "4"
+      gpu: "0"
+      memory: 16Gi
+      name: Standard_D4s_v3
+      usable: true
+    - cpu: "8"
+      gpu: "0"
+      memory: 32Gi
+      name: Standard_D8s_v3
+      usable: true
+    - cpu: "16"
+      gpu: "0"
+      memory: 64Gi
+      name: Standard_D16s_v3
+      usable: true
+    - cpu: "32"
+      gpu: "0"
+      memory: 128Gi
+      name: Standard_D32s_v3
+      usable: true
+    - cpu: "2"
+      gpu: "0"
+      memory: 7Gi
+      name: Standard_DS2_v2
+      usable: true
+    - cpu: "4"
+      gpu: "0"
+      memory: 14Gi
+      name: Standard_DS3_v2
+      usable: true
+    - cpu: "8"
+      gpu: "0"
+      memory: 28Gi
+      name: Standard_DS4_v2
+      usable: true
+    - cpu: "16"
+      gpu: "0"
+      memory: 56Gi
+      name: Standard_DS5_v2
+      usable: true
+    - cpu: "1"
+      gpu: "0"
+      memory: 2Gi
+      name: Standard_F1s
+      usable: true
+    - cpu: "2"
+      gpu: "0"
+      memory: 4Gi
+      name: Standard_F2s
+      usable: true
+    - cpu: "4"
+      gpu: "0"
+      memory: 8Gi
+      name: Standard_F4s
+      usable: true
+    - cpu: "8"
+      gpu: "0"
+      memory: 16Gi
+      name: Standard_F8s
+      usable: true
+    - cpu: "16"
+      gpu: "0"
+      memory: 32Gi
+      name: Standard_F16s
+      usable: true
+    - cpu: "8"
+      gpu: "0"
+      memory: 64Gi
+      name: Standard_E8s_v3
+      usable: true
+    - cpu: "32"
+      gpu: "0"
+      memory: 64Gi
+      name: Standard_F32s_v2
+      usable: true
+    - cpu: "64"
+      gpu: "0"
+      memory: 128Gi
+      name: Standard_F64s_v2
+      usable: true
+    - cpu: "64"
+      gpu: "0"
+      memory: 256Gi
+      name: Standard_D64s_v3
+      usable: true
+    - cpu: "64"
+      gpu: "0"
+      memory: 432Gi
+      name: Standard_E64s_v3
+      usable: true
+    - cpu: "64"
+      gpu: "0"
+      memory: 1Ti
+      name: Standard_M64s
+      usable: true
+    - cpu: "128"
+      gpu: "0"
+      memory: 2Ti
+      name: Standard_M128
+      usable: true
+    volumeTypes:
+    - class: standard
+      name: standard
+      usable: true
+    - class: premium
+      name: premium
+      usable: true
   countFaultDomains:
-  - region: westeurope
-    count: 2
-  - region: eastus
-    count: 2
+  - count: 2
+    region: australiaeast
+  - count: 2
+    region: australiasoutheast
+  - count: 2
+    region: brazilsouth
+  - count: 3
+    region: canadacentral
+  - count: 2
+    region: canadaeast
+  - count: 2
+    region: centralindia
+  - count: 3
+    region: centralus
+  - count: 2
+    region: eastasia
+  - count: 3
+    region: eastus
+  - count: 3
+    region: eastus2
+  - count: 2
+    region: francecentral
+  - count: 2
+    region: japaneast
+  - count: 2
+    region: japanwest
+  - count: 2
+    region: koreacentral
+  - count: 2
+    region: koreasouth
+  - count: 3
+    region: northcentralus
+  - count: 3
+    region: northeurope
+  - count: 2
+    region: southafricanorth
+  - count: 3
+    region: southcentralus
+  - count: 2
+    region: southeastasia
+  - count: 2
+    region: southindia
+  - count: 2
+    region: uksouth
+  - count: 2
+    region: ukwest
+  - count: 2
+    region: westcentralus
+  - count: 3
+    region: westeurope
+  - count: 2
+    region: westindia
+  - count: 3
+    region: westus
+  - count: 2
+    region: westus2
+  countUpdateDomains:
+  - count: 5
+    region: australiaeast
+  - count: 5
+    region: australiasoutheast
+  - count: 5
+    region: brazilsouth
+  - count: 5
+    region: canadacentral
+  - count: 5
+    region: canadaeast
+  - count: 5
+    region: centralindia
+  - count: 5
+    region: centralus
+  - count: 5
+    region: eastasia
+  - count: 5
+    region: eastus
+  - count: 5
+    region: eastus2
+  - count: 5
+    region: francecentral
+  - count: 5
+    region: japaneast
+  - count: 5
+    region: japanwest
+  - count: 5
+    region: koreacentral
+  - count: 5
+    region: koreasouth
+  - count: 5
+    region: northcentralus
+  - count: 5
+    region: northeurope
+  - count: 5
+    region: southafricanorth
+  - count: 5
+    region: southcentralus
+  - count: 5
+    region: southeastasia
+  - count: 5
+    region: southindia
+  - count: 5
+    region: uksouth
+  - count: 5
+    region: ukwest
+  - count: 5
+    region: westcentralus
+  - count: 5
+    region: westeurope
+  - count: 5
+    region: westindia
+  - count: 5
+    region: westus
+  - count: 5
+    region: westus2

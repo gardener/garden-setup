@@ -20,45 +20,151 @@ gcp:
     - name: unmanaged
     kubernetes:
       versions: (( values.kubernetes.versions ))
-    zones: (( values.provider.zones ))
     machineImages:
     - name: coreos
-      image: projects/coreos-cloud/global/images/coreos-stable-1745-7-0-v20180614
+      version: 2023.5.0
     machineTypes:
-    - name: n1-standard-2
-      cpu: "2"
+    - cpu: "2"
       gpu: "0"
       memory: 7500Mi
+      name: n1-standard-2
       usable: true
-    - name: n1-standard-4
-      cpu: "4"
+    - cpu: "4"
       gpu: "0"
       memory: 15Gi
+      name: n1-standard-4
       usable: true
-    - name: n1-standard-8
-      cpu: "8"
+    - cpu: "8"
       gpu: "0"
       memory: 30Gi
+      name: n1-standard-8
       usable: true
-    - name: n1-standard-16
-      cpu: "16"
+    - cpu: "16"
       gpu: "0"
       memory: 60Gi
+      name: n1-standard-16
       usable: true
-    - name: n1-standard-32
-      cpu: "32"
+    - cpu: "32"
       gpu: "0"
       memory: 120Gi
+      name: n1-standard-32
       usable: true
-    - name: n1-standard-64
-      cpu: "64"
+    - cpu: "64"
       gpu: "0"
       memory: 240Gi
-      usable: false
-    volumeTypes:
-    - name: pd-standard
-      class: standard
+      name: n1-standard-64
       usable: true
-    - name: pd-ssd
-      class: premium
-      usable: false
+    volumeTypes:
+    - class: standard
+      name: pd-standard
+      usable: true
+    - class: premium
+      name: pd-ssd
+      usable: true
+    zones:
+    - names:
+      - asia-east1-a
+      - asia-east1-b
+      - asia-east1-c
+      region: asia-east1
+    - names:
+      - asia-east2-c
+      - asia-east2-b
+      - asia-east2-a
+      region: asia-east2
+    - names:
+      - asia-northeast1-a
+      - asia-northeast1-b
+      - asia-northeast1-c
+      region: asia-northeast1
+    - names:
+      - asia-northeast2-a
+      - asia-northeast2-b
+      - asia-northeast2-c
+      region: asia-northeast2
+    - names:
+      - asia-south1-b
+      - asia-south1-a
+      - asia-south1-c
+      region: asia-south1
+    - names:
+      - asia-southeast1-a
+      - asia-southeast1-b
+      - asia-southeast1-c
+      region: asia-southeast1
+    - names:
+      - australia-southeast1-c
+      - australia-southeast1-a
+      - australia-southeast1-b
+      region: australia-southeast1
+    - names:
+      - europe-north1-b
+      - europe-north1-c
+      - europe-north1-a
+      region: europe-north1
+    - names:
+      - europe-west1-b
+      - europe-west1-c
+      - europe-west1-d
+      region: europe-west1
+    - names:
+      - europe-west2-a
+      - europe-west2-b
+      - europe-west2-c
+      region: europe-west2
+    - names:
+      - europe-west3-c
+      - europe-west3-a
+      - europe-west3-b
+      region: europe-west3
+    - names:
+      - europe-west4-c
+      - europe-west4-b
+      - europe-west4-a
+      region: europe-west4
+    - names:
+      - europe-west5-a
+      - europe-west5-b
+      - europe-west5-c
+      region: europe-west5
+    - names:
+      - europe-west6-b
+      - europe-west6-c
+      - europe-west6-a
+      region: europe-west6
+    - names:
+      - northamerica-northeast1-a
+      - northamerica-northeast1-b
+      - northamerica-northeast1-c
+      region: northamerica-northeast1
+    - names:
+      - southamerica-east1-a
+      - southamerica-east1-b
+      - southamerica-east1-c
+      region: southamerica-east1
+    - names:
+      - us-central1-a
+      - us-central1-b
+      - us-central1-c
+      - us-central1-f
+      region: us-central1
+    - names:
+      - us-east1-b
+      - us-east1-c
+      - us-east1-d
+      region: us-east1
+    - names:
+      - us-east4-a
+      - us-east4-b
+      - us-east4-c
+      region: us-east4
+    - names:
+      - us-west1-a
+      - us-west1-b
+      - us-west1-c
+      region: us-west1
+    - names:
+      - us-west2-c
+      - us-west2-b
+      - us-west2-a
+      region: us-west2

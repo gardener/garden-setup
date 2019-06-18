@@ -18,14 +18,14 @@ utilities:
     kubernetes:
       versions:
         - 1.14.0
-        - 1.13.5
-        - 1.12.7
-        - 1.11.9
+        - 1.13.7
+        - 1.12.9
+        - 1.11.10
     knownproviders:
-    - aws
-    - gcp
-    - openstack
-    - azure
+      - aws
+      - gcp
+      - openstack
+      - azure
     profilespecs: (( sum[knownproviders|{}|s,v|->s {v=read(__ctx.DIR "/../provider/" v "/iaas.yaml", "yaml")}] ))
     manifestfile: (( __ctx.DIR "/../manifests/manifest.yaml" ))
     create: (( |providertype,providername,providerconfig|->utilities.kubectl.generate(_.manifestfile, imports.kube_apiserver.export.kubeconfig, *_.values) ))

@@ -1,74 +1,348 @@
 ---
 imports: (( &temporary ))
-utilities: (( &temporary ))
 landscape: (( &temporary ))
+env: (( &temporary ))
 
 plugins:
-  - kubectl:
-    - extension_controllers
+  - <<: (( sum[extensions|[]|s,n,v|-> s [{ "extension" = "extensions." n }]] ))
+  - kubectl
   - shoot-check
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
-extension_controllers: (( map[extension_controllers_values|n,v|-> utilities.kubectl.generate( extension_controllers_func.extPath( n ) "main.yaml", imports.kube_apiserver.export.kubeconfig, v )] ))
+extensions: (( sum[extensions_manifests|{}|s,n,v|-> s { n = *.spec_template }] ))
 
-extension_controllers_func:
+kubectl:
+  kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+  files: (( extensions.[*].manifest ))
+
+# a dummy config for openstack, so the provider can be created if no config is given in the acre.yaml
+openstack_dummy_config:
+  machineImages:
+  - cloudProfiles:
+    - image: coreos-2023.5.0
+      name: openstack
+    name: coreos
+    version: 2023.5.0
+
+# this template gets evaluated for each entry in extensions_manifests
+spec_template:
+  <<: (( &temporary &template ))
+  name: (( n ))
+  version: (( &temporary( .landscape.versions.gardener.extensions[n] ) ))
+  repo: (( version.repo ))
+  tag: (( version.tag || ~~ ))
+  branch: (( version.branch || ~~ ))
+  commit: (( version.commit || ~~ ))
+  files:
+    - (( version.chart_path ))
+  manifest: (( "extensions." name "/manifest.yaml" ))
+  tmp_manifest_template: (( &temporary( *v ) ))
+  manifest_template: (( asyaml( tmp_manifest_template ) ))
+  chart_path: (( version.chart_path ))
+
+# the ControllerRegistration manifests
+# '<CHART>' will be replaced by the actual chart
+extensions_manifests:
   <<: (( &temporary ))
-  ignore:
-    - .git
-  _joinPath: (( |p,c|-> p == "" ? c :(p "/" c) ))
-  files: (( |d,p|->map[list_files(_._joinPath(d,p))|v|->contains(_.ignore, v) ? ~ :_._joinPath( p, v )] sum[map[list_dirs(d "/" p)|d|-> contains(_.ignore,d) ? ~ :d]|[]|s,v|->s _.files(d,_._joinPath(p, v))] ))
-  extPath: (( |n|-> __ctx.DIR "/extension-controllers/" n "/" ))
-  chartConfig: (( |path|-> archive( sum[extension_controllers_func.files( path, "" )|{}|s,e|->s { e = { "data" = read( path "/" e, "text" ) } }], "targz" ) ))
-
-extension_controllers_values:
-  <<: (( &temporary ))
-  controllerregistration_coreos:
-    temp: 
-      <<: (( &temporary ))
-      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
-      chart: (( extension_controllers_func.chartConfig( path ) ))
-    concurrentSyncs: 25
-    image:
-      tag: (( .landscape.versions.gardener.extensions.os-coreos.image_tag ))
-    resources:
-      limits:
-        cpu: 100m
-        memory: 256Mi
-      requests:
-        cpu: 20m
-        memory: 64Mi
-  controllerregistration_coreos_alicloud:
-    temp: 
-      <<: (( &temporary ))
-      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
-      chart: (( extension_controllers_func.chartConfig( path ) ))
-    concurrentSyncs: 25
-    image:
-      tag: (( .landscape.versions.gardener.extensions.os-coreos-alicloud.image_tag ))
-    resources:
-      limits:
-        cpu: 100m
-        memory: 256Mi
-      requests:
-        cpu: 20m
-        memory: 64Mi
-  dns_external:
-    temp:
-      <<: (( &temporary ))
-      path: (( extension_controllers_func.extPath( __ctx.PATH.[-3] ) "chart" ))
-      chart: (( extension_controllers_func.chartConfig( path ) ))
-    createCRDs: false
-    fullnameOverride: seed-dns-controller-manager
-    image:
-      repo: (( .landscape.versions.gardener.extensions.dns-controller.image_repo ))
-      tag: (( .landscape.versions.gardener.extensions.dns-controller.image_tag ))
-    configuration:
-      poolSize: 20
-      identifier: ""
-      serverPortHttp: 8080
-
-state:
-  <<: (( &state(merge none) ))
-
+  os-coreos:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: os-coreos
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            concurrentSyncs: 25
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 64Mi
+        type: helm
+      resources:
+      - kind: OperatingSystemConfig
+        type: coreos
+  os-coreos-alicloud:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: os-coreos-alicloud
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            concurrentSyncs: 25
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 64Mi
+        type: helm
+      resources:
+      - kind: OperatingSystemConfig
+        type: coreos-alicloud
+  os-suse-jeos:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: os-suse-jeos
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            concurrentSyncs: 20
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 20m
+                memory: 64Mi
+        type: helm
+      resources:
+      - kind: OperatingSystemConfig
+        type: suse-jeos
+  dns-external:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: dns-external
+    spec:
+      resources:
+      - kind: DNSProvider
+        type: aws-route53
+      - kind: DNSProvider
+        type: alicloud-dns
+      - kind: DNSProvider
+        type: azure-dns
+      - kind: DNSProvider
+        type: google-clouddns
+      - kind: DNSProvider
+        type: openstack-designate
+      deployment:
+        type: helm
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            createCRDs: false
+            fullnameOverride: seed-dns-controller-manager
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            configuration:
+              poolSize: 20
+              identifier: ""
+              serverPortHttp: 8080
+  provider-alicloud:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-alicloud
+    spec:
+      resources:
+      - kind: Infrastructure
+        type: alicloud
+      - kind: Worker
+        type: alicloud
+      deployment:
+        type: helm
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            config:
+              machineImages:
+              - displayName: coreos
+                id: coreos_2023_4_0_64_30G_alibase_20190319.vhd
+                name: coreos-alicloud
+                version: 2023.4.0
+            resources:
+              limits:
+                memory: 1Gi
+  provider-aws:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-aws
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config:
+              machineImages:
+              - name: coreos
+                regions:
+                - ami: ami-0d3a9785820124591
+                  name: ap-northeast-1
+                - ami: ami-03230b2fa6af112bf
+                  name: ap-northeast-2
+                - ami: ami-0b85fd1356963d2ee
+                  name: ap-south-1
+                - ami: ami-0f8a9aa9857d8af7e
+                  name: ap-southeast-1
+                - ami: ami-0e87752a1d331823a
+                  name: ap-southeast-2
+                - ami: ami-0c0100bac23bb1d39
+                  name: ca-central-1
+                - ami: ami-01e99c7e0a343d325
+                  name: cn-north-1
+                - ami: ami-0773341917796083a
+                  name: cn-northwest-1
+                - ami: ami-012abdf0d2781f0a5
+                  name: eu-central-1
+                - ami: ami-09fbda19ac2fc6c3f
+                  name: eu-north-1
+                - ami: ami-01f5fbceb7a9fa4d0
+                  name: eu-west-1
+                - ami: ami-069966bea0809e21d
+                  name: eu-west-2
+                - ami: ami-0194c504244182155
+                  name: eu-west-3
+                - ami: ami-0cd830cc037613a7d
+                  name: sa-east-1
+                - ami: ami-08e58b93705fb503f
+                  name: us-east-1
+                - ami: ami-03172282aaa2899be
+                  name: us-east-2
+                - ami: ami-0ff9e298ea0bacf53
+                  name: us-gov-east-1
+                - ami: ami-e7f59e86
+                  name: us-gov-west-1
+                - ami: ami-08d3e245ebf4d560f
+                  name: us-west-1
+                - ami: ami-0a4f49b2488e15346
+                  name: us-west-2
+                version: 2023.5.0
+              - name: suse-jeos
+                regions:
+                - ami: ami-07abe4613d2f3532c
+                  name: eu-central-1
+                version: alpha-1
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: aws
+      - kind: Worker
+        type: aws
+  provider-azure:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-azure
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config:
+              machineImages:
+              - name: coreos
+                offer: CoreOS
+                publisher: CoreOS
+                sku: Stable
+                version: 2023.5.0
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: azure
+      - kind: Worker
+        type: azure
+  provider-gcp:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-gcp
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config:
+              machineImages:
+              - image: projects/coreos-cloud/global/images/coreos-stable-2023-5-0-v20190312
+                name: coreos
+                version: 2023.5.0
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: gcp
+      - kind: Worker
+        type: gcp
+  provider-openstack:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-openstack
+    spec:
+      deployment:
+        providerConfig:
+          chart: "<CHART>"
+          values:
+            config: (( .landscape.iaas.openstack.extensionConfig || .openstack_dummy_config ))
+            controllers:
+              infrastructure:
+                concurrentSyncs: 50
+                ignoreOperationAnnotation: false
+              worker:
+                concurrentSyncs: 50
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: openstack
+      - kind: Worker
+        type: openstack
