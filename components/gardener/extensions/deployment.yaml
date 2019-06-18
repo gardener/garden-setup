@@ -10,7 +10,7 @@ plugins:
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
-# list of extensions taken from component.yaml
+# list of extensions taken from component.yaml (deployment.extensions)
 extensions: (( &temporary ))
 
 # instantiated manifest templates
@@ -54,7 +54,10 @@ spec_template:
 
 extension_manifests:
   <<: (( &temporary ))
+
+########################################
   os-coreos:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -80,7 +83,10 @@ extension_manifests:
       resources:
       - kind: OperatingSystemConfig
         type: coreos
+
+########################################
   os-coreos-alicloud:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -106,7 +112,10 @@ extension_manifests:
       resources:
       - kind: OperatingSystemConfig
         type: coreos-alicloud
+
+########################################
   os-suse-jeos:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -132,7 +141,10 @@ extension_manifests:
       resources:
       - kind: OperatingSystemConfig
         type: suse-jeos
+
+########################################
   dns-external:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -164,7 +176,10 @@ extension_manifests:
               poolSize: 20
               identifier: ""
               serverPortHttp: 8080
+
+########################################
   provider-alicloud:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -193,7 +208,10 @@ extension_manifests:
             resources:
               limits:
                 memory: 1Gi
+
+########################################
   provider-aws:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -266,7 +284,10 @@ extension_manifests:
         type: aws
       - kind: Worker
         type: aws
+
+########################################
   provider-azure:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -296,7 +317,10 @@ extension_manifests:
         type: azure
       - kind: Worker
         type: azure
+
+########################################
   provider-gcp:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
@@ -324,7 +348,10 @@ extension_manifests:
         type: gcp
       - kind: Worker
         type: gcp
+
+########################################
   provider-openstack:
+########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1alpha1
     kind: ControllerRegistration
