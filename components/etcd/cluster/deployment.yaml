@@ -77,8 +77,8 @@ etcd:
       replicas: 1
 
       images:
-        etcd: quay.io/coreos/etcd:v3.3.10
-        etcd-backup-restore: eu.gcr.io/gardener-project/gardener/etcdbrctl:0.4.1
+        etcd: (( .landscape.versions.etcd.etcd.image_repo ":" .landscape.versions.etcd.etcd.image_tag ))
+        etcd-backup-restore: (( .landscape.versions.etcd.backup_restore.image_repo ":" .landscape.versions.etcd.backup_restore.image_tag ))
 
       backup:
         schedule: "0 */24 * * *" # cron standard schedule
@@ -110,8 +110,8 @@ etcd:
       replicas: 1
 
       images:
-        etcd: quay.io/coreos/etcd:v3.3.10
-        etcd-backup-restore: eu.gcr.io/gardener-project/gardener/etcdbrctl:0.4.1
+        etcd: (( .landscape.versions.etcd.etcd.image_repo ":" .landscape.versions.etcd.etcd.image_tag ))
+        etcd-backup-restore: (( .landscape.versions.etcd.backup_restore.image_repo ":" .landscape.versions.etcd.backup_restore.image_tag ))
 
       tls:
         ca:
