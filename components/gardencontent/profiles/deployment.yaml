@@ -20,6 +20,6 @@ utilities: (( &temporary ))
 plugins:
   - kubectl
 
-kubectl: (( sum[landscape.profiles || []|[]|s,v|->utilities.profile.create(v.type,v.name,v.config || {})] ))
+kubectl: (( sum[landscape.profiles || []|[]|s,v|->s utilities.profile.create(v.type,v.name,v.config || {})] ))
 
 
