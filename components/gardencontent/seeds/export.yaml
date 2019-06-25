@@ -13,7 +13,3 @@
 # limitations under the License.
 
 ---
-kubectl: (( &temporary ))
-
-export:
-  profile: (( select[kubectl.[0].manifests|v|->v.kind == "CloudProfile"][0].metadata.name ))

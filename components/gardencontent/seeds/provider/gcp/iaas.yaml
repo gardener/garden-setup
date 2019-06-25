@@ -12,31 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: (( values.secretname ))
-  namespace: (( values.namespace ))
-type: Opaque
-data:
-  <<: (( sum[values.iaas.credentials|{}|s,k,v|->s {k=base64(v)}] ))
-  kubeconfig: (( base64(values.seed.kubeconfig) ))
-
----
-apiVersion: garden.sapcloud.io/v1beta1
-kind: Seed
-metadata:
-  name: (( values.name ))
-spec:
-  cloud:
-    profile: (( values.name ))
-    region: (( values.seed.region ))
-  secretRef:
-    name: (( values.secretname ))
-    namespace: (( values.namespace ))
-  ingressDomain: (( values.seed.ingressdomain ))
-  networks: # Seed and Shoot networks must be disjunct
-    nodes: (( values.seed.networks.nodes ))
-    pods: (( values.seed.networks.pods ))
-    services: (( values.seed.networks.services ))
+zones:
+- region: (( config.region ))
+  names: (( config.zones ))

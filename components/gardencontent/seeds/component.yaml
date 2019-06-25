@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-zones:
-- region: (( providerconfig.seed.region ))
-  names: (( providerconfig.seed.zones ))
+---
+component:
+  imports:
+    - profiles: gardencontent/profiles
+    - gardener_virtual: gardener/virtual
+    - gardener_runtime: gardener/extensions
+    - ingress_dns: ingress-controller
+    - kube_apiserver: kube-apiserver
+
+  stubs:
+    - plugins/kubectl/utilities.yaml

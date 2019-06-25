@@ -1,0 +1,2 @@
+zones:
+  - region: (( config.region ))
