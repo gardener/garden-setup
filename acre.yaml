@@ -139,7 +139,6 @@ landscape:
     <<: (( merge ))
     type: (( .dns_type_mapping[iaas.type] ))
     credentials: (( iaas.credentials ))
-  profiles: (( [] ))
 
 dns_type_mapping:
   <<: (( &temporary ))
@@ -252,6 +251,9 @@ validation:
       - ["mapfield", "name"]
       - ["mapfield", "type", ["valueset", (( keys( types.iaas ) ))]]
       - ["mapfield", "mode", ["valueset", ["seed", "profile", "cloudprofile", "soil"]]]
+      - - optionalfield
+        - credentials
+        - (( types.iaas[values.type].credentials ))
       - <<: (( types.iaas[values.type].config ))
     initial_seed:
       - <<: (( &template ))

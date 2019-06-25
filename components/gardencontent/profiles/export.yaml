@@ -13,7 +13,3 @@
 # limitations under the License.
 
 ---
-landscape: (( &temporary ))
-
-export:
-  names: (( map[landscape.profiles|v|->v.name] ))

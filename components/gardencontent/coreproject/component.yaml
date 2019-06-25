@@ -14,9 +14,8 @@
 
 ---
 component:
-  active: false
   imports:
-    - initialseed: gardencontent/initialseed
+    - gardencontent/seeds
     - kube_apiserver: kube-apiserver
 
   stubs:
