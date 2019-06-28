@@ -130,15 +130,15 @@ landscape:
     <<: (( merge ))
     backup:
       <<: (( merge ))
-      type: (( .backup_type_mapping[iaas.type] ))
-      region: (( iaas.region ))
-      credentials: (( iaas.credentials ))
+      type: (( .backup_type_mapping[iaas[0].type] ))
+      region: (( iaas[0].region ))
+      credentials: (( iaas[0].credentials ))
   identity:
   gardener:
   dns:
     <<: (( merge ))
-    type: (( .dns_type_mapping[iaas.type] ))
-    credentials: (( iaas.credentials ))
+    type: (( .dns_type_mapping[iaas[0].type] ))
+    credentials: (( iaas[0].credentials ))
 
 dns_type_mapping:
   <<: (( &temporary ))
