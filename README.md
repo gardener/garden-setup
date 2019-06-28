@@ -238,7 +238,7 @@ The first entry of the `landscape.iaas` list is special:
 - Don't specify the `cluster` node for it - it will configure your base cluster as seed.
   - Its `type` should match the one of your base cluster.
 
-See the [extended information](docs/extended/iaas.md) for more advanced configuration options.
+See the [extended documentation](docs/extended/iaas.md) for more advanced configuration options and information about Openstack.
 
 The credentials will be used to give Gardener access to the IaaS layer:
 * To create a secret that will be used on the Gardener dashboard to create shoot clusters.

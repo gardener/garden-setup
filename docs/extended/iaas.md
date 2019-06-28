@@ -48,3 +48,47 @@ If `mode` is set to `inactive`, the complete entry will be removed before the se
 ## Overwriting Cloudprofiles
 
 By adding a `profile` node in a iaas entry, it is also possible to overwrite parts of the cloudprofile. If the node is present, everything under it will be merged into the `spec` node of the cloudprofile. In this context, 'merged' means that every node that is under or next to `constraints` will be overwritten by what you specify here. You can add nodes that are not part of the default cloudprofile this way. Nodes on these levels that are not given here will use their defaults. A more fine-grained merge of values is not possible - the example above will not add `1.13.0` to the possible kubernetes versions in this cloudprofile, but instead set it to be the only available option.
+
+
+## Openstack
+
+Since every Openstack installation is different, configuring the setup for Openstack needs some additional configuration. See below for an example configuration:
+
+```yaml
+landscape:
+  iaas:
+    - name: openstack
+      type: openstack
+      ... # other iaas configuration, e.g. credentials
+      floatingPools:
+        - name: my-floating-pool-network
+      loadBalancerProviders:
+        - name: haproxy
+      extensionConfig:
+        machineImages:
+        - cloudProfiles:
+          - image: coreos-2023.5.0
+            name: openstack
+          name: coreos
+          version: 2023.5.0
+      machineImages:
+        - name: coreos
+          version: 2023.5.0
+      machineTypes:
+        - name: medium_2_4
+          cpu: "2"
+          gpu: "0"
+          memory: 4Gi
+          usable: true
+          volumeType: default
+          volumeSize: 20Gi
+        - name: medium_4_8
+          cpu: "4"
+          gpu: "0"
+          memory: 8Gi
+          usable: true
+          volumeType: default
+          volumeSize: 40Gi
+```
+
+The information specified in `extensionConfig` will be used for the [Openstack provider extension](https://github.com/gardener/gardener-extensions/tree/master/controllers/provider-openstack), while all other Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml).
