@@ -10,7 +10,7 @@ component:
   stubs: []
 
   plugins:
-    - <<: (( sum[.extensions|[]|s,n,v|-> s [{ "git" = "extensions." n }]] ))
+    - <<: (( sum[.extensions|[]|s,n,v|-> s [{ "-echo" = "--------------------------------------------------" }, { "-echo" = "checking out charts for extension '" n "'" }, { "git" = "extensions." n }]] ))
 
 # input for git plugin
 extensions: (( sum[.deployment.extensions|{}|s,n|-> s { n = *spec_template }] ))
@@ -31,7 +31,9 @@ deployment:
   # and a manifest template in extension_manifests in this component's deployment.yaml
   extensions:
     - os-coreos
-    - os-coreos-alicloud
+    - (( contains( .infrastructures, "alicloud" ) ? "os-coreos-alicloud" :~~ ))
     - os-suse-jeos
     - dns-external
-    - (( "provider-" .landscape.iaas.type ))
+    - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))
+
+infrastructures: (( &temporary ( uniq( landscape.iaas.[*].type ) ) ))

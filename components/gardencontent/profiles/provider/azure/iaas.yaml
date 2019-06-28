@@ -14,153 +14,165 @@
 
 <<: (( &template ))
 azure:
+  <<: (( merge ))
   constraints:
-    dnsProviders:
-    - name: (( values.dns.type ))
-    - name: unmanaged
-    kubernetes:
-      versions: (( values.kubernetes.versions ))
-    machineImages:
-    - name: coreos
-      version: 2023.5.0
-    machineTypes:
-    - cpu: "2"
-      gpu: "0"
-      memory: 8Gi
-      name: Standard_D2_v3
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 16Gi
-      name: Standard_D4_v3
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 32Gi
-      name: Standard_D8_v3
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 64Gi
-      name: Standard_D16_v3
-      usable: true
-    - cpu: "32"
-      gpu: "0"
-      memory: 128Gi
-      name: Standard_D32_v3
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 8Gi
-      name: Standard_D2s_v3
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 16Gi
-      name: Standard_D4s_v3
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 32Gi
-      name: Standard_D8s_v3
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 64Gi
-      name: Standard_D16s_v3
-      usable: true
-    - cpu: "32"
-      gpu: "0"
-      memory: 128Gi
-      name: Standard_D32s_v3
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 7Gi
-      name: Standard_DS2_v2
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 14Gi
-      name: Standard_DS3_v2
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 28Gi
-      name: Standard_DS4_v2
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 56Gi
-      name: Standard_DS5_v2
-      usable: true
-    - cpu: "1"
-      gpu: "0"
-      memory: 2Gi
-      name: Standard_F1s
-      usable: true
-    - cpu: "2"
-      gpu: "0"
-      memory: 4Gi
-      name: Standard_F2s
-      usable: true
-    - cpu: "4"
-      gpu: "0"
-      memory: 8Gi
-      name: Standard_F4s
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 16Gi
-      name: Standard_F8s
-      usable: true
-    - cpu: "16"
-      gpu: "0"
-      memory: 32Gi
-      name: Standard_F16s
-      usable: true
-    - cpu: "8"
-      gpu: "0"
-      memory: 64Gi
-      name: Standard_E8s_v3
-      usable: true
-    - cpu: "32"
-      gpu: "0"
-      memory: 64Gi
-      name: Standard_F32s_v2
-      usable: true
-    - cpu: "64"
-      gpu: "0"
-      memory: 128Gi
-      name: Standard_F64s_v2
-      usable: true
-    - cpu: "64"
-      gpu: "0"
-      memory: 256Gi
-      name: Standard_D64s_v3
-      usable: true
-    - cpu: "64"
-      gpu: "0"
-      memory: 432Gi
-      name: Standard_E64s_v3
-      usable: true
-    - cpu: "64"
-      gpu: "0"
-      memory: 1Ti
-      name: Standard_M64s
-      usable: true
-    - cpu: "128"
-      gpu: "0"
-      memory: 2Ti
-      name: Standard_M128
-      usable: true
-    volumeTypes:
-    - class: standard
-      name: standard
-      usable: true
-    - class: premium
-      name: premium
-      usable: true
+    <<: (( merge ))
+    dnsProviders: (( defaults.dnsProviders ))
+    kubernetes: (( values.kubernetes ))
+    machineImages: (( defaults.machineImages ))
+    machineTypes: (( defaults.machineTypes ))
+    volumeTypes: (( defaults.volumeTypes ))
+  countUpdateDomains: (( defaults.countUpdateDomains ))
+  countFaultDomains: (( defaults.countFaultDomains ))
+
+defaults:
+  <<: (( &temporary ))
+  dnsProviders:
+  - name: (( values.dns.type ))
+  - name: unmanaged
+  kubernetes:
+    versions: (( values.kubernetes.versions ))
+  machineImages:
+  - name: coreos
+    version: 2023.5.0
+  machineTypes:
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: Standard_D2_v3
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: Standard_D4_v3
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: Standard_D8_v3
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: Standard_D16_v3
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: Standard_D32_v3
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: Standard_D2s_v3
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: Standard_D4s_v3
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: Standard_D8s_v3
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: Standard_D16s_v3
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: Standard_D32s_v3
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 7Gi
+    name: Standard_DS2_v2
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 14Gi
+    name: Standard_DS3_v2
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 28Gi
+    name: Standard_DS4_v2
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 56Gi
+    name: Standard_DS5_v2
+    usable: true
+  - cpu: "1"
+    gpu: "0"
+    memory: 2Gi
+    name: Standard_F1s
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: Standard_F2s
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 8Gi
+    name: Standard_F4s
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 16Gi
+    name: Standard_F8s
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 32Gi
+    name: Standard_F16s
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: Standard_E8s_v3
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 64Gi
+    name: Standard_F32s_v2
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 128Gi
+    name: Standard_F64s_v2
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: Standard_D64s_v3
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 432Gi
+    name: Standard_E64s_v3
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 1Ti
+    name: Standard_M64s
+    usable: true
+  - cpu: "128"
+    gpu: "0"
+    memory: 2Ti
+    name: Standard_M128
+    usable: true
+  volumeTypes:
+  - class: standard
+    name: standard
+    usable: true
+  - class: premium
+    name: premium
+    usable: true
   countFaultDomains:
   - count: 2
     region: australiaeast

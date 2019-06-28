@@ -28,14 +28,16 @@ utilities:
       - azure
     profilespecs: (( sum[knownproviders|{}|s,v|->s {v=read(__ctx.DIR "/../provider/" v "/iaas.yaml", "yaml")}] ))
     manifestfile: (( __ctx.DIR "/../manifests/manifest.yaml" ))
-    create: (( |providertype,providername,providerconfig|->utilities.kubectl.generate(_.manifestfile, imports.kube_apiserver.export.kubeconfig, *_.values) ))
+    create: (( |iaasconfig|->utilities.kubectl.generate(_.manifestfile, imports.kube_apiserver.export.kubeconfig, *_.values) ))
     values:
       <<: (( &template ))
-      name: (( providername ))
-      cabundle: (( providerconfig.cabundle || ~~ ))
+      profileoverwrite: (( iaasconfig.profile || {} ))
+      name: (( iaasconfig.name ))
       values:
+        cabundle: (( config.cabundle || ~~ ))
         dns:
           type: (( landscape.dns.type ))
-        kubernetes: (( utilities.profile.kubernetes ))
-        provider: (( providerconfig ))
-      profilespec: (( *utilities.profile.profilespecs.[providertype] ))
+        kubernetes: (( config.kubernetes || utilities.profile.kubernetes ))
+        config: (( iaasconfig ))
+        credentials: (( iaasconfig.credentials || ~~ ))
+      profilespec: (( merge( utilities.profile.profilespecs.[iaasconfig.type], profileoverwrite ) ))

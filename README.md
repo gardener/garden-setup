@@ -102,23 +102,41 @@ This file will be evaluated using `spiff`, a dynamic templating language for yam
 <pre>
 landscape:
   <a href="#landscapename">name</a>: &lt;Identifier&gt;                       # general Gardener landscape identifier, for example, `my-gardener`
-  <a href="#landscapedomain">domain</a>: &lt;prefix&gt;.&lt;cluster domain&gt;        # Unique basis domain for DNS entries
+  <a href="#landscapedomain">domain</a>: &lt;prefix&gt;.&lt;cluster domain&gt;        # unique basis domain for DNS entries
 
-  <a href="#landscapecluster">cluster</a>:                                          # Information about your base cluster
-    kubeconfig: &lt;relative path + filename&gt;          # Path to your `kubeconfig` file, rel. to directory `landscape` (defaults to `./kubeconfig`)
-    <a href="#landscapenetworks">networks</a>:                                         # <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR IP ranges</a> of base cluster
+  <a href="#landscapecluster">cluster</a>:                                          # information about your base cluster
+    kubeconfig: &lt;relative path + filename&gt;          # path to your `kubeconfig` file, rel. to directory `landscape` (defaults to `./kubeconfig`)
+    <a href="#landscapenetworks">networks</a>:                                       # <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR IP ranges</a> of base cluster
       nodes: &lt;CIDR IP range&gt;
       pods: &lt;CIDR IP range&gt;
       services: &lt;CIDR IP range&gt;
 
   <a href="#landscapeiaas">iaas</a>:
-    type: &lt;gcp|aws|azure|openstack&gt;            # iaas provider (coming soon: alicloud)
-    region: &lt;major region&gt;-&lt;minor region&gt;      # region for initial seed cluster
-    zones:                                     # Remove zones block for Azure
-      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
-      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c
-      - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
-    credentials:                               # Provide access to IaaS layer used for creating resources for shoot clusters
+    - name: (( type ))                           # name of the seed
+      type: &lt;gcp|aws|azure|openstack&gt;            # iaas provider
+      region: &lt;major region&gt;-&lt;minor region&gt;      # region for initial seed
+      zones:                                     # remove zones block for Azure
+        - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # example: europe-west1-b
+        - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # example: europe-west1-c
+        - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # example: europe-west1-d
+      credentials:                               # provide access to IaaS layer used for creating resources for shoot clusters
+    - name:                                      # see above
+      type: &lt;gcp|aws|azure|openstack&gt;            # see above
+      region: &lt;major region&gt;-&lt;minor region&gt;      # region for seed
+      zones:                                     # remove zones block for Azure
+        - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-b
+        - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-c
+        - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # Example: europe-west1-d
+      cluster:                                   # information about your seed's base cluster
+        networks:                                # CIDR IP ranges of seed cluster
+          nodes: &lt;CIDR IP range&gt;
+          pods: &lt;CIDR IP range&gt;
+          services: &lt;CIDR IP range&gt;
+        kubeconfig:                              # kubeconfig for seed cluster
+          apiVersion: v1
+          kind: Config
+          ...
+      credentials:
 
   <a href="#landscapeetcd">etcd</a>:                                       # optional, default values based on `landscape.iaas`
     backup:
@@ -151,7 +169,7 @@ Arbitrary name for your landscape. The name will be part of the names for resour
 
 ### landscape.domain
 ```yaml
-  domain: <prefix>.<cluster domain>
+domain: <prefix>.<cluster domain>
 ```
 Basis domain for DNS entries. As a best practice, use an individual prefix together with the cluster domain of your base cluster.
 
@@ -175,22 +193,52 @@ Finding out CIDR ranges of your cluster is not trivial. For example, GKE only te
 ### landscape.iaas
 ```yaml
 iaas:
-  type: <gcp|aws|azure|openstack>
-  region: <major region>-<minor region>
-  zones:
-    - <major region>-<minor region>-<zone>
-    - <major region>-<minor region>-<zone>
-    - <major region>-<minor region>-<zone>
-  credentials:
+  - name: (( type ))                           # name of the seed
+    type: <gcp|aws|azure|openstack>            # iaas provider
+    region: <major region>-<minor region>      # region for initial seed
+    zones:                                     # remove zones block for Azure
+      - <major region>-<minor region>-<zone>   # example: europe-west1-b
+      - <major region>-<minor region>-<zone>   # example: europe-west1-c
+      - <major region>-<minor region>-<zone>   # example: europe-west1-d
+    credentials:                               # provide access to IaaS layer used for creating resources for shoot clusters
+  - name:                                      # see above
+    type: <gcp|aws|azure|openstack>            # see above
+    region: <major region>-<minor region>      # region for seed
+    zones:                                     # remove zones block for Azure
+      - <major region>-<minor region>-<zone>   # example: europe-west1-b
+      - <major region>-<minor region>-<zone>   # example: europe-west1-c
+      - <major region>-<minor region>-<zone>   # example: europe-west1-d
+    cluster:                                   # information about your seed's base cluster
+      networks:                                # CIDR IP ranges of seed cluster
+        nodes: <CIDR IP range>
+        pods: <CIDR IP range>
+        services: <CIDR IP range>
+      kubeconfig:                              # kubeconfig for seed cluster
+        apiVersion: v1
+        kind: Config
+        ...
+    credentials:
 ```
-Contains the information where Gardener will create intial seed cluster and a default profile to create shoot cluster. By default, the *initial* seed component will create a seed resource using your base cluster as seed cluster. Other seed clusters and profiles can be added after the installation.
+Contains the information where Gardener will create intial seed clusters and cloudprofiles to create shoot clusters.
 
 | Field | Type | Description | Examples |Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:--------|
-|`type`| Fixed value | IaaS provider you would like to install Gardener on. | `gcp` |
-|`region`|IaaS provider specific|Region for the initial seed cluster. The convention to use &lt;major region&gt;-&lt;minor region&gt; does not apply to all providers.<br/><br/>In Azure, use [az account list-locations](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations) to find out the location name (`name` attribute = lower case name without spaces). | `europe-west1` (GCP)<br/><br/>`eu-west-1` (AWS) <br/><br/> `westeurope` (Azure)|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html); [Azure (Overview)](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), [Azure (HowTo)](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations)|
-|`zones`|IaaS provider specific|Zones for the initial seed cluster. This block is only required for GCP or AWS. |`europe-west1-b` (GCP)<br/></br>|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
+|`name`| Custom value | Name of the seed/cloudprofile. Must be unique. | `gcp` |
+|`type`| Fixed value | IaaS provider for the seed. | `gcp` |
+|`region`|IaaS provider specific|Region for the seed cluster. The convention to use &lt;major region&gt;-&lt;minor region&gt; does not apply to all providers.<br/><br/>In Azure, use [az account list-locations](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations) to find out the location name (`name` attribute = lower case name without spaces). | `europe-west1` (GCP)<br/><br/>`eu-west-1` (AWS) <br/><br/> `westeurope` (Azure)|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html); [Azure (Overview)](https://azure.microsoft.com/en-us/global-infrastructure/geographies/), [Azure (HowTo)](https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest#az-account-list-locations)|
+|`zones`|IaaS provider specific|Zones for the seed cluster. Not needed for Azure. |`europe-west1-b` (GCP)<br/></br>|[GCP (HowTo)](https://cloud.google.com/kubernetes-engine/docs/how-to/managing-clusters#viewing_your_clusters), [GCP (overview)](https://cloud.google.com/docs/geography-and-regions); [AWS (HowTo)](https://docs.aws.amazon.com/cli/latest/reference/eks/describe-cluster.html), [AWS (Overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|
 |`credentials`|IaaS provider specific|Credentials in a provider-specific format. | See table with yaml keys below. | [GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal)|
+|`cluster.kubeconfig`| Kubeconfig | The kubeconfig for your seed base cluster. Must have basic auth authentification. ||
+|`cluster.networks`| CIDRs | The CIDRs of your seed cluster. See <a href="#landscapecluster">landscape.cluster</a> for more information. ||
+
+Here a list of configurations can be given. The setup will create one cloudprofile and seed per entry. Currently, you will have to provide the cluster you want to use as a seed - in future, the setup will be able to create a shoot and configure that shoot as a seed. The `type` should match the type of the underlying cluster.
+
+The first entry of the `landscape.iaas` list is special:
+- It has to exist - the list needs at least one entry.
+- Don't specify the `cluster` node for it - it will configure your base cluster as seed.
+  - Its `type` should match the one of your base cluster.
+
+See the [extended information](docs/extended/iaas.md) for more advanced configuration options.
 
 The credentials will be used to give Gardener access to the IaaS layer:
 * To create a secret that will be used on the Gardener dashboard to create shoot clusters.
@@ -202,9 +250,9 @@ Use the following yaml keys depending on your provider (excerpts):
 |:--------------|:--------------|
 |<pre>credentials: <br/>  accessKeyID: ...<br/>  secretAccessKey: ... </pre> |<pre>credentials: <br/>  serviceaccount.json: &#124;<br/>    {</br>      "type": "...",</br>      "project_id": "...",</br>      ...</br>    }</pre>
 | <b>Azure</b> | <b>Openstack</b> |
-|<pre>credentials:<br/>  clientID: ...<br/>  clientSecret: ...<br/>  subscriptionID: ...<br/>  tenantID: ...</pre>|<pre>credentials:<br/>  username: ...<br/>  password: ...<br/>  tenantName: ...<br/>  domainName: ...<br/>  authURL: ...</pre>|
+|<pre>credentials:<br/>  clientID: ...<br/>  clientSecret: ...<br/>  subscriptionID: ...<br/>  tenantID: ...</pre>|<pre>credentials:<br/>  username: ...<br/>  password: ...<br/>  tenantName: ...<br/>  domainName: ...<br/>  authURL: ...<br/>  region: ... # DNS only</pre>|
 
-The openstack credentials additionally have an optional `region` field. It is only evaluated within the `dns` block (as `iaas` and `etcd.backup` have their own region fields, which will be used instead) and, if not specified, defaults to the value of `iaas.region`.
+The `region` field in the openstack credentials is only evaluated within the `dns` block (as `iaas` and `etcd.backup` have their own region fields, which will be used instead).
 
 
 ### landscape.etcd

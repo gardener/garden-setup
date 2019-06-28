@@ -23,6 +23,3 @@ component:
   stubs:
     - plugins/kubectl/utilities.yaml
     - lib/create.yaml
-
-  plugins:
-    - -echo: "profiles are optional"

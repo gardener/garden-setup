@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ---
-imports:
+imports: (( &temporary ))
 landscape: (( &temporary ))
 utilities: (( &temporary ))
 
@@ -26,10 +26,30 @@ shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
   namespace: (( values.namespace ))
 
+secret_template:
+  <<: (( &template &temporary ))
+  secretname: (( "core-" v.type "-" v.name ))
+  manifest:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: (( secretname ))
+        namespace: (( values.namespace ))
+      type: Opaque
+      data: (( utilities.secretdata(v.credentials) ))
+    - apiVersion: garden.sapcloud.io/v1beta1
+      kind: SecretBinding
+      metadata:
+        labels:
+          cloudprofile.garden.sapcloud.io/name: (( v.name ))
+        name: (( secretname ))
+        namespace: (( values.namespace ))
+      secretRef:
+        name: (( secretname ))
+
 values:
   projectname: core
   namespace: garden-core
-  secretname: (( "core-" landscape.iaas.type ))
 
 core:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
@@ -41,25 +61,10 @@ core:
           garden.sapcloud.io/role: project
           project.garden.sapcloud.io/name: (( values.projectname ))
         name: (( values.namespace ))
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-        name: (( values.secretname ))
-        namespace: (( values.namespace ))
-      type: Opaque
-      data: (( utilities.secretdata(landscape.iaas.credentials) ))
     - apiVersion: garden.sapcloud.io/v1beta1
       kind: Project
       metadata:
         name: (( values.projectname ))
       spec:
         namespace: (( values.namespace ))
-    - apiVersion: garden.sapcloud.io/v1beta1
-      kind: SecretBinding
-      metadata:
-        labels:
-          cloudprofile.garden.sapcloud.io/name: (( imports.initialseed.export.profile ))
-        name: (( values.secretname ))
-        namespace: (( values.namespace ))
-      secretRef:
-        name: (( values.secretname ))
+    - <<: (( sum[landscape.iaas|[]|s,v|-> valid( v.credentials ) ? s (*secret_template).manifest :s ] ))
