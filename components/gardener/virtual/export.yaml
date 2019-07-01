@@ -15,8 +15,9 @@
 ---
 gardener: (( &temporary ))
 gardener_git: (( &temporary ))
+settings: (( &temporary ))
 export:
   gardener:
-    seedCandidateDeterminationStrategy: (( .gardener.admissionControlValue ))
+    seedCandidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
     values: (( .gardener.values ))
   gardener_git: (( .gardener_git ))

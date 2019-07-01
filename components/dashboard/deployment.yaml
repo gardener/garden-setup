@@ -52,7 +52,9 @@ dashboard:
       crt: (( imports.identity.export.server.crt ))
       key: (( imports.identity.export.server.key ))
     kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
+    gitHub: (( .landscape.dashboard.gitHub || ~~ ))
     frontendConfig:
+      <<: (( .landscape.dashboard.frontendConfig || ~ ))
       seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
 
 util:
