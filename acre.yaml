@@ -133,8 +133,9 @@ landscape:
       type: (( .backup_type_mapping[iaas[0].type] ))
       region: (( iaas[0].region ))
       credentials: (( iaas[0].credentials ))
+  dashboard: (( ~~ ))
   identity:
-  gardener:
+  gardener: (( ~~ ))
   dns:
     <<: (( merge ))
     type: (( .dns_type_mapping[iaas[0].type] ))
@@ -296,6 +297,8 @@ validation:
             - networks
             - (( validation.networks ))
     cloudprofile: (( &template( return_true ) ))
+  dashboard_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
+  gardener_validator: ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]]
   networks:
     - and
     - ["mapfield", "nodes", "cidr"]
@@ -330,6 +333,10 @@ validation:
     hostedZoneIDs: (( validate( landscape.dns, ["optionalfield", "hostedZoneIDs", ["map", ["valueset", ["include", "exclude"]], "list"]] ) ))
     provider_config: (( validate( landscape.dns, types.dns[landscape.dns.type].config ) ))
     credentials: (( validate( landscape.dns, ["mapfield", "credentials", types.dns[landscape.dns.type].credentials] ) ))
+  ##### landscape.gardener
+  gardener: (( defined( landscape.gardener ) ? validate( landscape.gardener, validation.gardener_validator ) :~~ ))
+  ##### landscape.dashboard
+  dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator ) :~~ ))
   ##### landscape.identity TODO
   identity:
     userspec:
