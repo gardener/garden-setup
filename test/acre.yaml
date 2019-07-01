@@ -1,5 +1,9 @@
-credentials:
+gcp-credentials:
   serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
+
+aws-credentials:
+  accessKeyID: (( env( "ACCESS_KEY_ID" ) ))
+  secretAccessKey: (( env( "SECRET_ACCESS_KEY_ID" ) ))
 
 
 ############################################################################
@@ -20,19 +24,31 @@ landscape:
 
   cluster:
     networks:
-      nodes: 10.254.0.0/19
-      pods: 10.255.0.0/17
-      services: 10.255.128.0/17
+      nodes: 10.132.0.0/16
+      pods: 10.28.0.0/15
+      services: 10.31.240.0/20
 
   iaas:
+  - name: gcp
+    mode: seed
     type: gcp
     region: europe-west1
     zones:
-      - (( iaas.region "-b"))
-      - (( iaas.region "-c"))
-      - (( iaas.region "-d"))
+      - (( region "-b"))
+      - (( region "-c"))
+      - (( region "-d"))
     credentials:
-      <<: (( .credentials ))
+      <<: (( .gcp-credentials ))
+  - name: aws
+    mode: cloudprofile
+    type: aws
+    region: eu-west-1
+    zones:
+      - (( region "a"))
+      - (( region "b"))
+      - (( region "c"))
+    credentials:
+      <<: (( .aws-credentials ))
 
   identity:
     users:
