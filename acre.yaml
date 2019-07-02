@@ -115,7 +115,7 @@ landscape:
     dashboard:
       <<: (( merge ))
       repo: "https://github.com/gardener/dashboard.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.31.2" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.33.0" ))
       image_tag: (( valid( tag ) ? tag :~~ ))
     identity:
       <<: (( merge ))
