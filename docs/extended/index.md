@@ -5,3 +5,4 @@ This document links to all extended configuration documentations for a better ov
 - [landscape.iaas](iaas.md)
 - [landscape.dashboard](dashboard.md)
 - [landscape.gardener](gardener.md)
+- [landscape.cert-manager](cert-manager.md)
