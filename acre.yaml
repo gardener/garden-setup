@@ -253,37 +253,30 @@ validation:
           - ["mapfield", "zones", ["list"]]
     etcd_backup:
       gcs:
-        credentials:
-          (( iaas.gcp.credentials ))
+        credentials: (( iaas.gcp.credentials ))
         config: (( return_true ))
       s3:
-        credentials:
-          (( iaas.aws.credentials ))
+        credentials: (( iaas.aws.credentials ))
         config: (( return_true ))
       abs:
-        credentials:
-          (( iaas.azure.credentials ))
+        credentials: (( iaas.azure.credentials ))
         config: ["mapfield", "resourceGroup"]
       swift:
-        credentials:
-          (( iaas.openstack.credentials ))
+        credentials: (( iaas.openstack.credentials ))
         config: (( return_true ))
     dns:
       google-clouddns:
-        credentials:
-          (( iaas.gcp.credentials ))
+        credentials: (( iaas.gcp.credentials ))
         config: (( return_true ))
       aws-route53:
-        credentials:
-          (( iaas.aws.credentials ))
+        credentials: (( iaas.aws.credentials ))
         config: (( return_true ))
       azure-dns:
-        credentials:
-          (( iaas.azure.credentials ))
+        credentials: (( iaas.azure.credentials ))
         config: (( return_true ))
       openstack-designate:
         credentials:
-          (( iaas.openstack.credentials ))
+          - <<: (( iaas.openstack.credentials ))
           - ["mapfield", "region"]
         config: (( return_true ))
   iaas_entry_validators:
