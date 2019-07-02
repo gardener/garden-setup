@@ -1,0 +1,13 @@
+#
+# remove this file if no dedicated deploy or delete code
+# is required
+#
+deploy()
+{
+  true
+}
+
+delete()
+{
+  true
+}

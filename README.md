@@ -157,6 +157,10 @@ landscape:
       - email:                                # see above
         username:                             # see above
         hash:                                 # bcrypted hash of password, see above
+  
+  <a href="#landscapecert-manager">cert-manager</a>:
+    email:                                    # email for acme registration
+    server: &lt;live|staging|self-signed|url&gt;    # which kind of certificates to use for the dashboard/identity ingress (defaults to `self-signed`)
 </pre>
 
 
@@ -304,6 +308,32 @@ identity:
 
 Configures the identity provider that allows access to the Gardener dashboard. The easiest method is to provide a list of `users`, each containing `email`, `username`, and either a clear-text `password` or a bcrypted `hash` of the password.
 You can then login into the dashboard using one of the specified email/password combinations.
+
+
+### landscape.cert-manager
+
+```yaml
+  cert-manager:
+    email:                                   
+    server: <live|staging|self-signed|url>
+```
+
+The setup deploys a [cert-manager](https://github.com/jetstack/cert-manager) to provide a certificate for the Gardener dashboard, which can be configured here. 
+
+The entire `landscape.cert-manager` block is optional. 
+
+If not specified, `landscape.cert-manager.server` defaults to `self-signed`. This means, that a selfs-signed CA will be created, which is used by the cert-manager (using a [CA issuer](https://docs.cert-manager.io/en/latest/tasks/issuers/setup-ca.html)) to sign the certificate. Since the CA is not publicly trusted, your webbrowser will show a 'untrusted certificate' warning when accessing the dashboard.
+The `landscape.cert-manager.email` field is not evaluated in `self-signed` mode.
+
+If set to `live`, the cert-manager will use the [letsencrypt](https://letsencrypt.org/) ACME server to get trusted certificates for the dashboard. Beware the [rate limits](https://letsencrypt.org/docs/rate-limits/) of letsencrypt.
+Letsencrypt requires an email address and will send information about expiring certificates to that address. If `landscape.cert-manager.email` is not specified, `landscape.identity.users[0].email` will be used. One of the two fields has to be present.
+
+If set to `staging`, the cert-manager will use the letsencrypt staging server. This is for testing purposes mainly. The communication with letsencrypt works exactly as for the `live` case, but the staging server does not produce trusted certificates, so you will still get the browser warning. The rate limits are significantly higher for the staging server, though. 
+
+If set to anything else, it is assumed to be the URL of an ACME server and the setup will create an [ACME issuer](https://docs.cert-manager.io/en/latest/tasks/issuers/setup-acme/index.html) for it.
+
+See the [extended configuration](docs/extended/cert-manager.md) for more configuration options.
+
 
 ## Uninstall Gardener
 

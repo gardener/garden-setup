@@ -15,8 +15,9 @@
 ---
 component:
   imports:
-    - ingress_dns: ingress-controller
+    - ingress-controller
     - namespace
+    - cert: cert-manager/cert
 
   stubs:
     - lib/templates/utilities.yaml

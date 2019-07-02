@@ -1,0 +1,131 @@
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+utilities: (( &temporary ))
+
+settings:
+  groupName: cert.gardener.cloud
+  solverName: certificate-dns-bridge
+  namespace: cert-manager # will be created - don't choose an existing one!
+  serviceAccountName: cert-manager
+  self-signed: (( .caSpec.url == "self-signed" ))
+  issuerName: (( .settings.self-signed ? "ca-issuer" :"acme-issuer" ))
+  caSecret: "self-signed-ca"
+  ca:
+    given: (( &temporary ( valid( .caSpec.ca.crt ) -and ( ( ! .settings.self-signed ) -or valid( .caSpec.ca.key ) ) ) )) # a given CA needs crt and key for self-signed mode
+    crt: (( given ? .caSpec.ca.crt :( .state.ca.value.cert || ~~ ) ))
+    key: (( given ? ( .caSpec.ca.key || ~~ ) :( .state.ca.value.key || ~~ ) ))
+
+caSpec:
+  <<: (( &temporary ))
+  instantiateIfNeeded: (( |x|-> type( x ) == "template" ? *x :x ))
+  server: (( caSpec.instantiateIfNeeded( .servers[.landscape.cert-manager.server.url] || .landscape.cert-manager.server ) ))
+  url: (( server.url || server ))
+  ca: (( server.ca || ~~ ))
+
+plugins:
+  - git
+  - chart-checkout
+  - kubectl: namespace
+  - kubectl: crds
+  - helm
+  - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
+  - kubectl: issuer
+
+git:
+  <<: (( landscape.versions.cert-manager.controller ))
+  files:
+    - "deploy/manifests/00-crds.yaml"
+
+chart-checkout:
+  repo: (( landscape.versions.cert-manager.controller.helm_repo ))
+  name: cert-manager
+  version: (( landscape.versions.cert-manager.controller.helm_tag ))
+
+namespace:
+  name: (( settings.namespace ))
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: Namespace
+      metadata:
+        labels:
+          certmanager.k8s.io/disable-validation: "true"
+        name: (( .namespace.name ))
+
+crds:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "git/repo/deploy/manifests/00-crds.yaml"
+
+issuer: (( .settings.self-signed ? *ca_issuer :*acme_issuer ))
+
+acme_issuer:
+  <<: (( &template &temporary ))
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  manifests:
+    - apiVersion: certmanager.k8s.io/v1alpha1
+      kind: Issuer
+      metadata:
+        name: (( settings.issuerName ))
+        namespace: (( .landscape.namespace ))
+      spec:
+        acme:
+          server: (( .caSpec.url ))
+          email: (( .landscape.cert-manager.email || .landscape.identity.users[0].email ))
+          privateKeySecretRef:
+            name: (( settings.issuerName "-secret" ))
+          solvers:
+            - dns01:
+                webhook:
+                  groupName: (( settings.groupName ))
+                  solverName: (( settings.solverName ))
+                  config:
+                    dns-class: (( .imports.dns-controller.export.dns-class ))
+                    namespace: (( .imports.dns-controller.export.namespace ))
+
+ca_issuer:
+  <<: (( &template &temporary ))
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: (( .settings.caSecret ))
+        namespace: (( .landscape.namespace ))
+      type: kubernetes.io/tls
+      data:
+        tls.crt: (( base64( .settings.ca.crt ) ))
+        tls.key: (( base64( .settings.ca.key ) ))
+    - apiVersion: certmanager.k8s.io/v1alpha1
+      kind: Issuer
+      metadata:
+        name: (( settings.issuerName ))
+        namespace: (( .landscape.namespace ))
+      spec:
+        ca:
+          secretName: (( .settings.caSecret ))
+
+
+servers:
+  <<: (( &temporary ))
+  live: https://acme-v02.api.letsencrypt.org/directory
+  staging: 
+    <<: (( &template )) # to not download the letsencrypt certs every time
+    url: https://acme-staging-v02.api.letsencrypt.org/directory
+    ca:
+      crt: (( exec( "curl", "-s", "https://letsencrypt.org/certs/fakelerootx1.pem" ) "\n" exec( "curl", "-s", "https://letsencrypt.org/certs/fakeleintermediatex1.pem" ) ))
+
+helm:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: "chart-checkout/charts/cert-manager"
+  name: cert-manager
+  namespace: (( .namespace.name ))
+  values:
+    serviceAccount:
+      create: true
+      name: (( .settings.serviceAccountName ))
+
+state:
+  <<: (( &state(merge none) ))
+  ca: (( .settings.self-signed -and ( ! .settings.ca.given ) ? ( utilities.certs.selfSignedCA("self-signed-ca", false) ) :~~ ))

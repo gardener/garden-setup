@@ -1,0 +1,8 @@
+---
+component:
+  imports:
+    - tiller
+    - dns-controller
+    - cert-controller: cert-manager/controller
+
+  stubs: []

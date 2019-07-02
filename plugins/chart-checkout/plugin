@@ -1,0 +1,53 @@
+# Checks out a helm chart from a helm repository
+source "$SOWLIB/pluginutils"
+
+deploy() {
+  getRequiredValue repo "repo" PLUGINCONFIGJSON
+  getRequiredValue name "name" PLUGINCONFIGJSON
+  getRequiredValue version "version" PLUGINCONFIGJSON
+
+  index_url="$repo/index.yaml"
+  index_file="$dir/chart_index.yaml"
+  verbose "Fetching repo index file $index_url"
+  if [ -n "$VERBOSE" ]; then
+    curl_flag=
+  else
+    curl_flag="-s"
+  fi
+  curl $curl_flag -o "$index_file" "$index_url"
+  index_json=$(spiff merge "$index_file" --json)
+  if ! entry=$(jq '.entries["'"$name"'"]' <<< "$index_json"); then
+    debug "$index_json"
+    fail "chart for '$name' not found in helm repo '$repo'!"
+  fi
+  if ! entry=$(jq 'map(select(.version == "'"$version"'"))[0]' <<< "$entry"); then # there shouldn't be more than one entry for a specific version, but if it happens, just take the first one
+    debug "$entry"
+    fail "version '$version' not found for chart '$name'!"
+  fi
+  url=$(jq -r '.urls[0] | if startswith("http") then . else "'"$repo"'/\(.)" end' <<< "$entry") # just take the first url
+  if [ -z "$url" ]; then
+    debug "$entry"
+    fail "unable to extract url from entry!"
+  fi
+  info "Downloading chart $url"
+  chart_archive="$dir/${url##*/}"
+  curl $curl_flag -o "$chart_archive" "$url"
+  if [ ! -f "$chart_archive" ]; then
+    fail "failed downloading the chart!"
+  fi
+  extract_location="$dir/charts"
+  mkdir -p "$extract_location"
+  tar -xf "$chart_archive" -C "$extract_location"
+  chart_file="$extract_location/$name" # $dir/charts/$name
+  verbose "Extracted chart to $chart_file"
+}
+
+delete() {
+  verbose "Nothing to do on delete."
+}
+
+case "$1" in
+    deploy) deploy "$@";;
+    delete) delete "$@";;
+    *) fail "unsupported action $1"
+esac

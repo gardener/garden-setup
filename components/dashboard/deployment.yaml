@@ -45,12 +45,11 @@ dashboard:
       pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))
-      ca: (( imports.identity.export.ca.crt ))
+      ca: (( imports.cert-controller.export.ca.crt || ~~ ))
       redirectUri: (( settings.dashboard_url "/auth/callback" ))
       clientSecret: (( imports.identity.export.dashboardClientSecret ))
-    tls:
-      crt: (( imports.identity.export.server.crt ))
-      key: (( imports.identity.export.server.key ))
+    tlsSecretName: (( imports.cert.export.certificate.secret_name ))
+    tls: ~
     kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
     gitHub: (( .landscape.dashboard.gitHub || ~~ ))
     frontendConfig:

@@ -34,3 +34,7 @@ landscape:
       - email: "admin@mydomain.org"
         username: "Admin"
         password: "MyHardPassword123$"
+
+#  cert-manager:
+#    email: "john.doe@mydomain.org"
+#    server: live

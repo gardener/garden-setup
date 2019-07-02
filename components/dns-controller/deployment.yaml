@@ -21,11 +21,13 @@ settings:
   naming: garden-setup
   fullname: (( naming "-dns-controller-manager" ))
   dns-class: (( naming ))
+  namespace: "kube-system"
 
 plugins:
   - git
   - helm
   - kubectl
+# TODO: create namespace if it doesn't exist
 
 git:
   <<: (( .landscape.versions.dns-controller ))

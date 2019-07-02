@@ -1,0 +1,11 @@
+---
+component:
+  imports:
+    - tiller
+    - dns-controller
+    - namespace
+
+  stubs:
+    - lib/templates/utilities.yaml
+    - lib/templates/certs.yaml
+    - lib/templates/state.yaml

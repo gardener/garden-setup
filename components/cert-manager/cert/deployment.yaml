@@ -1,0 +1,32 @@
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+
+settings:
+  certificate:
+    name: dashboard-identity-ingress
+    domain: (( "*." imports.ingress-controller.export.ingress_domain ))
+    secret_name: identity-dashboard-tls
+    namespace: (( landscape.namespace ))
+
+plugins:
+  - kubectl: cert
+  - -echo: "The export generation waits for the certificate, which may take some time."
+
+cert:
+  kubeconfig: (( .landscape.clusters[0].kubeconfig ))
+  manifests:
+    - apiVersion: certmanager.k8s.io/v1alpha1
+      kind: Certificate
+      metadata:
+        name: (( .settings.certificate.name ))
+        namespace: (( .settings.certificate.namespace ))
+      spec:
+        secretName: (( .settings.certificate.secret_name ))
+        renewBefore: 360h # 15d
+        commonName: (( .settings.certificate.domain ))
+        dnsNames:
+        - (( .settings.certificate.domain ))
+        issuerRef:
+          name: (( imports.cert-controller.export.issuerName ))
+          kind: Issuer
