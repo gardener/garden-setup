@@ -17,6 +17,7 @@ utilities:
   profile:
     kubernetes:
       versions:
+        - 1.15.0
         - 1.14.3
         - 1.13.7
         - 1.12.9

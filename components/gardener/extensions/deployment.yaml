@@ -189,6 +189,8 @@ extension_manifests:
       resources:
       - kind: Infrastructure
         type: alicloud
+      - kind: ControlPlane
+        type: alicloud
       - kind: Worker
         type: alicloud
       deployment:
@@ -282,6 +284,8 @@ extension_manifests:
       resources:
       - kind: Infrastructure
         type: aws
+      - kind: ControlPlane
+        type: aws
       - kind: Worker
         type: aws
 
@@ -315,6 +319,8 @@ extension_manifests:
       resources:
       - kind: Infrastructure
         type: azure
+      - kind: ControlPlane
+        type: azure
       - kind: Worker
         type: azure
 
@@ -345,6 +351,8 @@ extension_manifests:
         type: helm
       resources:
       - kind: Infrastructure
+        type: gcp
+      - kind: ControlPlane
         type: gcp
       - kind: Worker
         type: gcp
@@ -378,6 +386,8 @@ extension_manifests:
         type: helm
       resources:
       - kind: Infrastructure
+        type: openstack
+      - kind: ControlPlane
         type: openstack
       - kind: Worker
         type: openstack
