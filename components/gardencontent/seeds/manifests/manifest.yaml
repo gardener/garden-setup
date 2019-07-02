@@ -29,6 +29,7 @@ kind: Seed
 metadata:
   name: (( values.name ))
 spec:
+  blockCIDRs: (( values.iaas.blockCIDRs ))
   cloud:
     profile: (( values.name ))
     region: (( values.config.region ))

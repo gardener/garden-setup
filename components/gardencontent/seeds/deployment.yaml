@@ -37,8 +37,7 @@ providerconfig:
   namespace: (( landscape.namespace ))
   dns:
     type: (( landscape.dns.type ))
-  iaas:
-    profileconfig: (( read(__ctx.DIR "/provider/" v.type "/iaas.yaml", "import") ))
+  iaas: (( read(__ctx.DIR "/provider/" v.type "/iaas.yaml", "import") ))
   config: (( v ))
   seed:
     ingressdomain: (( imports.ingress_dns.export.ingress_domain ))

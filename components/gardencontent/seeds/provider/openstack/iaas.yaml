@@ -12,11 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-floatingPools: (( config.floatingPools ))
-loadBalancerProviders: (( config.loadBalancerProviders ))
-machineImages: (( config.machineImages ))
-machineTypes: (( config.machineTypes ))
-keystoneURL: (( config.credentials.authURL ))
-zones:
-- region: (( config.region ))
-  names: (( config.zones ))
+blockCIDRs:
+- 169.254.169.254/32
