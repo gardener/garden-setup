@@ -92,3 +92,25 @@ landscape:
 ```
 
 The information specified in `extensionConfig` will be used for the [Openstack provider extension](https://github.com/gardener/gardener-extensions/tree/master/controllers/provider-openstack), while all other Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml).
+
+### Openstack 'extensionConfig'
+
+The `extensionConfig` node in the openstack iaas configuration is somewhat special. First of all, if at least one iaas entry of type `openstack` is present in your acre.yaml, **exactly one** of the openstack iaas entries should have the `extensionConfig` node. Furthermore, some values there have to match other values of your configuration, otherwise you won't be able to create shoots:
+```yaml
+landscape:
+  iaas:
+    - name: openstack               # A
+      ...
+      extensionConfig:
+        machineImages:
+        - cloudProfiles:
+          - image: coreos-2023.5.0
+            name: openstack         # A
+          name: coreos              # B
+          version: 2023.5.0         # C
+      machineImages:
+        - name: coreos              # B
+          version: 2023.5.0         # C
+```
+- each entry in `machineImages` must have a corresponding entry in `extensionConfig.machineImages` with matching `name` and `version`
+- each `iaas` entry of type `openstack` must have a corresponding entry in `extensionConfig.machineImages[].cloudProfiles` with matching `name`

@@ -249,6 +249,21 @@ validation:
                 - ["mapfield", "usable"]
                 - ["mapfield", "volumeType"]
                 - ["mapfield", "volumeSize"]
+          - - optionalfield
+            - extensionConfig
+            - - mapfield
+              - machineImages
+              - - list
+                - - and
+                  - ["mapfield", "name"]
+                  - ["mapfield", "version"]
+                  - - mapfield
+                    - cloudProfiles
+                    - - list
+                      - - and
+                        - ["mapfield", "image"]
+                        - ["mapfield", "name"]
+          - (( |e|-> [length( validation.openstack_extensionConfigs ) == 1, "valid", "if there are entries in 'landscape.iaas' with type 'openstack', exactly one of these entries must contain the 'extensionConfig' configuration"] ))
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
     etcd_backup:
@@ -339,6 +354,7 @@ validation:
     selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-manager.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
     acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-manager.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
     email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-manager.email' or 'landscape.identity.users[0].email' needs to be set"] ))
+  openstack_extensionConfigs: (( (select[landscape.iaas|elem|-> elem.type == "openstack" -and valid( elem.extensionConfig )]).[*].extensionConfig ))
 
 
   

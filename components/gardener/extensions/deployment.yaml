@@ -29,16 +29,6 @@ kubectl:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
   manifests: (( rendered_extension_manifests.[*].manifest ))
 
-# a dummy config for openstack, so the provider can be created if no config is given in the acre.yaml
-openstack_dummy_config:
-  <<: (( &temporary ))
-  machineImages:
-  - cloudProfiles:
-    - image: coreos-2023.5.0
-      name: openstack
-    name: coreos
-    version: 2023.5.0
-
 # this template gets evaluated for each entry in extension_manifests
 spec_template:
   <<: (( &temporary &template ))
@@ -370,7 +360,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
-            config: (( .landscape.iaas.openstack.extensionConfig || .openstack_dummy_config ))
+            config: (( element( (select[landscape.iaas|elem|-> elem.type == "openstack" -and valid( elem.extensionConfig )]).[*].extensionConfig, 0 ) ))
             controllers:
               infrastructure:
                 concurrentSyncs: 50
