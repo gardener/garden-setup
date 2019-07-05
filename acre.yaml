@@ -35,7 +35,7 @@ landscape:
     gardener:
       <<: (( merge ))
       repo: "https://github.com/gardener/gardener.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.26.1" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.26.2" ))
       apiserver:
         <<: (( merge ))
         image_repo: "eu.gcr.io/gardener-project/gardener/apiserver"
@@ -115,8 +115,10 @@ landscape:
     dashboard:
       <<: (( merge ))
       repo: "https://github.com/gardener/dashboard.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.33.0" ))
-      image_tag: (( valid( tag ) ? tag :~~ ))
+      # tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.33.0" ))
+      # image_tag: (( valid( tag ) ? tag :~~ ))
+      commit: (( valid( branch ) -or valid( tag ) ? ~~ :"c861049ed826421b57baa452ee514510969d1f74" ))
+      image_tag: "1.34.0-dev-c861049ed826421b57baa452ee514510969d1f74"
     identity:
       <<: (( merge ))
       repo: (( dashboard.repo ))
