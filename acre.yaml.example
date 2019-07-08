@@ -10,24 +10,43 @@ landscape:
       services: <service CIDR>
 
   iaas:
-    type: <gcp/aws/azure>
-    region: europe-west1
-    zones:
-      - europe-west1-b
-      - europe-west1-c
-      - europe-west1-d
-    credentials:
-      # your credentials here
+    - name: (( type ))                           # name of the seed
+      type: <gcp|aws|azure|openstack>            # iaas provider
+      region: <major region>-<minor region>      # region for initial seed
+      zones:                                     # remove zones block for Azure
+        - <major region>-<minor region>-<zone>   # example: europe-west1-b
+        - <major region>-<minor region>-<zone>   # example: europe-west1-c
+        - <major region>-<minor region>-<zone>   # example: europe-west1-d
+      credentials:                               # provide access to IaaS layer used for creating resources for shoot clusters
+        # your credentials here
+    # - name:                                      # see above
+    #   type: <gcp|aws|azure|openstack>            # see above
+    #   region: <major region>-<minor region>      # region for seed
+    #   zones:                                     # remove zones block for Azure
+    #     - <major region>-<minor region>-<zone>   # example: europe-west1-b
+    #     - <major region>-<minor region>-<zone>   # example: europe-west1-c
+    #     - <major region>-<minor region>-<zone>   # example: europe-west1-d
+    #   cluster:                                   # information about your seed's base cluster
+    #     networks:                                # CIDR IP ranges of seed cluster
+    #       nodes: <CIDR IP range>
+    #       pods: <CIDR IP range>
+    #       services: <CIDR IP range>
+    #     kubeconfig:                              # kubeconfig for seed cluster
+    #       apiVersion: v1
+    #       kind: Config
+    #       ...
+    #   credentials:
+    #     # your credentials here
 
 #  etcd: # optional
 #    backup:
 #      type: <gcs/s3/abs>
 #      region: (( iaas.region ))
-#      credentials: (( iaas.credentials ))
+#      credentials: (( iaas[0].credentials ))
 
 #  dns: # optional
 #    type: <google-clouddns/aws-route53/azure-dns>
-#    credentials: (( iaas.credentials ))
+#    credentials: (( iaas[0].credentials ))
 
   identity:
     users:
