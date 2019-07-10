@@ -302,7 +302,7 @@ validation:
       - and
       - ["mapfield", "name"]
       - ["mapfield", "type", ["valueset", (( keys( types.iaas ) ))]]
-      - ["mapfield", "mode", ["valueset", ["seed", "profile", "cloudprofile"]]]
+      - ["mapfield", "mode", ["valueset", ["seed", "profile", "cloudprofile", "soil"]]]
       - - optionalfield
         - credentials
         - (( types.iaas[values.type].credentials ))
@@ -310,7 +310,7 @@ validation:
     initial_seed:
       - <<: (( &template ))
       - and
-      - ["mapfield", "mode", ["valueset", ["seed"]]]
+      - ["mapfield", "mode", ["valueset", ["seed", "soil"]]]
       - - mapfield
         - credentials
         - (( types.iaas[values.type].credentials ))
@@ -328,6 +328,11 @@ validation:
             - networks
             - (( validation.networks ))
     cloudprofile: (( &template( return_true ) ))
+    soil:
+      - <<: (( &template ))
+      - and
+      - - mapfield
+        - seeds
   dashboard_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
   gardener_validator: ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]]
   networks:
@@ -374,6 +379,7 @@ validation:
   iaas_initial_seed: (( validate( landscape.iaas[0], validation.instantiate_validator(landscape.iaas[0], iaas_entry_validators.initial_seed) ) ))
   iaas_seed: (( map[landscape.iaas.[1..]|id,entry|-> entry.mode == "seed" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.seed) ) :~~ ] ))
   iaas_cloudprofile: (( map[landscape.iaas.[1..]|id,entry|-> entry.mode == "profile" -or entry.mode == "cloudprofile" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.cloudprofile) ) :~~ ] ))
+  iaas_soil: (( map[landscape.iaas|id,entry|-> entry.mode == "soil" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.soil) ) :~~ ] ))
   ##### landscape.etcd
   etcd:
     backup:

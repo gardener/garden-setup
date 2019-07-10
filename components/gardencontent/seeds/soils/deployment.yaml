@@ -25,7 +25,7 @@ plugins:
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
-  seeds: (( sum[landscape.iaas|[]|s,v|-> v.mode == "seed" ? s v.name :s ] ))
+  seeds: (( sum[landscape.iaas|[]|s,v|-> v.mode == "seed" -or v.mode == "soil" ? s v.name :s ] ))
 
 cleanup:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
@@ -37,13 +37,13 @@ providerconfig:
   namespace: (( landscape.namespace ))
   dns:
     type: (( landscape.dns.type ))
-  iaas: (( read(__ctx.DIR "/provider/" v.type "/iaas.yaml", "import") ))
+  iaas: (( read(__ctx.DIR "/../provider/" v.type "/iaas.yaml", "import") ))
   config: (( v ))
   seed:
     ingressdomain: (( imports.ingress_dns.export.ingress_domain ))
     kubeconfig: (( asyaml( v.cluster.kubeconfig ) || read(env.ROOTDIR "/" landscape.clusters.[0].kubeconfig, "text") ))
     networks: (( v.cluster.networks || landscape.clusters.[0].networks ))
-  secretname: (( name "-seed" ))
+  secretname: (( name "-" v.mode ))
 
-kubectl: (( sum[landscape.iaas|[]|s,v|-> v.mode == "seed" ? s utilities.kubectl.generate( __ctx.DIR "/manifests/manifest.yaml", imports.kube_apiserver.export.kubeconfig, *providerconfig ) :s ] ))
+kubectl: (( sum[landscape.iaas|[]|s,v|-> v.mode == "seed" -or v.mode == "soil" ? s utilities.kubectl.generate( __ctx.DIR "/../manifests/seed_manifest.yaml", imports.kube_apiserver.export.kubeconfig, *providerconfig ) :s ] ))
 

@@ -15,6 +15,7 @@
 ---
 component:
   imports:
+    - project: gardencontent/coreproject
     - profiles: gardencontent/profiles
     - gardener_virtual: gardener/virtual
     - gardener_runtime: gardener/extensions
