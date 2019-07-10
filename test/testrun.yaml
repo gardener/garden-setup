@@ -16,32 +16,6 @@ spec:
     definition:
       name: create-garden
       config:
-      - name: GARDENER_VERSION
-        type: env
-        value: 0.20.1
-      - name: host-kubeconfig
-        type: file
-        path: "/tmp/garden/kubeconfig"
-        valueFrom:
-          secretKeyRef:
-            name: garden-test
-            key: kubeconfig
-      - name: gcloud
-        type: file
-        path: "/tmp/garden/gcloud.json"
-        valueFrom:
-          secretKeyRef:
-            name: garden-test
-            key: gcloud.json
-
-  - name: upgrade-gardener
-    dependsOn: [ create-gardener ]
-    definition:
-      name: upgrade-garden
-      config:
-      - name: GARDENER_VERSION
-        type: env
-        value: 0.20.2
       - name: host-kubeconfig
         type: file
         path: "/tmp/garden/kubeconfig"

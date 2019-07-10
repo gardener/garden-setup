@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+SOURCE_PATH="$(readlink -f "$(dirname ${0})/..")"
+GARDENER_VERSION_PATH="SOURCE_PATH/GARDENER_VERSION"
+
+if [[ "$DEPENDENCY_NAME" == "github.com/gardener/gardener" ]]; then
+    echo $DEPENDENCY_VERSION > $GARDENER_VERSION_PATH
+fi
