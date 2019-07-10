@@ -1,6 +1,17 @@
 garden-setup:
   template: 'default'
   jobs:
+    head-update:
+      traits:
+        draft_release: ~
+        version: ~
+    release:
+      traits:
+        version:
+          preprocess: 'finalize'
+        release:
+          nextversion: 'bump_minor'
+        component_descriptor: ~
     integration-test:
       traits:
         scheduling:

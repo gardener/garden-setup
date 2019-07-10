@@ -15,10 +15,10 @@ landscape:
   versions:
     gardener:
       apiserver:
-        image_tag: (( env( "GARDENER_VERSION" ) || "0.20.2" ))
+        image_tag: (( env( "GARDENER_VERSION" ) || read( "./GARDENER_VERSION", "text" ) ))
       controller_manager:
-        image_tag: (( env( "GARDENER_VERSION" ) || "0.20.2" ))
-      tag: (( env( "GARDENER_VERSION" ) || "0.20.2" ))
+        image_tag: (( env( "GARDENER_VERSION" ) || read( "./GARDENER_VERSION", "text" ) ))
+      tag: (( env( "GARDENER_VERSION" ) || read( "./GARDENER_VERSION", "text" ) ))
 
   domain: (( ( env( "GARDENER_PREFIX" ) || "test" ) ".oq.gcp.dev.k8s.ondemand.com" ))
 
