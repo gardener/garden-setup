@@ -17,6 +17,8 @@ env:
     value: (( config.credentials.authURL ))
   - name: "OS_DOMAIN_NAME"
     value: (( config.credentials.domainName ))
+  - name: "OS_USER_DOMAIN_NAME"
+    value: (( config.credentials.userDomainName || "" ))
   - name: "OS_USERNAME"
     value: (( config.credentials.username ))
   - name: "OS_PASSWORD"

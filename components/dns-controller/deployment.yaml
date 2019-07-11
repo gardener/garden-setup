@@ -75,6 +75,7 @@ providers:
       OS_USERNAME: (( landscape.dns.credentials.username ))
       OS_PASSWORD: (( landscape.dns.credentials.password ))
       OS_DOMAIN_NAME: (( landscape.dns.credentials.domainName ))
+      OS_USER_DOMAIN_NAME: (( landscape.dns.credentials.userDomainName || "" ))
       OS_PROJECT_NAME: (( landscape.dns.credentials.tenantName ))
 
 spec:

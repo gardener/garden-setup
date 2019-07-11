@@ -65,6 +65,7 @@ dns_credentials:
     OS_USERNAME: (( base64( landscape.dns.credentials.username ) ))
     OS_PASSWORD: (( base64( landscape.dns.credentials.password ) ))
     OS_DOMAIN_NAME: (( base64( landscape.dns.credentials.domainName ) ))
+    OS_USER_DOMAIN_NAME: (( base64( landscape.dns.credentials.userDomainName || "" ) ))
     OS_PROJECT_NAME: (( base64( landscape.dns.credentials.tenantName ) ))
 
 

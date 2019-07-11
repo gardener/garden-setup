@@ -13,12 +13,13 @@
 // limitations under the License.
 
 provider "openstack" {
-  user_name   = "${var.USERNAME}"
-  password    = "${var.PASSWORD}"
-  tenant_name = "${var.TENANT_NAME}"
-  region      = "${var.REGION}"
-  auth_url    = "${var.AUTH_URL}"
-  domain_name = "${var.DOMAIN_NAME}"
+  user_name        = "${var.USERNAME}"
+  password         = "${var.PASSWORD}"
+  tenant_name      = "${var.TENANT_NAME}"
+  region           = "${var.REGION}"
+  auth_url         = "${var.AUTH_URL}"
+  domain_name      = "${var.DOMAIN_NAME}"
+  user_domain_name = "${var.USER_DOMAIN_NAME}"
 }
 
 
