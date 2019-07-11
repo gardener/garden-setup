@@ -5,6 +5,17 @@ aws-credentials:
   accessKeyID: (( env( "ACCESS_KEY_ID" ) ))
   secretAccessKey: (( env( "SECRET_ACCESS_KEY_ID" ) ))
 
+azure-credentials:
+  clientID: (( env( "AZ_CLIENT_ID" ) ))
+  clientSecret: (( env( "AZ_CLIENT_SECRET" ) ))
+  subscriptionID: (( env( "AZ_SUBSCRIPTION_ID" ) ))
+  tenantID: (( env( "AZ_TENANT_ID" ) ))
+
+k8sVersions:
+  kubernetes:
+    versions:
+    - 1.14.3
+
 
 ############################################################################
 
@@ -39,6 +50,10 @@ landscape:
       - (( region "-d"))
     credentials:
       <<: (( .gcp-credentials ))
+    profile:
+      gcp:
+        constraints:
+          <<: (( .k8sVersions ))
   - name: aws
     mode: cloudprofile
     type: aws
@@ -49,6 +64,20 @@ landscape:
       - (( region "c"))
     credentials:
       <<: (( .aws-credentials ))
+    profile:
+      aws:
+        constraints:
+          <<: (( .k8sVersions ))
+  - name: azure
+    mode: cloudprofile
+    type: azure
+    region: westeurope
+    credentials:
+      <<: (( .azure-credentials ))
+    profile:
+      azure:
+        constraints:
+          <<: (( .k8sVersions ))
 
   identity:
     users:
