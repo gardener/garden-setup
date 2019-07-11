@@ -46,3 +46,9 @@ variable "DOMAIN_NAME" {
   description = "OpenStack Domain Name"
   type = "string"
 }
+
+variable "USER_DOMAIN_NAME" {
+  description = "OpenStack User Domain Name"
+  type = "string"
+  default = ""
+}
