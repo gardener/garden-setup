@@ -35,7 +35,7 @@ landscape:
     gardener:
       <<: (( merge ))
       repo: "https://github.com/gardener/gardener.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.26.2" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :read( __ctx.DIR "/GARDENER_VERSION", "text" ) ))
       apiserver:
         <<: (( merge ))
         image_repo: "eu.gcr.io/gardener-project/gardener/apiserver"
@@ -359,7 +359,7 @@ validation:
   openstack_extensionConfigs: (( (select[landscape.iaas|elem|-> elem.type == "openstack" -and valid( elem.extensionConfig )]).[*].extensionConfig ))
 
 
-  
+
   ### VALIDATIONS ###
   # structure resembles structure of landscape where possible
   ##### landscape.name
