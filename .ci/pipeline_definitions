@@ -18,6 +18,8 @@ garden-setup:
           preprocess: 'finalize'
         component_descriptor: ~
         update_component_deps: ~
+        cronjob:
+          interval: '5m'
     integration-test:
       traits:
         scheduling:
