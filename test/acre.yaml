@@ -26,10 +26,10 @@ landscape:
   versions:
     gardener:
       apiserver:
-        image_tag: (( env( "GARDENER_VERSION" ) || read( "./GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
       controller_manager:
-        image_tag: (( env( "GARDENER_VERSION" ) || read( "./GARDENER_VERSION", "text" ) ))
-      tag: (( env( "GARDENER_VERSION" ) || read( "./GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+      tag: (( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
 
   domain: (( ( env( "GARDENER_PREFIX" ) || "test" ) ".oq.gcp.dev.k8s.ondemand.com" ))
 
