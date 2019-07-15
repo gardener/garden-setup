@@ -17,7 +17,7 @@ spec:
     azure:
       networks: (( values.config.cluster.networks ))
       workers:
-      - autoScalerMax: 100
+      - autoScalerMax: 50
         autoScalerMin: 1
         machineType: Standard_DS5_v2
         maxSurge: 50%

@@ -19,7 +19,7 @@ spec:
       loadBalancerProvider: (( values.config.loadBalancerProviders[0].name ))
       networks: (( values.config.cluster.networks ))
       workers:
-      - autoScalerMax: 100
+      - autoScalerMax: 50
         autoScalerMin: 1
         machineType: (( values.config.machineType ))
         maxSurge: 50%

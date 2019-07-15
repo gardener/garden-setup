@@ -17,7 +17,7 @@ spec:
     aws:
       networks: (( values.config.cluster.networks ))
       workers:
-      - autoScalerMax: 100
+      - autoScalerMax: 50
         autoScalerMin: 1
         machineType: m5.4xlarge
         maxSurge: 50%

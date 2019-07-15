@@ -17,7 +17,7 @@ spec:
     gcp:
       networks: (( values.config.cluster.networks ))
       workers:
-      - autoScalerMax: 100
+      - autoScalerMax: 50
         autoScalerMin: 1
         machineType: n1-standard-16
         maxSurge: 50%
