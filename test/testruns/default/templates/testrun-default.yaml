@@ -19,7 +19,7 @@ spec:
       revision: gke-host-support
     - type: git
       repo: https://github.com/gardener/gardener.git
-      revision: {{ .Values.gardener.version }}
+      revision: {{ .Values.gardener.version }}
     - type: git
       repo: https://github.com/gardener/garden-setup.git
       revision: {{ .Values.gardensetup.version }}
