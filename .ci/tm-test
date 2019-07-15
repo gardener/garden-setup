@@ -67,7 +67,7 @@ pushd .
 cd $SOURCE_PATH
 VERSION=$(git rev-parse HEAD)
 popd
-GARDENER_VERSION=$(cat $SOURCE_PATH/GARDENER_VERSION)
+GARDENER_VERSION="$(cat $SOURCE_PATH/GARDENER_VERSION)"
 
 echo "Testmachinery config name: ${TM_CONFIG_NAME}"
 echo "Testmachinery landscape: ${TM_LANDSCAPE}"
