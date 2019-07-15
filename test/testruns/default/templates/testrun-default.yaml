@@ -28,7 +28,7 @@ spec:
   config:
   - name: GARDENER_VERSION
     type: env
-    value: {{ .Values.gardener.version }}
+    value: {{ .Values.gardener.version }}
   - name: GARDENER_PREFIX
     type: env
     value: {{ $prefix }}
