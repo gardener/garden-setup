@@ -20,4 +20,9 @@ utilities: (( &temporary ))
 plugins:
   - kubectl
 
-kubectl: (( sum[landscape.iaas|[]|s,v|->s utilities.profile.create(v)] ))
+profiles: (( sum[landscape.iaas|[]|s,v|-> s v ( select[v.seeds|elem|-> ! defined( elem.cloudprofile )] || ~ )] ))
+
+kubectl: (( sum[profiles|[]|s,v|->s utilities.profile.create(v)] ))
+
+# contains a mapping from cloudprofile name to the first kubernetes version in the list of kubernetes versions for that cloudprofile
+k8sVersions: (( sum[kubectl.[*].manifests[0]|{}|s,e|-> s {e.metadata.name = e.spec[e.metadata.annotations["cloudprofile.garden.sapcloud.io/iaas"]].constraints.kubernetes.versions[0]}] ))

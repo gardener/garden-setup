@@ -20,6 +20,7 @@ env: (( &temporary ))
 
 settings:
   seedCandidateDeterminationStrategy: (( .landscape.gardener.seedCandidateDeterminationStrategy || "SameRegion" ))
+  dns_credentials: (( *.dns_credentials[.landscape.dns.type] ))
 
 spec:
   <<: (( &temporary ))

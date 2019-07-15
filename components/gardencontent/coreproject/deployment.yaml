@@ -20,7 +20,7 @@ utilities: (( &temporary ))
 settings:
   project_name: core
   project_namespace: garden-core
-  secret_name_template: (( &template( "core-" v.type "-" v.name ) ))
+  secret_name_template: (( &template( settings.project_name "-" v.type "-" v.name ) ))
 
 plugins:
   - kubectl:
@@ -68,4 +68,4 @@ core:
         name: (( .settings.project_name ))
       spec:
         namespace: (( .settings.project_namespace ))
-    - <<: (( sum[landscape.iaas|[]|s,v|-> valid( v.credentials ) ? s (*secret_template).manifest :s ] ))
+    - <<: (( sum[imports.profiles.export.profiles|[]|s,v|-> valid( v.credentials ) ? s (*secret_template).manifest :s ] ))

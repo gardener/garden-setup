@@ -13,3 +13,9 @@
 # limitations under the License.
 
 ---
+k8sVersions: (( &temporary ))
+profiles: (( &temporary ))
+
+export:
+  k8sVersions: (( .k8sVersions ))
+  profiles: (( .profiles ))

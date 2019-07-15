@@ -1,0 +1,56 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+shoots: (( &temporary ))
+landscape: (( &temporary ))
+env:
+
+export:
+  shoots: (( sum[wait_for_shoots.wait|[]|s,sh|-> s [{"name" = sh.metadata.name, "namespace" = sh.metadata.namespace, "kubeconfig" = wait_for_shoots.extract_kubeconfig( wait_for_shoots.get_kubeconfig( sh ) )}]] ))
+
+wait_for_shoots:
+  <<: (( &temporary ))
+  kubeconfigs:
+    virtual: (( lookup_file( "kubeconfig", env.GENDIR ).[0] ))
+  command_templates:
+    get_shoot:
+      - <<: (( &template ))
+      - "kubectl"
+      - "--kubeconfig"
+      - (( _.kubeconfigs.virtual ))
+      - "-n"
+      - (( e.namespace ))
+      - "get"
+      - "shoot"
+      - (( e.name ))
+      - "-o"
+      - "json"
+    get_kubeconfig:
+      - <<: (( &template ))
+      - "kubectl"
+      - "--kubeconfig"
+      - (( _.kubeconfigs.virtual ))
+      - "-n"
+      - (( sh.metadata.namespace ))
+      - "get"
+      - "secret"
+      - (( sh.metadata.name ".kubeconfig" ))
+      - "-o"
+      - "json"
+  commands: (( sum[.shoots|[]|s,e|-> s [*command_templates.get_shoot]] ))
+  get_kubeconfig: (( |sh|-> exec( *_.command_templates.get_kubeconfig ) ))
+  extract_kubeconfig: (( |sec|-> base64_decode( sec.data.kubeconfig ) ))
+  wait: (( sum[commands|[]|s,cmd|-> s sync[exec_uncached( cmd )|v|-> wait_for_shoots.shoot_is_up( v ),v|3600]] ))
+  shoot_is_up: (( |s|-> s.status.conditions[0].status == "True" -and s.status.conditions[1].status == "True" -and s.status.conditions[2].status == "True" -and s.status.conditions[3].status == "True" -and s.status.observedGeneration == s.metadata.generation ))

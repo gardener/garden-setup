@@ -34,8 +34,9 @@ utilities:
       <<: (( &template ))
       profileoverwrite: (( iaasconfig.profile || {} ))
       name: (( iaasconfig.name ))
+      type: (( iaasconfig.type ))
+      cabundle: (( values.config.cabundle || ~~ ))
       values:
-        cabundle: (( config.cabundle || ~~ ))
         dns:
           type: (( landscape.dns.type ))
         kubernetes: (( config.kubernetes || utilities.profile.kubernetes ))
