@@ -37,8 +37,8 @@ garden-setup:
           image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:stable
           execute:
           - tm-test
-          - --tm-chart=garden-setup
+          - --tm-chart=default
           - --landscape=test
           - --tm-landscape=external
           - --
-          - --testrun-prefix=default
+          - --testrun-prefix=garden-setup
