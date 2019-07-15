@@ -9,10 +9,8 @@ testrunName: ""
 shoot:
   k8sVersion: 1.14.3
 
-kubeconfigs:
-  gardener: ""
-  seed: ""
-  shoot: ""
+gardener:
+  version: master
 
 garden:
   credentials:

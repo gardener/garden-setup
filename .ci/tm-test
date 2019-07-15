@@ -67,11 +67,13 @@ pushd .
 cd $SOURCE_PATH
 VERSION=$(git rev-parse HEAD)
 popd
+GARDENER_VERSION=$(cat $SOURCE_PATH/GARDENER_VERSION)
 
 echo "Testmachinery config name: ${TM_CONFIG_NAME}"
 echo "Testmachinery landscape: ${TM_LANDSCAPE}"
 echo "Arguments: ${ARGUMENTS}"
 echo "Version: ${VERSION}"
+echo "Gardener Version: ${GARDENER_VERSION}"
 
 mkdir -p /tm
 TM_CLUSTER=/tm/kubeconfig
@@ -92,5 +94,5 @@ kubectl cluster-info
     --s3-endpoint=$S3_ENDPOINT \
     --s3-ssl=true \
     --testruns-chart-path=$TESTRUN_CHART_PATH \
-    --set=gardensetup.version=$VERSION \
+    --set=gardensetup.version=$VERSION,gardener.version=$GARDENER_VERSION \
     $ARGUMENTS

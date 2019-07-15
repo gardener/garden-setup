@@ -18,14 +18,17 @@ spec:
       repo: https://github.com/schrodit/test-infra.git
       revision: gke-host-support
     - type: git
-      repo: https://github.com/schrodit/gardener.git
-      revision: test-reconcilation
+      repo: https://github.com/gardener/gardener.git
+      revision: {{ .Values.gardener.version }}
     - type: git
       repo: https://github.com/gardener/garden-setup.git
       revision: {{ .Values.gardensetup.version }}
 
   # Global config available to every test task in all phases (testFlow and onExit)
   config:
+  - name: GARDENER_VERSION
+    type: env
+    value: {{ .Values.gardener.version }}
   - name: GARDENER_PREFIX
     type: env
     value: {{ $prefix }}
