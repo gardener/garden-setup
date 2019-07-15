@@ -33,5 +33,12 @@ garden-setup:
             on_error:
               triggering_policy: 'only_first'
       steps:
-        test:
+        testrun:
           image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:stable
+          execute:
+          - tm-test
+          - --tm-chart=garden-setup
+          - --landscape=test
+          - --tm-landscape=external
+          - --
+          - --testrun-prefix=default

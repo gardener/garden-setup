@@ -1,0 +1,226 @@
+{{- $prefix := (randAlpha 5 | lower) -}}
+apiVersion: testmachinery.sapcloud.io/v1beta1
+kind: Testrun
+metadata:
+  name: {{ .Values.testrunName }}
+  namespace: default
+  annotations:
+    purpose: full-gardener
+spec:
+
+  ttlSecondsAfterFinished: 172800 # 2 days
+
+  locationSets:
+  - name: default
+    default: true
+    locations:
+    - type: git
+      repo: https://github.com/schrodit/test-infra.git
+      revision: gke-host-support
+    - type: git
+      repo: https://github.com/schrodit/gardener.git
+      revision: test-reconcilation
+    - type: git
+      repo: https://github.com/gardener/garden-setup.git
+      revision: {{ .Values.gardensetup.version }}
+
+  # Global config available to every test task in all phases (testFlow and onExit)
+  config:
+  - name: GARDENER_PREFIX
+    type: env
+    value: {{ $prefix }}
+  - name: PROJECT_NAMESPACE
+    type: env
+    value: garden-core
+
+  # the execution flow:
+  testflow:
+  - name: prepare-host
+    definition:
+      name: tm-scheduler-lock-gardener
+
+  - name: create-garden
+    dependsOn: [ prepare-host ]
+    definition:
+      name: create-garden
+      location: default
+      config:
+{{ toYaml .Values.garden.credentials.config | indent 6 }}
+
+  - name: create-shoot-aws
+    dependsOn: [ create-garden ]
+    definition:
+      name: create-shoot
+      locationSet: default
+      config:
+      - name: SHOOT_NAME
+        type: env
+        value: aws-14-{{ $prefix }}
+      - name: CLOUDPROVIDER
+        type: env
+        value: aws
+      - name: K8S_VERSION
+        type: env
+        value: {{ .Values.shoot.k8sVersion }}
+      - name: SEED
+        type: env
+        value: gcp
+      - name: CLOUDPROFILE
+        type: env
+        value: aws
+      - name: SECRET_BINDING
+        type: env
+        value: core-aws-aws
+      - name: REGION
+        type: env
+        value: eu-west-1
+      - name: ZONE
+        type: env
+        value: eu-west-1b
+
+  - name: tests-aws
+    dependsOn: [ create-shoot-aws ]
+    artifactsFrom: create-shoot-aws
+    definition:
+      name: shootapp-test
+      continueOnError: true
+
+  - name: delete-shoot-aws
+    dependsOn: [ tests-aws ]
+    definition:
+      name: delete-shoot
+      config:
+      - name: SHOOT_NAME
+        type: env
+        value: aws-14-{{ $prefix }}
+
+  - name: create-shoot-gcp
+    dependsOn: [ create-garden ]
+    definition:
+      name: create-shoot
+      locationSet: default
+      config:
+      - name: SHOOT_NAME
+        type: env
+        value: gcp-14-{{ $prefix }}
+      - name: K8S_VERSION
+        type: env
+        value: {{ .Values.shoot.k8sVersion }}
+      - name: CLOUDPROVIDER
+        type: env
+        value: gcp
+      - name: CLOUDPROFILE
+        type: env
+        value: gcp
+      - name: SECRET_BINDING
+        type: env
+        value: core-gcp-gcp
+      - name: REGION
+        type: env
+        value: europe-west1
+      - name: ZONE
+        type: env
+        value: europe-west1-b
+
+  - name: tests-gcp
+    dependsOn: [ create-shoot-gcp ]
+    definition:
+      name: shootapp-test
+      locationSet: default
+      continueOnError: true
+
+  - name: delete-shoot-gcp
+    dependsOn: [ tests-gcp ]
+    definition:
+      name: delete-shoot
+      locationSet: default
+      config:
+      - name: SHOOT_NAME
+        type: env
+        value: gcp-14-{{ $prefix }}
+
+  - name: create-shoot-az
+    dependsOn: [ create-garden ]
+    definition:
+      name: create-shoot
+      locationSet: default
+      config:
+      - name: SEED
+        type: env
+        value: gcp
+      - name: SHOOT_NAME
+        type: env
+        value: az-14-{{ $prefix }}
+      - name: K8S_VERSION
+        type: env
+        value: {{ .Values.shoot.k8sVersion }}
+      - name: CLOUDPROVIDER
+        type: env
+        value: azure
+      - name: CLOUDPROFILE
+        type: env
+        value: azure
+      - name: SECRET_BINDING
+        type: env
+        value: core-azure-azure
+      - name: REGION
+        type: env
+        value: westeurope
+
+  - name: tests-az
+    dependsOn: [ create-shoot-az ]
+    definition:
+      name: shootapp-test
+      locationSet: default
+      continueOnError: true
+
+  - name: delete-shoot-az
+    dependsOn: [ tests-az ]
+    definition:
+      name: delete-shoot
+      locationSet: default
+
+  - name: delete-garden
+    dependsOn: [ delete-shoot-aws, delete-shoot-gcp, delete-shoot-az ]
+    definition:
+      name: delete-garden
+      config:
+{{ toYaml .Values.garden.credentials.config | indent 6 }}
+
+  - name: reset-host
+    dependsOn: [ delete-garden ]
+    definition:
+      name: tm-scheduler-release-gardener
+      config:
+      - name: CLEAN
+        type: env
+        value: "false"
+
+  onExit:
+  - name: clean-gardener
+    useGlobalArtifacts: true
+    definition:
+      name: clean-gardener
+      continueOnError: true
+      condition: error
+
+  - name: delete-garden
+    dependsOn: [ clean-gardener ]
+    useGlobalArtifacts: true
+    definition:
+      name: delete-garden
+      continueOnError: true
+      condition: error
+      config:
+{{ toYaml .Values.garden.credentials.config | indent 6 }}
+
+  - name: reset-host
+    dependsOn: [ delete-garden ]
+    useGlobalArtifacts: true
+    definition:
+      name: tm-scheduler-release-gardener
+      condition: error
+      config:
+      - name: CLEAN
+        type: env
+        value: "true"
