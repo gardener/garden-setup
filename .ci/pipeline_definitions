@@ -21,6 +21,8 @@ garden-setup:
         cronjob:
           interval: '5m'
     integration-test:
+      repo:
+        trigger: false
       traits:
         scheduling:
           suppress_parallel_execution: true
