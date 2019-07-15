@@ -94,5 +94,5 @@ kubectl cluster-info
     --s3-endpoint=$S3_ENDPOINT \
     --s3-ssl=true \
     --testruns-chart-path=$TESTRUN_CHART_PATH \
-    --set=gardensetup.version=$VERSION,gardener.version=$GARDENER_VERSION \
+    --set="gardensetup.version=$VERSION,gardener.version=$GARDENER_VERSION" \
     $ARGUMENTS
