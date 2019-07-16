@@ -14,43 +14,26 @@
 
 ---
 shoots: (( &temporary ))
-landscape: (( &temporary ))
+imports: (( &temporary ))
 env:
 
 export:
-  shoots: (( sum[wait_for_shoots.wait|[]|s,sh|-> s [{"name" = sh.metadata.name, "namespace" = sh.metadata.namespace, "kubeconfig" = wait_for_shoots.extract_kubeconfig( wait_for_shoots.get_kubeconfig( sh ) )}]] ))
+  shoots: (( sum[.shoots|[]|s,sh|-> s [( sh {"kubeconfig" = commands.extract_kubeconfig( commands.get_kubeconfig( sh ) )} )]] ))
 
-wait_for_shoots:
+commands:
   <<: (( &temporary ))
-  kubeconfigs:
-    virtual: (( lookup_file( "kubeconfig", env.GENDIR ).[0] ))
-  command_templates:
-    get_shoot:
-      - <<: (( &template ))
-      - "kubectl"
-      - "--kubeconfig"
-      - (( _.kubeconfigs.virtual ))
-      - "-n"
-      - (( e.namespace ))
-      - "get"
-      - "shoot"
-      - (( e.name ))
-      - "-o"
-      - "json"
-    get_kubeconfig:
-      - <<: (( &template ))
-      - "kubectl"
-      - "--kubeconfig"
-      - (( _.kubeconfigs.virtual ))
-      - "-n"
-      - (( sh.metadata.namespace ))
-      - "get"
-      - "secret"
-      - (( sh.metadata.name ".kubeconfig" ))
-      - "-o"
-      - "json"
-  commands: (( sum[.shoots|[]|s,e|-> s [*command_templates.get_shoot]] ))
-  get_kubeconfig: (( |sh|-> exec( *_.command_templates.get_kubeconfig ) ))
+  kubeconfig: (( tempfile( imports.kube_apiserver.export.kubeconfig ) ))
+  get_kubeconfig_command:
+    - <<: (( &template ))
+    - "kubectl"
+    - "--kubeconfig"
+    - (( _.kubeconfig ))
+    - "-n"
+    - (( sh.namespace ))
+    - "get"
+    - "secret"
+    - (( sh.name ".kubeconfig" ))
+    - "-o"
+    - "json"
+  get_kubeconfig: (( |sh|-> exec( *_.get_kubeconfig_command ) ))
   extract_kubeconfig: (( |sec|-> base64_decode( sec.data.kubeconfig ) ))
-  wait: (( sum[commands|[]|s,cmd|-> s sync[exec_uncached( cmd )|v|-> wait_for_shoots.shoot_is_up( v ),v|3600]] ))
-  shoot_is_up: (( |s|-> s.status.conditions[0].status == "True" -and s.status.conditions[1].status == "True" -and s.status.conditions[2].status == "True" -and s.status.conditions[3].status == "True" -and s.status.observedGeneration == s.metadata.generation ))

@@ -41,3 +41,4 @@ spec:
     nodes: (( values.seed.networks.nodes ))
     pods: (( values.seed.networks.pods ))
     services: (( values.seed.networks.services ))
+  visible: (( values.config.mode != "soil" ))

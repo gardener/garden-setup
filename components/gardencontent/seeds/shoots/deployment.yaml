@@ -21,7 +21,10 @@ env: (( &temporary ))
 plugins:
   - kubectl: domain-secret
   - kubectl
-  - -echo: "The export generation waits until the shoots are ready. This may take up to 60 minutes."
+  - -echo: "The setup waits until the shoots are ready. This may take up to 60 minutes."
+  - <<: (( sum[.shootready|[]|s,i,e|-> s {"shootready" = "shootready[" i "]"}] ))
+
+shootready: (( sum[.shoots|[]|s,e|-> s ( e {"kubeconfig" = imports.kube_apiserver.export.kubeconfig} )] ))
 
 settings:
   domain_secret: internal-domain-seed
@@ -64,5 +67,3 @@ shoot_template:
   namespace: (( e.metadata.namespace ))
 
 shoots: (( sum[.kubectl.[*].manifests[0]|[]|s,e|-> s *.shoot_template] ))
-
-kubeconfig: (( &temporary( write( env.GENDIR "/kubeconfig", imports.kube_apiserver.export.kubeconfig ) ) ))
