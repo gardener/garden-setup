@@ -1,3 +1,12 @@
+# GARDENER_PREFIX: (default "test") use a a unique identifier for dns and gardener name
+
+# Specify the deployed gardener version by using the GARDENER_VERSION or GARDENER_IMAGE_TAG and GARDENER_COMMIT
+# GARDENER_VERSION: use a specific gardener version/tag
+
+# GARDENER_IMAGE_TAG: gardener apiserver, controllermanager and scheduler version
+# GARDENER_COMMIT: use a specific gardener commit
+
+
 gcp-credentials:
   serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
 
@@ -26,10 +35,13 @@ landscape:
   versions:
     gardener:
       apiserver:
-        image_tag: (( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
       controller_manager:
-        image_tag: (( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
-      tag: (( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+      scheduler:
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+      tag: (( defined( commit ) ? ~~ :( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ) ))
+      commit: (( env( "GARDENER_COMMIT" ) || ~~ ))
 
   domain: (( ( env( "GARDENER_PREFIX" ) || "test" ) ".oq.gcp.dev.k8s.ondemand.com" ))
 
