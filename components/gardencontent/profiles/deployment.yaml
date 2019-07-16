@@ -20,7 +20,7 @@ utilities: (( &temporary ))
 plugins:
   - kubectl
 
-profiles: (( sum[landscape.iaas|[]|s,v|-> s v ( select[v.seeds|elem|-> ! defined( elem.cloudprofile )] || ~ )] ))
+profiles: (( sum[landscape.iaas|[]|s,v|-> s ( ! defined( v.cloudprofile ) ? v :~ ) ( select[v.seeds|elem|-> ! defined( elem.cloudprofile )] || ~ )] ))
 
 kubectl: (( sum[profiles|[]|s,v|->s utilities.profile.create(v)] ))
 

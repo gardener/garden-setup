@@ -31,7 +31,7 @@ metadata:
 spec:
   blockCIDRs: (( values.iaas.blockCIDRs ))
   cloud:
-    profile: (( values.name ))
+    profile: (( values.config.cloudprofile || values.name ))
     region: (( values.config.region ))
   secretRef:
     name: (( values.secretname ))
