@@ -57,3 +57,9 @@ landscape:
 #  cert-manager:
 #    email: "john.doe@mydomain.org"
 #    server: live
+#    ## optional existing user account's key
+#    #privateKey: |+
+#    # -----BEGIN RSA PRIVATE KEY-----
+#    # MII...
+#    # ...
+#    # -----END RSA PRIVATE KEY-----

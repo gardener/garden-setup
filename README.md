@@ -161,6 +161,7 @@ landscape:
   <a href="#landscapecert-manager">cert-manager</a>:
     email:                                    # email for acme registration
     server: &lt;live|staging|self-signed|url&gt;    # which kind of certificates to use for the dashboard/identity ingress (defaults to `self-signed`)
+    privateKey:                               # optional existing user account's private key
 </pre>
 
 
@@ -316,6 +317,7 @@ You can then login into the dashboard using one of the specified email/password 
   cert-manager:
     email:                                   
     server: <live|staging|self-signed|url>
+    privateKey: # optional
 ```
 
 The setup deploys a [cert-manager](https://github.com/jetstack/cert-manager) to provide a certificate for the Gardener dashboard, which can be configured here. 
@@ -334,6 +336,7 @@ If set to anything else, it is assumed to be the URL of an ACME server and the s
 
 See the [extended configuration](docs/extended/cert-manager.md) for more configuration options.
 
+If the given email address is already registers at letsencrypt, you can specify the private key of the associated user account with `landscape.cert-manager.privateKey`.
 
 ## Uninstall Gardener
 

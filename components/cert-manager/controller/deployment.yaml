@@ -10,6 +10,7 @@ settings:
   serviceAccountName: cert-manager
   self-signed: (( .caSpec.url == "self-signed" ))
   issuerName: (( .settings.self-signed ? "ca-issuer" :"acme-issuer" ))
+  issuerPrivateKey: (( .settings.self-signed -or (! valid( .landscape.cert-manager.privateKey ) ) ? "" :.landscape.cert-manager.privateKey ))
   caSecret: "self-signed-ca"
   ca:
     given: (( &temporary ( valid( .caSpec.ca.crt ) -and ( ( ! .settings.self-signed ) -or valid( .caSpec.ca.key ) ) ) )) # a given CA needs crt and key for self-signed mode
@@ -60,10 +61,22 @@ crds:
 
 issuer: (( .settings.self-signed ? *ca_issuer :*acme_issuer ))
 
+issuer-secret:
+  - <<: (( &template &temporary ))
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+      name: (( settings.issuerName "-secret" ))
+      namespace: (( .landscape.namespace ))
+    data:
+      tls.key: (( base64(settings.issuerPrivateKey) ))
+
 acme_issuer:
   <<: (( &template &temporary ))
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   manifests:
+    - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :[] ))
     - apiVersion: certmanager.k8s.io/v1alpha1
       kind: Issuer
       metadata:
