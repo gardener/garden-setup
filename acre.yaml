@@ -186,9 +186,11 @@ validation:
   <<: (( &temporary ))
 
   ### AUXILIARY FUNCTIONS ###
-  return_true: (( |x|-> true ))
-  instantiate_validator: (( |values,validator|-> *validator ))
-  email_regex: "[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*@[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)+$"
+  return_true: (( |x|-> true )) # dummy validator that never fails
+  instantiate_validator: (( |values,validator|-> *validator )) # instantiates a validator with given values
+  email_regex: "[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*@[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)+$" # a simple email regex
+  flatten: (( |l|-> sum[l|[]|s,e|-> s e.[*]] )) # flattens a list of lists to a list of elements
+  length_validator: (( |x,l|-> [length( x ) <= l, x, "exceeded maximum allowed length (" l "):" " " x] )) # returns true if the length of x is equals or lesser than l
 
   ### VALIDATOR DEFINITIONS ###
   types:
@@ -200,6 +202,8 @@ validation:
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
+        networks:
+          - ["mapfield", "workers", ["list", ["cidr"]]]
       aws:
         credentials:
           - and
@@ -208,6 +212,10 @@ validation:
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
+        networks:
+          - ["mapfield", "internal", ["list", ["cidr"]]]
+          - ["mapfield", "public", ["list", ["cidr"]]]
+          - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
       azure:
         credentials:
           - and
@@ -217,6 +225,9 @@ validation:
           - ["mapfield", "tenantID"]
         config:
           - ["mapfield", "region"]
+        networks:
+          - ["mapfield", "workers", ["cidr"]]
+          - ["mapfield", "vnet", ["or", ["mapfield", "name"], ["mapfield", "cidr", ["cidr"]]]]
       openstack:
         credentials:
           - and
@@ -268,6 +279,8 @@ validation:
           - (( |e|-> [length( validation.openstack_extensionConfigs ) == 1, "valid", "if there are entries in 'landscape.iaas' with type 'openstack', exactly one of these entries must contain the 'extensionConfig' configuration"] ))
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
+        networks:
+          - ["mapfield", "workers", ["list", ["cidr"]]]
     etcd_backup:
       gcs:
         credentials: (( iaas.gcp.credentials ))
@@ -328,11 +341,24 @@ validation:
             - networks
             - (( validation.networks ))
     cloudprofile: (( &template( return_true ) ))
-    soil:
+    shooted_seed:
       - <<: (( &template ))
       - and
       - - mapfield
-        - seeds
+        - name
+        - - (( validation.length_validator ))
+          - 10
+      - - mapfield
+        - mode
+        - ["valueset", ["seed", "soil"]]
+      - - mapfield
+        - credentials
+        - (( types.iaas[values.type].credentials ))
+      - - mapfield
+        - cluster
+        - - mapfield
+          - networks
+          - (( validation.networks types.iaas[values.type].networks ))
   dashboard_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
   gardener_validator: ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]]
   networks:
@@ -375,11 +401,12 @@ validation:
   cluster:
     networks: (( validate( landscape.clusters[0].networks, validation.networks ) ))
   ##### landscape.iaas
-  iaas: (( map[landscape.iaas|entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic) )] ))
-  iaas_initial_seed: (( validate( landscape.iaas[0], validation.instantiate_validator(landscape.iaas[0], iaas_entry_validators.initial_seed) ) ))
-  iaas_seed: (( map[landscape.iaas.[1..]|id,entry|-> entry.mode == "seed" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.seed) ) :~~ ] ))
-  iaas_cloudprofile: (( map[landscape.iaas.[1..]|id,entry|-> entry.mode == "profile" -or entry.mode == "cloudprofile" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.cloudprofile) ) :~~ ] ))
-  iaas_soil: (( map[landscape.iaas|id,entry|-> entry.mode == "soil" ? validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.soil) ) :~~ ] ))
+  iaas: 
+    basic: (( map[landscape.iaas|entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic) )] ))
+    initial_seed: (( validate( landscape.iaas[0], validation.instantiate_validator(landscape.iaas[0], iaas_entry_validators.initial_seed) ) ))
+    seed_soil: (( map[select[landscape.iaas.[1..]|elem|-> elem.mode == "seed" -or elem.mode == "soil"]|id,entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.seed) )] ))
+    cloudprofile: (( map[select[landscape.iaas.[1..]|elem|-> elem.mode == "profile" -or elem.mode == "cloudprofile"]|id,entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.cloudprofile) )] ))
+    shooted_seed: (( map[validation.flatten( select[select[landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"]|elem|-> valid( elem.seeds )].[*].seeds ) |entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic), validation.instantiate_validator(entry, iaas_entry_validators.shooted_seed) )] ))
   ##### landscape.etcd
   etcd:
     backup:
