@@ -1,4 +1,4 @@
-# Extended Configuration Options for the 'cert-manager' Component
+# Advanced Configuration Options for the 'cert-manager' Component
 
 ```yaml
   cert-manager:

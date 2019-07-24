@@ -1,4 +1,4 @@
-# Extended Configuration Options for 'landscape.dashboard'
+# Advanced Configuration Options for 'landscape.dashboard'
 
 The `landscape.dashboard` node is entirely optional. There are basically two nodes in it that are evaluated:
 - `landscape.dashboard.frontendConfig`
