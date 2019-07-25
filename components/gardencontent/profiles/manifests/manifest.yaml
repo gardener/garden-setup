@@ -17,6 +17,8 @@ apiVersion: garden.sapcloud.io/v1beta1
 key:kind: CloudProfile
 metadata:
   name: (( values.name ))
+  annotations:
+    cloudprofile.garden.sapcloud.io/iaas: (( values.type ))
 spec:
   caBundle: (( values.cabundle || ~~ ))
   <<: (( values.profilespec ))

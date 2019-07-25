@@ -1,0 +1,9 @@
+---
+component:
+  imports:
+    - shoots: gardencontent/seeds/shoots
+    - ingress_dns: ingress-controller
+    - kube_apiserver: kube-apiserver
+
+  stubs:
+    - plugins/kubectl/utilities.yaml

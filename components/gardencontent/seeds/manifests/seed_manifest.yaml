@@ -31,7 +31,7 @@ metadata:
 spec:
   blockCIDRs: (( values.iaas.blockCIDRs ))
   cloud:
-    profile: (( values.name ))
+    profile: (( values.config.cloudprofile || values.name ))
     region: (( values.config.region ))
   secretRef:
     name: (( values.secretname ))
@@ -41,3 +41,4 @@ spec:
     nodes: (( values.seed.networks.nodes ))
     pods: (( values.seed.networks.pods ))
     services: (( values.seed.networks.services ))
+  visible: (( values.config.mode != "soil" ))

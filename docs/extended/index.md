@@ -1,6 +1,6 @@
-# Overview of Extended Configuration Options
+# Overview of Advanced Configuration Pages
 
-This document links to all extended configuration documentations for a better overview.
+This document links to all advanced configuration pages for a better overview.
 
 - [landscape.iaas](iaas.md)
 - [landscape.dashboard](dashboard.md)

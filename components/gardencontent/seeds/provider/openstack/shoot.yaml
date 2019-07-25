@@ -12,14 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-component:
-  imports:
-    - profiles: gardencontent/profiles
-    - gardener_virtual: gardener/virtual
-    - gardener_runtime: gardener/extensions
-    - ingress_dns: ingress-controller
-    - kube_apiserver: kube-apiserver
-
-  stubs:
-    - plugins/kubectl/utilities.yaml
+spec:
+  cloud:
+    openstack:
+      floatingPoolName: (( values.config.floatingPools[0].name))
+      loadBalancerProvider: (( values.config.loadBalancerProviders[0].name ))
+      networks: (( values.config.cluster.networks ))
+      workers:
+      - autoScalerMax: 50
+        autoScalerMin: 1
+        machineType: (( values.config.machineType ))
+        maxSurge: 50%
+        maxUnavailable: 0
+        name: cpu-worker
+      zones:
+      - (( values.config.zones[0] ))
+    profile: (( values.cloudprofile ))
+    region: (( values.config.region ))
+    secretBindingRef:
+      name: (( values.secretbinding ))
+    seed: (( values.seed ))

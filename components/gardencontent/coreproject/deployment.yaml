@@ -17,6 +17,11 @@ imports: (( &temporary ))
 landscape: (( &temporary ))
 utilities: (( &temporary ))
 
+settings:
+  project_name: core
+  project_namespace: garden-core
+  secret_name_template: (( &template( settings.project_name "-" v.type "-" v.name ) ))
+
 plugins:
   - kubectl:
       - core
@@ -24,17 +29,17 @@ plugins:
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
-  namespace: (( values.namespace ))
+  namespace: (( .settings.project_namespace ))
 
 secret_template:
   <<: (( &template &temporary ))
-  secretname: (( "core-" v.type "-" v.name ))
+  secretname: (( *.settings.secret_name_template ))
   manifest:
     - apiVersion: v1
       kind: Secret
       metadata:
         name: (( secretname ))
-        namespace: (( values.namespace ))
+        namespace: (( .settings.project_namespace ))
       type: Opaque
       data: (( utilities.secretdata(v.credentials) ))
     - apiVersion: garden.sapcloud.io/v1beta1
@@ -43,13 +48,9 @@ secret_template:
         labels:
           cloudprofile.garden.sapcloud.io/name: (( v.name ))
         name: (( secretname ))
-        namespace: (( values.namespace ))
+        namespace: (( .settings.project_namespace ))
       secretRef:
         name: (( secretname ))
-
-values:
-  projectname: core
-  namespace: garden-core
 
 core:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
@@ -59,12 +60,12 @@ core:
       metadata:
         labels:
           garden.sapcloud.io/role: project
-          project.garden.sapcloud.io/name: (( values.projectname ))
-        name: (( values.namespace ))
+          project.garden.sapcloud.io/name: (( .settings.project_name ))
+        name: (( .settings.project_namespace ))
     - apiVersion: garden.sapcloud.io/v1beta1
       kind: Project
       metadata:
-        name: (( values.projectname ))
+        name: (( .settings.project_name ))
       spec:
-        namespace: (( values.namespace ))
-    - <<: (( sum[landscape.iaas|[]|s,v|-> valid( v.credentials ) ? s (*secret_template).manifest :s ] ))
+        namespace: (( .settings.project_namespace ))
+    - <<: (( sum[imports.profiles.export.profiles|[]|s,v|-> valid( v.credentials ) ? s (*secret_template).manifest :s ] ))

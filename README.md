@@ -99,6 +99,8 @@ More information: [Most Important Commands and Directories](#most-important-comm
 
 This file will be evaluated using `spiff`, a dynamic templating language for yaml files. For example, this simplifies the specification of field values that are used multiple times in the yaml file. For more information, see the [spiff repository](https://github.com/mandelsoft/spiff/blob/master/README.md).
 
+> Please note that, for the sake of clarity, not all configuration options are listed in this readme. Instead, the more advanced configuration options have been moved into a set of additional documentation files. You can access these files via their [index](docs/extended/index.md) and each page is usually linked in its corresponding section below.
+
 <pre>
 landscape:
   <a href="#landscapename">name</a>: &lt;Identifier&gt;                       # general Gardener landscape identifier, for example, `my-gardener`
@@ -243,7 +245,15 @@ The first entry of the `landscape.iaas` list is special:
 - Don't specify the `cluster` node for it - it will configure your base cluster as seed.
   - Its `type` should match the one of your base cluster.
 
-See the [extended documentation](docs/extended/iaas.md) for more advanced configuration options and information about Openstack.
+See the [advanced documentation](docs/extended/iaas.md) for more advanced configuration options and information about Openstack.
+
+#### Shooted Seeds
+
+It's also possible to have the setup create shoots and then configure them as seeds. This has advantages compared to configuring existing clusters as seeds, e.g. you don't have to provide the clusters as they will be created automatically, the shooted seed clusters can leverage the Gardener's autoscaling capabilities, ...
+
+How to configure shooted seeds is explained in the [advanced documentation](docs/extended/iaas.md#shooted-seeds).
+
+#### Credentials
 
 The credentials will be used to give Gardener access to the IaaS layer:
 * To create a secret that will be used on the Gardener dashboard to create shoot clusters.
@@ -334,7 +344,7 @@ If set to `staging`, the cert-manager will use the letsencrypt staging server. T
 
 If set to anything else, it is assumed to be the URL of an ACME server and the setup will create an [ACME issuer](https://docs.cert-manager.io/en/latest/tasks/issuers/setup-acme/index.html) for it.
 
-See the [extended configuration](docs/extended/cert-manager.md) for more configuration options.
+See the [advanced configuration](docs/extended/cert-manager.md) for more configuration options.
 
 If the given email address is already registers at letsencrypt, you can specify the private key of the associated user account with `landscape.cert-manager.privateKey`.
 

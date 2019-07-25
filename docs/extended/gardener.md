@@ -1,3 +1,3 @@
-# Extended Configuration Options for 'landscape.gardener'
+# Advanced Configuration Options for 'landscape.gardener'
 
 There is only one configuration option for `landscape.gardener` and that is `landscape.gardener.seedCandidateDeterminationStrategy`. The two possible values are `SameRegion` (default) and `MinimalDistance`. In the first case, shoots can only be created in regions where a seed exists and only those regions will show up in the dashboard. In the latter case, shoots can be created in any region listed in the cloudprofile and the geographically closest seed will be used.

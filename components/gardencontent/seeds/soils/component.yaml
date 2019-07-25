@@ -13,12 +13,14 @@
 # limitations under the License.
 
 ---
-gardener: (( &temporary ))
-gardener_git: (( &temporary ))
-settings: (( &temporary ))
-export:
-  gardener:
-    seedCandidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
-    values: (( .gardener.values ))
-  gardener_git: (( .gardener_git ))
-  dns_credentials: (( .settings.dns_credentials ))
+component:
+  imports:
+    - project: gardencontent/coreproject
+    - profiles: gardencontent/profiles
+    - gardener_virtual: gardener/virtual
+    - gardener_runtime: gardener/extensions
+    - ingress_dns: ingress-controller
+    - kube_apiserver: kube-apiserver
+
+  stubs:
+    - plugins/kubectl/utilities.yaml

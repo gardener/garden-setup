@@ -13,12 +13,27 @@
 # limitations under the License.
 
 ---
-gardener: (( &temporary ))
-gardener_git: (( &temporary ))
-settings: (( &temporary ))
+shoots: (( &temporary ))
+imports: (( &temporary ))
+env:
+
 export:
-  gardener:
-    seedCandidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
-    values: (( .gardener.values ))
-  gardener_git: (( .gardener_git ))
-  dns_credentials: (( .settings.dns_credentials ))
+  shoots: (( sum[.shoots|[]|s,sh|-> s [( sh {"kubeconfig" = commands.extract_kubeconfig( commands.get_kubeconfig( sh ) )} )]] ))
+
+commands:
+  <<: (( &temporary ))
+  kubeconfig: (( tempfile( imports.kube_apiserver.export.kubeconfig ) ))
+  get_kubeconfig_command:
+    - <<: (( &template ))
+    - "kubectl"
+    - "--kubeconfig"
+    - (( _.kubeconfig ))
+    - "-n"
+    - (( sh.namespace ))
+    - "get"
+    - "secret"
+    - (( sh.name ".kubeconfig" ))
+    - "-o"
+    - "json"
+  get_kubeconfig: (( |sh|-> exec( *_.get_kubeconfig_command ) ))
+  extract_kubeconfig: (( |sec|-> base64_decode( sec.data.kubeconfig ) ))

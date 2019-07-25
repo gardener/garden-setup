@@ -15,8 +15,9 @@
 ---
 component:
   imports:
-    - gardencontent/seeds
+    - gardener/runtime
     - kube_apiserver: kube-apiserver
+    - profiles: gardencontent/profiles
 
   stubs:
     - lib/templates/utilities.yaml

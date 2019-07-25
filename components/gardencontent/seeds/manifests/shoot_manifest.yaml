@@ -1,0 +1,39 @@
+apiVersion: garden.sapcloud.io/v1beta1
+kind: Shoot
+metadata:
+  name: (( values.values.name ))
+  namespace: (( values.values.namespace ))
+  annotations:
+    garden.sapcloud.io/purpose: infrastructure
+spec:
+  cloud:
+    profile: (( values.values.cloudprofile ))
+    region: (( values.values.config.region ))
+    secretBindingRef:
+      name: (( values.values.secretbinding ))
+    <<: (( values.values.iaas.spec.cloud ))
+  kubernetes:
+  # clusterAutoscaler:
+  #   scaleDownUtilizationThreshold: 0.5
+  #   scaleDownUnneededTime: 30m
+  #   scaleDownDelayAfterAdd: 60m
+  #   scaleDownDelayAfterFailure: 10m
+  #   scaleDownDelayAfterDelete: 10s
+  #   scanInterval: 10s
+    version: (( values.values.k8sVersion ))
+    allowPrivilegedContainers: true # 'true' means that all authenticated users can use the "gardener.privileged" PodSecurityPolicy, allowing full unrestricted access to Pod features.
+    kubeControllerManager:
+      horizontalPodAutoscaler:
+        downscaleStabilization: 24h0m0s
+        tolerance: 0.2
+  dns:
+    domain: (( values.values.domain ))
+    secretName: (( values.values.domain_secret ))
+    provider: (( landscape.dns.type ))
+  maintenance:
+    timeWindow:
+      begin: 220000+0100
+      end: 230000+0100
+    autoUpdate:
+      kubernetesVersion: false
+  addons: (( values.values.iaas.addons || ~~ ))
