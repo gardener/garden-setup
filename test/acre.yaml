@@ -23,7 +23,7 @@ azure-credentials:
 k8sVersions:
   kubernetes:
     versions:
-    - 1.14.3
+    - (( env( "K8S_VERSION" ) || "1.14.3" ))
 
 
 ############################################################################
