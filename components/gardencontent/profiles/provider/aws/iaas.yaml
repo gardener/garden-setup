@@ -35,7 +35,7 @@ defaults:
   - name: coreos
     version: 2023.5.0
   - name: suse-jeos
-    version: alpha-1
+    version: 0.0.0-alpha-1
   machineTypes:
   - cpu: "2"
     gpu: "0"
