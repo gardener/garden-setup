@@ -14,3 +14,5 @@ cp -R $TM_SHARED_PATH/setup/* .
 
 sow order -A
 sow delete -A
+
+rm $TM_KUBECONFIG_PATH/gardener.config
