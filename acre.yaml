@@ -58,56 +58,56 @@ landscape:
           chart_path: charts/external-dns-management
         os-coreos:
           <<: (( merge ))
-          tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/os-coreos/charts/os-coreos
           image_tag: (( valid( os-coreos.tag ) ? os-coreos.tag :~~ ))
           image_repo: (( ~~ ))
         os-coreos-alicloud:
           <<: (( merge ))
-          tag: (( valid( os-coreos-alicloud.branch ) -or valid( os-coreos-alicloud.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( os-coreos-alicloud.branch ) -or valid( os-coreos-alicloud.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/os-coreos-alicloud/charts/os-coreos-alicloud
           image_tag: (( valid( os-coreos-alicloud.tag ) ? os-coreos-alicloud.tag :~~ ))
           image_repo: (( ~~ ))
         os-suse-jeos:
           <<: (( merge ))
-          tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/os-suse-jeos/charts/os-suse-jeos
           image_tag: (( valid( os-suse-jeos.tag ) ? os-suse-jeos.tag :~~ ))
           image_repo: (( ~~ ))
         provider-alicloud:
           <<: (( merge ))
-          tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-alicloud/charts/provider-alicloud
           image_tag: (( valid( provider-alicloud.tag ) ? provider-alicloud.tag :~~ ))
           image_repo: (( ~~ ))
         provider-aws:
           <<: (( merge ))
-          tag: (( valid( provider-aws.branch ) -or valid( provider-aws.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( provider-aws.branch ) -or valid( provider-aws.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-aws/charts/provider-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
         provider-gcp:
           <<: (( merge ))
-          tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-gcp/charts/provider-gcp
           image_tag: (( valid( provider-gcp.tag ) ? provider-gcp.tag :~~ ))
           image_repo: (( ~~ ))
         provider-azure:
           <<: (( merge ))
-          tag: (( valid( provider-azure.branch ) -or valid( provider-azure.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( provider-azure.branch ) -or valid( provider-azure.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-azure/charts/provider-azure
           image_tag: (( valid( provider-azure.tag ) ? provider-azure.tag :~~ ))
           image_repo: (( ~~ ))
         provider-openstack:
           <<: (( merge ))
-          tag: (( valid( provider-openstack.branch ) -or valid( provider-openstack.commit ) ? ~~ :"0.8.0" ))
+          tag: (( valid( provider-openstack.branch ) -or valid( provider-openstack.commit ) ? ~~ :"0.9.0" ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-openstack/charts/provider-openstack
           image_tag: (( valid( provider-openstack.tag ) ? provider-openstack.tag :~~ ))
