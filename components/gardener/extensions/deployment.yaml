@@ -177,6 +177,10 @@ extension_manifests:
       name: provider-alicloud
     spec:
       resources:
+      - kind: BackupBucket
+        type: alicloud
+      - kind: BackupEntry
+        type: alicloud
       - kind: Infrastructure
         type: alicloud
       - kind: ControlPlane
@@ -272,6 +276,10 @@ extension_manifests:
                 memory: 1Gi
         type: helm
       resources:
+      - kind: BackupBucket
+        type: aws
+      - kind: BackupEntry
+        type: aws
       - kind: Infrastructure
         type: aws
       - kind: ControlPlane
@@ -307,6 +315,10 @@ extension_manifests:
                 memory: 1Gi
         type: helm
       resources:
+      - kind: BackupBucket
+        type: azure
+      - kind: BackupEntry
+        type: azure
       - kind: Infrastructure
         type: azure
       - kind: ControlPlane
@@ -340,6 +352,10 @@ extension_manifests:
                 memory: 1Gi
         type: helm
       resources:
+      - kind: BackupBucket
+        type: gcp
+      - kind: BackupEntry
+        type: gcp
       - kind: Infrastructure
         type: gcp
       - kind: ControlPlane
@@ -375,6 +391,10 @@ extension_manifests:
                 memory: 1Gi
         type: helm
       resources:
+      - kind: BackupBucket
+        type: openstack
+      - kind: BackupEntry
+        type: openstack
       - kind: Infrastructure
         type: openstack
       - kind: ControlPlane
