@@ -17,6 +17,7 @@
 import util
 import os
 import sys
+import subprocess
 import version
 import yaml
 import ctx
@@ -24,25 +25,40 @@ from product.util import (
     ComponentDescriptor,
     ComponentDescriptorResolver,
 )
+from gitutil import (
+    GitHelper
+)
 from github.util import (
     GitHubRepositoryHelper,
 )
 
 it_label = "test/integration"
+source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
+
+
 labels_dir = os.getenv("OUT_PATH")
 if not labels_dir:
-    labels_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
+    labels_dir = source_path
 
 labels_path = os.path.join(labels_dir, "labels.yaml")
 
-pull_request_number=sys.argv[1]
 
-repo_owner=os.getenv("SOURCE_GITHUB_REPO_OWNER_AND_NAME")
-github_repository_owner,github_repository_name = repo_owner.split("/")
+repo_owner_name=os.getenv("SOURCE_GITHUB_REPO_OWNER_AND_NAME")
+github_repository_owner,github_repository_name = repo_owner_name.split("/")
 
 
 cfg_set = ctx.cfg_factory().cfg_set(os.getenv("CONCOURSE_CURRENT_CFG"))
 github_cfg = cfg_set.github()
+
+git_helper = GitHelper(
+    repo=os.path.join(source_path, ".git"),
+    github_cfg=github_cfg,
+    github_repo_path=repo_owner_name
+)
+
+pull_request_number=git_helper.repo.git.config("--get", "pullrequest.id")
+
+#$(git config --git-dir=$SOURCE_PATH/.git --get pullrequest.id)
 
 github_helper = GitHubRepositoryHelper(
         owner=github_repository_owner,
@@ -51,14 +67,13 @@ github_helper = GitHubRepositoryHelper(
     )
 
 pull_request = github_helper.repository.pull_request(pull_request_number)
-short_labels = list(pull_request.issue().labels())
-labels = [str(label) for label in short_labels]
+labels = [str(label) for label in pull_request.issue().labels()]
 
 print("Found labels {}".format(labels))
 
 if it_label not in labels:
     print("{} is not set".format(it_label))
-    exit(1)
+    exit(0)
 
 
 print("generate labels file")
@@ -75,3 +90,11 @@ with open(labels_path, "w+") as file:
 print("Lables file written to {}".format(labels_path))
 print(raw_labels)
 
+
+cmd = sys.argv
+cmd[0] = os.path.join(source_path, ".ci", "tm-test")
+cmd.append("--values={}".format(labels_path))
+
+proc = subprocess.Popen(cmd, shell=False)
+proc.communicate()
+exit(proc.returncode)
