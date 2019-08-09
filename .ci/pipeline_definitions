@@ -22,7 +22,7 @@ garden-setup:
           interval: '5m'
     pull_request_integration:
       traits:
-        pull_request: ~
+        pull-request: ~
         scheduling:
           suppress_parallel_execution: true
         version:
