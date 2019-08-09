@@ -37,6 +37,8 @@ garden-setup:
           - $(git config --git-dir=$SOURCE_PATH/.git --get pullrequest.id)
         testrun:
           image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:stable
+          depends:
+          - labels
           execute:
           - tm-test
           - --tm-chart=default
