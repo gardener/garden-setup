@@ -50,141 +50,61 @@ spec:
       config:
 {{ toYaml .Values.garden.credentials.config | indent 6 }}
 
-  - name: create-shoot-aws
-    dependsOn: [ create-garden ]
-    definition:
-      name: create-shoot
-      locationSet: default
-      config:
-      - name: SHOOT_NAME
-        type: env
-        value: aws-14-{{ $prefix }}
-      - name: CLOUDPROVIDER
-        type: env
-        value: aws
-      - name: K8S_VERSION
-        type: env
-        value: {{ .Values.shoot.k8sVersion }}
-      - name: SEED
-        type: env
-        value: gcp
-      - name: CLOUDPROFILE
-        type: env
-        value: aws
-      - name: SECRET_BINDING
-        type: env
-        value: core-aws-aws
-      - name: REGION
-        type: env
-        value: eu-west-1
-      - name: ZONE
-        type: env
-        value: eu-west-1b
-
+  {{ if or (has "platform/aws" .Values.labels) (not .Values.labels) }}
+  {{ include "aws-shoot" (set . "prefix" ( printf "aws-%s" $prefix ) ) }}
   - name: tests-aws
     dependsOn: [ create-shoot-aws ]
     artifactsFrom: create-shoot-aws
     definition:
       name: shootapp-test
       continueOnError: true
-
   - name: delete-shoot-aws
     dependsOn: [ tests-aws ]
     definition:
       name: delete-shoot
-      config:
-      - name: SHOOT_NAME
-        type: env
-        value: aws-14-{{ $prefix }}
+  {{ end }}
 
-  - name: create-shoot-gcp
-    dependsOn: [ create-garden ]
-    definition:
-      name: create-shoot
-      locationSet: default
-      config:
-      - name: SHOOT_NAME
-        type: env
-        value: gcp-14-{{ $prefix }}
-      - name: K8S_VERSION
-        type: env
-        value: {{ .Values.shoot.k8sVersion }}
-      - name: CLOUDPROVIDER
-        type: env
-        value: gcp
-      - name: CLOUDPROFILE
-        type: env
-        value: gcp
-      - name: SECRET_BINDING
-        type: env
-        value: core-gcp-gcp
-      - name: REGION
-        type: env
-        value: europe-west1
-      - name: ZONE
-        type: env
-        value: europe-west1-b
-
+  {{ if or (has "platform/gcp" .Values.labels) (not .Values.labels) }}
+  {{ include "gcp-shoot" (set . "prefix" ( printf "gcp-%s" $prefix ) ) }}
   - name: tests-gcp
     dependsOn: [ create-shoot-gcp ]
     definition:
       name: shootapp-test
       locationSet: default
       continueOnError: true
-
   - name: delete-shoot-gcp
     dependsOn: [ tests-gcp ]
     definition:
       name: delete-shoot
       locationSet: default
-      config:
-      - name: SHOOT_NAME
-        type: env
-        value: gcp-14-{{ $prefix }}
+  {{ end }}
 
-  - name: create-shoot-az
-    dependsOn: [ create-garden ]
-    definition:
-      name: create-shoot
-      locationSet: default
-      config:
-      - name: SEED
-        type: env
-        value: gcp
-      - name: SHOOT_NAME
-        type: env
-        value: az-14-{{ $prefix }}
-      - name: K8S_VERSION
-        type: env
-        value: {{ .Values.shoot.k8sVersion }}
-      - name: CLOUDPROVIDER
-        type: env
-        value: azure
-      - name: CLOUDPROFILE
-        type: env
-        value: azure
-      - name: SECRET_BINDING
-        type: env
-        value: core-azure-azure
-      - name: REGION
-        type: env
-        value: westeurope
-
+  {{ if or (has "platform/az" .Values.labels) (not .Values.labels) }}
+  {{ include "az-shoot" (set . "prefix" ( printf "az-%s" $prefix ) ) }}
   - name: tests-az
     dependsOn: [ create-shoot-az ]
     definition:
       name: shootapp-test
       locationSet: default
       continueOnError: true
-
   - name: delete-shoot-az
     dependsOn: [ tests-az ]
     definition:
       name: delete-shoot
       locationSet: default
+  {{ end }}
 
   - name: delete-garden
-    dependsOn: [ delete-shoot-aws, delete-shoot-gcp, delete-shoot-az ]
+    dependsOn:
+    {{ if or (has "platform/aws" .Values.labels) (not .Values.labels) }}
+    - delete-shoot-aws
+    {{ end }}
+    {{ if or (has "platform/gcp" .Values.labels) (not .Values.labels) }}
+    - delete-shoot-gcp
+    {{ end}}
+    {{ if or (has "platform/az" .Values.labels) (not .Values.labels) }}
+    - delete-shoot-az
+    {{ end}}
     definition:
       name: delete-garden
       config:

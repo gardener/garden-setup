@@ -9,6 +9,9 @@ testrunName: ""
 shoot:
   k8sVersion: 1.14.3
 
+gardensetup:
+  version: master
+
 gardener:
   version: master
 
@@ -64,3 +67,5 @@ garden:
         secretKeyRef:
           name: garden-test
           key: tenantID
+
+labels: []
