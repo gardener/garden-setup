@@ -41,6 +41,10 @@ spec:
   - name: prepare-host
     definition:
       name: tm-scheduler-lock-gardener
+      config:
+      - name: HOST_CLOUDPROVIDER
+        type: env
+        value: {{ .Values.baseCluster }}
 
   - name: create-garden
     dependsOn: [ prepare-host ]
@@ -48,7 +52,7 @@ spec:
       name: create-garden
       location: default
       config:
-{{ toYaml .Values.garden.credentials.config | indent 6 }}
+      {{ include "garden-config" . }}
 
   {{ if or (has "platform/aws" .Values.labels) (not .Values.labels) }}
   {{ include "aws-shoot" (set . "prefix" ( printf "aws-%s" $prefix ) ) }}
@@ -108,7 +112,7 @@ spec:
     definition:
       name: delete-garden
       config:
-{{ toYaml .Values.garden.credentials.config | indent 6 }}
+      {{ include "garden-config" . }}
 
   - name: reset-host
     dependsOn: [ delete-garden ]
@@ -135,7 +139,7 @@ spec:
       continueOnError: true
       condition: error
       config:
-{{ toYaml .Values.garden.credentials.config | indent 6 }}
+      {{ include "garden-config" . }}
 
   - name: reset-host
     dependsOn: [ delete-garden ]

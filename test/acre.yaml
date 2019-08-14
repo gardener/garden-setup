@@ -1,5 +1,7 @@
 # GARDENER_PREFIX: (default "test") use a a unique identifier for dns and gardener name
 
+# BASE_CLOUDPROVIDER: cloudprovider for the base cluster
+
 # Specify the deployed gardener version by using the GARDENER_VERSION or GARDENER_IMAGE_TAG and GARDENER_COMMIT
 # GARDENER_VERSION: use a specific gardener version/tag
 
@@ -24,6 +26,43 @@ k8sVersions:
   kubernetes:
     versions:
     - (( env( "K8S_VERSION" ) || "1.14.3" ))
+
+base_cluster_configs:
+  gcp:
+    type: gcp
+    region: europe-west1
+    zones:
+      - (( region "-b"))
+      - (( region "-c"))
+      - (( region "-d"))
+    credentials:
+      <<: (( .gcp-credentials ))
+    profile:
+      gcp:
+        constraints:
+          <<: (( .k8sVersions ))
+  aws:
+    type: aws
+    region: eu-west-1
+    zones:
+      - (( region "a"))
+      - (( region "b"))
+      - (( region "c"))
+    credentials:
+      <<: (( .aws-credentials ))
+    profile:
+      aws:
+        constraints:
+          <<: (( .k8sVersions ))
+  azure:
+    type: azure
+    region: westeurope
+    credentials:
+      <<: (( .azure-credentials ))
+    profile:
+      azure:
+        constraints:
+          <<: (( .k8sVersions ))
 
 
 ############################################################################
@@ -52,8 +91,11 @@ landscape:
       services: 10.31.240.0/20
 
   iaas:
-  - name: gcp
+  - name: base
     mode: seed
+    <<: (( .base_cluster_configs[env( "BASE_CLOUDPROVIDER" )] || .base_cluster_configs.gcp ))
+  - name: gcp
+    mode: cloudprofile
     type: gcp
     region: europe-west1
     zones:
@@ -90,6 +132,14 @@ landscape:
       azure:
         constraints:
           <<: (( .k8sVersions ))
+
+  dns:
+    type: google-clouddns
+    credentials: (( .gcp-credentials ))
+
+  etcd:
+    backup:
+      resourceGroup: (( .landscape.name ))
 
   identity:
     users:

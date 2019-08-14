@@ -7,7 +7,7 @@
       config:
       - name: SEED
         type: env
-        value: gcp
+        value: base
       - name: SHOOT_NAME
         type: env
         value: {{ .prefix }}
