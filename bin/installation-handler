@@ -1,0 +1,273 @@
+#!/usr/bin/env bash
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+set -e
+set -u
+set -o pipefail
+
+prepare() {
+  echo "### BEGIN PREPARE INSTALLATION ###"
+  local config="$1"
+  if [[ -z "$config" ]]; then
+    fail "missing config"
+  fi
+  local kubeconfig=$(jq -r '.kubeconfig' <<< "$config")
+  if [[ -z "$kubeconfig" ]]; then
+    fail "no kubeconfig given"
+  fi
+  if [[ "$kubeconfig" != /* ]]; then
+    kubeconfig="$ROOT/$kubeconfig"
+  fi
+  local namespace
+  namespace=$(jq -r '.namespace' <<< "$config") || namespace="garden-setup-state"
+  
+  # if folders exist, rename them to avoid conflicts
+  for folder in "$EXPORT" "$STATE"; do
+    # delete old backup folders to prevent mixing
+    rm -rf "${folder}.bak"
+    if [[ -d "$folder" ]]; then
+      mv "$folder" "${folder}.bak"
+    fi
+  done
+
+  # create new folders
+  mkdir -p "$EXPORT" "$STATE"
+
+  # convert secrets into directories
+  for sdir in "EXPORT" "STATE"; do
+    sdir_path=${!sdir}
+    # secrets contains base64-encoded json objects for the fetched secrets, containing name and content of the corresponding secret
+    local secrets
+    if ! secrets=$(exec_retry 5 15 kubectl --kubeconfig "$kubeconfig" -n "$namespace" get secret -l "garden-setup.gardener.cloud/state=$sdir" -o json); then
+      fail "unable to fetch secrets from namespace '$namespace'"
+    fi
+    secrets=($(jq -r '.items[] | {"name": .metadata.name, "content": .data.content, "component": .metadata.labels["garden-setup.gardener.cloud/component"]} | @base64' <<< "$secrets"))
+    if [[ -z ${secrets[@]} ]]; then
+      echo "No secrets with label 'garden-setup.gardener.cloud/state=$sdir' found in namespace '$namespace'."
+      continue
+    fi
+    for sec in ${secrets[@]}; do
+      # decode entry
+      sec=$(base64 -d <<< "$sec")
+      local sec_name=$(jq -r '.name' <<< "$sec")
+      local sec_content=$(jq -r '.content' <<< "$sec")
+      local sec_component=$(jq -r '.component' <<< "$sec")
+      # unpack folder
+      local dir="$sdir_path/$sec_component"
+      unpack "$dir" <<< "$sec_content"
+      echo "Successfully restored secret '$sec_name' to '$dir'."
+    done
+  done
+
+  # all secrets have been restored to local disk, delete them (deletes all secrets with a "garden-setup.gardener.cloud/state" label, independent of its value)
+  if ! exec_retry 5 15 kubectl --kubeconfig "$kubeconfig" -n "$namespace" delete secrets -l "garden-setup.gardener.cloud/state"; then
+    fail "failed to delete secrets after restoring them to disk"
+  fi
+  echo "### END PREPARE INSTALLATION ###"
+}
+
+finalize() {
+  echo "### BEGIN FINALIZE INSTALLATION ###"
+  local config="$1"
+  if [[ -z "$config" ]]; then
+    fail "missing config"
+  fi
+  local kubeconfig=$(jq -r '.kubeconfig' <<< "$config")
+  if [[ -z "$kubeconfig" ]]; then
+    fail "no kubeconfig given"
+  fi
+  if [[ "$kubeconfig" != /* ]]; then
+    kubeconfig="$ROOT/$kubeconfig"
+  fi
+  local namespace
+  namespace=$(jq -r '.namespace' <<< "$config") || namespace="garden-setup-state"
+  local backupLocation
+  backupLocation=$(jq -r '.backupLocation' <<< "$config" 2>/dev/null) || true
+  if [[ -z "$backupLocation" ]] || [[ ! -d "$backupLocation" ]]; then
+    backupLocation="$ROOT"
+  fi  
+  
+  # create timestamp
+  local ts=$(timestamp)
+  local failed_files=""
+
+  # generate manifests
+  for sdir in "STATE" "EXPORT"; do
+    local sdir_path="${!sdir}"
+    if [[ ! -d "$sdir_path" ]]; then
+      # nothing to save, if the directory doesn't exist
+      echo "No $sdir folder found at $sdir_path to save."
+      continue
+    fi
+    # generate/emtpy backup file
+    local backup="$backupLocation/backup_${sdir}_${ts}"
+    template_namespace "$namespace" > "$backup"
+
+    # create manifests
+    local dirs=($(find "$sdir_path" -mindepth 1 -maxdepth 1 -type d))
+    for dir in ${dirs[@]}; do
+      dir=${dir##*/} # cut off path
+      template_secret "${dir}-$(lowercase <<< "$sdir")" "$namespace" "$sdir" "$dir" "$(pack "$sdir_path/$dir")" >> "$backup"
+    done
+
+    # apply manifests
+    if ! exec_retry 5 15 kubectl --kubeconfig "$kubeconfig" apply -f "$backup"; then
+      failed_files="$failed_files$backup"$'\n'
+      echo "----------------------------------------"
+      echo "The file '$backup' could not be applied. You have to apply the file manually to your cluster BEFORE the next call to sow."
+      echo "To do so, use this command:"
+      echo "kubectl --kubeconfig \"$kubeconfig\" apply -f \"$backup\""
+      echo "----------------------------------------"
+    else
+      rm -rf "$backup"
+    fi
+  done
+
+  if [[ -n "$failed_files" ]]; then
+    echo "Not all of the state could be stored in your cluster. Please apply the following files to your cluster:"
+    echo "$failed_files"
+    echo "ATTENTION: You have to do this before the next call to sow, otherwise that call will be executed without the state!"
+    echo "In case you don't have access to the files, the content is now dumped here."
+    echo $'\n----------------------------------------\n'
+    for file in $(echo "$failed_files"); do
+      echo "$file:"
+      cat "$file"
+      echo $'\n----------------------------------------\n'
+    done
+    echo "ATTENTION: Applying the secrets failed and manual action has to be taken, please see above!"
+    echo ""
+  fi
+  echo "### END FINALIZE INSTALLATION ###"
+}
+
+# executes a given command and retries if it fails
+# $1: attempts
+# $2: waiting time between attempts
+# $@: command
+exec_retry() {
+  local attempts="$1"
+  local wait="$2"
+  shift 2
+  local res
+
+  while true; do
+    if res=$($@); then
+      echo "$res"
+      return
+    fi
+    attempts=$(( $attempts - 1 ))
+    if [[ $attempts -gt 0 ]]; then
+      echoerr "command failed - will be retried in $wait seconds ($attempts times)"
+      sleep $wait
+    else
+      echoerr "command failed and retry limit reached"
+      return 1
+    fi
+  done
+}
+
+# takes a path to a directory and outputs a base64-encoded string representation of that directory and its contents
+# path: directory to tar
+pack() {
+  local path=${1:-""}
+  if [[ -z "$path" ]]; then
+    fail "no path given"
+  fi
+  tar -czC "$path" . | base64 | tr -d \\n # remove line breaks (alpine base64 doesn't support -w option)
+}
+
+# counterpart of pack_directory
+# path: directory to untar files into
+#   defaults to PWD
+unpack() {
+  local path=${1:-""}
+  if [[ -z "$path" ]]; then
+    path="$PWD"
+  fi
+  mkdir -p "$path"
+  base64 -d | tar -xzC "$path"
+}
+
+# returns lowercase version of input
+lowercase() {
+  tr '[:upper:]' '[:lower:]'
+}
+
+# takes a base64-encoded content and returns a kubernetes secret template
+# $1: secret name
+# $2: secret namespace
+# $3: type of state (EXPORT or STATE)
+# $4: name of component the secret is for
+# $5: secret content
+template_secret() {
+  cat << EOF
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: $1
+  namespace: $2
+  labels:
+    garden-setup.gardener.cloud/state: $3
+    garden-setup.gardener.cloud/component: $4
+  creationTimestamp: null
+data:
+  content: $5
+EOF
+}
+
+# $1: namespace name
+template_namespace() {
+  cat << EOF
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: $1
+  creationTimestamp: null
+spec: {}
+status: {}
+EOF
+}
+
+timestamp() {
+  date +"%d-%m-%y_%H-%M-%S"
+}
+
+fail() {
+  echoerr "$@"
+  exit 1
+}
+
+echoerr() {
+  >&2 echo "$@"
+}
+
+# main
+action="$1"
+shift
+case "$action" in
+  prepare) prepare "$@";;
+  finalize) finalize "$@";;
+  exec)
+    cmd="$1"
+    shift
+    $cmd "$@"
+    ;;
+  *)
+    echo "unknown arguments: $@"
+    exit 1
+    ;;
+esac
