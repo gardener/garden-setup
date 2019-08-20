@@ -16,7 +16,7 @@
         value: {{ .Values.shoot.k8sVersion }}
       - name: SEED
         type: env
-        value: gcp
+        value: base
       - name: CLOUDPROFILE
         type: env
         value: aws

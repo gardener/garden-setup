@@ -36,11 +36,11 @@ it_label = "test/integration"
 source_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
 
 
-labels_dir = os.getenv("OUT_PATH")
-if not labels_dir:
-    labels_dir = source_path
+config_dir = os.getenv("OUT_PATH")
+if not config_dir:
+    config_dir = source_path
 
-labels_path = os.path.join(labels_dir, "labels.yaml")
+config_path = os.path.join(config_dir, "config.yaml")
 
 
 repo_owner_name=os.getenv("SOURCE_GITHUB_REPO_OWNER_AND_NAME")
@@ -58,8 +58,6 @@ git_helper = GitHelper(
 
 pull_request_number=git_helper.repo.git.config("--get", "pullrequest.id")
 
-#$(git config --git-dir=$SOURCE_PATH/.git --get pullrequest.id)
-
 github_helper = GitHubRepositoryHelper(
         owner=github_repository_owner,
         name=github_repository_name,
@@ -73,28 +71,25 @@ print("Found labels {}".format(labels))
 
 if it_label not in labels:
     print("{} is not set".format(it_label))
-    exit(0)
+    exit(1)
 
 
-print("generate labels file")
+print("generate config file")
 labels.remove(it_label)
-labels_file_data = {
-    "labels": labels
+config_file_data = {
+    "labels": [ label for label in labels if label.startswith("platform/") ]
 }
 
-raw_labels = yaml.dump(labels_file_data)
+# determine base cluster
+print("determine base cluster")
+base_cluster = [label for label in labels if label.startswith("base/")]
+if base_cluster:
+    config_file_data["baseCluster"] = base_cluster[0].replace("base/", "")
 
-with open(labels_path, "w+") as file:
-    file.write(raw_labels)
+raw_config = yaml.dump(config_file_data)
 
-print("Lables file written to {}".format(labels_path))
-print(raw_labels)
+with open(config_path, "w+") as file:
+    file.write(raw_config)
 
-
-cmd = sys.argv
-cmd[0] = os.path.join(source_path, ".ci", "tm-test")
-cmd.append("--values={}".format(labels_path))
-
-proc = subprocess.Popen(cmd, shell=False)
-proc.communicate()
-exit(proc.returncode)
+print("Config file written to {}".format(config_path))
+print(raw_config)

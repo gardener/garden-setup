@@ -22,7 +22,9 @@ garden-setup:
           interval: '5m'
     pull_request_integration:
       traits:
-        pull-request: ~
+        pull-request:
+          disable-status-report:
+          - prepare-test
         scheduling:
           suppress_parallel_execution: true
         version:
@@ -30,10 +32,19 @@ garden-setup:
             'inject-commit-hash'
           inject_effective_version: true
       steps:
+        prepare-test:
+          image: eu.gcr.io/gardener-project/gardener/testmachinery/base-step:latest
+          output_dir: out
+          execute:
+          - ./it-prepare.py
         integration-test:
           image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:stable
+          depends:
+          - prepare-test
+          inputs:
+            OUT_PATH: out_path
           execute:
-          - ./pr_labels.py
+          - ./tm-test
           - --tm-chart=default
           - --landscape=test
           - --tm-landscape=external

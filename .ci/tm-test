@@ -69,6 +69,11 @@ VERSION=$(git rev-parse HEAD)
 popd
 GARDENER_VERSION="$(cat $SOURCE_PATH/GARDENER_VERSION)"
 
+# Add configuration if a configuration file exists
+if [[ -f $OUT_PATH/config.yaml ]]; then
+    ARGUMENTS="$ARGUMENTS --values=$OUT_PATH/config.yaml"
+fi
+
 echo "Testmachinery config name: ${TM_CONFIG_NAME}"
 echo "Testmachinery landscape: ${TM_LANDSCAPE}"
 echo "Arguments: ${ARGUMENTS}"

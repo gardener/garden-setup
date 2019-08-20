@@ -5,6 +5,9 @@
       name: create-shoot
       locationSet: default
       config:
+      - name: SEED
+        type: env
+        value: base
       - name: SHOOT_NAME
         type: env
         value: {{ .prefix }}
