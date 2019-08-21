@@ -51,7 +51,7 @@ landscape:
       extensions:
         dns-external:
           <<: (( merge ))
-          tag: (( valid( dns-external.branch ) -or valid( dns-external.commit ) ? ~~ :( .landscape.versions.dns-controller.tag || "0.5.5" ) ))
+          tag: (( valid( dns-external.branch ) -or valid( dns-external.commit ) ? ~~ :( .landscape.versions.dns-controller.tag || "0.6.2" ) ))
           image_tag: (( valid( dns-external.tag ) ? dns-external.tag :~~ ))
           image_repo: (( ~~ ))
           repo: https://github.com/gardener/external-dns-management.git
