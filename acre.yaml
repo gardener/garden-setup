@@ -127,7 +127,7 @@ landscape:
       commit: (( dashboard.commit || ~~ ))
     dns-controller:
       <<: (( merge ))
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.6.1" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.6.2" ))
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
       repo: "https://github.com/gardener/external-dns-management.git"
