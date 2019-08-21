@@ -164,6 +164,7 @@ extension_manifests:
               tag: (( version.image_tag || ~~ ))
             configuration:
               poolSize: 20
+              controllers: dnscontrollers
               identifier: ""
               serverPortHttp: 8080
 
