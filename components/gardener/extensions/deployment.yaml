@@ -382,3 +382,24 @@ extension_manifests:
         type: openstack
       - kind: Worker
         type: openstack
+
+########################################
+  networking-calico:
+########################################
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: networking-calico
+    spec:
+      deployment:
+        providerConfig:
+          chart: (( encoded_chart ))
+          values:
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+        type: helm
+      resources:
+      - kind: Network
+        type: calico
