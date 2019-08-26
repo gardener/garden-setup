@@ -53,6 +53,7 @@ providers:
     credentials:
       AWS_ACCESS_KEY_ID: (( landscape.dns.credentials.accessKeyID ))
       AWS_SECRET_ACCESS_KEY: (( landscape.dns.credentials.secretAccessKey ))
+      AWS_REGION: (( landscape.dns.credentials.region || ~~ ))
   google-clouddns:
     <<: (( &template ))
     name: google
