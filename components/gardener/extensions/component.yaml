@@ -35,6 +35,7 @@ deployment:
     - (( contains( .infrastructures, "alicloud" ) ? "os-coreos-alicloud" :~~ ))
     - os-suse-jeos
     - dns-external
+    - networking-calico
     - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))
 
 infrastructures: (( &temporary ( uniq( sum[.landscape.iaas|[]|s,e|-> s e.type ( e.seeds.[*].type || ~ ) ] ) ) ))
