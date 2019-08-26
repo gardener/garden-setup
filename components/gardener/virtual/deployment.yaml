@@ -50,6 +50,7 @@ dns_credentials:
     <<: (( &template ))
     AWS_ACCESS_KEY_ID: (( base64( landscape.dns.credentials.accessKeyID ) ))
     AWS_SECRET_ACCESS_KEY: (( base64( landscape.dns.credentials.secretAccessKey ) ))
+    AWS_REGION: (( base64( landscape.dns.credentials.region ) || ~~ ))
   google-clouddns:
     <<: (( &template ))
     serviceaccount.json: (( base64( landscape.dns.credentials.["serviceaccount.json"] ) ))
