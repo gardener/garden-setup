@@ -55,17 +55,14 @@ git_helper = GitHelper(
     github_cfg=github_cfg,
     github_repo_path=repo_owner_name
 )
-
-pull_request_number=git_helper.repo.git.config("--get", "pullrequest.id")
-
 github_helper = GitHubRepositoryHelper(
         owner=github_repository_owner,
         name=github_repository_name,
         github_cfg=github_cfg,
     )
 
-pull_request = github_helper.repository.pull_request(pull_request_number)
-labels = [str(label) for label in pull_request.issue().labels()]
+pull_request_number=git_helper.pr_id()
+labels = [str(label) for label in github_helper.repository.pull_request(pull_request_number).issue().labels()]
 
 print("Found labels {}".format(labels))
 
