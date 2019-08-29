@@ -23,15 +23,14 @@ prepare() {
     fail "missing config"
   fi
   local kubeconfig=$(jq -r '.kubeconfig' <<< "$config")
-  if [[ -z "$kubeconfig" ]]; then
+  if [[ "$kubeconfig" == "null" ]]; then
     fail "no kubeconfig given"
   fi
   if [[ "$kubeconfig" != /* ]]; then
     kubeconfig="$ROOT/$kubeconfig"
   fi
-  local namespace
-  namespace=$(jq -r '.namespace' <<< "$config") || namespace="garden-setup-state"
-  
+  local namespace=$(jq -r '.namespace // "garden-setup-state"' <<< "$config")
+
   # if folders exist, rename them to avoid conflicts
   for folder in "$EXPORT" "$STATE"; do
     # delete old backup folders to prevent mixing
@@ -84,17 +83,15 @@ finalize() {
     fail "missing config"
   fi
   local kubeconfig=$(jq -r '.kubeconfig' <<< "$config")
-  if [[ -z "$kubeconfig" ]]; then
+  if [[ "$kubeconfig" == "null" ]]; then
     fail "no kubeconfig given"
   fi
   if [[ "$kubeconfig" != /* ]]; then
     kubeconfig="$ROOT/$kubeconfig"
   fi
-  local namespace
-  namespace=$(jq -r '.namespace' <<< "$config") || namespace="garden-setup-state"
-  local backupLocation
-  backupLocation=$(jq -r '.backupLocation' <<< "$config" 2>/dev/null) || true
-  if [[ -z "$backupLocation" ]] || [[ ! -d "$backupLocation" ]]; then
+  local namespace=$(jq -r '.namespace // "garden-setup-state"' <<< "$config")
+  local backupLocation=$(jq -r '.backupLocation' <<< "$config")
+  if [[ "$backupLocation" == "null" ]] || [[ ! -d "$backupLocation" ]]; then
     backupLocation="$ROOT"
   fi  
   
@@ -111,7 +108,7 @@ finalize() {
       continue
     fi
     # generate/emtpy backup file
-    local backup="$backupLocation/backup_${sdir}_${ts}"
+    local backup="$backupLocation/backup_${sdir}_${ts}.yaml"
     template_namespace "$namespace" > "$backup"
 
     # create manifests
