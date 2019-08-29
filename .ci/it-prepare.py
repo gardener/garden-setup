@@ -46,22 +46,16 @@ config_path = os.path.join(config_dir, "config.yaml")
 repo_owner_name=os.getenv("SOURCE_GITHUB_REPO_OWNER_AND_NAME")
 github_repository_owner,github_repository_name = repo_owner_name.split("/")
 
-
 cfg_set = ctx.cfg_factory().cfg_set(os.getenv("CONCOURSE_CURRENT_CFG"))
 github_cfg = cfg_set.github()
 
-git_helper = GitHelper(
-    repo=os.path.join(source_path, ".git"),
-    github_cfg=github_cfg,
-    github_repo_path=repo_owner_name
-)
 github_helper = GitHubRepositoryHelper(
         owner=github_repository_owner,
         name=github_repository_name,
         github_cfg=github_cfg,
     )
 
-pull_request_number=git_helper.pr_id()
+pull_request_number=os.getenv("PULLREQUEST_ID")
 labels = [str(label) for label in github_helper.repository.pull_request(pull_request_number).issue().labels()]
 
 print("Found labels {}".format(labels))
