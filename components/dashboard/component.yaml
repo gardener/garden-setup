@@ -13,6 +13,7 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
 component:
   imports:
     - identity
@@ -22,3 +23,11 @@ component:
     - kube_apiserver: kube-apiserver
     - cert: cert-manager/cert
     - cert-controller: cert-manager/controller
+
+  plugins:
+    - git
+
+git:
+  <<: (( .landscape.versions.dashboard ))
+  files:
+    - "charts"

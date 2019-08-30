@@ -25,23 +25,11 @@ caSpec:
   ca: (( server.ca || ~~ ))
 
 plugins:
-  - git
-  - chart-checkout
   - kubectl: namespace
   - kubectl: crds
   - helm
   - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
   - kubectl: issuer
-
-git:
-  <<: (( landscape.versions.cert-manager.controller ))
-  files:
-    - "deploy/manifests/00-crds.yaml"
-
-chart-checkout:
-  repo: (( landscape.versions.cert-manager.controller.helm_repo ))
-  name: cert-manager
-  version: (( landscape.versions.cert-manager.controller.helm_tag ))
 
 namespace:
   name: (( settings.namespace ))

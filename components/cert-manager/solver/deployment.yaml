@@ -8,13 +8,7 @@ plugins_self_signed:
   - -echo: "Using self-signed certificates, no solver deployment necessary."
 
 plugins_not_self_signed:
-  - git
   - helm
-
-git:
-  <<: (( landscape.versions.cert-manager.cert-dns-bridge ))
-  files:
-    - charts
 
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))

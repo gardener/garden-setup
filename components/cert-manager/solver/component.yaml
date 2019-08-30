@@ -1,4 +1,5 @@
 ---
+landscape: (( &temporary ))
 component:
   imports:
     - tiller
@@ -6,3 +7,11 @@ component:
     - cert-controller: cert-manager/controller
 
   stubs: []
+
+  plugins:
+    - git
+
+git:
+  <<: (( landscape.versions.cert-manager.cert-dns-bridge ))
+  files:
+    - charts

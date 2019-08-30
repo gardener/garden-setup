@@ -11,7 +11,6 @@ component:
 
   plugins:
     - <<: (( sum[.extensions|[]|s,n,v|-> s [{ "-echo" = "--------------------------------------------------" }, { "-echo" = "checking out charts for extension '" n "'" }, { "git" = "extensions." n }]] ))
-    - cleanup
 
 # input for git plugin
 extensions: (( sum[.deployment.extensions|{}|s,n|-> s { n = *spec_template }] ))

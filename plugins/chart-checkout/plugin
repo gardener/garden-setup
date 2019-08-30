@@ -1,7 +1,7 @@
 # Checks out a helm chart from a helm repository
 source "$SOWLIB/pluginutils"
 
-deploy() {
+checkout() {
   getRequiredValue repo "repo" PLUGINCONFIGJSON
   getRequiredValue name "name" PLUGINCONFIGJSON
   getRequiredValue version "version" PLUGINCONFIGJSON
@@ -42,12 +42,8 @@ deploy() {
   verbose "Extracted chart to $chart_file"
 }
 
-delete() {
-  verbose "Nothing to do on delete."
-}
-
 case "$1" in
-    deploy) deploy "$@";;
-    delete) delete "$@";;
+    deploy|prepare) checkout "$@";;
+    delete|cleanup) checkout "$@";;
     *) fail "unsupported action $1"
 esac

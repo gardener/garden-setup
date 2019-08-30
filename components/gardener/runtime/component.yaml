@@ -13,6 +13,7 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
 component:
   imports:
     - gardener_virtual: gardener/virtual
@@ -21,3 +22,11 @@ component:
 
   stubs:
     - plugins/kubectl/utilities.yaml
+
+  plugins:
+    - git
+
+git:
+  <<: (( .landscape.versions.gardener ))
+  files:
+    - "charts"

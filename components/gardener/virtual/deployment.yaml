@@ -78,8 +78,6 @@ state:
   gardener_controller_manager: (( utilities.certs.keyCertForCA(spec.controllermanager, gardener_ca, false) ))
 
 plugins:
-  - git:
-    - gardener_git
   - helm:
     - gardener
     - template
@@ -109,14 +107,11 @@ garden_secret:
       data:
         kubeconfig: (( base64( read( .env.ROOTDIR "/" .landscape.clusters[0].kubeconfig, "text" ) ) ))
 
-gardener_git:
-  <<: (( .landscape.versions.gardener ))
-  files:
-    - "charts"
+gardener_version: (( &temporary ( .landscape.versions.gardener ) ))
 
 gardener:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
-  source: "gardener_git/repo/charts/gardener/charts/application"
+  source: "git/repo/charts/gardener/charts/application"
   name: "gardener"
   namespace: "garden"
   values:
@@ -136,8 +131,8 @@ gardener:
         groupPriorityMinimum: 10000
         image:
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
-          repository: (( .gardener_git.apiserver.image_repo ))
-          tag: (( .gardener_git.apiserver.image_tag || ~~ ))
+          repository: (( .gardener_version.apiserver.image_repo ))
+          tag: (( .gardener_version.apiserver.image_tag || ~~ ))
         insecureSkipTLSVerify: false
         replicaCount: 1
         resources:
@@ -214,8 +209,8 @@ gardener:
         enabled: true
         image:
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
-          repository: (( .gardener_git.controller_manager.image_repo ))
-          tag: (( .gardener_git.controller_manager.image_tag || ~~ ))
+          repository: (( .gardener_version.controller_manager.image_repo ))
+          tag: (( .gardener_version.controller_manager.image_tag || ~~ ))
         internalDomain:
           credentials: (( *.dns_credentials.[provider] ))
           domain: (( "internal." .landscape.domain ))
@@ -232,8 +227,8 @@ gardener:
       scheduler:
         image:
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
-          repository: (( .gardener_git.scheduler.image_repo ))
-          tag: (( .gardener_git.scheduler.image_tag || ~~ ))
+          repository: (( .gardener_version.scheduler.image_repo ))
+          tag: (( .gardener_version.scheduler.image_tag || ~~ ))
         serviceAccountName: gardener-scheduler
         config:
           candidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))

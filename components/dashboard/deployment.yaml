@@ -17,21 +17,17 @@ imports: (( &temporary ))
 landscape: (( &temporary ))
 
 plugins:
-  - git: dashboard_git
   - helm: dashboard
   - kubectl: rbac
   - -echo: "==================================================================="
   - -echo: (( "Dashboard URL -> " settings.dashboard_url ))
   - -echo: "==================================================================="
 
-dashboard_git:
-  <<: (( .landscape.versions.dashboard ))
-  files:
-    - "charts"
+dashboard_version: (( &temporary ( .landscape.versions.dashboard ) ))
 
 dashboard:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
-  source: "dashboard_git/repo/charts/gardener-dashboard"
+  source: "git/repo/charts/gardener-dashboard"
   name: "dashboard"
   namespace: (( .landscape.namespace ))
   values:
@@ -40,8 +36,8 @@ dashboard:
     hosts:
       - (( imports.identity.export.dashboard_dns ))
     image:
-      repository: (( .dashboard_git.image_repo || ~~ ))
-      tag: (( .dashboard_git.image_tag || ~~ ))
+      repository: (( .dashboard_version.image_repo || ~~ ))
+      tag: (( .dashboard_version.image_tag || ~~ ))
       pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))

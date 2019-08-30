@@ -59,8 +59,6 @@ kubeconfigs:
     config: (( *kubeconfig_scheme ))
 
 plugins:
-  - git:
-    - gardener_git
   - helm:
     - gardener
   - gardenready
@@ -72,12 +70,10 @@ shoot-check:
 gardenready:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
-gardener_git: (( imports.gardener_virtual.export.gardener_git ))
-
 gardener:
   <<: (( imports.gardener_virtual.export.gardener ))
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
-  source: "gardener_git/repo/charts/gardener/charts/runtime"
+  source: "git/repo/charts/gardener/charts/runtime"
   values: (( merge(.imports.gardener_virtual.export.gardener.values, spec) ))
   name: gardener
   namespace: (( landscape.namespace ))

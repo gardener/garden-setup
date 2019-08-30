@@ -13,6 +13,7 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
 component:
   imports:
     - ingress-controller
@@ -23,3 +24,11 @@ component:
     - lib/templates/utilities.yaml
     - lib/templates/certs.yaml
     - lib/templates/state.yaml
+
+  plugins:
+    - git
+
+git:
+  <<: (( .landscape.versions.identity ))
+  files:
+    - "charts"
