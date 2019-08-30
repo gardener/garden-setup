@@ -99,7 +99,7 @@ More information: [Most Important Commands and Directories](#most-important-comm
 
 This file will be evaluated using `spiff`, a dynamic templating language for yaml files. For example, this simplifies the specification of field values that are used multiple times in the yaml file. For more information, see the [spiff repository](https://github.com/mandelsoft/spiff/blob/master/README.md).
 
-> Please note that, for the sake of clarity, not all configuration options are listed in this readme. Instead, the more advanced configuration options have been moved into a set of additional documentation files. You can access these files via their [index](docs/extended/index.md) and each page is usually linked in its corresponding section below.
+> Please note that, for the sake of clarity, not all configuration options are listed in this readme. Instead, the more advanced configuration options have been moved into a set of additional documentation files. You can access these files via their [index](docs/extended/README.md) and each page is usually linked in its corresponding section below.
 
 <pre>
 landscape:
