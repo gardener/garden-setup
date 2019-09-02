@@ -13,6 +13,7 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
 component:
   imports:
     - etcd: etcd/cluster
@@ -22,3 +23,11 @@ component:
     - lib/templates/utilities.yaml
     - lib/templates/state.yaml
     - lib/templates/certs.yaml
+
+  plugins:
+    - git
+
+git:
+  <<: (( .landscape.versions.gardener ))
+  files:
+    - "charts"

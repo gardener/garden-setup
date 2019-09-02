@@ -24,15 +24,9 @@ settings:
   namespace: "kube-system"
 
 plugins:
-  - git
   - helm
   - kubectl
 # TODO: create namespace if it doesn't exist
-
-git:
-  <<: (( .landscape.versions.dns-controller ))
-  files:
-    - "charts"
 
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
