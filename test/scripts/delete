@@ -10,8 +10,6 @@ ln -s $SOURCE_PATH ./crop
 cp $SOURCE_PATH/test/acre.yaml .
 cp $TM_KUBECONFIG_PATH/host.config ./kubeconfig
 
-cp -R $TM_SHARED_PATH/setup/* .
-
 sow order -A
 sow delete -A
 

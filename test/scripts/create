@@ -1,10 +1,7 @@
 #! /bin/bash -e
 
 copy_state() {
-    mkdir -p $TM_SHARED_PATH/setup
-    cp -R ./state $TM_SHARED_PATH/setup
-    cp -R ./export $TM_SHARED_PATH/setup
-    cp -R ./gen $TM_SHARED_PATH/setup
+    cp -R ./export/kube-apiserver/kubeconfig $TM_KUBECONFIG_PATH/gardener.config
 }
 
 SOURCE_PATH="$(realpath .)"
@@ -16,12 +13,11 @@ ln -s $SOURCE_PATH ./crop
 cp $SOURCE_PATH/test/acre.yaml .
 cp $TM_KUBECONFIG_PATH/host.config ./kubeconfig
 
-trap copy_state EXIT
+kubectl --kubeconfig=./kubeconfig delete ns garden-setup-state --ignore-not-found
 
+trap copy_state EXIT
 sow order -A
 sow -Dv deploy -A
-
-cp -R ./export/kube-apiserver/kubeconfig $TM_KUBECONFIG_PATH/gardener.config
 
 copy_state
 
