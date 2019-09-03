@@ -15,8 +15,8 @@ spec:
     default: true
     locations:
     - type: git
-      repo: https://github.com/schrodit/test-infra.git
-      revision: gke-host-support
+      repo: https://github.com/gardener/test-infra.git
+      revision: master
     - type: git
       repo: https://github.com/gardener/gardener.git
       revision: master

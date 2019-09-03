@@ -68,6 +68,14 @@ base_cluster_configs:
 ############################################################################
 
 
+meta:
+  installationHandler:
+    path: crop/bin/installation-handler
+    config:
+      kubeconfig: ./kubeconfig
+      namespace: garden-setup-state
+      # backupLocation: (( env( "ROOT" ) ))
+
 landscape:
   name: (( ( env( "GARDENER_PREFIX" ) || "test" ) "-gardener-oq" ))
 
