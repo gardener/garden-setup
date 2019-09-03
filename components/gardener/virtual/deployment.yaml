@@ -78,11 +78,12 @@ state:
   gardener_controller_manager: (( utilities.certs.keyCertForCA(spec.controllermanager, gardener_ca, false) ))
 
 plugins:
-  - helm:
-    - gardener
-    - template
-  - kubectl:
-    - kubectl_apply
+  - pinned:
+    - helm:
+      - gardener
+      - template
+    - kubectl:
+      - kubectl_apply
   - kubectl:
     - garden_secret
 

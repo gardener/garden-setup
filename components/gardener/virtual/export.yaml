@@ -14,11 +14,9 @@
 
 ---
 gardener: (( &temporary ))
-gardener_git: (( &temporary ))
 settings: (( &temporary ))
 export:
   gardener:
     seedCandidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
     values: (( .gardener.values ))
-  gardener_git: (( .gardener_git ))
   dns_credentials: (( .settings.dns_credentials ))
