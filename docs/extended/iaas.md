@@ -51,8 +51,8 @@ iaas:
       <gcp|aws|azure|openstack>:                 # depends on infrastructure provider
         constraints:
           kubernetes:
-            versions:
-              - 1.13.0
+            offeredVersions:
+              - version: 1.13.0
 ```
 
 ## The 'mode' Field

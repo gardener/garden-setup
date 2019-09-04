@@ -184,6 +184,10 @@ extension_manifests:
         type: alicloud
       - kind: Worker
         type: alicloud
+      - kind: BackupBucket
+        type: alicloud
+      - kind: BackupEntry
+        type: alicloud
       deployment:
         type: helm
         providerConfig:
@@ -279,6 +283,10 @@ extension_manifests:
         type: aws
       - kind: Worker
         type: aws
+      - kind: BackupBucket
+        type: aws
+      - kind: BackupEntry
+        type: aws
 
 ########################################
   provider-azure:
@@ -314,6 +322,10 @@ extension_manifests:
         type: azure
       - kind: Worker
         type: azure
+      - kind: BackupBucket
+        type: azure
+      - kind: BackupEntry
+        type: azure
 
 ########################################
   provider-gcp:
@@ -346,6 +358,10 @@ extension_manifests:
       - kind: ControlPlane
         type: gcp
       - kind: Worker
+        type: gcp
+      - kind: BackupBucket
+        type: gcp
+      - kind: BackupEntry
         type: gcp
 
 ########################################
@@ -381,6 +397,10 @@ extension_manifests:
       - kind: ControlPlane
         type: openstack
       - kind: Worker
+        type: openstack
+      - kind: BackupBucket
+        type: openstack
+      - kind: BackupEntry
         type: openstack
 
 ########################################

@@ -42,7 +42,7 @@ secret_template:
         namespace: (( .settings.project_namespace ))
       type: Opaque
       data: (( utilities.secretdata(v.credentials) ))
-    - apiVersion: garden.sapcloud.io/v1beta1
+    - apiVersion: core.gardener.cloud/v1alpha1
       kind: SecretBinding
       metadata:
         labels:
@@ -62,10 +62,26 @@ core:
           garden.sapcloud.io/role: project
           project.garden.sapcloud.io/name: (( .settings.project_name ))
         name: (( .settings.project_namespace ))
-    - apiVersion: garden.sapcloud.io/v1beta1
+    - apiVersion: core.gardener.cloud/v1alpha1
       kind: Project
       metadata:
         name: (( .settings.project_name ))
       spec:
         namespace: (( .settings.project_namespace ))
+        createdBy:
+          apiGroup: rbac.authorization.k8s.io
+          kind: User
+          name: garden:client:admin
+        members: (( valid( .landscape.identity.users ) ? sum[.landscape.identity.users|[]|s,u|-> s *.projectMemberTemplate] :~~ ))
+        owner:
+          apiGroup: rbac.authorization.k8s.io
+          kind: User
+          name: garden:client:admin
     - <<: (( sum[imports.profiles.export.profiles|[]|s,v|-> valid( v.credentials ) ? s (*secret_template).manifest :s ] ))
+
+projectMemberTemplate:
+  <<: (( &temporary &template ))
+  apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: (( u.email ))
+  role: viewer
