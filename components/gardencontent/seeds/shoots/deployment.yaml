@@ -20,7 +20,7 @@ env: (( &temporary ))
 
 plugins:
   - kubectl: domain-secret
-  - kubectl
+  - parallel: (( sum[.kubectl|[]|s,i,e|-> s {"kubectl" = "kubectl[" i "]"}] ))
   - -echo: "The setup waits until the shoots are ready. This may take up to 60 minutes."
   - <<: (( sum[.shootready|[]|s,i,e|-> s {"shootready" = "shootready[" i "]"}] ))
 
