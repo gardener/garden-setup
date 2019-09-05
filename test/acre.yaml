@@ -24,8 +24,8 @@ azure-credentials:
 
 k8sVersions:
   kubernetes:
-    versions:
-    - (( env( "K8S_VERSION" ) || "1.14.3" ))
+    offeredVersions:
+    - version: (( env( "K8S_VERSION" ) || "1.14.3" ))
 
 base_cluster_configs:
   gcp:
