@@ -24,21 +24,28 @@ data:
   kubeconfig: (( base64(values.seed.kubeconfig) ))
 
 ---
-apiVersion: garden.sapcloud.io/v1beta1
+apiVersion: core.gardener.cloud/v1alpha1
 kind: Seed
 metadata:
   name: (( values.name ))
 spec:
-  blockCIDRs: (( values.iaas.blockCIDRs ))
-  cloud:
-    profile: (( values.config.cloudprofile || values.name ))
+  provider:
+    type: (( values.config.type ))
     region: (( values.config.region ))
+  blockCIDRs: (( values.iaas.blockCIDRs ))
+  backup:
+    provider: (( values.config.type ))
+    region: (( values.config.region ))
+    secretRef:
+      name: (( values.secretname ))
+      namespace: (( values.namespace ))
+  dns:
+    ingressDomain: (( values.seed.ingressdomain ))
   secretRef:
     name: (( values.secretname ))
     namespace: (( values.namespace ))
-  ingressDomain: (( values.seed.ingressdomain ))
   networks: # Seed and Shoot networks must be disjunct
     nodes: (( values.seed.networks.nodes ))
     pods: (( values.seed.networks.pods ))
     services: (( values.seed.networks.services ))
-  visible: (( values.config.mode != "soil" ))
+  taints: (( values.config.mode == "soil" ? [{ "key" = "seed.gardener.cloud/invisible" }] :~~ ))

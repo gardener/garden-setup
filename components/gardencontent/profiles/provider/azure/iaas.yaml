@@ -31,7 +31,7 @@ defaults:
   - name: (( values.dns.type ))
   - name: unmanaged
   kubernetes:
-    versions: (( values.kubernetes.versions ))
+    offeredVersions: (( values.kubernetes.offeredVersions ))
   machineImages:
   - name: coreos
     version: 2023.5.0
