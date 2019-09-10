@@ -22,3 +22,5 @@ export:
   dashboard_url: (( .settings.dashboardUrl ))
   dashboardClientSecret: (( .state.dashboardClientSecret.value ))
   dashboard_dns: (( .settings.dashboard_dns ))
+  identity_dns: (( .settings.identity_dns ))
+  identity_url: (( "https://" identity_dns ))

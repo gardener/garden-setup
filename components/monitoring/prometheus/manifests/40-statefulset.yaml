@@ -1,0 +1,138 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: garden-prometheus
+  namespace: (( values.namespace ))
+  labels:
+    app: monitoring
+    role: prometheus
+    context: garden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring
+      role: prometheus
+      context: garden
+  serviceName: prometheus
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: monitoring
+        role: prometheus
+        context: garden
+    spec:
+      containers:
+      - name: prometheus
+        image: (( values.monitoring_versions.prometheus.image_repo ":" values.monitoring_versions.prometheus.image_tag ))
+        imagePullPolicy: (( values.monitoring_versions.prometheus.image_tag == "latest" ? "Always" :"IfNotPresent" ))
+        args:
+        - --config.file=/etc/prometheus/config/config.yaml
+        - --storage.tsdb.path=/var/prometheus/data
+        - --storage.tsdb.no-lockfile
+        - --storage.tsdb.retention.time=10d
+        - --web.route-prefix=/
+        - --web.enable-lifecycle
+        - --web.listen-address=0.0.0.0:9090
+        - (( "--web.external-url=https://garden-prometheus." values.ingress_domain ))
+        securityContext:
+          runAsUser: 0
+        livenessProbe:
+          httpGet:
+            path: /-/healthy
+            port: 9090
+            scheme: HTTP
+          failureThreshold: 60
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 9090
+            scheme: HTTP
+          failureThreshold: 120
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+          limits:
+            cpu: 1024m
+            memory: 2400Mi
+          requests:
+            cpu: 468m
+            memory: 500Mi
+        volumeMounts:
+        - name: prometheus-db
+          mountPath: /var/prometheus/data
+        - name: prometheus-config
+          mountPath: /etc/prometheus/config
+        - name: prometheus-rules
+          mountPath: /etc/prometheus/rules
+      - name: blackbox-exporter
+        image: (( values.monitoring_versions.blackbox-exporter.image_repo ":" values.monitoring_versions.blackbox-exporter.image_tag ))
+        args:
+        - --config.file=/etc/blackbox/config.yaml
+        ports:
+        - name: blackbox-export
+          containerPort: 9115
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 5m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 128Mi
+        volumeMounts:
+        - name: blackbox-exporter-config
+          mountPath: /etc/blackbox
+        - name: blackbox-exporter-probe-secret
+          mountPath: /var/run/secrets/blackbox
+      - name: prometheus-config-reloader
+        image: (( values.monitoring_versions.configmap-reload.image_repo ":" values.monitoring_versions.configmap-reload.image_tag ))
+        imagePullPolicy: (( values.monitoring_versions.configmap-reload.image_tag == "latest" ? "Always" :"IfNotPresent" ))
+        args:
+        - -webhook-url=http://localhost:9090/-/reload
+        - -volume-dir=/etc/prometheus/config
+        resources:
+          requests:
+            cpu: 5m
+            memory: 10Mi
+          limits:
+            cpu: 10m
+            memory: 20Mi
+        volumeMounts:
+        - mountPath: /etc/prometheus/config
+          name: prometheus-config
+          readOnly: true
+      terminationGracePeriodSeconds: 300
+      serviceAccountName: garden-prometheus
+      volumes:
+      - name: prometheus-config
+        configMap:
+          defaultMode: 420
+          name: garden-prometheus-config
+      - name: prometheus-rules
+        configMap:
+          defaultMode: 420
+          name: garden-prometheus-rules
+      - name: blackbox-exporter-config
+        configMap:
+          defaultMode: 420
+          name: garden-blackbox-exporter-config
+      - name: blackbox-exporter-probe-secret
+        secret:
+          secretName: garden-blackbox-exporter-probe-secret
+          defaultMode: 420
+  volumeClaimTemplates:
+  - metadata:
+      name: prometheus-db
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi

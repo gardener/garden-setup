@@ -1,0 +1,35 @@
+job_name: blackbox-gardener-controller-manager
+params:
+  module:
+  - http_2xx
+scrape_interval: 30s
+scrape_timeout: 10s
+metrics_path: /probe
+scheme: http
+static_configs:
+- targets:
+  - http://gardener-controller-manager.garden.svc/healthz
+  labels:
+    purpose: availability
+relabel_configs:
+- source_labels: [__address__]
+  separator: ;
+  regex: (.*)
+  target_label: __param_target
+  replacement: $1
+  action: replace
+- source_labels: [__param_target]
+  separator: ;
+  regex: (.*)
+  target_label: instance
+  replacement: $1
+  action: replace
+- separator: ;
+  regex: (.*)
+  target_label: __address__
+  replacement: 127.0.0.1:9115
+  action: replace
+metric_relabel_configs:
+- source_labels: [ __name__ ]
+  regex: ^(probe_success|probe_http_status_code|probe_http_duration_seconds)$
+  action: keep

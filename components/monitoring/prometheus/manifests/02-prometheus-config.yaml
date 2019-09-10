@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: garden-prometheus-config
+  namespace: (( values.namespace ))
+  labels:
+    app: monitoring
+    role: prometheus
+    context: garden
+data:
+  config.yaml: (( asyaml( config_data ) ))
+
+
+config_data:
+  <<: (( &temporary ))    
+  global:
+    evaluation_interval: 30s
+    scrape_interval: 30s
+
+  rule_files:
+  - /etc/prometheus/rules/*.yaml
+
+  alerting:
+    alertmanagers:
+    - kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+          - garden
+      scheme: http
+      relabel_configs:
+      - source_labels: [ __meta_kubernetes_service_label_context ]
+        action: keep
+        regex: garden
+      - source_labels: [ __meta_kubernetes_service_label_app ]
+        action: keep
+        regex: monitoring
+      - source_labels: [ __meta_kubernetes_service_label_role ]
+        action: keep
+        regex: alertmanager
+      - source_labels: [ __meta_kubernetes_endpoint_port_name ]
+        action: keep
+        regex: web
+
+  scrape_configs: (( sum[list_files( __ctx.DIR "/manifests/scrape-configs" )|[]|scrape,sconf|-> scrape read( __ctx.DIR "/manifests/scrape-configs/" sconf )] ))

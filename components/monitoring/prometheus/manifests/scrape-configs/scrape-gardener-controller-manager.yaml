@@ -1,0 +1,14 @@
+job_name: gardener-controller-manager
+kubernetes_sd_configs:
+- role: endpoints
+  namespaces:
+    names:
+    - garden
+relabel_configs:
+- source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+  regex: gardener-controller-manager;http
+  action: keep
+metric_relabel_configs:
+- source_labels: [ __name__ ]
+  regex: ^(garden_cm_worker_amount|garden_cm_workqueue_duration_milliseconds|garden_cm_workqueue_duration_milliseconds_count|garden_cm_workqueue_duration_milliseconds_sum|garden_cm_workqueue_items_adds_total|garden_cm_workqueue_items_total|garden_cm_workqueue_latency_milliseconds|garden_cm_workqueue_latency_milliseconds_count|garden_cm_workqueue_latency_milliseconds_sum|garden_cm_workqueue_retries_total)$
+  action: keep
