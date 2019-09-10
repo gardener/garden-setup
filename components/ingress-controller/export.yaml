@@ -14,8 +14,8 @@
 
 ---
 ingresscontroller: (( &temporary ))
-env:
-landscape: (( &temporaray ))
+env: (( &temporary ))
+landscape: (( &temporary ))
 settings: (( &temporary ))
 
 temp:
