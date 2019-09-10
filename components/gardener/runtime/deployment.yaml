@@ -26,7 +26,7 @@ spec:
   controller_secret: (( utilities.kubectl.getField(kubeconfig,"sa","gardener-controller-manager", "{.secrets[0].name}") ))
   controller_token: (( base64_decode( utilities.kubectl.getField( kubeconfig, "secret", controller_secret, "{.data.token}")) ))
   cluster_endpoint: (( "https://" utilities.kubectl.getField( landscape.clusters.[0].kubeconfig, "svc", "garden-kube-apiserver", "{.metadata.name}:{.spec.ports[0].port}") ))
-  apiserver_ca: (( base64( imports.kube_apiserver.export.kube_apiserver_ca ) ))
+  apiserver_ca: (( base64( imports.kube_apiserver.export.kube_apiserver_ca.cert ) ))
 
 kubeconfig_scheme:
   <<: (( &temporary &template ))

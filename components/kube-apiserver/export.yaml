@@ -36,7 +36,7 @@ export:
   gardener_dns: (( .settings.gardener_dns ))
   apiserver_dns: (( .settings.apiserver_dns ))
   apiserver_url: (( "https://" apiserver_dns ))
-  kube_apiserver_ca: (( .state.kube_apiserver_ca.value.cert ))
+  kube_apiserver_ca: (( .state.kube_apiserver_ca.value ))
   kubeconfig: (( parse(base64_decode(exec( temp.command ))) || "" ))
 
 files:
