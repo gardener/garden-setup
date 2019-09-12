@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: garden-grafana-dashboards
+  namespace: (( values.namespace ))
+  labels:
+    app: monitoring
+    role: grafana
+    context: garden
+data: (( sum[list_files( __ctx.DIR "/manifests/dashboard-configs" )|{}|dashboards,dconf|-> dashboards { dconf = read( __ctx.DIR "/manifests/dashboard-configs/" dconf, "text" ) }] ))

@@ -1,0 +1,11 @@
+---
+landscape: (( &temporary ))
+component:
+  active: (( .landscape.monitoring.active ))
+  imports:
+    - prometheus: monitoring/prometheus
+    - ingress-controller
+    - cert: cert-manager/cert
+
+  stubs:
+    - plugins/kubectl/utilities.yaml

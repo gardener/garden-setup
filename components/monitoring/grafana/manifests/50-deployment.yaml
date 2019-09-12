@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garden-grafana
+  namespace: (( values.namespace ))
+  labels:
+    app: monitoring
+    role: grafana
+    context: garden
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring
+      role: grafana
+      context: garden
+  template:
+    metadata:
+      labels:
+        app: monitoring
+        role: grafana
+        context: garden
+    spec:
+      # initContainers:
+      # - name: init-prometheus
+      #   image: ${images['busybox']}
+      #   command: ['sh', '-c', 'until wget -T 5 -qO- http://garden-prometheus/-/healthy > /dev/null; do echo waiting for Prometheus; sleep 2; done;']
+      containers:
+      - name: grafana
+        image: (( values.monitoring_versions.grafana.image_repo ":" values.monitoring_versions.grafana.image_tag ))
+        imagePullPolicy: (( values.monitoring_versions.grafana.image_tag == "latest" ? "Always" :"IfNotPresent" ))
+        env:
+        - name: GF_AUTH_BASIC_ENABLED
+          value: "false"
+        - name: GF_AUTH_DISABLE_LOGIN_FORM
+          value: "true"
+        - name: GF_AUTH_ANONYMOUS_ENABLED
+          value: "true"
+        volumeMounts:
+        - name: dashboards
+          mountPath: /var/lib/grafana/dashboards
+        - name: datasources
+          mountPath: /etc/grafana/provisioning/datasources
+        - name: dashboard-providers
+          mountPath: /etc/grafana/provisioning/dashboards
+        ports:
+        - name: web
+          containerPort: 3000
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+      volumes:
+      - name: dashboards
+        configMap:
+          name: garden-grafana-dashboards
+      - name: datasources
+        configMap:
+          name: garden-grafana-datasources
+      - name: dashboard-providers
+        configMap:
+          name: garden-grafana-dashboard-providers
