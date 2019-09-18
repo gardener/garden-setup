@@ -6,6 +6,7 @@ component:
     - prometheus: monitoring/prometheus
     - ingress-controller
     - cert: cert-manager/cert
+    - namespace
 
   stubs:
     - plugins/kubectl/utilities.yaml

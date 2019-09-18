@@ -8,6 +8,7 @@ component:
     - identity
     - gardener: gardener/extensions
     - cert: cert-manager/cert
+    - namespace
 
   stubs:
     - plugins/kubectl/utilities.yaml

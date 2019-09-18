@@ -6,6 +6,7 @@ component:
     - monitoring/prometheus
     - grafana: monitoring/grafana
     - kube-apiserver
+    - namespace
 
   plugins:
     - git
