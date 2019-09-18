@@ -27,6 +27,10 @@ k8sVersions:
     offeredVersions:
     - version: (( env( "K8S_VERSION" ) || "1.14.3" ))
 
+monitoring-credentials:
+  username: (( env( "MONITORING_USERNAME" ) || ~~ ))
+  password: (( env( "MONITORING_PASSWORD" ) || ~~ ))
+
 base_cluster_configs:
   gcp:
     type: gcp
@@ -140,6 +144,10 @@ landscape:
       azure:
         constraints:
           <<: (( .k8sVersions ))
+
+  monitoring:
+    active: true
+    <<: (( .monitoring-credentials ))
 
   dns:
     type: google-clouddns
