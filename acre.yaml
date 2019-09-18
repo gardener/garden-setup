@@ -165,6 +165,12 @@ landscape:
       grafana:
         image_repo: grafana/grafana
         image_tag: "6.3.2"
+      gardener-metrics-exporter:
+        <<: (( merge ))
+        repo: https://github.com/gardener/gardener-metrics-exporter.git
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.4.0" ))
+        image_tag: (( valid( tag ) ? tag :~~ ))
+        image_repo: (( ~~ ))
   iaas: (( merge none // map[ select[stub()|e|-> ( ! defined( e.mode ) ) -or ( e.mode != "inactive" ) ] |idx,v|-> v { "mode" = v.mode || "seed" } ] ))
   etcd:
     <<: (( merge ))
