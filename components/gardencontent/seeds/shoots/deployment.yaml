@@ -20,7 +20,7 @@ env: (( &temporary ))
 
 plugins:
   - kubectl: domain-secret
-  - kubectl
+  - parallel: (( sum[.kubectl|[]|s,i,e|-> s {"kubectl" = "kubectl[" i "]"}] ))
   - -echo: "The setup waits until the shoots are ready. This may take up to 60 minutes."
   - <<: (( sum[.shootready|[]|s,i,e|-> s {"shootready" = "shootready[" i "]"}] ))
 
@@ -48,18 +48,18 @@ domain-secret:
 shootconfig:
   <<: (( &template &temporary ))
   values:
-    name: (( v2.name ))
-    namespace: (( v2.namespace || imports.project.export.project_namespace ))
+    name: (( v.name ))
+    namespace: (( v.namespace || imports.project.export.project_namespace ))
     domain: (( name "." imports.project.export.project_name ".seed." landscape.domain ))
     domain_secret: (( .settings.domain_secret ))
-    iaas: (( read(__ctx.DIR "/../provider/" v2.type "/shoot.yaml", "import") ))
-    cloudprofile: (( v2.cloudprofile || v2.name ))
-    k8sVersion: (( v2.k8sVersion || imports.profiles.export.k8sVersions[cloudprofile] ))
-    seed: (( v.name ))
-    secretbinding: (( ( "v" = { "type" = v2.type, "name" = cloudprofile }, "settings" = { "project_name" = imports.project.export.project_name } ) *imports.project.export.secret_name_template ))
-    config: (( v2 ))
+    iaas: (( read(__ctx.DIR "/../provider/" v.type "/shoot.yaml", "import") ))
+    cloudprofile: (( v.cloudprofile || v.name ))
+    k8sVersion: (( v.k8sVersion || imports.profiles.export.k8sVersions[cloudprofile] ))
+    seed: (( v.seed ))
+    secretbinding: (( ( "v" = { "type" = v.type, "name" = cloudprofile }, "settings" = { "project_name" = imports.project.export.project_name } ) *imports.project.export.secret_name_template ))
+    config: (( v ))
 
-kubectl: (( sum[landscape.iaas|[]|s,v|-> ( v.mode == "seed" -or v.mode == "soil" ) -and valid( v.seeds ) ? s sum[v.seeds|[]|s2,v2|-> s2 utilities.kubectl.generate( __ctx.DIR "/../manifests/shoot_manifest.yaml", imports.kube_apiserver.export.kubeconfig, *shootconfig )] :s ] ))
+kubectl: (( sum[.landscape.iaas_shooted_seeds|[]|s,v|-> s utilities.kubectl.generate( __ctx.DIR "/../manifests/shoot_manifest.yaml", imports.kube_apiserver.export.kubeconfig, *shootconfig )] ))
 
 shoot_template:
   <<: (( &template &temporary ))

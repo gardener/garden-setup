@@ -103,7 +103,7 @@ If you want to create shoots on all IaaS providers, best practise is to configur
 
 A few important things to know:
 - creating shoots takes some time, thus using shooted seeds will significantly increase the time needed for a complete setup
-  - deletion will take even longer, because `sow` deletes the shoots one after another, always waiting for the deletion to finish (parallel is not possible currently)
+  - the shoots are created and deleted in parallel to minimize the delay
 - all shoots for the shooted seeds will be created in the `core` project with purpose set to `infrastructure`
   - they use a big worker node size and are configured to scale between 1 and 100 workers depending on their load
   - **do not delete these shoots!**
