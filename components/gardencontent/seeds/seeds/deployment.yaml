@@ -35,7 +35,5 @@ providerconfig:
     networks: (( {"nodes" = v.cluster.networks.nodes, "pods" = v.cluster.networks.pods, "services" = v.cluster.networks.services} ))
   secretname: (( name "-" v.mode ))
 
-flattened_seeds: (( &temporary ( sum[landscape.iaas|[]|s,elem|-> defined( elem.seeds ) ? s elem.seeds :s] ) ))
-
-kubectl: (( sum[.flattened_seeds|[]|s,v|-> s utilities.kubectl.generate( __ctx.DIR "/../manifests/seed_manifest.yaml", imports.kube_apiserver.export.kubeconfig, *providerconfig )] ))
+kubectl: (( sum[.landscape.iaas_shooted_seeds|[]|s,v|-> s utilities.kubectl.generate( __ctx.DIR "/../manifests/seed_manifest.yaml", imports.kube_apiserver.export.kubeconfig, *providerconfig )] ))
 

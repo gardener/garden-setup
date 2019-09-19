@@ -13,7 +13,9 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
 component:
+  active: (( length( .landscape.iaas_shooted_seeds ) > 0 ))
   imports:
     - soils: gardencontent/seeds/soils
     - profiles: gardencontent/profiles

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-meta:
+meta: (( ~~ ))
 landscape:
   name: (( error("landscape name required") ))
   domain:
@@ -172,6 +172,7 @@ landscape:
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
   iaas: (( merge none // map[ select[stub()|e|-> ( ! defined( e.mode ) ) -or ( e.mode != "inactive" ) ] |idx,v|-> v { "mode" = v.mode || "seed" } ] ))
+  iaas_shooted_seeds: (( merge none // sum[landscape.iaas|[]|s,e|-> ( e.mode == "seed" -or e.mode == "soil" ) -and valid( e.seeds ) ? s map[e.seeds|x|-> x {"seed" = e.name}] :s] ))
   etcd:
     <<: (( merge ))
     backup:
