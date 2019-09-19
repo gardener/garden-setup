@@ -1,0 +1,41 @@
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+env: (( &temporary ))
+
+plugins:
+  - kubectl_patch
+  - helm
+
+kubectl_patch:
+  kubeconfig: (( .landscape.clusters[0].kubeconfig ))
+  resource: configmap
+  name: (( .imports.grafana.export.grafana_dashboards_configmap ))
+  namespace: (( .landscape.namespace ))
+  patch:
+    deploy: (( asyaml( .patch.deploy ) ))
+    delete: (( asyaml( .patch.delete ) ))
+
+helm:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: "git/repo/charts/gardener-metrics-exporter"
+  name: gardener-metrics-exporter
+  namespace: (( .landscape.namespace ))
+  values:
+    image:
+      repository: (( .landscape.versions.monitoring.gardener-metrics-exporter.image_repo || ~~ ))
+      tag: (( .landscape.versions.monitoring.gardener-metrics-exporter.image_tag || ~~ ))
+    kubeconfig: (( asyaml( .imports.kube-apiserver.export.kubeconfig ) ))
+
+settings:
+  dashboard_path_prefix: (( env.GENDIR "/git/repo/dashboards/" ))
+  excluded_dashboards:
+    - shoot-state-overview-dashboard.json
+
+patch:
+  <<: (( &temporary ))
+  deploy:
+    data: (( sum[list_files( .settings.dashboard_path_prefix )|{}|s,f|-> contains( .settings.excluded_dashboards, f ) ? s :s { f = read( .settings.dashboard_path_prefix f, "text" ) }] ))
+  delete:
+    data: (( sum[list_files( .settings.dashboard_path_prefix )|{}|s,f|-> contains( .settings.excluded_dashboards, f ) ? s :s { f = "null" }] ))
+  

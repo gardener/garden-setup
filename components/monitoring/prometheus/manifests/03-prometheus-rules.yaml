@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: garden-prometheus-rules
+  namespace: (( values.namespace ))
+  labels:
+    app: monitoring
+    role: prometheus
+    context: garden
+data:
+  rules.yaml: |
+    groups:
+    - name: availability.rules
+      rules:
+      - alert: ApiServerDown
+        expr: probe_success{job="blackbox-apiserver", purpose="availability"} == 0
+        for: 2m
+        labels:
+          service: apiserver
+          purpose: availability
+          severity: critical
+          status_code: |
+            {{ with printf "probe_http_status_code{instance='%s', purpose='availability'}" .Labels.instance | query }} {{ . | first | value }} {{ end }}
+        annotations:
+          description: The http health probe to the Api Server failed for at least 2 minutes ({{ $labels.instance }}).
+          summary: ApiServer Down
+
+      - alert: GardenerApiServerDown
+        expr: probe_success{job="blackbox-gardener-apiserver", purpose="availability"} == 0
+        for: 2m
+        labels:
+          service: gardener-apiserver
+          purpose: availability
+          severity: critical
+          status_code: |
+            {{ with printf "probe_http_status_code{instance='%s', purpose='availability'}" .Labels.instance | query }} {{ . | first | value }} {{ end }}
+        annotations:
+          description: The http health probe to the Gardener Api Server failed for at least 2 minutes ({{ $labels.instance }}).
+          summary: Gardener ApiServer Down
+
+      - alert: GardenerControllerManagerDown
+        expr: probe_success{job="blackbox-gardener-controller-manager", purpose="availability"} == 0
+        for: 10m
+        labels:
+          service: gardener-controller-manager
+          purpose: availability
+          severity: critical
+          status_code: |
+            {{ with printf "probe_http_status_code{instance='%s', purpose='availability'}" .Labels.instance | query }} {{ . | first | value }} {{ end }}
+        annotations:
+          description: The http health probe to the Gardener Controller Manager failed for at least 10 minutes ({{ $labels.instance }}).
+          summary: Gardener Controller Manager Down
+
+      - alert: DashboardDown
+        expr: probe_success{job="blackbox-dashboard", purpose="availability"} == 0
+        for: 5m
+        labels:
+          service: dashboard
+          purpose: availability
+          severity: critical
+          status_code: |
+            {{ with printf "probe_http_status_code{instance='%s', purpose='availability'}" .Labels.instance | query }} {{ . | first | value }} {{ end }}
+        annotations:
+          description: The http health probe to the Gardener Dashboard failed for at least 5 minutes ({{ $labels.instance }}).
+          summary: Dashboard Down
+
+      - alert: IdentityDown
+        expr: probe_success{job="blackbox-dex", purpose="availability"} == 0
+        for: 5m
+        labels:
+          service: identity
+          purpose: availability
+          severity: critical
+          status_code: |
+            {{ with printf "probe_http_status_code{instance='%s', purpose='availability'}" .Labels.instance | query }} {{ . | first | value }} {{ end }}
+        annotations:
+          description: The http health probe to the identity/dex service failed for at least 5 minutes ({{ $labels.instance }}).
+          summary: Identity/Dex Down

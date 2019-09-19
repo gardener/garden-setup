@@ -1,0 +1,19 @@
+---
+landscape: (( &temporary ))
+component:
+  active: (( .landscape.monitoring.active ))
+  imports:
+    - monitoring/prometheus
+    - grafana: monitoring/grafana
+    - kube-apiserver
+    - namespace
+
+  plugins:
+    - git
+
+git:
+  <<: (( .landscape.versions.monitoring.gardener-metrics-exporter ))
+  files:
+    - "charts"
+    - "dashboards"
+

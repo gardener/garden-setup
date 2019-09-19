@@ -1,0 +1,32 @@
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+utilities: (( &temporary ))
+
+plugins:
+  - kubectl: prometheus
+
+prometheus: (( sum[list_files( __ctx.DIR "/manifests" )|[]|s,f|-> s .utilities.kubectl.generate( __ctx.DIR "/manifests/" f, .landscape.clusters[0].kubeconfig, .kubectlconfig )] ))
+
+kubectlconfig:
+  <<: (( &temporary ))
+  namespace: (( .landscape.namespace ))
+  monitoring_versions: (( .landscape.versions.monitoring ))
+  apiserver_cert: (( .imports.kube_apiserver.export.kube_apiserver_ca ))
+  ingress_domain: (( .imports.ingress-controller.export.ingress_domain ))
+  settings: (( .settings ))
+
+settings:
+  hash: (( .landscape.monitoring.hash || exec_uncached( htpasswd ) ))
+  prometheus_domain: (( "garden-prometheus." .imports.ingress-controller.export.ingress_domain ))
+
+state:
+  <<: (( &state(merge none) ))
+  generated_password: (( valid( .landscape.monitoring.hash ) -or valid( .landscape.monitoring.password ) ? ~~ :rand("[:alnum:]", 20) ))
+
+htpasswd:
+  - <<: (( &temporary ))
+  - "htpasswd"
+  - "-nb"
+  - (( .landscape.monitoring.username ))
+  - (( .landscape.monitoring.password || .state.generated_password ))

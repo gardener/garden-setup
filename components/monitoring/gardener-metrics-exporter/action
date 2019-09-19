@@ -12,28 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-ingresscontroller: (( &temporary ))
-env: (( &temporary ))
-landscape: (( &temporary ))
-settings: (( &temporary ))
+source "$SOWLIB/k8s"
 
-temp:
-  <<: (( &temporary ))
-  command: 
-    - "kubectl"
-    - "--kubeconfig"
-    - (( lookup_file(landscape.clusters.[0].kubeconfig, env.ROOTDIR).[0] ))
-    - "-n"
-    - (( .ingresscontroller.namespace ))
-    - "get"
-    - "service"
-    - (( .ingresscontroller.values.name ))
-    - "-o"
-    - "json"
-  target: (( sync( exec_uncached( command ), defined(value.status.loadBalancer.ingress.[0]), value.status.loadBalancer.ingress.[0], 120 ) ))
-
-export:
-  type: (( defined( .temp.target.ip ) ? "A" :"CNAME" ))
-  address: (( .temp.target.ip || .temp.target.hostname ))
-  ingress_domain: (( .settings.ingress_domain ))
+kubectl_patch()
+{
+  PLUGIN_setup "$2" kubectl_patch
+  K8S_setKubeConfig "$field_path" "$GENDIR/$field_path/kubeconfig"
+  getRequiredValue name "name" PLUGINCONFIGJSON
+  getRequiredValue namespace "namespace" PLUGINCONFIGJSON
+  getRequiredValue resource "resource" PLUGINCONFIGJSON
+  getRequiredValue patch "patch.$1" PLUGINCONFIGJSON
+  kubectl -n "$namespace" patch "$resource" "$name" --patch "$(echo "$patch")"
+}

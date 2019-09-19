@@ -1,0 +1,14 @@
+job_name: auditlog-garden-controller-manager
+kubernetes_sd_configs:
+- role: endpoints
+  namespaces:
+    names:
+    - auditlog
+relabel_configs:
+- source_labels: [__meta_kubernetes_service_name]
+  regex: auditlog-garden-controller-manager
+  action: keep
+metric_relabel_configs:
+- source_labels: [ __name__ ]
+  regex: ^auditlog_landscape_per_seed$
+  action: keep

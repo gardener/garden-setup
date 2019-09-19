@@ -152,6 +152,25 @@ landscape:
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
         repo: "https://github.com/gardener/certificate-dns-bridge.git"
+    monitoring:
+      prometheus:
+        image_repo: quay.io/prometheus/prometheus
+        image_tag: v2.12.0
+      blackbox-exporter:
+        image_repo: quay.io/prometheus/blackbox-exporter
+        image_tag: v0.14.0
+      configmap-reload:
+        image_repo: quay.io/coreos/configmap-reload
+        image_tag: v0.0.1
+      grafana:
+        image_repo: grafana/grafana
+        image_tag: "6.3.2"
+      gardener-metrics-exporter:
+        <<: (( merge ))
+        repo: https://github.com/gardener/gardener-metrics-exporter.git
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.4.0" ))
+        image_tag: (( valid( tag ) ? tag :~~ ))
+        image_repo: (( ~~ ))
   iaas: (( merge none // map[ select[stub()|e|-> ( ! defined( e.mode ) ) -or ( e.mode != "inactive" ) ] |idx,v|-> v { "mode" = v.mode || "seed" } ] ))
   etcd:
     <<: (( merge ))
@@ -163,6 +182,11 @@ landscape:
   dashboard: (( ~~ ))
   identity:
   gardener: (( ~~ ))
+  monitoring:
+    active: false
+    username: admin
+    password: (( ~~ ))
+    hash: (( ~~ ))
   cert-manager:
     <<: (( merge ))
     server: (( merge none // valid( stub() ) ? ( type( stub() ) == "map" ? stub() :{ "url" = stub() } ) :{"url" = "self-signed"} ))

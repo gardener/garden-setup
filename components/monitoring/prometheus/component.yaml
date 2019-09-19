@@ -1,0 +1,14 @@
+---
+landscape: (( &temporary ))
+component:
+  active: (( .landscape.monitoring.active ))
+  imports:
+    - ingress-controller
+    - kube_apiserver: kube-apiserver
+    - identity
+    - gardener: gardener/extensions
+    - cert: cert-manager/cert
+    - namespace
+
+  stubs:
+    - plugins/kubectl/utilities.yaml
