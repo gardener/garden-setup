@@ -232,7 +232,11 @@ gardener:
           tag: (( .gardener_version.scheduler.image_tag || ~~ ))
         serviceAccountName: gardener-scheduler
         config:
-          candidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
+          schedulers:
+            shoot:
+              retrySyncPeriod: 15s
+              concurrentSyncs: 5
+              candidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
         kubeconfig: (( asyaml( imports.kube_apiserver.export.kubeconfig ) ))
       deployment:
         virtualGarden:

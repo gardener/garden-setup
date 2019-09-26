@@ -66,10 +66,9 @@ acme_issuer:
   manifests:
     - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :~ ))
     - apiVersion: certmanager.k8s.io/v1alpha1
-      kind: Issuer
+      kind: ClusterIssuer
       metadata:
         name: (( settings.issuerName ))
-        namespace: (( .landscape.namespace ))
       spec:
         acme:
           server: (( .caSpec.url ))
@@ -93,16 +92,15 @@ ca_issuer:
       kind: Secret
       metadata:
         name: (( .settings.caSecret ))
-        namespace: (( .landscape.namespace ))
+        namespace: (( .settings.namespace ))
       type: kubernetes.io/tls
       data:
         tls.crt: (( base64( .settings.ca.crt ) ))
         tls.key: (( base64( .settings.ca.key ) ))
     - apiVersion: certmanager.k8s.io/v1alpha1
-      kind: Issuer
+      kind: ClusterIssuer
       metadata:
         name: (( settings.issuerName ))
-        namespace: (( .landscape.namespace ))
       spec:
         ca:
           secretName: (( .settings.caSecret ))

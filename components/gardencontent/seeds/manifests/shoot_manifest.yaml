@@ -36,4 +36,8 @@ spec:
       end: 230000+0100
     autoUpdate:
       kubernetesVersion: false
-  addons: (( values.values.iaas.addons || ~~ ))
+  addons:
+    <<: (( values.values.iaas.spec.addons || ~ ))
+    nginx-ingress:
+      enabled: true
+      loadBalancerSourceRanges: []

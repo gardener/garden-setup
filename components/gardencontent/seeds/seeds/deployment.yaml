@@ -30,7 +30,7 @@ providerconfig:
   iaas: (( read(__ctx.DIR "/../provider/" v.type "/seed.yaml", "import") ))
   config: (( v ))
   seed:
-    ingressdomain: (( imports.ingress_dns.export.ingress_domain ))
+    ingressdomain: (( "ingress." name ".seed." .landscape.domain ))
     kubeconfig: (( imports.shoots.export.shoots[v.name].kubeconfig ))
     networks: (( {"nodes" = v.cluster.networks.nodes, "pods" = v.cluster.networks.pods, "services" = v.cluster.networks.services} ))
   secretname: (( name "-" v.mode ))

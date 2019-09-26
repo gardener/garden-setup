@@ -29,4 +29,4 @@ cert:
         - (( .settings.certificate.domain ))
         issuerRef:
           name: (( imports.cert-controller.export.issuerName ))
-          kind: Issuer
+          kind: ClusterIssuer
