@@ -8,6 +8,10 @@
 # GARDENER_IMAGE_TAG: gardener apiserver, controllermanager and scheduler version
 # GARDENER_COMMIT: use a specific gardener commit
 
+# Specify the supported kubernetes versions for the cloudprofiles by using K8S_VERSION or a file at K8S_VERSIONS
+# K8S_VERSION: specify the kubernetes version
+
+# K8S_VERSIONS: path to a file containing offered kubernetes versions
 
 gcp-credentials:
   serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
@@ -23,9 +27,12 @@ azure-credentials:
   tenantID: (( env( "AZ_TENANT_ID" ) ))
 
 k8sVersions:
-  kubernetes:
+  tmp:
+    <<: (( &temporary ))
     offeredVersions:
-    - version: (( env( "K8S_VERSION" ) || "1.14.3" ))
+    - version: (( env( "K8S_VERSION" ) || "1.14.4" ))
+  kubernetes:
+    (( read( env( "K8S_VERSIONS" ), "yaml") || tmp ))
 
 monitoring-credentials:
   username: (( env( "MONITORING_USERNAME" ) || ~~ ))
