@@ -50,7 +50,7 @@ shootconfig:
   values:
     name: (( v.name ))
     namespace: (( v.namespace || imports.project.export.project_namespace ))
-    domain: (( name "." imports.project.export.project_name ".seed." landscape.domain ))
+    domain: (( name ".seed." landscape.domain ))
     domain_secret: (( .settings.domain_secret ))
     iaas: (( read(__ctx.DIR "/../provider/" v.type "/shoot.yaml", "import") ))
     cloudprofile: (( v.cloudprofile || v.name ))
