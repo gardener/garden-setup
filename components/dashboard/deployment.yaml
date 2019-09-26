@@ -74,17 +74,6 @@ rbac:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       metadata:
-        labels:
-          garden.sapcloud.io/role: admins
-        name: garden-administrators
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: garden.sapcloud.io:system:project-member
-      subjects: (( util.userbindings(spec.users) ))
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
-      metadata:
         name: garden.sapcloud.io:system:project-creation
       roleRef:
         apiGroup: rbac.authorization.k8s.io
