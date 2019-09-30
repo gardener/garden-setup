@@ -3,7 +3,6 @@ set -e
 
 export SOURCE_PATH="$(readlink -f "$(dirname ${0})/..")"
 
-TESTRUN_CHART=""
 TM_LANDSCAPE="external"
 LANDSCAPE=""
 ARGUMENTS=""
@@ -17,10 +16,6 @@ for i in "$@"
 do
 echo $i
 case $i in
-        -tm-chart=*|--tm-chart=*)
-        TESTRUN_CHART="${i#*=}"
-        shift
-    ;;
         -tm-landscape=*|--tm-landscape=*)
         TM_LANDSCAPE="${i#*=}"
         shift
@@ -41,10 +36,6 @@ case $i in
 esac
 done
 
-if [[ $TESTRUN_CHART == "" ]]; then
-    echo "Required paramter: -tm-chart"
-    exit 1
-fi
 if [[ $TM_LANDSCAPE == "" ]]; then
     echo "Required paramter: -tm-landscape : external | internal"
     exit 1
@@ -96,7 +87,6 @@ kubectl cluster-info
     --s3-endpoint=$S3_ENDPOINT \
     --s3-ssl=true \
     --landscape=$LANDSCAPE \
-    --testruns-chart-path=$TESTRUN_CHART_PATH \
     --garden-setup-version=$VERSION \
     --gardener-version=$GARDENER_VERSION \
     --hostprovider=gardener \
