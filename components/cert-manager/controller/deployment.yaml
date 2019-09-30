@@ -4,7 +4,7 @@ landscape: (( &temporary ))
 utilities: (( &temporary ))
 
 settings:
-  groupName: cert.gardener.cloud
+  groupName: cert-bridge.gardener.cloud
   solverName: certificate-dns-bridge
   namespace: cert-manager # will be created - don't choose an existing one!
   serviceAccountName: cert-manager
