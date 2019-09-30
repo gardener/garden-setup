@@ -45,7 +45,6 @@ garden-setup:
             OUT_PATH: out_path
           execute:
           - ./tm-test
-          - --tm-chart=default
           - --landscape=test
           - --tm-landscape=external
           - --
