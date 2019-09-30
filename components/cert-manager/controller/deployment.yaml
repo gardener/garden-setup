@@ -56,7 +56,7 @@ issuer-secret:
     type: Opaque
     metadata:
       name: (( settings.issuerName "-secret" ))
-      namespace: (( .landscape.namespace ))
+      namespace: (( .settings.namespace ))
     data:
       tls.key: (( base64(settings.issuerPrivateKey) ))
 
