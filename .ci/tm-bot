@@ -1,0 +1,21 @@
+
+# configure default values for pull request tests
+test:
+  hostprovider: gardener
+  baseClusterCloudprovider: gcp
+
+  gardensetup:
+    revision:
+      prHead: true
+
+  gardener:
+    version:
+      path: GARDENER_VERSION
+
+  kubernetes:
+    versions:
+    - 1.14.4
+
+  cloudproviders:
+  - gcp
+  - aws
