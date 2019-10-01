@@ -81,8 +81,8 @@ kubectl cluster-info
 # timeout to 6h
 /testrunner run-gardener \
     --kubeconfig=$TM_CLUSTER \
-    --timeout=21600 \
-    --interval=60 \
+    --timeout=6h \
+    --interval=1m \
     --es-config-name=sap_internal \
     --s3-endpoint=$S3_ENDPOINT \
     --s3-ssl=true \
