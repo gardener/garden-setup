@@ -86,7 +86,6 @@ kubectl cluster-info
     --es-config-name=sap_internal \
     --s3-endpoint=$S3_ENDPOINT \
     --s3-ssl=true \
-    --landscape=$LANDSCAPE \
     --garden-setup-version=$VERSION \
     --gardener-version=$GARDENER_VERSION \
     --hostprovider=gardener \
