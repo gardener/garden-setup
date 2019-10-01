@@ -20,39 +20,6 @@ garden-setup:
         update_component_deps: ~
         cronjob:
           interval: '5m'
-    pull_request_integration:
-      traits:
-        pull-request:
-          disable-status-report:
-          - prepare-test
-        scheduling:
-          suppress_parallel_execution: true
-        version:
-          preprocess:
-            'inject-commit-hash'
-          inject_effective_version: true
-      steps:
-        prepare-test:
-          image: eu.gcr.io/gardener-project/gardener/testmachinery/base-step:latest
-          output_dir: out
-          execute:
-          - ./it-prepare.py
-        integration-test:
-          image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:stable
-          depends:
-          - prepare-test
-          inputs:
-            OUT_PATH: out_path
-          execute:
-          - ./tm-test
-          - --landscape=test
-          - --tm-landscape=external
-          - --
-          - --testrun-prefix=garden-setup
-          - --project-namespace=garden-core
-          - --kubernetes-version=1.15.4
-          - --cloudprovider=gcp
-          - --cloudprovider=aws
     integration-test:
       repo:
         trigger: false
@@ -72,8 +39,11 @@ garden-setup:
           image: eu.gcr.io/gardener-project/gardener/testmachinery/testmachinery-run:stable
           execute:
           - tm-test
-          - --tm-chart=default
           - --landscape=test
           - --tm-landscape=external
           - --
           - --testrun-prefix=garden-setup
+          - --project-namespace=garden-core
+          - --kubernetes-version=1.15.4
+          - --cloudprovider=gcp
+          - --cloudprovider=aw
