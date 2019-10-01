@@ -46,4 +46,4 @@ garden-setup:
           - --project-namespace=garden-core
           - --kubernetes-version=1.15.4
           - --cloudprovider=gcp
-          - --cloudprovider=aw
+          - --cloudprovider=aws
