@@ -64,12 +64,12 @@ landscape:
           chart_path: controllers/os-coreos/charts/os-coreos
           image_tag: (( valid( os-coreos.tag ) ? os-coreos.tag :~~ ))
           image_repo: (( ~~ ))
-        os-coreos-alicloud:
+        os-ubuntu:
           <<: (( merge ))
-          tag: (( valid( os-coreos-alicloud.branch ) -or valid( os-coreos-alicloud.commit ) ? ~~ :"0.13.3" ))
+          tag: (( valid( os-ubuntu.branch ) -or valid( os-ubuntu.commit ) ? ~~ :"0.13.3" ))
           repo: https://github.com/gardener/gardener-extensions.git
-          chart_path: controllers/os-coreos-alicloud/charts/os-coreos-alicloud
-          image_tag: (( valid( os-coreos-alicloud.tag ) ? os-coreos-alicloud.tag :~~ ))
+          chart_path: controllers/os-ubuntu/charts/os-ubuntu
+          image_tag: (( valid( os-ubuntu.tag ) ? os-ubuntu.tag :~~ ))
           image_repo: (( ~~ ))
         os-suse-jeos:
           <<: (( merge ))
@@ -77,13 +77,6 @@ landscape:
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/os-suse-jeos/charts/os-suse-jeos
           image_tag: (( valid( os-suse-jeos.tag ) ? os-suse-jeos.tag :~~ ))
-          image_repo: (( ~~ ))
-        provider-alicloud:
-          <<: (( merge ))
-          tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :"0.13.3" ))
-          repo: https://github.com/gardener/gardener-extensions.git
-          chart_path: controllers/provider-alicloud/charts/provider-alicloud
-          image_tag: (( valid( provider-alicloud.tag ) ? provider-alicloud.tag :~~ ))
           image_repo: (( ~~ ))
         provider-aws:
           <<: (( merge ))
@@ -279,7 +272,10 @@ validation:
             - - list
               - - and
                 - ["mapfield", "name"]
-                - ["mapfield", "version"]
+                - - mapfield
+                  - versions
+                  - - list
+                    - ["mapfield", "version"]
           - - mapfield
             - loadBalancerProviders
             - - list
@@ -293,8 +289,13 @@ validation:
                 - ["mapfield", "gpu"]
                 - ["mapfield", "memory"]
                 - ["mapfield", "usable"]
-                - ["mapfield", "volumeType"]
-                - ["mapfield", "volumeSize"]
+                - - mapfield
+                  - storage
+                  - - and
+                    - ["mapfield", "type"]
+                    - ["mapfield", "size"]
+          - ["optionalfield", "dhcpDomain", "dnsdomain"]
+          - ["optionalfield", "keystoneURL", "dnsdomain"]
           - - optionalfield
             - extensionConfig
             - - mapfield

@@ -31,7 +31,7 @@ deployment:
   # and a manifest template in extension_manifests in this component's deployment.yaml
   extensions:
     - os-coreos
-    - (( contains( .infrastructures, "alicloud" ) ? "os-coreos-alicloud" :~~ ))
+    - os-ubuntu
     - os-suse-jeos
     - dns-external
     - networking-calico

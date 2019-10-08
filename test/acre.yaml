@@ -29,7 +29,7 @@ azure-credentials:
 k8sVersions:
   tmp:
     <<: (( &temporary ))
-    offeredVersions:
+    versions:
     - version: (( env( "K8S_VERSION" ) || "1.14.4" ))
   kubernetes:
     (( read( env( "K8S_VERSIONS" ), "yaml") || tmp ))
@@ -49,9 +49,7 @@ base_cluster_configs:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      gcp:
-        constraints:
-          <<: (( .k8sVersions ))
+      kubernetes: (( .k8sVersions.kubernetes ))
   aws:
     type: aws
     region: eu-west-1
@@ -62,18 +60,14 @@ base_cluster_configs:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      aws:
-        constraints:
-          <<: (( .k8sVersions ))
+      kubernetes: (( .k8sVersions.kubernetes ))
   azure:
     type: azure
     region: westeurope
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      azure:
-        constraints:
-          <<: (( .k8sVersions ))
+      kubernetes: (( .k8sVersions.kubernetes ))
 
 
 ############################################################################
@@ -124,9 +118,7 @@ landscape:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      gcp:
-        constraints:
-          <<: (( .k8sVersions ))
+      kubernetes: (( .k8sVersions.kubernetes ))
   - name: aws
     mode: cloudprofile
     type: aws
@@ -138,9 +130,7 @@ landscape:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      aws:
-        constraints:
-          <<: (( .k8sVersions ))
+      kubernetes: (( .k8sVersions.kubernetes ))
   - name: azure
     mode: cloudprofile
     type: azure
@@ -148,9 +138,7 @@ landscape:
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      azure:
-        constraints:
-          <<: (( .k8sVersions ))
+      kubernetes: (( .k8sVersions.kubernetes ))
 
   monitoring:
     active: true

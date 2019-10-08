@@ -15,20 +15,6 @@
 utilities:
   <<: (( &temporary(merge || ~) ))
   profile:
-    kubernetes:
-      offeredVersions:
-        - version: 1.16.1
-        - version: 1.15.4
-        - version: 1.14.7
-        - version: 1.13.11
-        - version: 1.12.10
-        - version: 1.11.10
-    knownproviders:
-      - aws
-      - gcp
-      - openstack
-      - azure
-    profilespecs: (( sum[knownproviders|{}|s,v|->s {v=read(__ctx.DIR "/../provider/" v "/iaas.yaml", "yaml")}] ))
     manifestfile: (( __ctx.DIR "/../manifests/manifest.yaml" ))
     create: (( |iaasconfig|->utilities.kubectl.generate(_.manifestfile, imports.kube_apiserver.export.kubeconfig, *_.values) ))
     values:
@@ -36,11 +22,6 @@ utilities:
       profileoverwrite: (( iaasconfig.profile || {} ))
       name: (( iaasconfig.name ))
       type: (( iaasconfig.type ))
-      cabundle: (( values.config.cabundle || ~~ ))
-      values:
-        dns:
-          type: (( landscape.dns.type ))
-        kubernetes: (( config.kubernetes || utilities.profile.kubernetes ))
-        config: (( iaasconfig ))
-        credentials: (( iaasconfig.credentials || ~~ ))
-      profilespec: (( merge( utilities.profile.profilespecs.[iaasconfig.type], profileoverwrite ) ))
+      config: (( iaasconfig ))
+      credentials: (( iaasconfig.credentials || ~~ ))
+      providerspec: (( read( __ctx.DIR "/provider/" type "/iaas.yaml", "yaml" ) ))

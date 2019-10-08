@@ -48,11 +48,9 @@ iaas:
         ...
     credentials:
     profile:
-      <gcp|aws|azure|openstack>:                 # depends on infrastructure provider
-        constraints:
-          kubernetes:
-            offeredVersions:
-              - version: 1.13.0
+      kubernetes:
+        versions:
+          - version: 1.13.0
 ```
 
 ## The 'mode' Field
@@ -84,7 +82,7 @@ Cloudprofiles are created first, before any seed. Thus, entries of `landscape.ia
           - <major region>-<minor region>-<zone>
           - <major region>-<minor region>-<zone>
           - <major region>-<minor region>-<zone>
-        credentials:
+        credentials: ...
         cluster:
           networks:
             nodes: <CIDR IP range>
@@ -112,7 +110,7 @@ A few important things to know:
 
 ## Overwriting Cloudprofiles
 
-By adding a `profile` node in a iaas entry, it is possible to overwrite parts of the cloudprofile. If the node is present, everything under it will be merged into the `spec` node of the cloudprofile. In this context, 'merged' means that every node that is under or next to `constraints` will be overwritten by what you specify here. You can add nodes that are not part of the default cloudprofile this way. Nodes on these levels that are not given here will use their defaults. A more fine-grained merge of values is not possible - the example above will not add `1.13.0` to the possible kubernetes versions in this cloudprofile, but instead set it to be the only available option.
+By adding a `profile` node in a iaas entry, it is possible to overwrite parts of the cloudprofile. If the node is present, everything under it will be merged into the `spec` node of the cloudprofile. In this context, 'merged' means that every node that is directly under `spec` will be overwritten by what you specify here. You can add nodes that are not part of the default cloudprofile this way. Nodes on these levels that are not given here will use their defaults. A more fine-grained merge of values is not possible - the example above will not add `1.13.0` to the possible kubernetes versions in this cloudprofile, but instead set it to be the only available option.
 
 This is incompatible with the `cloudprofile` field explained above (because no cloudprofile will be created in this case).
 
