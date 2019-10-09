@@ -82,7 +82,7 @@ Cloudprofiles are created first, before any seed. Thus, entries of `landscape.ia
           - <major region>-<minor region>-<zone>
           - <major region>-<minor region>-<zone>
           - <major region>-<minor region>-<zone>
-        credentials: ...
+        credentials:
         cluster:
           networks:
             nodes: <CIDR IP range>
@@ -106,6 +106,55 @@ A few important things to know:
   - they use a big worker node size and are configured to scale between 1 and 100 workers depending on their load
   - **do not delete these shoots!**
 - shoots have a length restriction of 10 characters for their name - this restriction applies to the `name` fields of `seeds` entries
+
+
+### Worker Configuration
+
+It is possible to configure the worker groups for the shooted seeds. To do so, just add a `shootMachines` node to the shooted seed's iaas configuration, which follows the same structure as the worker configuration of the [shoot spec](https://github.com/gardener/gardener/blob/0.30.2/example/90-shoot.yaml#L29-L91).
+
+By default, only one worker group will be configured with these values:
+```yaml
+name: cpu-worker
+minimum: 1
+maximum: 50
+maxSurge: "50%"
+maxUnavailable: 0
+machine:
+  type: <depends on iaas provider>
+  image:
+    name: coreos # or first image from `machineImages` for openstack
+    version: <some coreos version>
+volume:
+  type: <depends on iaas provider>
+  size: "50Gi"
+zones: <first zone from the specified zones, if found>
+```
+
+If you only want to overwrite some values of this worker group, you can just add the corresponding key and value in the `shootMachines` node:
+```yaml
+      - name: my-seed
+        type: gcp
+        mode: seed
+        shootMachines:
+          maxSurge: 1
+        ...
+```
+This example would only overwrite the `maxSurge` field and use the defaults for everything else.
+
+If you want to add another worker group, provide a list instead with each entry overwriting the defaults of the corresponding worker group as explained above:
+```yaml
+        ...
+        shootMachines:
+          - {} # use defaults for first worker group
+          - name: logging
+            maximum: 3
+            labels:
+              my-logging-label: "true"
+        ...
+```
+This would configure two worker groups, the first one completely with default values and the second one with default values except for `name`, `maximum`, and `labels`.
+
+Note that if you don't overwrite the name, the first worker group will be named `cpu-worker` and each following worker group will be named `worker`, followed by its index. In the above example, the second worker group would have been named `worker1`, if the name wasn't overwritten.
 
 
 ## Overwriting Cloudprofiles

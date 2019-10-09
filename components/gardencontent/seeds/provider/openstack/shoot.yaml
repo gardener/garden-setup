@@ -12,23 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-spec:
-  cloud:
-    openstack:
-      floatingPoolName: (( values.config.floatingPools[0].name))
-      loadBalancerProvider: (( values.config.loadBalancerProviders[0].name ))
-      networks: (( values.config.cluster.networks ))
-      workers:
-      - autoScalerMax: 50
-        autoScalerMin: 1
-        machineType: (( values.config.machineType ))
-        maxSurge: 50%
-        maxUnavailable: 0
-        name: cpu-worker
-      zones:
-      - (( values.config.zones[0] ))
-    profile: (( values.cloudprofile ))
-    region: (( values.config.region ))
-    secretBindingRef:
-      name: (( values.secretbinding ))
-    seed: (( values.seed ))
+infrastructureConfig:
+  networks:
+    worker: (( values.config.cluster.networks.workers ))
+  floatingPoolName: (( values.config.floatingPools[0].name))
+controlPlaneConfig:
+  zone: (( values.config.zones[0] ))
+  loadBalancerProvider: (( values.config.loadBalancerProviders[0].name ))
+defaultMachineType: (( values.config.machineTypes[0].name ))
+defaultVolumeType: (( values.config.machineTypes[0].name ))

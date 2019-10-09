@@ -229,7 +229,7 @@ validation:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
         networks:
-          - ["mapfield", "workers", ["list", ["cidr"]]]
+          - ["mapfield", "workers", ["cidr"]]
       aws:
         credentials:
           - and
@@ -239,8 +239,8 @@ validation:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
         networks:
-          - ["mapfield", "internal", ["list", ["cidr"]]]
-          - ["mapfield", "public", ["list", ["cidr"]]]
+          - ["mapfield", "internal", ["cidr"]]
+          - ["mapfield", "public", ["cidr"]]
           - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
       azure:
         credentials:
@@ -314,7 +314,7 @@ validation:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
         networks:
-          - ["mapfield", "workers", ["list", ["cidr"]]]
+          - ["mapfield", "workers", ["cidr"]]
     etcd_backup:
       gcs:
         credentials: (( iaas.gcp.credentials ))

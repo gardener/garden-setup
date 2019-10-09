@@ -12,23 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-spec:
-  cloud:
-    aws:
-      networks: (( values.config.cluster.networks ))
-      workers:
-      - autoScalerMax: 50
-        autoScalerMin: 1
-        machineType: m5.4xlarge
-        maxSurge: 50%
-        maxUnavailable: 0
-        name: cpu-worker
-        volumeSize: 50Gi
-        volumeType: gp2
-      zones:
-      - (( values.config.zones[0] ))
-    profile: (( values.cloudprofile ))
-    region: (( values.config.region ))
-    secretBindingRef:
-      name: (( values.secretbinding ))
-    seed: (( values.seed ))
+infrastructureConfig:
+  networks:
+    vpc: (( values.config.cluster.networks.vpc ))
+    zones:
+      - name: (( values.config.zones[0] ))
+        internal: (( values.config.cluster.networks.internal ))
+        public: (( values.config.cluster.networks.workers ))
+        workers: (( values.config.cluster.networks.public ))
+controlPlaneConfig: {}
+defaultMachineType: m5.4xlarge
+defaultVolumeType: gp2

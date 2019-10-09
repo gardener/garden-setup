@@ -15,7 +15,9 @@
 ---
 k8sVersions: (( &temporary ))
 profiles: (( &temporary ))
+defaultCoreosVersion: (( &temporary ))
 
 export:
   k8sVersions: (( .k8sVersions ))
   profiles: (( .profiles ))
+  defaultCoreosVersion: (( .defaultCoreosVersion ))
