@@ -13,30 +13,13 @@
 # limitations under the License.
 
 <<: (( &template ))
-aws:
-  <<: (( merge ))
-  constraints:
-    <<: (( merge ))
-    dnsProviders: (( defaults.dnsProviders ))
-    kubernetes: (( values.kubernetes ))
-    machineImages: (( defaults.machineImages ))
-    machineTypes: (( defaults.machineTypes ))
-    volumeTypes: (( defaults.volumeTypes ))
-    zones: (( defaults.zones ))
 
-defaults:
-  <<: (( &temporary ))
-  dnsProviders:
-  - name: (( values.dns.type ))
-  - name: unmanaged
-  kubernetes:
-    offeredVersions: (( values.kubernetes.offeredVersions ))
-  machineImages:
-  - name: coreos
-    version: 2023.5.0
+machineImages:
   - name: suse-jeos
-    version: 0.0.0-alpha-1
-  machineTypes:
+    versions:
+      - version: 0.0.0-alpha.2
+
+machineTypes:
   - cpu: "2"
     gpu: "0"
     memory: 8Gi
@@ -277,87 +260,89 @@ defaults:
     memory: 4Gi
     name: t3.medium
     usable: true
-  volumeTypes:
+
+volumeTypes:
   - class: standard
     name: gp2
     usable: true
-  zones:
-  - names:
-    - ap-northeast-1a
-    - ap-northeast-1c
-    - ap-northeast-1d
-    region: ap-northeast-1
-  - names:
-    - ap-northeast-2a
-    - ap-northeast-2c
-    region: ap-northeast-2
-  - names:
-    - ap-south-1a
-    - ap-south-1b
-    region: ap-south-1
-  - names:
-    - ap-southeast-1a
-    - ap-southeast-1b
-    - ap-southeast-1c
-    region: ap-southeast-1
-  - names:
-    - ap-southeast-2a
-    - ap-southeast-2b
-    - ap-southeast-2c
-    region: ap-southeast-2
-  - names:
-    - ca-central-1a
-    - ca-central-1b
-    region: ca-central-1
-  - names:
-    - eu-central-1a
-    - eu-central-1b
-    - eu-central-1c
-    region: eu-central-1
-  - names:
-    - eu-north-1a
-    - eu-north-1b
-    - eu-north-1c
-    region: eu-north-1
-  - names:
-    - eu-west-1a
-    - eu-west-1b
-    - eu-west-1c
-    region: eu-west-1
-  - names:
-    - eu-west-2a
-    - eu-west-2b
-    - eu-west-2c
-    region: eu-west-2
-  - names:
-    - eu-west-3a
-    - eu-west-3b
-    - eu-west-3c
-    region: eu-west-3
-  - names:
-    - sa-east-1a
-    - sa-east-1c
-    region: sa-east-1
-  - names:
-    - us-east-1a
-    - us-east-1b
-    - us-east-1c
-    - us-east-1d
-    - us-east-1e
-    - us-east-1f
-    region: us-east-1
-  - names:
-    - us-east-2a
-    - us-east-2b
-    - us-east-2c
-    region: us-east-2
-  - names:
-    - us-west-1a
-    - us-west-1c
-    region: us-west-1
-  - names:
-    - us-west-2a
-    - us-west-2b
-    - us-west-2c
-    - us-west-2d
-    region: us-west-2
+
+regions:
+  - zones:
+    - name: ap-northeast-1a
+    - name: ap-northeast-1c
+    - name: ap-northeast-1d
+    name: ap-northeast-1
+  - zones:
+    - name: ap-northeast-2a
+    - name: ap-northeast-2c
+    name: ap-northeast-2
+  - zones:
+    - name: ap-south-1a
+    - name: ap-south-1b
+    name: ap-south-1
+  - zones:
+    - name: ap-southeast-1a
+    - name: ap-southeast-1b
+    - name: ap-southeast-1c
+    name: ap-southeast-1
+  - zones:
+    - name: ap-southeast-2a
+    - name: ap-southeast-2b
+    - name: ap-southeast-2c
+    name: ap-southeast-2
+  - zones:
+    - name: ca-central-1a
+    - name: ca-central-1b
+    name: ca-central-1
+  - zones:
+    - name: eu-central-1a
+    - name: eu-central-1b
+    - name: eu-central-1c
+    name: eu-central-1
+  - zones:
+    - name: eu-north-1a
+    - name: eu-north-1b
+    - name: eu-north-1c
+    name: eu-north-1
+  - zones:
+    - name: eu-west-1a
+    - name: eu-west-1b
+    - name: eu-west-1c
+    name: eu-west-1
+  - zones:
+    - name: eu-west-2a
+    - name: eu-west-2b
+    - name: eu-west-2c
+    name: eu-west-2
+  - zones:
+    - name: eu-west-3a
+    - name: eu-west-3b
+    - name: eu-west-3c
+    name: eu-west-3
+  - zones:
+    - name: sa-east-1a
+    - name: sa-east-1c
+    name: sa-east-1
+  - zones:
+    - name: us-east-1a
+    - name: us-east-1b
+    - name: us-east-1c
+    - name: us-east-1d
+    - name: us-east-1e
+    - name: us-east-1f
+    name: us-east-1
+  - zones:
+    - name: us-east-2a
+    - name: us-east-2b
+    - name: us-east-2c
+    name: us-east-2
+  - zones:
+    - name: us-west-1a
+    - name: us-west-1c
+    name: us-west-1
+  - zones:
+    - name: us-west-2a
+    - name: us-west-2b
+    - name: us-west-2c
+    - name: us-west-2d
+    name: us-west-2

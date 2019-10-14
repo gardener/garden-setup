@@ -13,28 +13,8 @@
 # limitations under the License.
 
 <<: (( &template ))
-gcp:
-  <<: (( merge ))
-  constraints:
-    <<: (( merge ))
-    dnsProviders: (( defaults.dnsProviders ))
-    kubernetes: (( values.kubernetes ))
-    machineImages: (( defaults.machineImages ))
-    machineTypes: (( defaults.machineTypes ))
-    volumeTypes: (( defaults.volumeTypes ))
-    zones: (( defaults.zones ))
 
-defaults:
-  <<: (( &temporary ))
-  dnsProviders:
-  - name: (( values.dns.type ))
-  - name: unmanaged
-  kubernetes:
-    offeredVersions: (( values.kubernetes.offeredVersions ))
-  machineImages:
-  - name: coreos
-    version: 2023.5.0
-  machineTypes:
+machineTypes:
   - cpu: "2"
     gpu: "0"
     memory: 7500Mi
@@ -65,117 +45,119 @@ defaults:
     memory: 240Gi
     name: n1-standard-64
     usable: true
-  volumeTypes:
+
+volumeTypes:
   - class: standard
     name: pd-standard
     usable: true
   - class: premium
     name: pd-ssd
     usable: true
-  zones:
-  - names:
-    - asia-east1-a
-    - asia-east1-b
-    - asia-east1-c
-    region: asia-east1
-  - names:
-    - asia-east2-c
-    - asia-east2-b
-    - asia-east2-a
-    region: asia-east2
-  - names:
-    - asia-northeast1-a
-    - asia-northeast1-b
-    - asia-northeast1-c
-    region: asia-northeast1
-  - names:
-    - asia-northeast2-a
-    - asia-northeast2-b
-    - asia-northeast2-c
-    region: asia-northeast2
-  - names:
-    - asia-south1-b
-    - asia-south1-a
-    - asia-south1-c
-    region: asia-south1
-  - names:
-    - asia-southeast1-a
-    - asia-southeast1-b
-    - asia-southeast1-c
-    region: asia-southeast1
-  - names:
-    - australia-southeast1-c
-    - australia-southeast1-a
-    - australia-southeast1-b
-    region: australia-southeast1
-  - names:
-    - europe-north1-b
-    - europe-north1-c
-    - europe-north1-a
-    region: europe-north1
-  - names:
-    - europe-west1-b
-    - europe-west1-c
-    - europe-west1-d
-    region: europe-west1
-  - names:
-    - europe-west2-a
-    - europe-west2-b
-    - europe-west2-c
-    region: europe-west2
-  - names:
-    - europe-west3-c
-    - europe-west3-a
-    - europe-west3-b
-    region: europe-west3
-  - names:
-    - europe-west4-c
-    - europe-west4-b
-    - europe-west4-a
-    region: europe-west4
-  - names:
-    - europe-west5-a
-    - europe-west5-b
-    - europe-west5-c
-    region: europe-west5
-  - names:
-    - europe-west6-b
-    - europe-west6-c
-    - europe-west6-a
-    region: europe-west6
-  - names:
-    - northamerica-northeast1-a
-    - northamerica-northeast1-b
-    - northamerica-northeast1-c
-    region: northamerica-northeast1
-  - names:
-    - southamerica-east1-a
-    - southamerica-east1-b
-    - southamerica-east1-c
-    region: southamerica-east1
-  - names:
-    - us-central1-a
-    - us-central1-b
-    - us-central1-c
-    - us-central1-f
-    region: us-central1
-  - names:
-    - us-east1-b
-    - us-east1-c
-    - us-east1-d
-    region: us-east1
-  - names:
-    - us-east4-a
-    - us-east4-b
-    - us-east4-c
-    region: us-east4
-  - names:
-    - us-west1-a
-    - us-west1-b
-    - us-west1-c
-    region: us-west1
-  - names:
-    - us-west2-c
-    - us-west2-b
-    - us-west2-a
-    region: us-west2
+
+regions:
+  - zones:
+    - name: asia-east1-a
+    - name: asia-east1-b
+    - name: asia-east1-c
+    name: asia-east1
+  - zones:
+    - name: asia-east2-c
+    - name: asia-east2-b
+    - name: asia-east2-a
+    name: asia-east2
+  - zones:
+    - name: asia-northeast1-a
+    - name: asia-northeast1-b
+    - name: asia-northeast1-c
+    name: asia-northeast1
+  - zones:
+    - name: asia-northeast2-a
+    - name: asia-northeast2-b
+    - name: asia-northeast2-c
+    name: asia-northeast2
+  - zones:
+    - name: asia-south1-b
+    - name: asia-south1-a
+    - name: asia-south1-c
+    name: asia-south1
+  - zones:
+    - name: asia-southeast1-a
+    - name: asia-southeast1-b
+    - name: asia-southeast1-c
+    name: asia-southeast1
+  - zones:
+    - name: australia-southeast1-c
+    - name: australia-southeast1-a
+    - name: australia-southeast1-b
+    name: australia-southeast1
+  - zones:
+    - name: europe-north1-b
+    - name: europe-north1-c
+    - name: europe-north1-a
+    name: europe-north1
+  - zones:
+    - name: europe-west1-b
+    - name: europe-west1-c
+    - name: europe-west1-d
+    name: europe-west1
+  - zones:
+    - name: europe-west2-a
+    - name: europe-west2-b
+    - name: europe-west2-c
+    name: europe-west2
+  - zones:
+    - name: europe-west3-c
+    - name: europe-west3-a
+    - name: europe-west3-b
+    name: europe-west3
+  - zones:
+    - name: europe-west4-c
+    - name: europe-west4-b
+    - name: europe-west4-a
+    name: europe-west4
+  - zones:
+    - name: europe-west5-a
+    - name: europe-west5-b
+    - name: europe-west5-c
+    name: europe-west5
+  - zones:
+    - name: europe-west6-b
+    - name: europe-west6-c
+    - name: europe-west6-a
+    name: europe-west6
+  - zones:
+    - name: northamerica-northeast1-a
+    - name: northamerica-northeast1-b
+    - name: northamerica-northeast1-c
+    name: northamerica-northeast1
+  - zones:
+    - name: southamerica-east1-a
+    - name: southamerica-east1-b
+    - name: southamerica-east1-c
+    name: southamerica-east1
+  - zones:
+    - name: us-central1-a
+    - name: us-central1-b
+    - name: us-central1-c
+    - name: us-central1-f
+    name: us-central1
+  - zones:
+    - name: us-east1-b
+    - name: us-east1-c
+    - name: us-east1-d
+    name: us-east1
+  - zones:
+    - name: us-east4-a
+    - name: us-east4-b
+    - name: us-east4-c
+    name: us-east4
+  - zones:
+    - name: us-west1-a
+    - name: us-west1-b
+    - name: us-west1-c
+    name: us-west1
+  - zones:
+    - name: us-west2-c
+    - name: us-west2-b
+    - name: us-west2-a
+    name: us-west2

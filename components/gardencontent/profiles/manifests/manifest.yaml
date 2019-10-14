@@ -13,15 +13,43 @@
 # limitations under the License.
 
 ---
-apiVersion: garden.sapcloud.io/v1beta1
+apiVersion: core.gardener.cloud/v1alpha1
 key:kind: CloudProfile
 metadata:
   name: (( values.name ))
-  annotations:
-    cloudprofile.garden.sapcloud.io/iaas: (( values.type ))
 spec:
-  caBundle: (( values.cabundle || ~~ ))
-  <<: (( values.profilespec ))
+  type: (( values.type ))
+  <<: (( ( values.type == "openstack" ? defaults.openstack :defaults.spec ) values.profileoverwrite ))
 
-
-
+defaults:
+  <<: (( &temporary ))
+  openstack:
+    kubernetes: (( spec.kubernetes ))
+    <<: (( defaults.providerspec ))
+  spec:
+    providerConfig: (( defaults.providerspec.providerConfig || ~~ ))
+    kubernetes: (( defaults.providerspec.kubernetes || defaults.kubernetes ))
+    machineImages:
+      - name: coreos
+        versions:
+          - version: (( values.coreosVersion ))
+      - name: ubuntu
+        versions:
+        - version: 18.04.201906170
+      - <<: (( defaults.providerspec.machineImages || ~ ))
+    machineTypes:
+      - <<: (( defaults.providerspec.machineTypes || ~ ))
+    volumeTypes:
+      - <<: (( defaults.providerspec.volumeTypes || ~ ))
+    regions:
+      - <<: (( defaults.providerspec.regions || ~ ))
+    caBundle: (( values.config.caBundle || ~~ ))
+  kubernetes:
+    versions:
+      - version: 1.16.1
+      - version: 1.15.4
+      - version: 1.14.7
+      - version: 1.13.11
+      - version: 1.12.10
+      - version: 1.11.10
+  providerspec: (( *values.providerspec ))

@@ -13,29 +13,8 @@
 # limitations under the License.
 
 <<: (( &template ))
-azure:
-  <<: (( merge ))
-  constraints:
-    <<: (( merge ))
-    dnsProviders: (( defaults.dnsProviders ))
-    kubernetes: (( values.kubernetes ))
-    machineImages: (( defaults.machineImages ))
-    machineTypes: (( defaults.machineTypes ))
-    volumeTypes: (( defaults.volumeTypes ))
-  countUpdateDomains: (( defaults.countUpdateDomains ))
-  countFaultDomains: (( defaults.countFaultDomains ))
 
-defaults:
-  <<: (( &temporary ))
-  dnsProviders:
-  - name: (( values.dns.type ))
-  - name: unmanaged
-  kubernetes:
-    offeredVersions: (( values.kubernetes.offeredVersions ))
-  machineImages:
-  - name: coreos
-    version: 2023.5.0
-  machineTypes:
+machineTypes:
   - cpu: "2"
     gpu: "0"
     memory: 8Gi
@@ -166,124 +145,127 @@ defaults:
     memory: 2Ti
     name: Standard_M128
     usable: true
-  volumeTypes:
+
+volumeTypes:
   - class: standard
     name: standard
     usable: true
   - class: premium
     name: premium
     usable: true
+
+providerConfig:
   countFaultDomains:
-  - count: 2
-    region: australiaeast
-  - count: 2
-    region: australiasoutheast
-  - count: 2
-    region: brazilsouth
-  - count: 3
-    region: canadacentral
-  - count: 2
-    region: canadaeast
-  - count: 2
-    region: centralindia
-  - count: 3
-    region: centralus
-  - count: 2
-    region: eastasia
-  - count: 3
-    region: eastus
-  - count: 3
-    region: eastus2
-  - count: 2
-    region: francecentral
-  - count: 2
-    region: japaneast
-  - count: 2
-    region: japanwest
-  - count: 2
-    region: koreacentral
-  - count: 2
-    region: koreasouth
-  - count: 3
-    region: northcentralus
-  - count: 3
-    region: northeurope
-  - count: 2
-    region: southafricanorth
-  - count: 3
-    region: southcentralus
-  - count: 2
-    region: southeastasia
-  - count: 2
-    region: southindia
-  - count: 2
-    region: uksouth
-  - count: 2
-    region: ukwest
-  - count: 2
-    region: westcentralus
-  - count: 3
-    region: westeurope
-  - count: 2
-    region: westindia
-  - count: 3
-    region: westus
-  - count: 2
-    region: westus2
+    - count: 2
+      region: australiaeast
+    - count: 2
+      region: australiasoutheast
+    - count: 2
+      region: brazilsouth
+    - count: 3
+      region: canadacentral
+    - count: 2
+      region: canadaeast
+    - count: 2
+      region: centralindia
+    - count: 3
+      region: centralus
+    - count: 2
+      region: eastasia
+    - count: 3
+      region: eastus
+    - count: 3
+      region: eastus2
+    - count: 2
+      region: francecentral
+    - count: 2
+      region: japaneast
+    - count: 2
+      region: japanwest
+    - count: 2
+      region: koreacentral
+    - count: 2
+      region: koreasouth
+    - count: 3
+      region: northcentralus
+    - count: 3
+      region: northeurope
+    - count: 2
+      region: southafricanorth
+    - count: 3
+      region: southcentralus
+    - count: 2
+      region: southeastasia
+    - count: 2
+      region: southindia
+    - count: 2
+      region: uksouth
+    - count: 2
+      region: ukwest
+    - count: 2
+      region: westcentralus
+    - count: 3
+      region: westeurope
+    - count: 2
+      region: westindia
+    - count: 3
+      region: westus
+    - count: 2
+      region: westus2
   countUpdateDomains:
-  - count: 5
-    region: australiaeast
-  - count: 5
-    region: australiasoutheast
-  - count: 5
-    region: brazilsouth
-  - count: 5
-    region: canadacentral
-  - count: 5
-    region: canadaeast
-  - count: 5
-    region: centralindia
-  - count: 5
-    region: centralus
-  - count: 5
-    region: eastasia
-  - count: 5
-    region: eastus
-  - count: 5
-    region: eastus2
-  - count: 5
-    region: francecentral
-  - count: 5
-    region: japaneast
-  - count: 5
-    region: japanwest
-  - count: 5
-    region: koreacentral
-  - count: 5
-    region: koreasouth
-  - count: 5
-    region: northcentralus
-  - count: 5
-    region: northeurope
-  - count: 5
-    region: southafricanorth
-  - count: 5
-    region: southcentralus
-  - count: 5
-    region: southeastasia
-  - count: 5
-    region: southindia
-  - count: 5
-    region: uksouth
-  - count: 5
-    region: ukwest
-  - count: 5
-    region: westcentralus
-  - count: 5
-    region: westeurope
-  - count: 5
-    region: westindia
-  - count: 5
-    region: westus
-  - count: 5
-    region: westus2
+    - count: 5
+      region: australiaeast
+    - count: 5
+      region: australiasoutheast
+    - count: 5
+      region: brazilsouth
+    - count: 5
+      region: canadacentral
+    - count: 5
+      region: canadaeast
+    - count: 5
+      region: centralindia
+    - count: 5
+      region: centralus
+    - count: 5
+      region: eastasia
+    - count: 5
+      region: eastus
+    - count: 5
+      region: eastus2
+    - count: 5
+      region: francecentral
+    - count: 5
+      region: japaneast
+    - count: 5
+      region: japanwest
+    - count: 5
+      region: koreacentral
+    - count: 5
+      region: koreasouth
+    - count: 5
+      region: northcentralus
+    - count: 5
+      region: northeurope
+    - count: 5
+      region: southafricanorth
+    - count: 5
+      region: southcentralus
+    - count: 5
+      region: southeastasia
+    - count: 5
+      region: southindia
+    - count: 5
+      region: uksouth
+    - count: 5
+      region: ukwest
+    - count: 5
+      region: westcentralus
+    - count: 5
+      region: westeurope
+    - count: 5
+      region: westindia
+    - count: 5
+      region: westus
+    - count: 5
+      region: westus2

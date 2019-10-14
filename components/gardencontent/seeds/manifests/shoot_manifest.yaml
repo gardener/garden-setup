@@ -1,4 +1,4 @@
-apiVersion: garden.sapcloud.io/v1beta1
+apiVersion: core.gardener.cloud/v1alpha1
 kind: Shoot
 metadata:
   name: (( values.values.name ))
@@ -6,38 +6,76 @@ metadata:
   annotations:
     garden.sapcloud.io/purpose: infrastructure
 spec:
-  cloud:
-    profile: (( values.values.cloudprofile ))
-    region: (( values.values.config.region ))
-    secretBindingRef:
-      name: (( values.values.secretbinding ))
-    <<: (( values.values.iaas.spec.cloud ))
+  secretBindingName: (( values.values.secretbinding ))
+  cloudProfileName: (( values.values.cloudprofile ))
+  seedName: (( values.values.seed ))
+  region: (( values.values.config.region ))
+  provider:
+    type: (( values.values.type ))
+    infrastructureConfig: (( values.values.iaas.infrastructureConfig ))
+    controlPlaneConfig: (( values.values.iaas.controlPlaneConfig ))
+    workers: (( templates.instantiateWorkerSpecs( templates.ensureNotEmptyList( rawWorkersConfig ), values.values ) ))
+    rawWorkersConfig: (( &temporary ( values.values.config.shootMachines || {} ) ))
   kubernetes:
-  # clusterAutoscaler:
-  #   scaleDownUtilizationThreshold: 0.5
-  #   scaleDownUnneededTime: 30m
-  #   scaleDownDelayAfterAdd: 60m
-  #   scaleDownDelayAfterFailure: 10m
-  #   scaleDownDelayAfterDelete: 10s
-  #   scanInterval: 10s
     version: (( values.values.k8sVersion ))
     allowPrivilegedContainers: true # 'true' means that all authenticated users can use the "gardener.privileged" PodSecurityPolicy, allowing full unrestricted access to Pod features.
+    kubeAPIServer:
+      enableBasicAuthentication: true
     kubeControllerManager:
       horizontalPodAutoscaler:
         downscaleStabilization: 24h0m0s
         tolerance: 0.2
+      nodeCIDRMaskSize: 24
   dns:
     domain: (( values.values.domain ))
-    secretName: (( values.values.domain_secret ))
-    provider: (( landscape.dns.type ))
+    providers:
+      - type: (( landscape.dns.type ))
+        secretName: (( values.values.domain_secret ))
+  networking:
+    type: calico
+    pods: (( values.values.config.cluster.networks.pods || ~~ ))
+    nodes: (( values.values.config.cluster.networks.nodes || ~~ ))
+    services: (( values.values.config.cluster.networks.services || ~~ ))
   maintenance:
     timeWindow:
       begin: 220000+0100
       end: 230000+0100
     autoUpdate:
       kubernetesVersion: false
+      machineImageVersion: true
+  hibernation:
+    enabled: false
   addons:
-    <<: (( values.values.iaas.spec.addons || ~ ))
     nginx-ingress:
       enabled: true
-      loadBalancerSourceRanges: []
+    kubernetes-dashboard:
+      enabled: false
+
+templates:
+  <<: (( &temporary ))
+  ensureNotEmptyList: (( lambda |x|-> templates.ensureNotEmpty( templates.ensureList( x ) ) ))
+  ensureList: (( lambda |x|-> type( x ) == "list" ? x :[x] ))
+  ensureNotEmpty: (( lambda |x|-> length( x ) == 0 ? [{}] :x ))
+  instantiateWorkerSpecs: (( lambda |x,cvalues|-> sum[x|[]|s,i,elem|-> s [ *templates.worker ]] ))
+  worker:
+    <<: (( &template ))
+    name: (( elem.name || i > 0 ? "worker" i :"cpu-worker" ))
+    minimum: (( elem.minimum || 1 ))
+    maximum: (( elem.maximum || 50 ))
+    maxSurge: (( elem.maxSurge || "50%" ))
+    maxUnavailable: (( elem.maxUnavailable || 0 ))
+    providerConfig: (( elem.providerConfig || ~~ ))
+    labels: (( elem.labels || ~~ ))
+    annotations: (( elem.annotations || ~~ ))
+    taints: (( elem.taints || ~~ ))
+    kubernetes: (( elem.kubernetes || ~~ ))
+    machine:
+      type: (( elem.machine.type || cvalues.iaas.defaultMachineType ))
+      image:
+        name: (( elem.machine.image.name || cvalues.type == "openstack" ? cvalues.config.machineImages[0].name :"coreos" ))
+        version: (( elem.machine.image.version || cvalues.type == "openstack" ? cvalues.config.machineImages[0].versions[0].version :cvalues.coreosVersion ))
+    volume:
+      type: (( elem.volume.type || cvalues.iaas.defaultVolumeType ))
+      size: (( elem.volume.size || "50Gi" ))
+    caBundle: (( elem.caBundle || ~~ ))
+    zones: (( elem.zones || [ cvalues.config.zones[0] ] || ~~ ))
