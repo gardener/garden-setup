@@ -1,5 +1,5 @@
 ---
 settings: (( &temporary ))
 export:
-  monitoring_auth: (( .settings.hash ))
+  monitoring_auth: (( .settings.monitoring_credentials.hash ))
   prometheus_dns: (( .settings.prometheus_domain ))

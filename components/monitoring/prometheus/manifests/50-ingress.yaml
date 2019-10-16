@@ -9,7 +9,7 @@ metadata:
     role: prometheus
     context: garden
 data:
-  auth: (( base64( values.settings.hash ) ))
+  auth: (( base64( values.settings.monitoring_credentials.hash ) ))
 type: Opaque
 ---
 apiVersion: extensions/v1beta1

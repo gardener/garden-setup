@@ -17,16 +17,24 @@ kubectlconfig:
   settings: (( .settings ))
 
 settings:
-  hash: (( .landscape.monitoring.hash || exec_uncached( htpasswd ) ))
+  monitoring_credentials: (( .state.monitoring_credentials.value ))
   prometheus_domain: (( "garden-prometheus." .imports.ingress-controller.export.ingress_domain ))
+
+monitoring_password:
+  <<: (( &temporary ))
+  input:
+    username: (( valid( hash ) ? ~~ :.landscape.monitoring.username ))
+    password: (( .landscape.monitoring.password || ~~ ))
+    hash: (( .landscape.monitoring.hash || ~~ ))
+  value:
+    <<: (( &template ))
+    data:
+      password: (( valid( input.hash ) ? ~~ :( input.password || rand("[:alnum:]", 20) ) ))
+    state:
+      password: (( data.password || ~~ ))
+      hash: (( input.hash || exec_uncached( ["htpasswd", "-nb", input.username, data.password] ) ))
 
 state:
   <<: (( &state(merge none) ))
-  generated_password: (( valid( .landscape.monitoring.hash ) -or valid( .landscape.monitoring.password ) ? ~~ :rand("[:alnum:]", 20) ))
+  monitoring_credentials: (( utilities.state.standard( .monitoring_password, false ) ))
 
-htpasswd:
-  - <<: (( &temporary ))
-  - "htpasswd"
-  - "-nb"
-  - (( .landscape.monitoring.username ))
-  - (( .landscape.monitoring.password || .state.generated_password ))

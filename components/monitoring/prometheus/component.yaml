@@ -12,3 +12,4 @@ component:
 
   stubs:
     - plugins/kubectl/utilities.yaml
+    - lib/templates/state.yaml
