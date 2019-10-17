@@ -12,7 +12,7 @@ wait_for_certificate:
     - "-n"
     - (( .settings.certificate.namespace ))
     - "get"
-    - "certificate"
+    - "certificate.certmanager.k8s.io"
     - (( .settings.certificate.name ))
     - "-o"
     - "json"
