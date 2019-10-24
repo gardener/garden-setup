@@ -5,7 +5,9 @@ landscape: (( &temporary ))
 settings:
   certificate:
     name: dashboard-identity-ingress
-    domain: (( "*." imports.ingress-controller.export.ingress_domain ))
+    domains:
+      - (( "*." imports.ingress-controller.export.ingress_domain ))
+      - (( .landscape.dashboard.cname.domain || ~~ ))
     secret_name: identity-dashboard-tls
     namespace: (( landscape.namespace ))
 
@@ -24,9 +26,7 @@ cert:
       spec:
         secretName: (( .settings.certificate.secret_name ))
         renewBefore: 360h # 15d
-        commonName: (( .settings.certificate.domain ))
-        dnsNames:
-        - (( .settings.certificate.domain ))
+        dnsNames: (( .settings.certificate.domains ))
         issuerRef:
           name: (( imports.cert-controller.export.issuerName ))
           kind: ClusterIssuer

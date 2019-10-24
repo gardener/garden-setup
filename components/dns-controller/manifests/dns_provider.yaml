@@ -15,9 +15,9 @@
 apiVersion: dns.gardener.cloud/v1alpha1
 kind: DNSProvider
 metadata:
-  name: (( values.provider.name ))
+  name: (( values.provider_name ))
   namespace: (( values.namespace ))
-  annotations: (( { "dns.gardener.cloud/class"=values.helm.configuration.dnsClass} || ~ ))
+  annotations: (( { "dns.gardener.cloud/class"=values.dns_class} || ~~ ))
   
 spec:
   type: (( values.type ))

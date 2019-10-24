@@ -32,12 +32,18 @@ helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   source: "git/repo/charts/external-dns-management"
   name: (( settings.fullname ))
-  namespace: (( .spec.namespace ))
+  namespace: (( .spec.common.namespace ))
   values: (( .spec.helm ))
 
 kubectl:
-  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "provider_secret.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
-  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "dns_provider.yaml", landscape.clusters.[0].kubeconfig, .spec ) ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "provider_secret.yaml", landscape.clusters.[0].kubeconfig, .spec.dns ) ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "dns_provider.yaml", landscape.clusters.[0].kubeconfig, .spec.dns ) ))
+  - <<: (( valid( .landscape.dashboard.cname ) ? *.kubectl_cname_template :~~ ))
+
+kubectl_cname_template:
+  - <<: (( &template &temporary ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "provider_secret.yaml", landscape.clusters.[0].kubeconfig, .spec.cname ) ))
+  - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "dns_provider.yaml", landscape.clusters.[0].kubeconfig, .spec.cname ) ))
 
 providers:
   <<: (( &temporary ))
@@ -45,42 +51,60 @@ providers:
     <<: (( &template ))
     name: aws
     credentials:
-      AWS_ACCESS_KEY_ID: (( landscape.dns.credentials.accessKeyID ))
-      AWS_SECRET_ACCESS_KEY: (( landscape.dns.credentials.secretAccessKey ))
-      AWS_REGION: (( landscape.dns.credentials.region || ~~ ))
+      AWS_ACCESS_KEY_ID: (( node.credentials.accessKeyID ))
+      AWS_SECRET_ACCESS_KEY: (( node.credentials.secretAccessKey ))
+      AWS_REGION: (( node.credentials.region || ~~ ))
   google-clouddns:
     <<: (( &template ))
     name: google
     credentials:
-      serviceaccount.json: (( landscape.dns.credentials.["serviceaccount.json"] ))
+      serviceaccount.json: (( node.credentials.["serviceaccount.json"] ))
   azure-dns:
     <<: (( &template ))
     name: azure
     credentials:
-      AZURE_CLIENT_ID: (( landscape.dns.credentials.clientID ))
-      AZURE_CLIENT_SECRET: (( landscape.dns.credentials.clientSecret ))
-      AZURE_SUBSCRIPTION_ID: (( landscape.dns.credentials.subscriptionID ))
-      AZURE_TENANT_ID: (( landscape.dns.credentials.tenantID ))
+      AZURE_CLIENT_ID: (( node.credentials.clientID ))
+      AZURE_CLIENT_SECRET: (( node.credentials.clientSecret ))
+      AZURE_SUBSCRIPTION_ID: (( node.credentials.subscriptionID ))
+      AZURE_TENANT_ID: (( node.credentials.tenantID ))
   openstack-designate:
     <<: (( &template ))
     name: openstack
     credentials:
-      OS_AUTH_URL: (( landscape.dns.credentials.authURL ))
-      OS_REGION_NAME: (( landscape.dns.credentials.region ))
-      OS_USERNAME: (( landscape.dns.credentials.username ))
-      OS_PASSWORD: (( landscape.dns.credentials.password ))
-      OS_DOMAIN_NAME: (( landscape.dns.credentials.domainName ))
-      OS_USER_DOMAIN_NAME: (( landscape.dns.credentials.userDomainName || "" ))
-      OS_PROJECT_NAME: (( landscape.dns.credentials.tenantName ))
+      OS_AUTH_URL: (( node.credentials.authURL ))
+      OS_REGION_NAME: (( node.credentials.region ))
+      OS_USERNAME: (( node.credentials.username ))
+      OS_PASSWORD: (( node.credentials.password ))
+      OS_DOMAIN_NAME: (( node.credentials.domainName ))
+      OS_USER_DOMAIN_NAME: (( node.credentials.userDomainName || "" ))
+      OS_PROJECT_NAME: (( node.credentials.tenantName ))
+
+func:
+  <<: (( &temporary ))
+  instantiateProvider: (( |type,node|-> *.providers[type] ))
 
 spec:
   <<: (( &temporary ))
-  secret_name: (( settings.fullname "-" provider.name ))
-  type: (( .landscape.dns.type ))
-  provider: (( *providers.[type] ))
-  domain: (( .landscape.domain ))
-  zones: (( .landscape.dns.hostedZoneIDs || ~~ ))
-  namespace: "kube-system"
+  common:
+    namespace: "kube-system"
+    dns_class: (( .settings.dns-class ))
+  dns:
+    type: (( .landscape.dns.type ))
+    provider: (( .func.instantiateProvider( type, .landscape.dns ) ))
+    domain: (( .landscape.domain ))
+    zones: (( .landscape.dns.hostedZoneIDs || ~~ ))
+    secret_name: (( .settings.fullname "-" provider.name ))
+    provider_name: (( provider.name ))
+    <<: (( common ))
+  cname:
+    dns_fallback: (( .landscape.dashboard.cname.dns || .landscape.dns ))
+    type: (( dns_fallback.type ))
+    provider: (( .func.instantiateProvider( type, dns_fallback ) ))
+    domain: (( .landscape.dashboard.cname.domain || ~~ ))
+    zones: (( dns_fallback.hostedZoneIDs || ~~ ))
+    secret_name: (( .settings.fullname "-" provider.name "-cname" ))
+    provider_name: (( provider.name "-cname" ))
+    <<: (( common ))
   helm:
     nameOverride: (( settings.fullname ))
     fullnameOverride: (( settings.fullname ))
@@ -89,7 +113,7 @@ spec:
       repository: (( .landscape.versions.dns-controller.image_repo || ~~ ))
     createCRDs: true
     configuration:
-      dnsClass: (( settings.dns-class ))
+      dnsClass: (( common.dns_class ))
       identifier: (( "setup.gardener.cloud/" .landscape.name ))
-      controllers: (( "dnssources," type ))
+      controllers: (( "dnssources," dns.type ( cname.type != dns.type ? "," cname.type :"" ) ))
       ttl: (( .landscape.dns.ttl || ~~ ))
