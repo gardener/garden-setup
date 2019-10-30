@@ -19,6 +19,7 @@ landscape: (( &temporary ))
 plugins:
   - helm: dashboard
   - kubectl: rbac
+  - (( valid( .landscape.dashboard.cname ) ? { "kubectl" = "cname_dnsentry" } :~~ ))
   - -echo: "==================================================================="
   - -echo: (( "Dashboard URL -> " settings.dashboard_url ))
   - -echo: "==================================================================="
@@ -35,6 +36,7 @@ dashboard:
     sessionSecret: (( rand("[:alnum:]", 30) ))
     hosts:
       - (( imports.identity.export.dashboard_dns ))
+      - (( .landscape.dashboard.cname.domain || ~~ ))
     image:
       repository: (( .dashboard_version.image_repo || ~~ ))
       tag: (( .dashboard_version.image_tag || ~~ ))
@@ -51,6 +53,22 @@ dashboard:
     frontendConfig:
       <<: (( .landscape.dashboard.frontendConfig || ~ ))
       seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
+
+cname_dnsentry:
+  kubeconfig: (( .landscape.clusters[0].kubeconfig ))
+  manifests:
+    - apiVersion: dns.gardener.cloud/v1alpha1
+      kind: DNSEntry
+      metadata:
+        annotations:
+          dns.gardener.cloud/class: (( .imports.dns-controller.export.dns-class ))
+        name: garden-dashboard-cname
+        namespace: (( .imports.dns-controller.export.namespace ))
+      spec:
+        dnsName: (( .landscape.dashboard.cname.domain || ~~ ))
+        targets:
+        - (( .imports.identity.export.dashboard_dns ))
+        ttl: 120
 
 util:
   <<: (( &temporary ))

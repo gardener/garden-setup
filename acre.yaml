@@ -141,7 +141,7 @@ landscape:
         helm_tag: "v0.9.1"
       cert-dns-bridge:
         <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.0.0" ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.0.1" ))
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
         repo: "https://github.com/gardener/certificate-dns-bridge.git"
@@ -394,6 +394,23 @@ validation:
           - networks
           - (( validation.networks types.iaas[values.type].networks ))
   dashboard_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
+  dashboard_cname_validator:
+    - optionalfield
+    - cname
+    - - and
+      - - mapfield
+        - domain
+        - - dnsdomain
+      - - optionalfield
+        - dns
+        - - and
+          - - mapfield
+            - type
+            - - valueset
+              - (( keys( validation.types.dns ) ))
+          - - mapfield
+            - credentials
+            - (( types.dns[landscape.dashboard.cname.dns.type].credentials || [] ))
   gardener_validator: ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]]
   networks:
     - and
@@ -457,7 +474,7 @@ validation:
   ##### landscape.gardener
   gardener: (( defined( landscape.gardener ) ? validate( landscape.gardener, validation.gardener_validator ) :~~ ))
   ##### landscape.dashboard
-  dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator ) :~~ ))
+  dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator, validation.dashboard_cname_validator ) :~~ ))
   ##### landscape.certmanager
   cert-manager: (( validate( landscape.cert-manager, validation.cert-manager_validators.basic, [validation.cert-manager_validators.email, landscape.identity] ) ))
   ##### landscape.identity TODO
