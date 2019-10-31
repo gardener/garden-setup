@@ -256,8 +256,6 @@ spec:
         secret:
           secretName: garden-kube-aggregator
       - name: etcssl
-        hostPath:
-          path: /etc/ssl
+        emptyDir: {}
       - name: ssl-certs-hosts
-        hostPath:
-          path: /usr/share/ca-certificates
+        emptyDir: {}
