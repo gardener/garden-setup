@@ -11,7 +11,9 @@
 # Specify the supported kubernetes versions for the cloudprofiles by using K8S_VERSION or a file at K8S_VERSIONS
 # K8S_VERSION: specify the kubernetes version
 
-# K8S_VERSIONS: path to a file containing offered kubernetes versions
+# K8S_VERSIONS: path to a file containing offered kubernetes versions per cloudprovider in the format (map[common.CloudProvider][]v1alpha1.ExpirableVersion)
+
+# MACHINE_IMAGES: path to the file containing offered machine images per cloudprovider
 
 gcp-credentials:
   serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
@@ -29,10 +31,20 @@ azure-credentials:
 k8sVersions:
   tmp:
     <<: (( &temporary ))
-    versions:
-    - version: (( env( "K8S_VERSION" ) || "1.14.4" ))
+    gcp:
+      versions:
+      - version: (( env( "K8S_VERSION" ) || "1.15.5" ))
+    aws:
+      versions:
+      - version: (( env( "K8S_VERSION" ) || "1.15.5" ))
+    azure:
+      versions:
+      - version: (( env( "K8S_VERSION" ) || "1.15.5" ))
   kubernetes:
     (( read( env( "K8S_VERSIONS" ), "yaml") || tmp ))
+
+machineImages:
+  (( read( env( "MACHINE_IMAGES" ), "yaml") || ~~ ))
 
 monitoring-credentials:
   username: (( env( "MONITORING_USERNAME" ) || ~~ ))
@@ -49,7 +61,8 @@ base_cluster_configs:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes ))
+      kubernetes: (( .k8sVersions.kubernetes.gcp ))
+      machineImages: (( .machineImages.gcp || ~~ ))
   aws:
     type: aws
     region: eu-west-1
@@ -60,14 +73,16 @@ base_cluster_configs:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes ))
+      kubernetes: (( .k8sVersions.kubernetes.aws ))
+      machineImages: (( .machineImages.aws || ~~ ))
   azure:
     type: azure
     region: westeurope
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes ))
+      kubernetes: (( .k8sVersions.kubernetes.azure ))
+      machineImages: (( .machineImages.azure || ~~ ))
 
 
 ############################################################################
@@ -118,7 +133,8 @@ landscape:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes ))
+      kubernetes: (( .k8sVersions.kubernetes.gcp ))
+      machineImages: (( .machineImages.gcp || ~~ ))
   - name: aws
     mode: cloudprofile
     type: aws
@@ -130,7 +146,8 @@ landscape:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes ))
+      kubernetes: (( .k8sVersions.kubernetes.aws ))
+      machineImages: (( .machineImages.aws || ~~ ))
   - name: azure
     mode: cloudprofile
     type: azure
@@ -138,7 +155,8 @@ landscape:
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes ))
+      kubernetes: (( .k8sVersions.kubernetes.azure ))
+      machineImages: (( .machineImages.azure || ~~ ))
 
   monitoring:
     active: true
