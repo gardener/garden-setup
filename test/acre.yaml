@@ -65,7 +65,7 @@ base_cluster_configs:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.gcp ))
+      kubernetes: (( .k8sVersions.kubernetes.gcp || ~~ ))
       machineImages: (( .machineImages.gcp || ~~ ))
   aws:
     type: aws
@@ -77,7 +77,7 @@ base_cluster_configs:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.aws ))
+      kubernetes: (( .k8sVersions.kubernetes.aws || ~~ ))
       machineImages: (( .machineImages.aws || ~~ ))
   azure:
     type: azure
@@ -85,7 +85,7 @@ base_cluster_configs:
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.azure ))
+      kubernetes: (( .k8sVersions.kubernetes.azure || ~~ ))
       machineImages: (( .machineImages.azure || ~~ ))
 
 
@@ -138,7 +138,7 @@ landscape:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.gcp ))
+      kubernetes: (( .k8sVersions.kubernetes.gcp || ~~ ))
       machineImages: (( .machineImages.gcp || ~~ ))
   - name: aws
     mode: cloudprofile
@@ -151,7 +151,7 @@ landscape:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.aws ))
+      kubernetes: (( .k8sVersions.kubernetes.aws || ~~ ))
       machineImages: (( .machineImages.aws || ~~ ))
   - name: azure
     mode: cloudprofile
@@ -160,7 +160,7 @@ landscape:
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.azure ))
+      kubernetes: (( .k8sVersions.kubernetes.azure || ~~ ))
       machineImages: (( .machineImages.azure || ~~ ))
 
   monitoring:
