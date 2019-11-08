@@ -13,9 +13,11 @@ test:
       path: GARDENER_VERSION
 
   shootFlavors:
-  - cloudprovider: gcp
-    kubernetesVersions:
-    - version: 1.14.4
-  - cloudprovider: aws
-    kubernetesVersions:
-    - version: 1.14.4
+  - provider: gcp
+    kubernetes:
+      versions:
+      - version: 1.14.4
+  - provider: aws
+    kubernetes:
+      versions:
+      - version: 1.14.4
