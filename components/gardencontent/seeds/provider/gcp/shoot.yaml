@@ -13,9 +13,13 @@
 # limitations under the License.
 
 infrastructureConfig:
+  apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+  kind: InfrastructureConfig
   networks:
     worker: (( values.config.cluster.networks.workers ))
 controlPlaneConfig:
+  apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+  kind: ControlPlaneConfig
   zone: (( values.config.zones[0] ))
 defaultMachineType: n1-standard-16
 defaultVolumeType: pd-standard
