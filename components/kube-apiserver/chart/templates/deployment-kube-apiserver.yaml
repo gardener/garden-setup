@@ -166,12 +166,6 @@ spec:
           mountPath: /srv/kubernetes/auth
         - name: kube-aggregator
           mountPath: /srv/kubernetes/aggregator
-        - name: etcssl
-          mountPath: /etc/ssl
-          readOnly: true
-        - name: ssl-certs-hosts
-          mountPath: /usr/share/ca-certificates
-          readOnly: true
         {{- if .Values.tls.identity.ca }}
         - name: ca-identity
           mountPath: /srv/kubernetes/identity-ca
@@ -255,9 +249,3 @@ spec:
       - name: kube-aggregator
         secret:
           secretName: garden-kube-aggregator
-      - name: etcssl
-        hostPath:
-          path: /etc/ssl
-      - name: ssl-certs-hosts
-        hostPath:
-          path: /usr/share/ca-certificates
