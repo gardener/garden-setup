@@ -58,7 +58,7 @@ pushd .
 cd $SOURCE_PATH
 VERSION=$(git rev-parse HEAD)
 popd
-GARDENER_VERSION="$(cat $SOURCE_PATH/GARDENER_VERSION)"
+GARDENER_VERSION="$(cat $SOURCE_PATH/dependency-versions.yaml | jq -r '.versions.gardener.core.version')"
 
 # Add configuration if a configuration file exists
 if [[ -f $OUT_PATH/config.yaml ]]; then

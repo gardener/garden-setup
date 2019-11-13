@@ -1,8 +1,19 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-SOURCE_PATH="$(readlink -f "$(dirname ${0})/..")"
-GARDENER_VERSION_PATH="$SOURCE_PATH/GARDENER_VERSION"
+import yaml
+import json
+import os
+from pathlib import Path
 
-if [[ "$DEPENDENCY_NAME" == "github.com/gardener/gardener" ]]; then
-    echo -n $DEPENDENCY_VERSION > $GARDENER_VERSION_PATH
-fi
+dep_file = Path(__file__).resolve().parent.parent / 'dependency-versions.yaml'
+dep_name = os.getenv('DEPENDENCY_NAME')
+dep_version = os.getenv('DEPENDENCY_VERSION')
+
+if dep_name == 'github.com/gardener/gardener':
+    with dep_file.open() as f:
+        deps = yaml.safe_load(f)
+    
+    deps['versions']['gardener']['core']['version'] = dep_version
+    
+    with dep_file.open(mode='w') as f:
+        f.write(json.dumps(deps, indent=2))

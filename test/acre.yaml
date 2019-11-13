@@ -15,6 +15,8 @@
 
 # MACHINE_IMAGES: path to the file containing offered machine images per cloudprovider
 
+dependency_versions: (( &temporary( read( __ctx.DIR "/../dependency-versions.yaml", "yaml" ) ) ))
+
 gcp-credentials:
   serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
 
@@ -102,12 +104,12 @@ landscape:
   versions:
     gardener:
       apiserver:
-        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || .dependency_versions.versions.gardener.core.version ))
       controller_manager:
-        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || .dependency_versions.versions.gardener.core.version ))
       scheduler:
-        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
-      tag: (( defined( commit ) ? ~~ :( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || .dependency_versions.versions.gardener.core.version ))
+      tag: (( defined( commit ) ? ~~ :( env( "GARDENER_VERSION" ) || .dependency_versions.versions.gardener.core.version ) ))
       commit: (( env( "GARDENER_COMMIT" ) || ~~ ))
 
   domain: (( ( env( "GARDENER_PREFIX" ) || "test" ) ".oq.gcp.dev.k8s.ondemand.com" ))

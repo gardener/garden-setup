@@ -10,7 +10,7 @@ test:
 
   gardener:
     version:
-      path: GARDENER_VERSION
+      path: dependency-versions.yaml
 
   shootFlavors:
   - provider: gcp

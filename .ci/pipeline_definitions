@@ -19,7 +19,7 @@ garden-setup:
         component_descriptor: ~
         update_component_deps: ~
         cronjob:
-          interval: '5m'
+          interval: '15m'
     integration-test:
       repo:
         trigger: false
