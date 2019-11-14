@@ -15,6 +15,8 @@
 
 # MACHINE_IMAGES: path to the file containing offered machine images per cloudprovider
 
+dependency_versions: (( &temporary( read( __ctx.DIR "/../dependency-versions.yaml", "yaml" ) ) ))
+
 gcp-credentials:
   serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
 
@@ -43,6 +45,8 @@ k8sVersions:
   kubernetes:
     (( read( env( "K8S_VERSIONS" ), "yaml") || tmp ))
 
+extensionVersions: (( read( env( "GARDENER_EXTENSIONS" ), "yaml" ) || ~~ ))
+
 machineImages:
   (( read( env( "MACHINE_IMAGES" ), "yaml") || ~~ ))
 
@@ -61,7 +65,7 @@ base_cluster_configs:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.gcp ))
+      kubernetes: (( .k8sVersions.kubernetes.gcp || ~~ ))
       machineImages: (( .machineImages.gcp || ~~ ))
   aws:
     type: aws
@@ -73,7 +77,7 @@ base_cluster_configs:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.aws ))
+      kubernetes: (( .k8sVersions.kubernetes.aws || ~~ ))
       machineImages: (( .machineImages.aws || ~~ ))
   azure:
     type: azure
@@ -81,7 +85,7 @@ base_cluster_configs:
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.azure ))
+      kubernetes: (( .k8sVersions.kubernetes.azure || ~~ ))
       machineImages: (( .machineImages.azure || ~~ ))
 
 
@@ -102,13 +106,14 @@ landscape:
   versions:
     gardener:
       apiserver:
-        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || .dependency_versions.versions.gardener.core.version ))
       controller_manager:
-        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || .dependency_versions.versions.gardener.core.version ))
       scheduler:
-        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ))
-      tag: (( defined( commit ) ? ~~ :( env( "GARDENER_VERSION" ) || read( __ctx.DIR "/crop/GARDENER_VERSION", "text" ) ) ))
+        image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || .dependency_versions.versions.gardener.core.version ))
+      tag: (( defined( commit ) ? ~~ :( env( "GARDENER_VERSION" ) || .dependency_versions.versions.gardener.core.version ) ))
       commit: (( env( "GARDENER_COMMIT" ) || ~~ ))
+      extensions: (( .extensionVersions || ~~ ))
 
   domain: (( ( env( "GARDENER_PREFIX" ) || "test" ) ".oq.gcp.dev.k8s.ondemand.com" ))
 
@@ -133,7 +138,7 @@ landscape:
     credentials:
       <<: (( .gcp-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.gcp ))
+      kubernetes: (( .k8sVersions.kubernetes.gcp || ~~ ))
       machineImages: (( .machineImages.gcp || ~~ ))
   - name: aws
     mode: cloudprofile
@@ -146,7 +151,7 @@ landscape:
     credentials:
       <<: (( .aws-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.aws ))
+      kubernetes: (( .k8sVersions.kubernetes.aws || ~~ ))
       machineImages: (( .machineImages.aws || ~~ ))
   - name: azure
     mode: cloudprofile
@@ -155,7 +160,7 @@ landscape:
     credentials:
       <<: (( .azure-credentials ))
     profile:
-      kubernetes: (( .k8sVersions.kubernetes.azure ))
+      kubernetes: (( .k8sVersions.kubernetes.azure || ~~ ))
       machineImages: (( .machineImages.azure || ~~ ))
 
   monitoring:

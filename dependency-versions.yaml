@@ -1,0 +1,48 @@
+{
+  "versions": {
+    "gardener": {
+      "core": {
+        "repo": "https://github.com/gardener/gardener.git",
+        "version": "0.31.1"
+      },
+      "extensions": {
+        "dns-external": {
+          "repo": "https://github.com/gardener/external-dns-management.git",
+          "version": "0.7.1"
+        },
+        "networking-calico": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        },
+        "os-coreos": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        },
+        "os-suse-jeos": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        },
+        "os-ubuntu": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        },
+        "provider-aws": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        },
+        "provider-azure": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        },
+        "provider-gcp": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        },
+        "provider-openstack": {
+          "repo": "https://github.com/gardener/gardener-extensions.git",
+          "version": "0.14.3"
+        }
+      }
+    }
+  }
+}

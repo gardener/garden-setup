@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+dependency_versions: (( &temporary( read( __ctx.DIR "/dependency-versions.yaml", "yaml" ) ) ))
 meta: (( ~~ ))
 landscape:
   name: (( error("landscape name required") ))
@@ -36,7 +37,7 @@ landscape:
     gardener:
       <<: (( merge ))
       repo: "https://github.com/gardener/gardener.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :read( __ctx.DIR "/GARDENER_VERSION", "text" ) ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.core.version ))
       apiserver:
         <<: (( merge ))
         image_repo: "eu.gcr.io/gardener-project/gardener/apiserver"
@@ -50,67 +51,65 @@ landscape:
         image_repo: "eu.gcr.io/gardener-project/gardener/scheduler"
         image_tag: (( valid( tag ) ? tag :~~ ))
       extensions:
-        grouped_extension_version: "0.14.3"
-        grouped_dns_extension_version: "0.7.1"
         dns-external:
           <<: (( merge ))
-          tag: (( valid( dns-external.branch ) -or valid( dns-external.commit ) ? ~~ :( .landscape.versions.dns-controller.tag || versions.gardener.extensions.grouped_dns_extension_version ) ))
+          tag: (( valid( dns-external.branch ) -or valid( dns-external.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
           image_tag: (( valid( dns-external.tag ) ? dns-external.tag :~~ ))
           image_repo: (( ~~ ))
           repo: https://github.com/gardener/external-dns-management.git
           chart_path: charts/external-dns-management
         os-coreos:
           <<: (( merge ))
-          tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-coreos.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/os-coreos/charts/os-coreos
           image_tag: (( valid( os-coreos.tag ) ? os-coreos.tag :~~ ))
           image_repo: (( ~~ ))
         os-ubuntu:
           <<: (( merge ))
-          tag: (( valid( os-ubuntu.branch ) -or valid( os-ubuntu.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( os-ubuntu.branch ) -or valid( os-ubuntu.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-ubuntu.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/os-ubuntu/charts/os-ubuntu
           image_tag: (( valid( os-ubuntu.tag ) ? os-ubuntu.tag :~~ ))
           image_repo: (( ~~ ))
         os-suse-jeos:
           <<: (( merge ))
-          tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-suse-jeos.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/os-suse-jeos/charts/os-suse-jeos
           image_tag: (( valid( os-suse-jeos.tag ) ? os-suse-jeos.tag :~~ ))
           image_repo: (( ~~ ))
         provider-aws:
           <<: (( merge ))
-          tag: (( valid( provider-aws.branch ) -or valid( provider-aws.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( provider-aws.branch ) -or valid( provider-aws.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-aws.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-aws/charts/provider-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
         provider-gcp:
           <<: (( merge ))
-          tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-gcp.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-gcp/charts/provider-gcp
           image_tag: (( valid( provider-gcp.tag ) ? provider-gcp.tag :~~ ))
           image_repo: (( ~~ ))
         provider-azure:
           <<: (( merge ))
-          tag: (( valid( provider-azure.branch ) -or valid( provider-azure.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( provider-azure.branch ) -or valid( provider-azure.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-azure.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-azure/charts/provider-azure
           image_tag: (( valid( provider-azure.tag ) ? provider-azure.tag :~~ ))
           image_repo: (( ~~ ))
         provider-openstack:
           <<: (( merge ))
-          tag: (( valid( provider-openstack.branch ) -or valid( provider-openstack.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( provider-openstack.branch ) -or valid( provider-openstack.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-openstack.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/provider-openstack/charts/provider-openstack
           image_tag: (( valid( provider-openstack.tag ) ? provider-openstack.tag :~~ ))
           image_repo: (( ~~ ))
         networking-calico:
           <<: (( merge ))
-          tag: (( valid( networking-calico.branch ) -or valid( networking-calico.commit ) ? ~~ :versions.gardener.extensions.grouped_extension_version ))
+          tag: (( valid( networking-calico.branch ) -or valid( networking-calico.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.networking-calico.version ))
           repo: https://github.com/gardener/gardener-extensions.git
           chart_path: controllers/networking-calico/charts/networking-calico
           image_tag: (( valid( networking-calico.tag ) ? networking-calico.tag :~~ ))
@@ -128,7 +127,7 @@ landscape:
       commit: (( dashboard.commit || ~~ ))
     dns-controller:
       <<: (( merge ))
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :versions.gardener.extensions.grouped_dns_extension_version ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
       repo: "https://github.com/gardener/external-dns-management.git"
