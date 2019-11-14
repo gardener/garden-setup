@@ -164,6 +164,8 @@ volumeTypes:
     usable: true
 
 providerConfig:
+  apiVersion: azure.provider.extensions.gardener.cloud/v1alpha1
+  kind: CloudProfileConfig
   countFaultDomains:
     - count: 2
       region: australiaeast

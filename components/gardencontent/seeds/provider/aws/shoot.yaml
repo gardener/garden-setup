@@ -13,6 +13,8 @@
 # limitations under the License.
 
 infrastructureConfig:
+  apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
+  kind: InfrastructureConfig
   networks:
     vpc: (( values.config.cluster.networks.vpc ))
     zones:
@@ -20,6 +22,8 @@ infrastructureConfig:
         internal: (( values.config.cluster.networks.internal ))
         public: (( values.config.cluster.networks.workers ))
         workers: (( values.config.cluster.networks.public ))
-controlPlaneConfig: {}
+controlPlaneConfig:
+  apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
+  kind: ControlPlaneConfig
 defaultMachineType: m5.4xlarge
 defaultVolumeType: gp2

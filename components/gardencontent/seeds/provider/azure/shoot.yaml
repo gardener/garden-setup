@@ -13,10 +13,14 @@
 # limitations under the License.
 
 infrastructureConfig:
+  apiVersion: azure.provider.extensions.gardener.cloud/v1alpha1
+  kind: InfrastructureConfig
   networks:
     vnet: (( values.config.cluster.networks.vnet ))
     workers: (( values.config.cluster.networks.workers ))
 controlPlaneConfig:
+  apiVersion: azure.provider.extensions.gardener.cloud/v1alpha1
+  kind: ControlPlaneConfig
   cloudControllerManager:
     featureGates:
       ServiceLoadBalancerFinalizer: true

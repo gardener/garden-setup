@@ -75,7 +75,8 @@ templates:
         name: (( elem.machine.image.name || cvalues.type == "openstack" ? cvalues.config.machineImages[0].name :"coreos" ))
         version: (( elem.machine.image.version || cvalues.type == "openstack" ? cvalues.config.machineImages[0].versions[0].version :cvalues.coreosVersion ))
     volume:
-      type: (( elem.volume.type || cvalues.iaas.defaultVolumeType ))
-      size: (( elem.volume.size || "50Gi" ))
+      <<: (( cvalues.type == "openstack" ? ~~ :~ ))
+      type: (( cvalues.type != "openstack" ? elem.volume.type || cvalues.iaas.defaultVolumeType :~~ ))
+      size: (( cvalues.type != "openstack" ? elem.volume.size || cvalues.iaas.defaultVolumeSize || "50Gi" :~~ ))
     caBundle: (( elem.caBundle || ~~ ))
     zones: (( elem.zones || [ cvalues.config.zones[0] ] || ~~ ))

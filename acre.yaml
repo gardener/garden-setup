@@ -50,7 +50,7 @@ landscape:
         image_repo: "eu.gcr.io/gardener-project/gardener/scheduler"
         image_tag: (( valid( tag ) ? tag :~~ ))
       extensions:
-        grouped_extension_version: "0.13.3"
+        grouped_extension_version: "0.14.3"
         grouped_dns_extension_version: "0.7.1"
         dns-external:
           <<: (( merge ))
@@ -118,7 +118,7 @@ landscape:
     dashboard:
       <<: (( merge ))
       repo: "https://github.com/gardener/dashboard.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.34.2" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.35.0" ))
       image_tag: (( valid( tag ) ? tag :~~ ))
     identity:
       <<: (( merge ))
@@ -289,9 +289,10 @@ validation:
                 - ["mapfield", "gpu"]
                 - ["mapfield", "memory"]
                 - ["mapfield", "usable"]
-                - - mapfield
+                - - optionalfield
                   - storage
                   - - and
+                    - ["mapfield", "class"]
                     - ["mapfield", "type"]
                     - ["mapfield", "size"]
           - ["optionalfield", "dhcpDomain", "dnsdomain"]
