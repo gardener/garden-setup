@@ -289,9 +289,10 @@ validation:
                 - ["mapfield", "gpu"]
                 - ["mapfield", "memory"]
                 - ["mapfield", "usable"]
-                - - mapfield
+                - - optionalfield
                   - storage
                   - - and
+                    - ["mapfield", "class"]
                     - ["mapfield", "type"]
                     - ["mapfield", "size"]
           - ["optionalfield", "dhcpDomain", "dnsdomain"]

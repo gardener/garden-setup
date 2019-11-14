@@ -24,4 +24,3 @@ controlPlaneConfig:
   zone: (( values.config.zones[0] ))
   loadBalancerProvider: (( values.config.loadBalancerProviders[0].name ))
 defaultMachineType: (( values.config.machineTypes[0].name ))
-defaultVolumeType: (( values.config.machineTypes[0].name ))
