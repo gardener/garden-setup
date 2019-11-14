@@ -11,6 +11,11 @@ test:
   gardener:
     version:
       path: dependency-versions.yaml
+      structuredJSONPATH: "versions.gardener.core.version"
+
+  gardener-extensions:
+    path: dep-versions.yaml
+    structuredJSONPATH: "versions.gardener.extensions"
 
   shootFlavors:
   - provider: gcp
