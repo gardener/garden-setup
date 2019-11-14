@@ -45,6 +45,8 @@ k8sVersions:
   kubernetes:
     (( read( env( "K8S_VERSIONS" ), "yaml") || tmp ))
 
+extensionVersions: (( read( env( "GARDENER_EXTENSIONS" ), "yaml" ) || ~~ ))
+
 machineImages:
   (( read( env( "MACHINE_IMAGES" ), "yaml") || ~~ ))
 
@@ -111,6 +113,7 @@ landscape:
         image_tag: (( env( "GARDENER_VERSION" ) || env( "GARDENER_IMAGE_TAG" ) || .dependency_versions.versions.gardener.core.version ))
       tag: (( defined( commit ) ? ~~ :( env( "GARDENER_VERSION" ) || .dependency_versions.versions.gardener.core.version ) ))
       commit: (( env( "GARDENER_COMMIT" ) || ~~ ))
+      extensions: (( .extensionVersions || ~~ ))
 
   domain: (( ( env( "GARDENER_PREFIX" ) || "test" ) ".oq.gcp.dev.k8s.ondemand.com" ))
 
