@@ -27,5 +27,5 @@ terraform:
   source: (( temp.dir ))
   values:
     <<: (( temp.addon ))
-    BUCKETNAME: (( substr( landscape.name, 0, 25 ) "-etcd-bucket" ))
+    BUCKETNAME: (( ( length( landscape.name ) > 25 ? substr( landscape.name, 0, 25 ) :landscape.name ) "-etcd-bucket" ))
     REGION: (( landscape.etcd.backup.region ))
