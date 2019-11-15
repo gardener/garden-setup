@@ -15,7 +15,7 @@
 
 # MACHINE_IMAGES: path to the file containing offered machine images per cloudprovider
 
-dependency_versions: (( &temporary( read( __ctx.DIR "/../dependency-versions.yaml", "yaml" ) ) ))
+dependency_versions: (( &temporary( read( __ctx.DIR "/crop/dependency-versions.yaml", "yaml" ) ) ))
 
 gcp-credentials:
   serviceaccount.json: (( read( "./gcloud.json", "text" ) ))
