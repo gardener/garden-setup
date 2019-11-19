@@ -1,0 +1,21 @@
+# Allows outgoing traffic to the terminal-controller-manager
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: to-terminal-controller-manager
+  namespace: (( landscape.namespace ))
+spec:
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          component: terminal-manager
+      podSelector:
+        matchLabels:
+          component: terminal-manager
+  podSelector:
+    matchLabels:
+      networking.gardener.cloud/to-terminal-controller-manager: allowed
+  policyTypes:
+  - Egress

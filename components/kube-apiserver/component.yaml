@@ -19,6 +19,7 @@ component:
     - etcd: etcd/cluster
     - identity
     - namespace
+    - network-policies
     - cert-controller: cert-manager/controller
 
   stubs:

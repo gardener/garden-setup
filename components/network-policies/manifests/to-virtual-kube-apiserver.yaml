@@ -1,0 +1,19 @@
+# Allows outgoing traffic to the virtual kube-apiserver pods.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: to-virtual-kube-apiserver
+  namespace: (( landscape.namespace ))
+spec:
+  podSelector:
+    matchLabels:
+      networking.gardener.cloud/to-virtual-kube-apiserver: allowed
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: garden
+          component: kube-apiserver

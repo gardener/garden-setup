@@ -24,6 +24,7 @@ component:
     - cert: cert-manager/cert
     - cert-controller: cert-manager/controller
     - dns-controller
+    - network-policies
 
   plugins:
     - git

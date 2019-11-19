@@ -1,0 +1,25 @@
+# Allows outgoing traffic to the pods responsible for DNS.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: to-dns
+  namespace: (( landscape.namespace ))
+spec:
+  podSelector:
+    matchLabels:
+      networking.gardener.cloud/to-dns: allowed
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          role: kube-system
+      podSelector:
+        matchExpressions:
+        - key: k8s-app
+          operator: In
+          values:
+          - kube-dns
+          - coredns

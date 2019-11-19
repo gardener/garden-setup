@@ -1,0 +1,23 @@
+# Allows outgoing traffic to public networks (with a few exceptions).
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: to-world
+  namespace: (( landscape.namespace ))
+spec:
+  podSelector:
+    matchLabels:
+      networking.gardener.cloud/to-world: allowed
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 169.254.0.0/16      # link-local (RFC3927) (includes GKE/AWS/OpenStack metadata service)
+        - 100.64.0.0/10       # carrier-grade NAT (RFC6598)
+        - 192.168.0.0/16      # private networks (RFC1918)
+        - 10.0.0.0/8          # private networks (RFC1918)
+        - 172.16.0.0/12       # private networks (RFC1918)
