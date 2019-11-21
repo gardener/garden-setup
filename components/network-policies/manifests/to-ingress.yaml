@@ -1,0 +1,26 @@
+# Allows outgoing traffic to the ingress controller.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: to-ingress
+  namespace: (( landscape.namespace ))
+spec:
+  podSelector:
+    matchLabels:
+      networking.gardener.cloud/to-ingress: allowed
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          role: kube-system
+      podSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - nginx
+          - nginx-ingress
+          - ingress

@@ -1,0 +1,11 @@
+---
+landscape: (( &temporary ))
+imports: (( &temporary ))
+
+plugins:
+  - kubectl
+
+kubectl:
+  kubeconfig: (( .landscape.clusters[0].kubeconfig ))
+  manifest_path: (( __ctx.DIR "/manifests" ))
+  manifests: (( sum[list_files( manifest_path )|[]|s,f|-> s read( manifest_path "/" f, "yaml" )] ))

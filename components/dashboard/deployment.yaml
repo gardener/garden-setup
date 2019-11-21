@@ -49,6 +49,12 @@ dashboard:
     tlsSecretName: (( imports.cert.export.certificate.secret_name ))
     tls: ~
     kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
+    podLabels:
+      networking.gardener.cloud/to-dns: allowed
+      networking.gardener.cloud/to-garden-kube-apiserver: allowed
+      networking.gardener.cloud/to-identity: allowed
+      networking.gardener.cloud/to-ingress: allowed
+      networking.gardener.cloud/to-world: allowed
     gitHub: (( .landscape.dashboard.gitHub || ~~ ))
     frontendConfig:
       <<: (( .landscape.dashboard.frontendConfig || ~ ))
