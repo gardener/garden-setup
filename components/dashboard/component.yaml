@@ -25,6 +25,7 @@ component:
     - cert-controller: cert-manager/controller
     - dns-controller
     - (( ( .landscape.gardener.network-policies.active || false ) ? "network-policies" :~~ ))
+    - (( ( .landscape.dashboard.terminals.active || false ) ? "terminals" :~~ ))
 
   plugins:
     - git

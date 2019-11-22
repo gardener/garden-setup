@@ -1,0 +1,22 @@
+---
+landscape: (( &temporary ))
+component:
+  active: (( .landscape.dashboard.terminals.active || false ))
+  imports:
+    - kube-apiserver
+    - ingress-controller
+    - cert-manager/solver
+    - gardener/runtime
+
+  plugins:
+    - git
+
+  stubs:
+    - lib/templates/utilities.yaml
+    - lib/templates/state.yaml
+    - lib/templates/certs.yaml
+
+git:
+  <<: (( .landscape.versions.terminal-controller-manager ))
+  files:
+    - config

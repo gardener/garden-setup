@@ -1,0 +1,107 @@
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+utilities: (( &temporary ))
+env: (( &temporary ))
+
+plugins:
+  - pinned:
+    - kustomize: kustomize.virtual.render
+    - kubectl: kustomize.virtual.apply
+  - kubectl
+  - pinned:
+    - kustomize-edit: kustomize.runtime.edit
+    - kustomize: kustomize.runtime.render
+    - kubectl: kustomize.runtime.apply
+
+kubectl:
+  kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: Secret
+      type: Opaque
+      metadata:
+        name: (( settings.kubeconfig_secret ))
+        namespace: (( .landscape.namespace ))
+      data:
+        kubeconfig: (( base64( asyaml( .imports.kube-apiserver.export.kubeconfig ) ) ))
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: dashboard.gardener.cloud:system:project-member
+        labels:
+          rbac.gardener.cloud/aggregate-to-project-member: "true"
+      rules:
+      - apiGroups:
+        - dashboard.gardener.cloud
+        resources:
+        - terminals
+        verbs:
+        - create
+        - delete
+        - deletecollection
+        - get
+        - list
+        - patch
+        - update
+        - watch
+
+kustomize:
+  virtual:
+    render:
+      path: (( .settings.repo_path ))
+      kustomization: (( "config/overlay/multi-cluster/virtual-garden" ))
+    apply:
+      kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
+      files:
+        - (( env.GENDIR "/kustomize.virtual.render/manifest.yaml" ))
+  runtime:
+    edit:
+      kustomization: (( "config/overlay/multi-cluster/runtime/manager" ))
+      path: (( .settings.repo_path ))
+      args:
+        - add
+        - secret
+        - kubeconfig
+        - (( "--from-literal=kubeconfig=" asjson( .imports.kube-apiserver.export.kubeconfig ) ))
+        - --type=Opaque
+    render:
+      path: (( env.GENDIR "/kustomize.runtime.edit/edit" ))
+      kustomization: (( "config/overlay/multi-cluster/runtime" ))
+    apply:
+      kubeconfig: (( .landscape.clusters[0].kubeconfig ))
+      files:
+        - (( env.GENDIR "/kustomize.runtime.render/manifest.yaml" ))
+
+settings:
+  namespace: terminal-system
+  kubeconfig_secret: garden-kubeconfig-for-admin
+  repo_path: (( env.GENDIR "/git/repo" ))
+  cert_path: (( repo_path "/config/secret/tls" ))
+
+writefiles:
+  <<: (( &temporary ))
+  cert:
+    crt: (( write( .settings.cert_path "/terminal-controller-manager-tls.pem", .state.cert.value.cert ) ))
+    key: (( write( .settings.cert_path "/terminal-controller-manager-tls-key.pem", .state.cert.value.key ) ))
+
+spec:
+  <<: (( &temporary ))
+  cert:
+    commonName: "terminal-webhook-service.terminal-system.svc.cluster.local"
+    validity: 87600
+    usage:
+      - ServerAuth
+      - ClientAuth
+      - KeyEncipherment
+    hosts:
+      - "terminal-webhook-service"
+      - "terminal-webhook-service.terminal-system"
+      - "terminal-webhook-service.terminal-system.svc"
+      - "terminal-webhook-service.terminal-system.svc.cluster"
+      - "terminal-webhook-service.terminal-system.svc.cluster.local"
+
+state:
+  <<: (( &state(merge none) ))
+  ca: (( utilities.certs.selfSignedCA("ca-gardener-term", false) ))
+  cert: (( utilities.certs.keyCertForCA(spec.cert, ca, false) ))

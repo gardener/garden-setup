@@ -60,6 +60,30 @@ dashboard:
     frontendConfig:
       <<: (( .landscape.dashboard.frontendConfig || ~ ))
       seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
+    terminal: (( ( .landscape.dashboard.terminals.active || false ) ? *.terminal_config :~~ ))
+
+terminal_config:
+  <<: (( &temporary &template ))
+  containerImage: eu.gcr.io/gardener-project/gardener/ops-toolbelt:0.6.0
+  containerImageOperator: eu.gcr.io/gardener-project/gardener/ops-toolbelt:0.6.0
+  gardenTerminalHost:
+    seedRef: (( .landscape.iaas[0].name ))
+  garden:
+    operatorCredentials:
+      secretRef:
+        name: (( .imports.terminals.export.kubeconfig_secret ))
+        namespace: (( .landscape.namespace ))
+  bootstrap:
+    disabled: false
+    shootDisabled: false
+    seedDisabled: false
+    gardenTerminalHostDisabled: true
+    apiServerIngress:
+      annotations:
+        certmanager.k8s.io/cluster-issuer: (( .imports.cert-controller.export.issuerName ))
+        cert.gardener.cloud/purpose: managed
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/backend-protocol: HTTPS
 
 cname_dnsentry:
   kubeconfig: (( .landscape.clusters[0].kubeconfig ))
