@@ -116,3 +116,4 @@ kubeapiserver:
       secretNames:
         ca: garden-etcd-main-ca
         client: garden-etcd-main-client
+    networkPolicies: (( .landscape.gardener.network-policies.active || false ))

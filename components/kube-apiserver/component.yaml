@@ -13,13 +13,14 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
 component:
   imports:
     - ingress_controller: ingress-controller
     - etcd: etcd/cluster
     - identity
     - namespace
-    - network-policies
+    - (( ( .landscape.gardener.network-policies.active || false ) ? "network-policies" :~~ ))
     - cert-controller: cert-manager/controller
 
   stubs:
