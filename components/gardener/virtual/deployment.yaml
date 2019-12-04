@@ -184,8 +184,7 @@ gardener:
             shootQuota:
               concurrentSyncs: 5
               syncPeriod: 60m
-          featureGates:
-            HVPA: true
+          featureGates: {}
           leaderElection:
             leaderElect: true
             leaseDuration: 15s
