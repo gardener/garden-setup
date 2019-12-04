@@ -152,7 +152,7 @@ gardener:
         kubeconfig: dummy
         additionalVolumeMounts: []
         additionalVolumes: []
-        alertingSMTP: []
+        alerting: []
         config:
           clientConnection:
             acceptContentTypes: application/json
@@ -184,7 +184,8 @@ gardener:
             shootQuota:
               concurrentSyncs: 5
               syncPeriod: 60m
-          featureGates: {}
+          featureGates:
+            HVPA: true
           leaderElection:
             leaderElect: true
             leaseDuration: 15s

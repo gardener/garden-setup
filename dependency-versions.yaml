@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "0.31.2"
+        "version": "v0.32.0"
       },
       "extensions": {
         "dns-external": {
@@ -12,35 +12,35 @@
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         },
         "os-suse-jeos": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "0.14.4"
+          "version": "1.0.2"
         }
       }
     }
