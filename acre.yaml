@@ -116,13 +116,13 @@ landscape:
           image_repo: (( ~~ ))
     dashboard:
       <<: (( merge ))
-      repo: "https://github.com/gardener/dashboard.git"
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.35.0" ))
+      repo: (( .dependency_versions.versions.dashboard.core.repo ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dashboard.core.version ))
       image_tag: (( valid( tag ) ? tag :~~ ))
     identity:
       <<: (( merge ))
-      repo: (( dashboard.repo ))
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :( dashboard.tag || ~~ ) ))
+      repo: (( .dependency_versions.versions.dashboard.identity.repo ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dashboard.identity.version ))
       branch: (( valid( commit ) ? ~~ :( dashboard.branch || ~~ ) ))
       commit: (( dashboard.commit || ~~ ))
     dns-controller:
