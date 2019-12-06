@@ -43,6 +43,16 @@
           "version": "1.0.2"
         }
       }
+    },
+    "dashboard": {
+      "core": {
+        "repo": "https://github.com/gardener/dashboard.git",
+        "version": "1.35.3"
+      },
+      "identity": {
+        "repo": "(( dashboard.core.repo ))",
+        "version": "(( dashboard.core.version ))"
+      }
     }
   }
 }
