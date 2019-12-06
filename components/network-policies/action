@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-landscape: (( &temporary ))
-component:
-  imports:
-    - identity
-    - gardener_virtual: gardener/virtual
-    - gardener: gardener/extensions
-    - ingress_dns: ingress-controller
-    - kube_apiserver: kube-apiserver
-    - cert: cert-manager/cert
-    - cert-controller: cert-manager/controller
-    - dns-controller
-    - (( ( .landscape.gardener.network-policies.active || false ) ? "network-policies" :~~ ))
+source "$SOWLIB/k8s"
 
-  plugins:
-    - git
-
-git:
-  <<: (( .landscape.versions.dashboard ))
-  files:
-    - "charts"
+label_kube_system()
+{
+  if [ "$1" = "deploy" ]; then
+    PLUGIN_setup label_kube_system
+    K8S_setKubeConfig "$PLUGININSTANCE" 
+    kubectl label --overwrite namespace kube-system role=kube-system
+  fi
+}

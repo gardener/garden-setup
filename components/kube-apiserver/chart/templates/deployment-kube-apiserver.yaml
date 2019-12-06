@@ -43,6 +43,7 @@ spec:
       labels:
         app: garden
         component: kube-apiserver
+        {{- if .Values.networkPolicies }}
         networking.gardener.cloud/to-dns: allowed
         networking.gardener.cloud/to-etcd: allowed
         networking.gardener.cloud/to-gardener-apiserver: allowed
@@ -51,6 +52,7 @@ spec:
         networking.gardener.cloud/to-ingress: allowed # needed for communication to identity
         networking.gardener.cloud/to-terminal-controller-manager: allowed # needed for webhooks
         networking.gardener.cloud/to-world: allowed # necessary, except for GCP because GCP puts IP table rules on the nodes that allow in-cluster routing
+        {{- end }}
     spec:
       affinity:
         podAntiAffinity:

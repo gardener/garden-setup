@@ -1,4 +1,6 @@
 ---
+landscape: (( &temporary ))
 component:
+  active: (( .landscape.gardener.network-policies.active || false ))
   imports:
     - namespace

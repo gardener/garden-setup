@@ -411,7 +411,16 @@ validation:
           - - mapfield
             - credentials
             - (( types.dns[landscape.dashboard.cname.dns.type].credentials || [] ))
-  gardener_validator: ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]]
+  gardener_validator:
+    - and
+    - - optionalfield
+      - seedCandidateDeterminationStrategy
+      - ["valueset", ["SameRegion", "MinimalDistance"]]
+    - - optionalfield
+      - network-policies
+      - - mapfield
+        - active
+        - ["type", "bool"]
   networks:
     - and
     - ["mapfield", "nodes", "cidr"]

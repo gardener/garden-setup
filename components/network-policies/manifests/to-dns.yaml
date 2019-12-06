@@ -1,4 +1,4 @@
-# Allows outgoing traffic to the pods responsible for DNS.
+# Allows outgoing traffic on port 53 (DNS) as well as traffic to kube-dns/coredns pods.
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -12,6 +12,11 @@ spec:
   policyTypes:
   - Egress
   egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
   - to:
     - namespaceSelector:
         matchLabels:

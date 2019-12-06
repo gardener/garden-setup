@@ -3,7 +3,11 @@ landscape: (( &temporary ))
 imports: (( &temporary ))
 
 plugins:
+  - label_kube_system
   - kubectl
+
+label_kube_system:
+  kubeconfig: (( .landscape.clusters[0].kubeconfig ))
 
 kubectl:
   kubeconfig: (( .landscape.clusters[0].kubeconfig ))

@@ -123,6 +123,10 @@ landscape:
       pods: 10.28.0.0/15
       services: 10.31.240.0/20
 
+  gardener:
+    network-policies:
+      active: (( env( "NETWORK_POLICIES" ) || true ))
+
   iaas:
   - name: base
     mode: seed

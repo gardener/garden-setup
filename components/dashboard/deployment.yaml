@@ -50,6 +50,7 @@ dashboard:
     tls: ~
     kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
     podLabels:
+      <<: (( ( .landscape.gardener.network-policies.active || false ) ? ~ :~~ ))
       networking.gardener.cloud/to-dns: allowed
       networking.gardener.cloud/to-garden-kube-apiserver: allowed
       networking.gardener.cloud/to-identity: allowed
