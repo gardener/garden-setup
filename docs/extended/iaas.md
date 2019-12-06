@@ -181,28 +181,33 @@ landscape:
       extensionConfig:
         machineImages:
         - cloudProfiles:
-          - image: coreos-2023.5.0
+          - image: coreos-2135.6.0
             name: openstack
           name: coreos
-          version: 2023.5.0
+          version: 2135.6.0
       machineImages:
         - name: coreos
-          version: 2023.5.0
+          versions:
+            - version: 2135.6.0
       machineTypes:
         - name: medium_2_4
           cpu: "2"
           gpu: "0"
           memory: 4Gi
           usable: true
-          volumeType: default
-          volumeSize: 20Gi
+          storage:
+            class: ""
+            type: default
+            size: 20Gi
         - name: medium_4_8
           cpu: "4"
           gpu: "0"
           memory: 8Gi
           usable: true
-          volumeType: default
-          volumeSize: 40Gi
+          storage:
+            class: ""
+            type: default
+            size: 40Gi
 ```
 
 The information specified in `extensionConfig` will be used for the [Openstack provider extension](https://github.com/gardener/gardener-extensions/tree/master/controllers/provider-openstack), while all other Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml).
@@ -218,13 +223,14 @@ landscape:
       extensionConfig:
         machineImages:
         - cloudProfiles:
-          - image: coreos-2023.5.0
+          - image: coreos-2135.6.0
             name: openstack         # A
           name: coreos              # B
-          version: 2023.5.0         # C
+          version: 2135.6.0         # C
       machineImages:
         - name: coreos              # B
-          version: 2023.5.0         # C
+          versions:
+            - version: 2135.6.0     # C
 ```
 - each entry in `machineImages` must have a corresponding entry in `extensionConfig.machineImages` with matching `name` and `version`
 - each `iaas` entry of type `openstack` must have a corresponding entry in `extensionConfig.machineImages[].cloudProfiles` with matching `name`
