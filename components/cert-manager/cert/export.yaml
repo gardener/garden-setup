@@ -16,7 +16,7 @@ wait_for_certificate:
     - (( .settings.certificate.name ))
     - "-o"
     - "json"
-  result: (( sync( exec_uncached( check_command ), value.status.conditions[0].status == "True", value, 600 ) ))
+  result: (( sync( exec_uncached( check_command ), defined( value.status.conditions[0].status ) -and value.status.conditions[0].status == "True", value, 600 ) ))
   b64dall: (( |x|-> sum[x|{}|s,k,v|-> s {k=base64_decode(v)}] ))
 
 export:
