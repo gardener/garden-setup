@@ -14,6 +14,132 @@
 
 <<: (( &template ))
 
+providerConfig:
+  apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
+  kind: CloudProfileConfig
+  machineImages:
+    - name: coreos
+      regions:
+      - ami: ami-0e4285d1d637f9621
+        name: ap-northeast-1
+      - ami: ami-0b0b27a09fa29bcc0
+        name: ap-northeast-2
+      - ami: ami-05533b69d18ef0f2b
+        name: ap-south-1
+      - ami: ami-03b2848db9a1e8331
+        name: ap-southeast-1
+      - ami: ami-0f2a464ec2d360ab3
+        name: ap-southeast-2
+      - ami: ami-0971c6160f743d7a4
+        name: ca-central-1
+      - ami: ami-05e7c07155bf6194c
+        name: cn-north-1
+      - ami: ami-0834edd97d31a9b8c
+        name: cn-northwest-1
+      - ami: ami-034fd8c3f4026eb39
+        name: eu-central-1
+      - ami: ami-0eb52d157df39a702
+        name: eu-north-1
+      - ami: ami-0b4e04c2cc22a915e
+        name: eu-west-1
+      - ami: ami-0ed4f5a960d2d3527
+        name: eu-west-2
+      - ami: ami-0338e402d6f997560
+        name: eu-west-3
+      - ami: ami-017d7523a36c57feb
+        name: sa-east-1
+      - ami: ami-04e51eabc8abea762
+        name: us-east-1
+      - ami: ami-00893b3a357694f05
+        name: us-east-2
+      - ami: ami-06cc1e14c395f91e7
+        name: us-gov-east-1
+      - ami: ami-b5286bd4
+        name: us-gov-west-1
+      - ami: ami-00f0659e80ce3eba1
+        name: us-west-1
+      - ami: ami-073f5d166dc37a1bd
+        name: us-west-2
+      version: 2135.6.0
+    - name: suse-jeos
+      regions:
+      - ami: ami-010e3748f56b5d383
+        name: us-east-1
+      - ami: ami-0dc4fc3671d317b6c
+        name: us-east-2
+      - ami: ami-01914ce4b7059bfb5
+        name: us-west-2
+      - ami: ami-0ea395d8f8260bd55
+        name: us-west-1
+      - ami: ami-087f06875ef584618
+        name: eu-central-1
+      - ami: ami-01bb37716e2cb5d03
+        name: eu-north-1
+      - ami: ami-03ea392be24056138
+        name: eu-west-1
+      - ami: ami-07ea661aea943d2b4
+        name: eu-west-2
+      - ami: ami-0f62282f3b1fef7d2
+        name: eu-west-3
+      - ami: ami-00923597b32063906
+        name: ap-southeast-1
+      - ami: ami-01ef0c0bd0dbcf21d
+        name: ap-northeast-1
+      - ami: ami-09d5e8d4f8a76376d
+        name: ap-northeast-2
+      - ami: ami-0d773c42304e5e163
+        name: ap-southeast-2
+      - ami: ami-03ef7c10453976402
+        name: sa-east-1
+      - ami: ami-13eaa972
+        name: us-gov-west-1
+      - ami: ami-075d69383501846fc
+        name: cn-north-1
+      - ami: ami-026904ecb3d37e059
+        name: cn-northwest-1
+      - ami: ami-0402c421f192a940a
+        name: ap-south-1
+      - ami: ami-04dd83d6325c4a630
+        name: ca-central-1
+      - ami: ami-0028371a477eba9ac
+        name: us-gov-east-1
+      version: 0.0.0-alpha.2
+    - name: ubuntu
+      regions:
+      - ami: ami-01c333e5001714a3d
+        name: ap-northeast-1
+      - ami: ami-08950c5587cf810bc
+        name: ap-northeast-2
+      - ami: ami-02989c66e628f149a
+        name: ap-southeast-1
+      - ami: ami-05c7a11c530b53852
+        name: ap-southeast-2
+      - ami: ami-02568785ff8181be2
+        name: ap-south-1
+      - ami: ami-0fdc38093c170108e
+        name: ca-central-1
+      - ami: ami-0cfa055c19966a250
+        name: eu-central-1
+      - ami: ami-7534bc0b
+        name: eu-north-1
+      - ami: ami-08dfaa238f8403d8a
+        name: eu-west-1
+      - ami: ami-09aeadd018dc26db7
+        name: eu-west-2
+      - ami: ami-0f51905d6c231ad75
+        name: eu-west-3
+      - ami: ami-0432c0d031ebc20b8
+        name: sa-east-1
+      - ami: ami-0cda679a4be93d2f9
+        name: us-east-1
+      - ami: ami-0cd23f4bd552794b7
+        name: us-east-2
+      - ami: ami-0faf7d30ef5a9cf85
+        name: us-west-1
+      - ami: ami-038e46ae6528090d1
+        name: us-west-2
+      version: 18.04.201906170
+
 machineImages:
   - name: suse-jeos
     versions:

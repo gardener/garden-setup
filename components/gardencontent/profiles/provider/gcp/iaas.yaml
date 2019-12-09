@@ -14,6 +14,17 @@
 
 <<: (( &template ))
 
+providerConfig:
+  apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+  kind: CloudProfileConfig
+  machineImages:
+    - image: projects/coreos-cloud/global/images/coreos-stable-2135-6-0-v20190801
+      name: coreos
+      version: 2135.6.0
+    - image: projects/ubuntu-os-cloud/global/images/ubuntu-minimal-1804-bionic-v20190617
+      name: ubuntu
+      version: 18.04.201906170
+
 machineTypes:
   - cpu: "2"
     gpu: "0"
