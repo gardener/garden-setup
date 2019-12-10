@@ -462,3 +462,32 @@ extension_manifests:
       resources:
       - kind: Network
         type: calico
+
+########################################
+  shoot-cert-service:
+########################################
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1alpha1
+    kind: ControllerRegistration
+    metadata:
+      name: shoot-cert-service
+    spec:
+      deployment:
+        type: helm
+        providerConfig:
+          chart: (( encoded_chart ))
+          values:
+            certificateConfig:
+              defaultIssuer:
+                name: garden
+                acme:
+                  email: (( valid( landscape.dashboard.terminals.cert.email ) ? landscape.dashboard.terminals.cert.email :( landscape.cert-manager.email || landscape.identity.users[0].email ) ))
+                  server: (( valid( landscape.dashboard.terminals.cert.server ) ? landscape.dashboard.terminals.cert.server :( landscape.cert-manager.server.url == "live" ? "https://acme-v02.api.letsencrypt.org/directory" :landscape.cert-manager.server.url ) ))
+                  privateKey: (( ( valid( landscape.dashboard.terminals.cert.privateKey ) ? landscape.dashboard.terminals.cert.privateKey :( ! valid( landscape.dashboard.terminals.cert.server ) ? landscape.cert-manager.privateKey :~~ ) ) || ~~ ))
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+      resources:
+      - kind: Extension
+        type: shoot-cert-service
+        globallyEnabled: true

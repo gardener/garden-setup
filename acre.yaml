@@ -56,63 +56,70 @@ landscape:
           tag: (( valid( dns-external.branch ) -or valid( dns-external.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
           image_tag: (( valid( dns-external.tag ) ? dns-external.tag :~~ ))
           image_repo: (( ~~ ))
-          repo: https://github.com/gardener/external-dns-management.git
+          repo: (( .dependency_versions.versions.gardener.extensions.dns-external.repo ))
           chart_path: charts/external-dns-management
         os-coreos:
           <<: (( merge ))
           tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-coreos.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.os-coreos.repo ))
           chart_path: controllers/os-coreos/charts/os-coreos
           image_tag: (( valid( os-coreos.tag ) ? os-coreos.tag :~~ ))
           image_repo: (( ~~ ))
         os-ubuntu:
           <<: (( merge ))
           tag: (( valid( os-ubuntu.branch ) -or valid( os-ubuntu.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-ubuntu.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.os-ubuntu.repo ))
           chart_path: controllers/os-ubuntu/charts/os-ubuntu
           image_tag: (( valid( os-ubuntu.tag ) ? os-ubuntu.tag :~~ ))
           image_repo: (( ~~ ))
         os-suse-jeos:
           <<: (( merge ))
           tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-suse-jeos.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.os-suse-jeos.repo ))
           chart_path: controllers/os-suse-jeos/charts/os-suse-jeos
           image_tag: (( valid( os-suse-jeos.tag ) ? os-suse-jeos.tag :~~ ))
           image_repo: (( ~~ ))
         provider-aws:
           <<: (( merge ))
           tag: (( valid( provider-aws.branch ) -or valid( provider-aws.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-aws.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-aws.repo ))
           chart_path: controllers/provider-aws/charts/provider-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
         provider-gcp:
           <<: (( merge ))
           tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-gcp.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-gcp.repo ))
           chart_path: controllers/provider-gcp/charts/provider-gcp
           image_tag: (( valid( provider-gcp.tag ) ? provider-gcp.tag :~~ ))
           image_repo: (( ~~ ))
         provider-azure:
           <<: (( merge ))
           tag: (( valid( provider-azure.branch ) -or valid( provider-azure.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-azure.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-azure.repo ))
           chart_path: controllers/provider-azure/charts/provider-azure
           image_tag: (( valid( provider-azure.tag ) ? provider-azure.tag :~~ ))
           image_repo: (( ~~ ))
         provider-openstack:
           <<: (( merge ))
           tag: (( valid( provider-openstack.branch ) -or valid( provider-openstack.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-openstack.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-openstack.repo ))
           chart_path: controllers/provider-openstack/charts/provider-openstack
           image_tag: (( valid( provider-openstack.tag ) ? provider-openstack.tag :~~ ))
           image_repo: (( ~~ ))
         networking-calico:
           <<: (( merge ))
           tag: (( valid( networking-calico.branch ) -or valid( networking-calico.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.networking-calico.version ))
-          repo: https://github.com/gardener/gardener-extensions.git
+          repo: (( .dependency_versions.versions.gardener.extensions.networking-calico.repo ))
           chart_path: controllers/networking-calico/charts/networking-calico
           image_tag: (( valid( networking-calico.tag ) ? networking-calico.tag :~~ ))
+          image_repo: (( ~~ ))
+        shoot-cert-service:
+          <<: (( merge ))
+          tag: (( valid( shoot-cert-service.branch ) -or valid( shoot-cert-service.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.shoot-cert-service.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.shoot-cert-service.repo ))
+          chart_path: controllers/extension-shoot-cert-service/charts/extension-shoot-cert-service
+          image_tag: (( valid( shoot-cert-service.tag ) ? shoot-cert-service.tag :~~ ))
           image_repo: (( ~~ ))
     dashboard:
       <<: (( merge ))
@@ -125,6 +132,12 @@ landscape:
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dashboard.identity.version ))
       branch: (( valid( commit ) ? ~~ :( dashboard.branch || ~~ ) ))
       commit: (( dashboard.commit || ~~ ))
+    terminal-controller-manager:
+      <<: (( merge ))
+      repo: https://github.com/gardener/terminal-controller-manager.git
+      image_tag: (( valid( tag ) ? tag :~~ ))
+      image_repo: (( ~~ ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.5.0" ))
     dns-controller:
       <<: (( merge ))
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
@@ -393,24 +406,45 @@ validation:
         - - mapfield
           - networks
           - (( validation.networks types.iaas[values.type].networks ))
-  dashboard_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
-  dashboard_cname_validator:
-    - optionalfield
-    - cname
-    - - and
-      - - mapfield
-        - domain
-        - - dnsdomain
-      - - optionalfield
-        - dns
-        - - and
-          - - mapfield
-            - type
-            - - valueset
-              - (( keys( validation.types.dns ) ))
-          - - mapfield
-            - credentials
-            - (( types.dns[landscape.dashboard.cname.dns.type].credentials || [] ))
+  dashboard_validator:
+    - and
+    - - optionalfield
+      - cname
+      - - and
+        - - mapfield
+          - domain
+          - - dnsdomain
+        - - optionalfield
+          - dns
+          - - and
+            - - mapfield
+              - type
+              - - valueset
+                - (( keys( validation.types.dns ) ))
+            - - mapfield
+              - credentials
+              - (( types.dns[landscape.dashboard.cname.dns.type].credentials || [] ))
+    - - optionalfield
+      - terminals
+      - - and
+        - - mapfield
+          - active
+          - - type
+            - bool
+        - - optionalfield
+          - cert
+          - - and
+            - - optionalfield
+              - email
+              - - match
+                - (( validation.email_regex ))
+            - - optionalfield
+              - server
+            - - optionalfield
+              - privateKey
+              - privatekey
+  dashboard_no_seed_strategy_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
+  dashboard_terminals_validator: (( |db,cm|-> [! (( db.terminals.active || false ) -and ( cm.server.url == "self-signed" -or cm.server.url == "staging" )), "valid", "the 'dashboard terminals' feature requires trusted certificates, please configure the cert-manager accordingly"] ))
   gardener_validator:
     - and
     - - optionalfield
@@ -444,6 +478,9 @@ validation:
           - - optionalfield
             - ca
             - ["and", [(( cert-manager_validators.selfsigned )), (( landscape.cert-manager.server.url ))], [(( cert-manager_validators.acme )), (( landscape.cert-manager.server.url ))]]
+      - - optionalfield
+        - privateKey
+        - privatekey
     selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-manager.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
     acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-manager.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
     email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-manager.email' or 'landscape.identity.users[0].email' needs to be set"] ))
@@ -483,7 +520,7 @@ validation:
   ##### landscape.gardener
   gardener: (( defined( landscape.gardener ) ? validate( landscape.gardener, validation.gardener_validator ) :~~ ))
   ##### landscape.dashboard
-  dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator, validation.dashboard_cname_validator ) :~~ ))
+  dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator, validation.dashboard_no_seed_strategy_validator, [validation.dashboard_terminals_validator, landscape.cert-manager] ) :~~ ))
   ##### landscape.certmanager
   cert-manager: (( validate( landscape.cert-manager, validation.cert-manager_validators.basic, [validation.cert-manager_validators.email, landscape.identity] ) ))
   ##### landscape.identity TODO

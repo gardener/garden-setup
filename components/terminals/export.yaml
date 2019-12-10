@@ -1,0 +1,4 @@
+---
+settings: (( &temporary ))
+export:
+  kubeconfig_secret: (( settings.kubeconfig_secret ))
