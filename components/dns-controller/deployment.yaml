@@ -24,9 +24,18 @@ settings:
   namespace: "kube-system"
 
 plugins:
-  - helm
+  - pinned:
+    - helm:
+       - helm
+       - template
+    - kubectl: kubectl_apply
   - kubectl
 # TODO: create namespace if it doesn't exist
+
+kubectl_apply:
+  kubeconfig: (( .helm.kubeconfig ))
+  files:
+    - "helm/rendered_charts.yaml"
 
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
