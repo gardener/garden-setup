@@ -50,6 +50,10 @@ landscape:
         <<: (( merge ))
         image_repo: "eu.gcr.io/gardener-project/gardener/scheduler"
         image_tag: (( valid( tag ) ? tag :~~ ))
+      gardenlet:
+        <<: (( merge ))
+        image_repo: "eu.gcr.io/gardener-project/gardener/gardenlet"
+        image_tag: (( valid( tag ) ? tag :~~ ))
       extensions:
         dns-external:
           <<: (( merge ))

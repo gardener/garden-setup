@@ -112,7 +112,7 @@ gardener_version: (( &temporary ( .landscape.versions.gardener ) ))
 
 gardener:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
-  source: "git/repo/charts/gardener/charts/application"
+  source: "git/repo/charts/gardener/controlplane/charts/application"
   name: "gardener"
   namespace: "garden"
   values:
@@ -203,19 +203,11 @@ gardener:
                 caBundle: (( .state.gardener_ca.value.cert ))
                 crt: (( .state.gardener_controller_manager.value.cert ))
                 key: (( .state.gardener_controller_manager.value.key ))
-        defaultDomains:
-          - credentials: (( *.dns_credentials.[provider] ))
-            domain: (( "shoot." .landscape.domain ))
-            provider: (( .landscape.dns.type ))
         enabled: true
         image:
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
           repository: (( .gardener_version.controller_manager.image_repo ))
           tag: (( .gardener_version.controller_manager.image_tag || ~~ ))
-        internalDomain:
-          credentials: (( *.dns_credentials.[provider] ))
-          domain: (( "internal." .landscape.domain ))
-          provider: (( .landscape.dns.type ))
         replicaCount: 1
         resources:
           limits:
@@ -238,6 +230,14 @@ gardener:
               concurrentSyncs: 5
               candidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
         # kubeconfig: is only needed for the runtime chart and will be added in export step
+      defaultDomains:
+        - credentials: (( *.dns_credentials.[provider] ))
+          domain: (( "shoot." .landscape.domain ))
+          provider: (( .landscape.dns.type ))
+      internalDomain:
+        credentials: (( *.dns_credentials.[provider] ))
+        domain: (( "internal." .landscape.domain ))
+        provider: (( .landscape.dns.type ))
       deployment:
         virtualGarden:
           clusterIP: (( min_ip(.landscape.clusters.[0].networks.services) + 20 ))

@@ -36,4 +36,4 @@ commands:
     - "-o"
     - "json"
   get_kubeconfig: (( |sh|-> exec( *_.get_kubeconfig_command ) ))
-  extract_kubeconfig: (( |sec|-> base64_decode( sec.data.kubeconfig ) ))
+  extract_kubeconfig: (( |sec|-> parse( base64_decode( sec.data.kubeconfig ) ) ))

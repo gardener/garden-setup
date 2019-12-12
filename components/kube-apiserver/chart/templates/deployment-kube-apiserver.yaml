@@ -188,7 +188,7 @@ spec:
         - controller-manager
         - --cluster-signing-cert-file=/srv/kubernetes/ca/ca.crt
         - --cluster-signing-key-file=/srv/kubernetes/ca/ca.key
-        - --controllers=namespace,serviceaccount,serviceaccount-token,clusterrole-aggregation,garbagecollector
+        - --controllers=namespace,serviceaccount,serviceaccount-token,clusterrole-aggregation,garbagecollector,csrapproving,csrcleaner,csrsigning,bootstrapsigner,tokencleaner
         - --authorization-kubeconfig=/srv/kubernetes/controller-manager/kubeconfig
         - --authentication-kubeconfig=/srv/kubernetes/controller-manager/kubeconfig
         - --kubeconfig=/srv/kubernetes/controller-manager/kubeconfig
