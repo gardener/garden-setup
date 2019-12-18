@@ -23,6 +23,7 @@ plugins:
 settings:
   apiserver_dns: (( "api." imports.ingress_controller.export.ingress_domain ))
   gardener_dns: (( "gardener." imports.ingress_controller.export.ingress_domain ))
+  apiserver_url_internal: (( "https://" .kubeapiserver.serviceName "." .kubeapiserver.namespace ".svc:443" ))
   
 spec:
   <<: (( &temporary ))
@@ -86,7 +87,7 @@ kubeapiserver:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   source: chart
   name: "garden-kube-apiserver"
-  namespace: "garden"
+  namespace: (( .landscape.namespace ))
   serviceName: (( name ))
   values:
     images:
