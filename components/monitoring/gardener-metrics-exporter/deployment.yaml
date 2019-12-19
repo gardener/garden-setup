@@ -4,8 +4,52 @@ landscape: (( &temporary ))
 env: (( &temporary ))
 
 plugins:
+  - kubectl: kubectl_sa
   - kubectl_patch
-  - helm
+  - helm:
+    - helm
+    - spiff
+
+kubectl_sa:
+  kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: (( .settings.serviceaccount_name ))
+        namespace: (( .landscape.namespace ))
+        labels:
+          app: gardener
+          role: metrics-exporter
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: garden.sapcloud.io:metrics-exporter
+      rules:
+      - apiGroups:
+        - garden.sapcloud.io
+        - core.gardener.cloud
+        resources:
+        - shoots
+        - seeds
+        - projects
+        - plants
+        verbs:
+        - get
+        - watch
+        - list
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: garden.sapcloud.io:metrics-exporter
+      subjects:
+      - kind: ServiceAccount
+        name: (( .settings.serviceaccount_name ))
+        namespace: (( .landscape.namespace ))
+      roleRef:
+        kind: ClusterRole
+        name: garden.sapcloud.io:metrics-exporter
+        apiGroup: rbac.authorization.k8s.io
 
 kubectl_patch:
   kubeconfig: (( .landscape.clusters[0].kubeconfig ))
@@ -25,10 +69,11 @@ helm:
     image:
       repository: (( .landscape.versions.monitoring.gardener-metrics-exporter.image_repo || ~~ ))
       tag: (( .landscape.versions.monitoring.gardener-metrics-exporter.image_tag || ~~ ))
-    kubeconfig: (( asyaml( .imports.kube-apiserver.export.kubeconfig ) ))
+    kubeconfig: (( format( "((! read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"text\") ))", env.GENDIR, .settings.serviceaccount_name ) ))
 
 settings:
   dashboard_path_prefix: (( env.GENDIR "/git/repo/dashboards/" ))
+  serviceaccount_name: gardener-metrics-exporter
   excluded_dashboards:
     - shoot-state-overview-dashboard.json
 
