@@ -237,7 +237,7 @@ gardener:
               retrySyncPeriod: 15s
               concurrentSyncs: 5
               candidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
-        kubeconfig: (( asyaml( imports.kube_apiserver.export.kubeconfig ) ))
+        # kubeconfig: is only needed for the runtime chart and will be added in export step
       deployment:
         virtualGarden:
           clusterIP: (( min_ip(.landscape.clusters.[0].networks.services) + 20 ))

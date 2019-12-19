@@ -15,8 +15,15 @@
 ---
 gardener: (( &temporary ))
 settings: (( &temporary ))
+env: (( &temporary ))
 export:
   gardener:
     seedCandidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
-    values: (( .gardener.values ))
+    values:
+      <<: (( .gardener.values ))
+      global:
+        <<: (( .gardener.values.global ))
+        scheduler:
+          <<: (( .gardener.values.global.scheduler ))
+          kubeconfig: (( read( env.GENDIR "/kubectl_apply/sa_gardener-scheduler.kubeconfig", "text" ) ))
   dns_credentials: (( .settings.dns_credentials ))
