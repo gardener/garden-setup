@@ -1,4 +1,4 @@
-apiVersion: core.gardener.cloud/v1alpha1
+apiVersion: core.gardener.cloud/v1beta1
 kind: Shoot
 metadata:
   name: (( values.values.name ))
@@ -46,9 +46,9 @@ spec:
   hibernation:
     enabled: false
   addons:
-    nginx-ingress:
+    nginxIngress:
       enabled: true
-    kubernetes-dashboard:
+    kubernetesDashboard:
       enabled: false
 
 templates:

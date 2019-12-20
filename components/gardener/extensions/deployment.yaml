@@ -49,7 +49,7 @@ extension_manifests:
   os-coreos:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: os-coreos
@@ -78,7 +78,7 @@ extension_manifests:
   os-ubuntu:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: os-ubuntu
@@ -107,7 +107,7 @@ extension_manifests:
   os-suse-jeos:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: os-suse-jeos
@@ -136,7 +136,7 @@ extension_manifests:
   dns-external:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: dns-external
@@ -172,7 +172,7 @@ extension_manifests:
   provider-aws:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: provider-aws
@@ -327,7 +327,7 @@ extension_manifests:
   provider-azure:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: provider-azure
@@ -367,7 +367,7 @@ extension_manifests:
   provider-gcp:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: provider-gcp
@@ -407,7 +407,7 @@ extension_manifests:
   provider-openstack:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: provider-openstack
@@ -446,7 +446,7 @@ extension_manifests:
   networking-calico:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: networking-calico
@@ -467,7 +467,7 @@ extension_manifests:
   shoot-cert-service:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1alpha1
+    apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
       name: shoot-cert-service

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ---
-apiVersion: core.gardener.cloud/v1alpha1
+apiVersion: core.gardener.cloud/v1beta1
 key:kind: CloudProfile
 metadata:
   name: (( values.name ))
