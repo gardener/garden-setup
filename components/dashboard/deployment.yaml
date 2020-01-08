@@ -15,9 +15,13 @@
 ---
 imports: (( &temporary ))
 landscape: (( &temporary ))
+env: (( &temporary ))
 
 plugins:
-  - helm: dashboard
+  - kubectl: kubectl_sa
+  - helm:
+    - dashboard
+    - spiff
   - kubectl: rbac
   - (( valid( .landscape.dashboard.cname ) ? { "kubectl" = "cname_dnsentry" } :~~ ))
   - -echo: "==================================================================="
@@ -48,7 +52,7 @@ dashboard:
       clientSecret: (( imports.identity.export.dashboardClientSecret ))
     tlsSecretName: (( imports.cert.export.certificate.secret_name ))
     tls: ~
-    kubeconfig: (( asyaml(imports.kube_apiserver.export.kubeconfig) ))
+    kubeconfig: (( format( "((! read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"text\") ))", env.GENDIR, .settings.serviceaccount_name ) ))
     podLabels:
       <<: (( ( .landscape.gardener.network-policies.active || false ) ? ~ :~~ ))
       networking.gardener.cloud/to-dns: allowed
@@ -106,7 +110,29 @@ util:
   userbindings: ((|users|->map[users|user|->*spec.subject] ))
 
 settings:
+  serviceaccount_name: gardener-dashboard
   dashboard_url: (( "https://" imports.identity.export.dashboard_dns ))
+
+kubectl_sa:
+  kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: (( .settings.serviceaccount_name ))
+        namespace: (( .landscape.namespace ))
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: "dashboard.gardener.cloud:admin"
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-admin
+      subjects:
+        - kind: ServiceAccount
+          name: (( .settings.serviceaccount_name ))
+          namespace: (( .landscape.namespace ))
 
 spec:
   <<: (( &temporary ))
