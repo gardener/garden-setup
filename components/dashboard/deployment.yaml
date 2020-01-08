@@ -64,6 +64,9 @@ dashboard:
     frontendConfig:
       <<: (( .landscape.dashboard.frontendConfig || ~ ))
       seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
+      features:
+        <<: (( .landscape.dashboard.frontendConfig.features || ~ ))
+        terminalEnabled: (( ( .landscape.dashboard.terminals.active || false ) ))
     terminal: (( ( .landscape.dashboard.terminals.active || false ) ? *.terminal_config :~~ ))
 
 terminal_config:
