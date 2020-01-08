@@ -15,7 +15,6 @@
 ---
 component:
   imports:
-    - tiller
     - backupinfra: etcd/backupinfra
     - namespace
 
