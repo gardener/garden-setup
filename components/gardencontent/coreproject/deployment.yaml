@@ -42,7 +42,7 @@ secret_template:
         namespace: (( .settings.project_namespace ))
       type: Opaque
       data: (( utilities.secretdata(v.credentials) ))
-    - apiVersion: core.gardener.cloud/v1alpha1
+    - apiVersion: core.gardener.cloud/v1beta1
       kind: SecretBinding
       metadata:
         labels:
@@ -62,7 +62,7 @@ core:
           garden.sapcloud.io/role: project
           project.garden.sapcloud.io/name: (( .settings.project_name ))
         name: (( .settings.project_namespace ))
-    - apiVersion: core.gardener.cloud/v1alpha1
+    - apiVersion: core.gardener.cloud/v1beta1
       kind: Project
       metadata:
         name: (( .settings.project_name ))

@@ -64,6 +64,9 @@ dashboard:
     frontendConfig:
       <<: (( .landscape.dashboard.frontendConfig || ~ ))
       seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
+      features:
+        <<: (( .landscape.dashboard.frontendConfig.features || ~ ))
+        terminalEnabled: (( ( .landscape.dashboard.terminals.active || false ) ))
     terminal: (( ( .landscape.dashboard.terminals.active || false ) ? *.terminal_config :~~ ))
 
 terminal_config:
@@ -153,7 +156,7 @@ rbac:
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
-        name: garden.sapcloud.io:system:project-creation
+        name: gardener.cloud:system:project-creation
       subjects: (( util.userbindings(spec.users) ))
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
@@ -163,5 +166,5 @@ rbac:
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
-        name: garden.sapcloud.io:system:administrators
+        name: gardener.cloud:system:administrators
       subjects: (( util.userbindings(["system:kube-aggregator"] spec.users) ))

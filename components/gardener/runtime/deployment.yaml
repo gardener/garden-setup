@@ -73,7 +73,7 @@ gardenready:
 gardener:
   <<: (( imports.gardener_virtual.export.gardener ))
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
-  source: "git/repo/charts/gardener/charts/runtime"
+  source: "git/repo/charts/gardener/controlplane/charts/runtime"
   values: (( merge(.imports.gardener_virtual.export.gardener.values, spec) ))
   name: gardener
   namespace: (( landscape.namespace ))

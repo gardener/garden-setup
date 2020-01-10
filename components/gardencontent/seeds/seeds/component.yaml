@@ -23,3 +23,11 @@ component:
 
   stubs:
     - plugins/kubectl/utilities.yaml
+
+  plugins:
+    - git
+
+git:
+  <<: (( .landscape.versions.gardener ))
+  files:
+    - "charts"

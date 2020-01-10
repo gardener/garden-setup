@@ -7,6 +7,7 @@ Whatever is specified for
 will be given directly to the [dashboard helm chart](https://github.com/gardener/dashboard/blob/master/charts/gardener-dashboard/values.yaml), so you can overwrite the corresponding default values.
 
 Please note that `frontendConfig.seedCandidateDeterminationStrategy` can not be overwritten here, as that value is derived from the Gardener. You can overwrite it [here](gardener.md).
+The same is true for `frontendConfig.features.terminalEnabled`. See [below](#landscape-dashboard-terminals) on how to activate the terminals.
 
 ### landscape.dashboard.cname
 

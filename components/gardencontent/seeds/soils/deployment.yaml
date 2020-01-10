@@ -15,16 +15,27 @@
 ---
 landscape: (( &temporary ))
 imports: (( &temporary ))
-utilities: (( &temporary ))
 env: (( &temporary ))
 
 plugins:
   - cleanup
-  - kubectl
+  - <<: (( sum[.iaasSeedsSoils|[]|s,id,v|-> s *.pluginTemplate] ))
+
+pluginTemplate:
+  - <<: (( &temporary &template ))
+  - kubectl: (( "renderedPluginSpecs[" id "].deploySecrets" ))
+  - (( valid( renderedPluginSpecs[id].namespace ) ? { "kubectl" = "renderedPluginSpecs[" id "].namespace" } :~~ ))
+  - helm: (( "renderedPluginSpecs[" id "].gardenlet" ))
+  - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
+  - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
+
+iaasSeedsSoils: (( &temporary ( select[.landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"] ) ))
+
+bootstrapTokens: (( sum[.iaasSeedsSoils|{}|s,elem|-> s { elem.name = { "id" = substr( elem.name, 0, 3 ) rand( "a-z0-9", 3 ), "secret" = substr( elem.name, 0, 3 ) rand( "a-z0-9", 13 ) } }] ))
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
-  seeds: (( sum[landscape.iaas|[]|s,v|-> v.mode == "seed" -or v.mode == "soil" ? s v.name :s ] ))
+  seeds: (( .iaasSeedsSoils ))
 
 cleanup:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
@@ -38,11 +49,14 @@ providerconfig:
     type: (( landscape.dns.type ))
   iaas: (( read(__ctx.DIR "/../provider/" v.type "/seed.yaml", "import") ))
   config: (( v ))
+  isBaseCluster: (( ! valid( v.cluster.kubeconfig ) ))
+  bootstrapToken: (( bootstrapTokens[v.name] ))
+  kubeconfigs:
+    virtual: (( .imports.kube_apiserver.export.kubeconfig ))
+    seed: (( v.cluster.kubeconfig || read( env.ROOTDIR "/" landscape.clusters.[0].kubeconfig, "yaml" ) ))
   seed:
     ingressdomain: (( name "." .imports.ingress_dns.export.ingress_domain ))
-    kubeconfig: (( asyaml( v.cluster.kubeconfig ) || read(env.ROOTDIR "/" landscape.clusters.[0].kubeconfig, "text") ))
     networks: (( v.cluster.networks || landscape.clusters.[0].networks ))
   secretname: (( name "-" v.mode ))
 
-kubectl: (( sum[landscape.iaas|[]|s,v|-> v.mode == "seed" -or v.mode == "soil" ? s utilities.kubectl.generate( __ctx.DIR "/../manifests/seed_manifest.yaml", imports.kube_apiserver.export.kubeconfig, *providerconfig ) :s ] ))
-
+renderedPluginSpecs: (( sum[.iaasSeedsSoils|[]|s,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ---
-apiVersion: core.gardener.cloud/v1alpha1
+apiVersion: core.gardener.cloud/v1beta1
 key:kind: CloudProfile
 metadata:
   name: (( values.name ))
@@ -46,8 +46,11 @@ defaults:
     caBundle: (( values.config.caBundle || ~~ ))
   kubernetes:
     versions:
+      - version: 1.16.4
       - version: 1.16.3
+      - version: 1.15.7
       - version: 1.15.6
+      - version: 1.14.10
       - version: 1.14.9
       - version: 1.13.12
       - version: 1.12.10

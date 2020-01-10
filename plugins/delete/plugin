@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+#
 # Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +14,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-landscape: (( &temporary ))
-component:
-  imports:
-    - project: gardencontent/coreproject
-    - profiles: gardencontent/profiles
-    - gardener_virtual: gardener/virtual
-    - gardener_runtime: gardener/extensions
-    - ingress_dns: ingress-controller
-    - kube_apiserver: kube-apiserver
+# Helper plugin to delete resources
 
-  stubs:
-    - plugins/kubectl/utilities.yaml
-  
-  plugins:
-    - git
+source "$SOWLIB/pluginutils"
+source "$SOWLIB/k8s"
 
-git:
-  <<: (( .landscape.versions.gardener ))
-  files:
-    - "charts"
+set -eo pipefail
+
+K8S_setKubeConfig "$PLUGININSTANCE" "$dir/kubeconfig"
+getRequiredValue type "type" PLUGINCONFIGJSON
+getRequiredValue name "name" PLUGINCONFIGJSON
+getRequiredValue step "step" PLUGINCONFIGJSON
+getValue namespace "namespace" PLUGINCONFIGJSON
+
+case "$1" in
+    deploy) ;&
+    delete)
+        if [[ "$step" == "$1" ]]; then
+            exec_cmd kubectl delete ${namespace:+"-n"}${namespace:-} $type $name --ignore-not-found
+        else
+            verbose "Nothing to do on $1."
+        fi
+        ;;
+    *) fail "unsupported action $1"
+esac
