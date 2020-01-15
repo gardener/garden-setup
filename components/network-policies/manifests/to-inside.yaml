@@ -1,0 +1,23 @@
+# Allows outgoing traffic to private networks.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: to-inside
+  namespace: (( landscape.namespace ))
+spec:
+  podSelector:
+    matchLabels:
+      networking.gardener.cloud/to-inside: allowed
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 192.168.0.0/16      # private networks (RFC1918)
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/8          # private networks (RFC1918)
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/12       # private networks (RFC1918)

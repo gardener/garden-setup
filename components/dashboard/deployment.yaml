@@ -60,6 +60,7 @@ dashboard:
       networking.gardener.cloud/to-identity: allowed
       networking.gardener.cloud/to-ingress: allowed
       networking.gardener.cloud/to-world: allowed
+      networking.gardener.cloud/to-inside: allowed
     gitHub: (( .landscape.dashboard.gitHub || ~~ ))
     frontendConfig:
       <<: (( .landscape.dashboard.frontendConfig || ~ ))
