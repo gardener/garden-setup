@@ -199,6 +199,9 @@ pluginSpecs:
     name: gardenlet
     namespace: garden
     values: (( gardenletSpec ))
+  seedReady:
+    kubeconfig: (( configValues.kubeconfigs.virtual ))
+    seed: (( configValues.name ))
   deleteSeed:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     step: delete

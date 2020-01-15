@@ -18,8 +18,51 @@ providerConfig:
   apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
   kind: CloudProfileConfig
   machineImages:
-    - name: coreos
-      regions:
+  - name: coreos
+    versions:
+    - regions:
+      - ami: ami-0a3dec216288de4d0
+        name: ap-northeast-1
+      - ami: ami-02adc372e1ee4146f
+        name: ap-northeast-2
+      - ami: ami-0bbd4b2079d5402b4
+        name: ap-south-1
+      - ami: ami-01c32d64ac0ba511d
+        name: ap-southeast-1
+      - ami: ami-0419e4286d0d71faf
+        name: ap-southeast-2
+      - ami: ami-03a72248ea060789a
+        name: ca-central-1
+      - ami: ami-074403249c8493cae
+        name: cn-north-1
+      - ami: ami-0982d4762e829ff1b
+        name: cn-northwest-1
+      - ami: ami-031c08681db8c400e
+        name: eu-central-1
+      - ami: ami-0c3ab996558c44892
+        name: eu-north-1
+      - ami: ami-0143712d42aa4a7c9
+        name: eu-west-1
+      - ami: ami-04d721db24f40ffce
+        name: eu-west-2
+      - ami: ami-04740abcad65f30d8
+        name: eu-west-3
+      - ami: ami-03e977723db9b9ade
+        name: sa-east-1
+      - ami: ami-0a953cad0391f0305
+        name: us-east-1
+      - ami: ami-040ed4d275bf17303
+        name: us-east-2
+      - ami: ami-07b62f136d16aca9f
+        name: us-gov-east-1
+      - ami: ami-a62079c7
+        name: us-gov-west-1
+      - ami: ami-03a8c2f3cfe69169d
+        name: us-west-1
+      - ami: ami-0adf78a0f99af398f
+        name: us-west-2
+      version: 2303.3.0
+    - regions:
       - ami: ami-0e4285d1d637f9621
         name: ap-northeast-1
       - ami: ami-0b0b27a09fa29bcc0
@@ -61,89 +104,86 @@ providerConfig:
       - ami: ami-073f5d166dc37a1bd
         name: us-west-2
       version: 2135.6.0
-    - name: suse-jeos
-      regions:
-      - ami: ami-010e3748f56b5d383
-        name: us-east-1
-      - ami: ami-0dc4fc3671d317b6c
-        name: us-east-2
-      - ami: ami-01914ce4b7059bfb5
-        name: us-west-2
-      - ami: ami-0ea395d8f8260bd55
-        name: us-west-1
-      - ami: ami-087f06875ef584618
-        name: eu-central-1
-      - ami: ami-01bb37716e2cb5d03
-        name: eu-north-1
-      - ami: ami-03ea392be24056138
-        name: eu-west-1
-      - ami: ami-07ea661aea943d2b4
-        name: eu-west-2
-      - ami: ami-0f62282f3b1fef7d2
-        name: eu-west-3
-      - ami: ami-00923597b32063906
-        name: ap-southeast-1
-      - ami: ami-01ef0c0bd0dbcf21d
-        name: ap-northeast-1
-      - ami: ami-09d5e8d4f8a76376d
-        name: ap-northeast-2
-      - ami: ami-0d773c42304e5e163
-        name: ap-southeast-2
-      - ami: ami-03ef7c10453976402
-        name: sa-east-1
-      - ami: ami-13eaa972
-        name: us-gov-west-1
-      - ami: ami-075d69383501846fc
-        name: cn-north-1
-      - ami: ami-026904ecb3d37e059
-        name: cn-northwest-1
-      - ami: ami-0402c421f192a940a
-        name: ap-south-1
-      - ami: ami-04dd83d6325c4a630
-        name: ca-central-1
-      - ami: ami-0028371a477eba9ac
-        name: us-gov-east-1
-      version: 0.0.0-alpha.2
-    - name: ubuntu
-      regions:
-      - ami: ami-01c333e5001714a3d
-        name: ap-northeast-1
-      - ami: ami-08950c5587cf810bc
-        name: ap-northeast-2
-      - ami: ami-02989c66e628f149a
-        name: ap-southeast-1
-      - ami: ami-05c7a11c530b53852
-        name: ap-southeast-2
-      - ami: ami-02568785ff8181be2
-        name: ap-south-1
-      - ami: ami-0fdc38093c170108e
-        name: ca-central-1
-      - ami: ami-0cfa055c19966a250
-        name: eu-central-1
-      - ami: ami-7534bc0b
-        name: eu-north-1
-      - ami: ami-08dfaa238f8403d8a
-        name: eu-west-1
-      - ami: ami-09aeadd018dc26db7
-        name: eu-west-2
-      - ami: ami-0f51905d6c231ad75
-        name: eu-west-3
-      - ami: ami-0432c0d031ebc20b8
-        name: sa-east-1
-      - ami: ami-0cda679a4be93d2f9
-        name: us-east-1
-      - ami: ami-0cd23f4bd552794b7
-        name: us-east-2
-      - ami: ami-0faf7d30ef5a9cf85
-        name: us-west-1
-      - ami: ami-038e46ae6528090d1
-        name: us-west-2
-      version: 18.04.201906170
-
-machineImages:
   - name: suse-jeos
     versions:
-      - version: 0.0.0-alpha.2
+    - regions:
+      - ami: ami-0dcb57d166e925854
+        name: us-east-1
+      - ami: ami-09694178b817bcd28
+        name: us-east-2
+      - ami: ami-080533dea8d9c8baf
+        name: us-west-2
+      - ami: ami-08422fb363ef1aedd
+        name: us-west-1
+      - ami: ami-08e70db8ef93e0bac
+        name: eu-central-1
+      - ami: ami-0fa5bf294a788694c
+        name: eu-north-1
+      - ami: ami-06d013494ca4213d8
+        name: eu-west-1
+      - ami: ami-065613d1b34746e00
+        name: eu-west-2
+      - ami: ami-0f3e09317fd5181bd
+        name: eu-west-3
+      - ami: ami-03d81cd01a1b8597f
+        name: ap-southeast-1
+      - ami: ami-01e45a330ea88d2fa
+        name: ap-northeast-1
+      - ami: ami-0ae34577330ede1ab
+        name: ap-northeast-2
+      - ami: ami-05af0ae3a0fb8ab8e
+        name: ap-southeast-2
+      - ami: ami-09cd65bd61de59109
+        name: sa-east-1
+      - ami: ami-630d5902
+        name: us-gov-west-1
+      - ami: ami-02adcbeacefad2c83
+        name: cn-north-1
+      - ami: ami-09f6629d9165e76d8
+        name: cn-northwest-1
+      - ami: ami-07f1b9fd15f519b43
+        name: ap-south-1
+      - ami: ami-02374553e4b269d1b
+        name: ca-central-1
+      - ami: ami-01ac17a8105938a58
+        name: us-gov-east-1
+      version: 15.1.20190927
+  - name: ubuntu
+    versions:
+    - regions:
+      - ami: ami-032cf5e284518543d
+        name: ap-northeast-1
+      - ami: ami-0fcd3565c065e9238
+        name: sa-east-1
+      - ami: ami-08b1cea5487c762b3
+        name: eu-west-1
+      - ami: ami-027d1dd332103051b
+        name: ap-south-1
+      - ami: ami-02fd7546f0f6effb6
+        name: us-east-2
+      - ami: ami-04aac3d7ea7609469
+        name: us-west-2
+      - ami: ami-095192256fe1477ad
+        name: us-east-1
+      - ami: ami-0b08c6831ffd5ea84
+        name: ca-central-1
+      - ami: ami-0c2e7524d47186df7
+        name: ap-southeast-1
+      - ami: ami-035c8e816223729a6
+        name: ap-southeast-2
+      - ami: ami-1b33bb65
+        name: eu-north-1
+      - ami: ami-074f4c146d4f5d466
+        name: eu-west-3
+      - ami: ami-06d2ca2471c251818
+        name: ap-northeast-2
+      - ami: ami-05b5a98cd34853d29
+        name: eu-central-1
+      - ami: ami-0ee246e709782b1be
+        name: eu-west-2
+      - ami: ami-03c9dad75296f9e90
+        name: us-west-1
+      version: 18.4.20190617
 
 machineTypes:
   - cpu: "2"

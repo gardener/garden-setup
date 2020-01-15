@@ -180,15 +180,24 @@ landscape:
         - name: haproxy
       extensionConfig:
         machineImages:
-        - cloudProfiles:
-          - image: coreos-2135.6.0
-            name: openstack
-          name: coreos
-          version: 2135.6.0
+          - name: coreos
+            versions:
+              - image: coreos-2303.3.0
+                version: 2303.3.0
+              - image: coreos-2135.6.0
+                version: 2135.6.0
+          - name: ubuntu
+            versions:
+              - image: ubuntu-18.04
+                version: 18.4.20190617
       machineImages:
         - name: coreos
           versions:
-            - version: 2135.6.0
+          - version: 2303.3.0
+          - version: 2135.6.0
+        - name: ubuntu
+          versions:
+          - version: 18.4.20190617
       machineTypes:
         - name: medium_2_4
           cpu: "2"
@@ -210,27 +219,24 @@ landscape:
             size: 40Gi
 ```
 
-The information specified in `extensionConfig` will be used for the [Openstack provider extension](https://github.com/gardener/gardener-extensions/tree/master/controllers/provider-openstack), while all other Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml).
+All of the Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml), with `extensionConfig.machineImages` providing the values for `spec.providerConfig.machineImages`.
 
 ### Openstack 'extensionConfig'
 
-The `extensionConfig` node in the openstack iaas configuration is somewhat special. First of all, if at least one iaas entry of type `openstack` is present in your acre.yaml, **exactly one** of the openstack iaas entries should have the `extensionConfig` node. Furthermore, some values there have to match other values of your configuration, otherwise you won't be able to create shoots:
+The `extensionConfig` node in the openstack iaas configuration is somewhat special - some values there have to match other values of your configuration, otherwise you won't be able to create shoots:
 ```yaml
 landscape:
   iaas:
-    - name: openstack               # A
       ...
       extensionConfig:
         machineImages:
-        - cloudProfiles:
-          - image: coreos-2135.6.0
-            name: openstack         # A
-          name: coreos              # B
-          version: 2135.6.0         # C
+          - name: coreos                 # A
+            versions:
+              - image: coreos-2303.3.0
+                version: 2303.3.0        # B
       machineImages:
-        - name: coreos              # B
+        - name: coreos                   # A
           versions:
-            - version: 2135.6.0     # C
+          - version: 2303.3.0            # B
 ```
-- each entry in `machineImages` must have a corresponding entry in `extensionConfig.machineImages` with matching `name` and `version`
-- each `iaas` entry of type `openstack` must have a corresponding entry in `extensionConfig.machineImages[].cloudProfiles` with matching `name`
+Each entry in `machineImages` must have a corresponding entry in `extensionConfig.machineImages` with matching `name` and `version`.

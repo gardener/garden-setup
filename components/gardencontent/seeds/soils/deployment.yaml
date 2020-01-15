@@ -26,6 +26,7 @@ pluginTemplate:
   - kubectl: (( "renderedPluginSpecs[" id "].deploySecrets" ))
   - (( valid( renderedPluginSpecs[id].namespace ) ? { "kubectl" = "renderedPluginSpecs[" id "].namespace" } :~~ ))
   - helm: (( "renderedPluginSpecs[" id "].gardenlet" ))
+  - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
 
