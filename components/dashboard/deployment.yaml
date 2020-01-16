@@ -101,8 +101,9 @@ terminal_config:
     gardenTerminalHostDisabled: true
     apiServerIngress:
       annotations:
-        cert-manager.io/cluster-issuer: (( .imports.cert-controller.export.issuerName ))
+        # certmanager.k8s.io/cluster-issuer: (( .imports.cert-controller.export.issuerName ))
         cert.gardener.cloud/purpose: managed
+        cert.gardener.cloud/class: (( .imports.dns-controller.export.dns-class ))
         kubernetes.io/ingress.class: nginx
         nginx.ingress.kubernetes.io/backend-protocol: HTTPS
 

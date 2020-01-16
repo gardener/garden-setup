@@ -372,9 +372,9 @@ extension_manifests:
               defaultIssuer:
                 name: garden
                 acme:
-                  email: (( valid( landscape.dashboard.terminals.cert.email ) ? landscape.dashboard.terminals.cert.email :( landscape.cert-manager.email || landscape.identity.users[0].email ) ))
-                  server: (( valid( landscape.dashboard.terminals.cert.server ) ? landscape.dashboard.terminals.cert.server :( landscape.cert-manager.server.url == "live" ? "https://acme-v02.api.letsencrypt.org/directory" :landscape.cert-manager.server.url ) ))
-                  privateKey: (( ( valid( landscape.dashboard.terminals.cert.privateKey ) ? landscape.dashboard.terminals.cert.privateKey :( ! valid( landscape.dashboard.terminals.cert.server ) ? landscape.cert-manager.privateKey :~~ ) ) || ~~ ))
+                  email: (( valid( landscape.dashboard.terminals.cert.email ) ? landscape.dashboard.terminals.cert.email :( landscape.cert-management.email || landscape.identity.users[0].email ) ))
+                  server: (( valid( landscape.dashboard.terminals.cert.server ) ? landscape.dashboard.terminals.cert.server :( landscape.cert-management.server.url == "live" ? "https://acme-v02.api.letsencrypt.org/directory" :landscape.cert-management.server.url ) ))
+                  privateKey: (( ( valid( landscape.dashboard.terminals.cert.privateKey ) ? landscape.dashboard.terminals.cert.privateKey :( ! valid( landscape.dashboard.terminals.cert.server ) ? landscape.cert-management.privateKey :~~ ) ) || ~~ ))
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))

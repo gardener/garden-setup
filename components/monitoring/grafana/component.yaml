@@ -5,7 +5,7 @@ component:
   imports:
     - prometheus: monitoring/prometheus
     - ingress-controller
-    - cert: cert-manager/cert
+    - cert: cert-management/cert
     - namespace
 
   stubs:

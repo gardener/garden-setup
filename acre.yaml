@@ -17,7 +17,8 @@ meta: (( ~~ ))
 landscape:
   name: (( error("landscape name required") ))
   domain:
-  namespace: garden
+  namespace: (( merge none // "garden" ))
+  dependency_namespace: "gardener-dependencies"
   cluster:
     kubeconfig: ./kubeconfig
     networks: ~
@@ -166,20 +167,13 @@ landscape:
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
-      repo: "https://github.com/gardener/external-dns-management.git"
-    cert-manager:
-      controller:
-        <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :helm_tag )) # only used for CRDs
-        repo: "https://github.com/jetstack/cert-manager.git"
-        helm_repo: "https://charts.jetstack.io"
-        helm_tag: "v0.13.1"
-      cert-dns-bridge:
-        <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.0.0" ))
-        image_tag: (( valid( tag ) ? tag :~~ ))
-        image_repo: (( ~~ ))
-        repo: "https://github.com/gardener/certificate-dns-bridge.git"
+      repo: (( .dependency_versions.versions.gardener.extensions.dns-external.repo ))
+    cert-management:
+      <<: (( merge ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.cert-management.core.version ))
+      image_tag: (( valid( tag ) ? tag :~~ ))
+      image_repo: (( ~~ ))
+      repo: (( .dependency_versions.versions.cert-management.core.repo ))
     monitoring:
       prometheus:
         image_repo: quay.io/prometheus/prometheus
@@ -216,7 +210,7 @@ landscape:
     username: admin
     password: (( ~~ ))
     hash: (( ~~ ))
-  cert-manager:
+  cert-management:
     <<: (( merge ))
     server: (( merge none // valid( stub() ) ? ( type( stub() ) == "map" ? stub() :{ "url" = stub() } ) :{"url" = "self-signed"} ))
   dns:
@@ -518,7 +512,7 @@ validation:
               - privateKey
               - privatekey
   dashboard_no_seed_strategy_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
-  dashboard_terminals_validator: (( |db,cm|-> [! (( db.terminals.active || false ) -and ( cm.server.url == "self-signed" -or cm.server.url == "staging" )), "valid", "the 'dashboard terminals' feature requires trusted certificates, please configure the cert-manager accordingly"] ))
+  dashboard_terminals_validator: (( |db,cm|-> [! (( db.terminals.active || false ) -and ( cm.server.url == "self-signed" -or cm.server.url == "staging" )), "valid", "the 'dashboard terminals' feature requires trusted certificates, please configure the cert-management accordingly"] ))
   gardener_validator:
     - and
     - - optionalfield
@@ -534,7 +528,7 @@ validation:
     - ["mapfield", "nodes", "cidr"]
     - ["mapfield", "pods", "cidr"]
     - ["mapfield", "services", "cidr"]
-  cert-manager_validators:
+  cert-management_validators:
     basic:
       - and
       - - optionalfield
@@ -547,17 +541,18 @@ validation:
           - - mapfield
             - url
             - - or
-              - ["valueset", ["self-signed", "staging", "live"]]
+              - ["valueset", ["staging", "live"]] # 'self-signed' currently not supported ...
               - dnsdomain
           - - optionalfield
             - ca
-            - ["and", [(( cert-manager_validators.selfsigned )), (( landscape.cert-manager.server.url ))], [(( cert-manager_validators.acme )), (( landscape.cert-manager.server.url ))]]
+            - ["and", [(( cert-management_validators.selfsigned )), (( landscape.cert-management.server.url ))], [(( cert-management_validators.acme )), (( landscape.cert-management.server.url ))]]
       - - optionalfield
         - privateKey
         - privatekey
-    selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-manager.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
-    acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-manager.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
-    email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-manager.email' or 'landscape.identity.users[0].email' needs to be set"] ))
+    selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-management.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
+    acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-management.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
+    email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-management.email' or 'landscape.identity.users[0].email' needs to be set"] ))
+  openstack_extensionConfigs: (( (select[landscape.iaas|elem|-> elem.type == "openstack" -and valid( elem.extensionConfig )]).[*].extensionConfig ))
 
 
 
@@ -593,9 +588,9 @@ validation:
   ##### landscape.gardener
   gardener: (( defined( landscape.gardener ) ? validate( landscape.gardener, validation.gardener_validator ) :~~ ))
   ##### landscape.dashboard
-  dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator, validation.dashboard_no_seed_strategy_validator, [validation.dashboard_terminals_validator, landscape.cert-manager] ) :~~ ))
-  ##### landscape.certmanager
-  cert-manager: (( validate( landscape.cert-manager, validation.cert-manager_validators.basic, [validation.cert-manager_validators.email, landscape.identity] ) ))
+  dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator, validation.dashboard_no_seed_strategy_validator, [validation.dashboard_terminals_validator, landscape.cert-management] ) :~~ ))
+  ##### landscape.cert-management
+  cert-management: (( validate( landscape.cert-management, validation.cert-management_validators.basic, [validation.cert-management_validators.email, landscape.identity] ) ))
   ##### landscape.identity TODO
   identity:
     userspec:

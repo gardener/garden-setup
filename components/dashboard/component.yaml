@@ -21,8 +21,8 @@ component:
     - gardener: gardener/extensions
     - ingress_dns: ingress-controller
     - kube_apiserver: kube-apiserver
-    - cert: cert-manager/cert
-    - cert-controller: cert-manager/controller
+    - cert: cert-management/cert
+    - cert-controller: cert-management/controller
     - dns-controller
     - (( ( .landscape.gardener.network-policies.active || false ) ? "network-policies" :~~ ))
     - (( ( .landscape.dashboard.terminals.active || false ) ? "terminals" :~~ ))

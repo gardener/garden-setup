@@ -21,8 +21,16 @@ plugins:
 kubectl:
   kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
   manifests:
-    - apiVersion: v1
-      kind: Namespace
-      metadata:
-        labels:
-        name: (( .landscape.namespace ))
+    - (( ( "values" = { "name" = .landscape.namespace, "labels" = { "role" = "garden" } } ) *.namespace_template ))
+    - (( defined( .settings.dependency_namespace ) ? ( "values" = { "name" = .settings.dependency_namespace, "labels" = { "role" = "gardener-dependencies" } } ) *.namespace_template :~~ ))
+
+namespace_template:
+  <<: (( &temporary &template ))
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels: (( values.labels || ~~ ))
+    name: (( values.name ))
+
+settings:
+  dependency_namespace: (( valid( .landscape.dependency_namespace ) ? .landscape.dependency_namespace :~~ ))

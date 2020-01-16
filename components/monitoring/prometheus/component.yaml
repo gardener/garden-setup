@@ -7,7 +7,7 @@ component:
     - kube_apiserver: kube-apiserver
     - identity
     - gardener: gardener/extensions
-    - cert: cert-manager/cert
+    - cert: cert-management/cert
     - namespace
 
   stubs:

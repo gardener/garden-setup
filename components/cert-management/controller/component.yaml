@@ -1,0 +1,19 @@
+---
+landscape: (( &temporary ))
+component:
+  imports:
+    - dns-controller
+    - namespace
+
+  stubs:
+    - lib/templates/utilities.yaml
+    - lib/templates/certs.yaml
+    - lib/templates/state.yaml
+
+  plugins:
+    - git
+
+git:
+  <<: (( landscape.versions.cert-management ))
+  files:
+    - "charts"

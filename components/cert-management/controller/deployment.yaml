@@ -1,0 +1,120 @@
+---
+imports: (( &temporary ))
+landscape: (( &temporary ))
+utilities: (( &temporary ))
+
+settings:
+  groupName: cert-bridge.gardener.cloud
+  solverName: certificate-dns-bridge
+  namespace: (( .imports.namespace.export.dependency_namespace || .landscape.namespace ))
+  serviceAccountName: cert-management
+  self-signed: (( .caSpec.url == "self-signed" ))
+  issuerName: gardener-issuer
+  issuerPrivateKey: (( .settings.self-signed -or (! valid( .landscape.cert-management.privateKey ) ) ? ~ :.landscape.cert-management.privateKey ))
+  caSecret: "self-signed-ca"
+  ca:
+    given: (( &temporary ( valid( .caSpec.ca.crt ) -and ( ( ! .settings.self-signed ) -or valid( .caSpec.ca.key ) ) ) )) # a given CA needs crt and key for self-signed mode
+    crt: (( given ? .caSpec.ca.crt :( .state.ca.value.cert || ~~ ) ))
+    key: (( given ? ( .caSpec.ca.key || ~~ ) :( .state.ca.value.key || ~~ ) ))
+
+caSpec:
+  <<: (( &temporary ))
+  instantiateIfNeeded: (( |x|-> type( x ) == "template" ? *x :x ))
+  server: (( caSpec.instantiateIfNeeded( .servers[.landscape.cert-management.server.url] || .landscape.cert-management.server ) ))
+  url: (( server.url || server ))
+  ca: (( server.ca || ~~ ))
+
+plugins:
+  - helm
+  - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
+  - kubectl: issuer
+
+issuer: (( .settings.self-signed ? *ca_issuer :*acme_issuer ))
+
+acme_issuer:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  manifests:
+    - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :~ ))
+    - apiVersion: cert.gardener.cloud/v1alpha1
+      kind: Issuer
+      metadata:
+        name: (( .settings.issuerName ))
+        namespace: (( .settings.namespace ))
+      spec:
+        acme:
+          server: (( .caSpec.url ))
+          email: (( .landscape.cert-management.email || .landscape.identity.users[0].email ))
+          autoRegistration: true
+          privateKeySecretRef:
+            name: (( settings.issuerName "-secret" ))
+            namespace: (( .settings.namespace ))
+
+issuer-secret:
+  - <<: (( &template &temporary ))
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+      name: (( settings.issuerName "-secret" ))
+      namespace: (( settings.namespace ))
+    data:
+      privateKey: (( base64( settings.issuerPrivateKey ) ))
+
+ca_issuer:
+  <<: (( &template &temporary ))
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  manifests:
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: (( .settings.caSecret ))
+        namespace: (( .settings.namespace ))
+      type: kubernetes.io/tls
+      data:
+        tls.crt: (( base64( .settings.ca.crt ) ))
+        tls.key: (( base64( .settings.ca.key ) ))
+    - apiVersion: cert.gardener.cloud/v1alpha1
+      kind: Issuer
+      metadata:
+        name: (( settings.issuerName ))
+        namespace: (( .settings.namespace ))
+      spec:
+        ca:
+          privateKeySecretRef:
+            name: (( .settings.caSecret ))
+            namespace: (( .settings.namespace ))
+
+
+servers:
+  <<: (( &temporary ))
+  live: https://acme-v02.api.letsencrypt.org/directory
+  staging: 
+    <<: (( &template )) # to not download the letsencrypt certs every time
+    url: https://acme-staging-v02.api.letsencrypt.org/directory
+    ca:
+      crt: (( exec( "curl", "-s", "https://letsencrypt.org/certs/fakelerootx1.pem" ) "\n" exec( "curl", "-s", "https://letsencrypt.org/certs/fakeleintermediatex1.pem" ) ))
+
+helm:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  source: "git/repo/charts/cert-management"
+  name: cert-controller-manager
+  namespace: (( .settings.namespace ))
+  values:
+    image:
+      repository: (( .landscape.versions.cert-management.image_repo || ~~ ))
+      tag: (( .landscape.versions.cert-management.image_tag || ~~ ))
+    createCRDs:
+      issuers: true
+      certificates: false
+    configuration:
+      certClass: (( .imports.dns-controller.export.dns-class ))
+      certTargetClass: (( .imports.dns-controller.export.dns-class ))
+      dnsClass: (( .imports.dns-controller.export.dns-class ))
+      dnsNamespace: (( .settings.namespace ))
+      issuerNamespace: (( .settings.namespace ))
+      defaultIssuer: (( .settings.issuerName ))
+      namespace: (( .settings.namespace ))
+
+state:
+  <<: (( &state(merge none) ))
+  ca: (( .settings.self-signed -and ( ! .settings.ca.given ) ? ( utilities.certs.selfSignedCA("self-signed-ca", false) ) :~~ ))

@@ -1,10 +1,10 @@
 ---
 component:
   imports:
-    - cert-manager/solver
-    - cert-controller: cert-manager/controller
+    - cert-controller: cert-management/controller
     - namespace
     - ingress-controller
+    - dns-controller
 
   stubs:
     - lib/templates/utilities.yaml

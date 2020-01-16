@@ -18,10 +18,9 @@ landscape: (( &temporary ))
 utilities: (( &temporary ))
 
 settings:
-  naming: garden-setup
-  fullname: (( naming "-dns-controller-manager" ))
-  dns-class: (( naming ))
-  namespace: "kube-system"
+  fullname: dns-controller-manager
+  dns-class: garden-setup
+  namespace: (( .imports.namespace.export.dependency_namespace || .landscape.namespace ))
 
 plugins:
   - pinned:
@@ -40,8 +39,8 @@ kubectl_apply:
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   source: "git/repo/charts/external-dns-management"
-  name: (( settings.fullname ))
-  namespace: (( .spec.common.namespace ))
+  name: (( .settings.fullname ))
+  namespace: (( .settings.namespace ))
   values: (( .spec.helm ))
 
 kubectl:
@@ -65,7 +64,7 @@ typeToProvider:
 spec:
   <<: (( &temporary ))
   common:
-    namespace: "kube-system"
+    namespace: (( .settings.namespace ))
     dns_class: (( .settings.dns-class ))
   dns:
     type: (( .landscape.dns.type ))
@@ -100,3 +99,4 @@ spec:
       identifier: (( "setup.gardener.cloud/" .landscape.name ))
       controllers: (( "dnssources," dns.type ( cname.type != dns.type ? "," cname.type :"" ) ))
       ttl: (( .landscape.dns.ttl || ~~ ))
+      disableNamespaceRestriction: "true"

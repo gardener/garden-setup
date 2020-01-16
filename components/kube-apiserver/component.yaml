@@ -21,7 +21,7 @@ component:
     - identity
     - namespace
     - (( ( .landscape.gardener.network-policies.active || false ) ? "network-policies" :~~ ))
-    - cert-controller: cert-manager/controller
+    - cert-controller: cert-management/controller
 
   stubs:
     - lib/templates/utilities.yaml

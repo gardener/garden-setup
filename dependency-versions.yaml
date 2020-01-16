@@ -61,6 +61,12 @@
         "repo": "(( dashboard.core.repo ))",
         "version": "(( dashboard.core.version ))"
       }
+    },
+    "cert-management": {
+      "core": {
+        "repo": "https://github.com/gardener/cert-management.git",
+        "version": "v0.3.4"
+      }
     }
   }
 }

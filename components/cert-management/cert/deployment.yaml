@@ -9,7 +9,7 @@ settings:
       - (( "*." imports.ingress-controller.export.ingress_domain ))
       - (( .landscape.dashboard.cname.domain || ~~ ))
     secret_name: identity-dashboard-tls
-    namespace: (( landscape.namespace ))
+    namespace: (( .landscape.namespace ))
 
 plugins:
   - kubectl: cert
@@ -18,15 +18,16 @@ plugins:
 cert:
   kubeconfig: (( .landscape.clusters[0].kubeconfig ))
   manifests:
-    - apiVersion: cert-manager.io/v1alpha2
+    - apiVersion: cert.gardener.cloud/v1alpha1
       kind: Certificate
       metadata:
         name: (( .settings.certificate.name ))
         namespace: (( .settings.certificate.namespace ))
+        annotations:
+          cert.gardener.cloud/class: (( .imports.dns-controller.export.dns-class ))
       spec:
         secretName: (( .settings.certificate.secret_name ))
-        renewBefore: 360h # 15d
-        dnsNames: (( .settings.certificate.domains ))
+        commonName: (( .settings.certificate.domains[0] ))
+        dnsNames: (( .settings.certificate.domains[1..] ))
         issuerRef:
           name: (( imports.cert-controller.export.issuerName ))
-          kind: ClusterIssuer

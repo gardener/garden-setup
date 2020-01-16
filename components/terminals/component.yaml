@@ -5,7 +5,7 @@ component:
   imports:
     - kube-apiserver
     - ingress-controller
-    - cert-manager/solver
+    - cert-management/cert
     - gardener/runtime
 
   plugins:

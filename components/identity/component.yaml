@@ -18,7 +18,7 @@ component:
   imports:
     - ingress-controller
     - namespace
-    - cert: cert-manager/cert
+    - cert: cert-management/cert
 
   stubs:
     - lib/templates/utilities.yaml
