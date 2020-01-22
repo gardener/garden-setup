@@ -36,6 +36,59 @@ cleanup()
       secret/prometheus-token-dg4vh \
       serviceaccount/prometheus \
       persistentvolumeclaim/alertmanager-db-alertmanager-0 \
-      persistentvolumeclaim/prometheus-db-prometheus-0
+      persistentvolumeclaim/prometheus-db-prometheus-0 \
+      deployment.apps/dependency-watchdog-endpoint \
+      deployment.apps/dependency-watchdog-probe \
+      deployment.apps/gardener-resource-manager \
+      deployment.apps/grafana \
+      deployment.apps/reserve-excess-capacity \
+      deployment.apps/vpa-admission-controller \
+      deployment.apps/vpa-exporter \
+      deployment.apps/vpa-recommender \
+      deployment.apps/vpa-updater \
+      ingress.extensions/aggregate-prometheus \
+      ingress.extensions/grafana \
+      rolebinding.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-endpoint:role-binding \
+      rolebinding.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-probe:role-binding \
+      role.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-endpoint:role \
+      role.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-probe:role \
+      serviceaccount/aggregate-prometheus \
+      serviceaccount/dependency-watchdog-endpoint \
+      serviceaccount/dependency-watchdog-probe \
+      serviceaccount/gardener-resource-manager \
+      serviceaccount/vpa-admission-controller \
+      serviceaccount/vpa-exporter \
+      serviceaccount/vpa-recommender \
+      serviceaccount/vpa-updater \
+      service/aggregate-prometheus-web \
+      service/grafana \
+      service/vpa-exporter \
+      service/vpa-webhook \
+      configmap/aggregate-prometheus-config \
+      configmap/aggregate-prometheus-rules \
+      configmap/dependency-watchdog-endpoint-config \
+      configmap/dependency-watchdog-probe-config \
+      configmap/gardener-resource-manager \
+      configmap/gardenlet-leader-election \
+      configmap/grafana-dashboard-providers \
+      configmap/grafana-dashboards \
+      configmap/grafana-datasources \
+      networkpolicy.networking.k8s.io/allow-from-aggregate-prometheus \
+      networkpolicy.networking.k8s.io/allow-to-all-shoot-apiservers \
+      networkpolicy.networking.k8s.io/allow-to-blocked-cidrs \
+      networkpolicy.networking.k8s.io/allow-to-dns \
+      networkpolicy.networking.k8s.io/allow-to-private-networks \
+      networkpolicy.networking.k8s.io/allow-to-public-networks \
+      networkpolicy.networking.k8s.io/allow-to-seed-apiserver \
+      networkpolicy.networking.k8s.io/deny-all \
+      secret/aggregate-prometheus-basic-auth \
+      secret/aggregate-prometheus-tls \
+      secret/ca-seed \
+      secret/gardenlet-kubeconfig \
+      secret/grafana-basic-auth \
+      secret/grafana-tls \
+      secret/seed-monitoring-ingress-credentials \
+      endpoints/dependency-watchdog \
+      endpoints/dependency-watchdog-probe
   fi
 }
