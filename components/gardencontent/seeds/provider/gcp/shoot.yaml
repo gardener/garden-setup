@@ -17,6 +17,7 @@ infrastructureConfig:
   kind: InfrastructureConfig
   networks:
     worker: (( values.config.cluster.networks.workers ))
+    workers: (( values.config.cluster.networks.workers ))
 controlPlaneConfig:
   apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
   kind: ControlPlaneConfig

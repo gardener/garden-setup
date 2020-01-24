@@ -3,55 +3,55 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v0.33.7"
+        "version": "v0.34.0"
       },
       "extensions": {
         "dns-external": {
           "repo": "https://github.com/gardener/external-dns-management.git",
-          "version": "v0.7.3"
+          "version": "v0.7.4"
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "os-suse-jeos": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.1.0"
+          "version": "v1.2.0"
         }
       }
     },
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.35.4"
+        "version": "1.36.0"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
