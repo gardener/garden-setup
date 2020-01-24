@@ -21,17 +21,17 @@ create_kubeconfig_secret()
   getRequiredValue namespace "namespace" PLUGINCONFIGJSON
   getRequiredValue kubeconfig_path "kubeconfig_path" PLUGINCONFIGJSON
   getValue write_to "write_to" PLUGINCONFIGJSON
+  getValue server "server" PLUGINCONFIGJSON
 
   local kubeconfig="Zm9v"
   if [ "$1" = "deploy" ]; then
     if [[ ! -f "$kubeconfig_path" ]]; then
       fail "kubeconfig not found at path '$kubeconfig_path'"
     fi
-    kubeconfig=$(cat "$kubeconfig_path" | base64 | tr -d \\n)
+    kubeconfig=$(cat "$kubeconfig_path" | replace_server "$server" | base64 | tr -d \\n)
   fi
 
-  local secret_path="${write_to:-"$dir/secret_$name.yaml"}"
-  verbose "Writing kubeconfig secret to '$secret_path'"
+  local secret_path="$dir/secret_$name.yaml"
   cat > "$secret_path" << EOF
 apiVersion: v1
 kind: Secret
@@ -42,4 +42,21 @@ metadata:
 data:
   kubeconfig: $kubeconfig
 EOF
+
+  if [[ -n ${write_to:-""} ]]; then
+    verbose "Writing kubeconfig secret to '$write_to'"
+    cp -f "$secret_path" "$write_to"
+  fi
+}
+
+replace_server()
+{
+  if [[ -n ${1:-""} ]]; then
+    # convert to json using spiff, replace server url, convert back to yaml
+    verbose "Replacing server url with '$1' ..."
+    spiff merge --json - | jq -r ".clusters[0].server = \"$1\"" | spiff merge -
+  else
+    # just pipe input through without modifying it
+    cat -
+  fi
 }

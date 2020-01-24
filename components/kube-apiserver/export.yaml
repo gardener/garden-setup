@@ -39,7 +39,23 @@ export:
   apiserver_url_internal: (( .settings.apiserver_url_internal ))
   kube_apiserver_ca: (( .state.kube_apiserver_ca.value ))
   kubeconfig: (( parse(base64_decode(exec( temp.command ))) || "" ))
+  kubeconfig_internal_merge_snippet: (( .files.kubeconfig_internal_merge_snippet.data ))
 
 files:
   kubeconfig:
     data: (( asyaml(export.kubeconfig) ))
+  kubeconfig_internal_merge_snippet:
+    data: (( .kubeconfig_internal_merge.snippet ))
+
+kubeconfig_internal_merge:
+  <<: (( &temporary ))
+  snippet: (( replace( raw_snippet, "internal-domain-here", .settings.apiserver_url_internal ) ))
+  raw_snippet: |
+    ---
+    <<: (( &template ))
+    apiVersion:
+    kind:
+    current-context:
+    contexts:
+    clusters: (( merge none // [ stub(clusters)[0] { "cluster" = merge( stub(clusters)[0].cluster, { "server" = "internal-domain-here" } ) } ] ))
+    users:

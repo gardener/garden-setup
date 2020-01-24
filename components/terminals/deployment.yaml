@@ -27,6 +27,7 @@ kcfg_sa:
   namespace: terminal-system
   kubeconfig_path: (( .settings.kubeconfig_secret_path_sa ))
   write_to: (( .settings.repo_path "/config/overlay/multi-cluster/runtime/manager/kubeconfig-secret.yaml" ))
+  server: (( .imports.kube-apiserver.export.apiserver_url_internal ))
 
 kubectl_sa:
   kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
