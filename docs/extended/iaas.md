@@ -6,6 +6,9 @@ iaas:
     type: <gcp|aws|azure|openstack>              # iaas provider
     mode: <seed|soil>                            # optional, defaults to 'seed'
     cloudprofile: <name of cloudprofile>         # optional, will deploy its own cloudprofile if not specified
+    shootDefaultNetworks:                        # optional, overwrites defaults of .spec.networks.shootDefaults in the seed manifest
+      pods: 100.96.0.0/11
+      services: 100.64.0.0/13
     region: <major region>-<minor region>        # region for initial seed
     zones:                                       # remove zones block for Azure
       - <major region>-<minor region>-<zone>     # example: europe-west1-b
@@ -32,6 +35,7 @@ iaas:
   - name:                                        # see above
     mode: <seed|cloudprofile|profile|inactive>   # what should be deployed
     type: <gcp|aws|azure|openstack>              # see above
+    shootDefaultNetworks:                        # see above
     region: <major region>-<minor region>        # region for seed
     zones:                                       # remove zones block for Azure
       - <major region>-<minor region>-<zone>     # example: europe-west1-b
@@ -77,6 +81,7 @@ Cloudprofiles are created first, before any seed. Thus, entries of `landscape.ia
       - name:                                    # max. 10 characters
         type: <gcp|aws|azure|openstack>
         mode: <seed|soil>                        # NOT optional for nested entries
+        shootDefaultNetworks:                    # see above
         region: <major region>-<minor region>
         zones:
           - <major region>-<minor region>-<zone>

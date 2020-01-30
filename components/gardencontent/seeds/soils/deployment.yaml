@@ -58,6 +58,7 @@ providerconfig:
   seed:
     ingressdomain: (( name "." .imports.ingress_dns.export.ingress_domain ))
     networks: (( v.cluster.networks || landscape.clusters.[0].networks ))
+    shootDefaultNetworks: (( v.shootDefaultNetworks || ~~ ))
   secretname: (( name "-" v.mode ))
 
 renderedPluginSpecs: (( sum[.iaasSeedsSoils|[]|s,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))

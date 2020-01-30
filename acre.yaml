@@ -369,6 +369,11 @@ validation:
       - ["mapfield", "type", ["valueset", (( keys( types.iaas ) ))]]
       - ["mapfield", "mode", ["valueset", ["seed", "profile", "cloudprofile", "soil"]]]
       - - optionalfield
+        - shootDefaultNetworks
+        - - and
+          - ["mapfield", "pods", ["cidr"]]
+          - ["mapfield", "services", ["cidr"]]
+      - - optionalfield
         - credentials
         - (( types.iaas[values.type].credentials ))
       - <<: (( types.iaas[values.type].config ))

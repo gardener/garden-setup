@@ -64,9 +64,7 @@ seedSpec:
     nodes: (( configValues.seed.networks.nodes ))
     pods: (( configValues.seed.networks.pods ))
     services: (( configValues.seed.networks.services ))
-    shootDefaults:
-      pods: 100.96.0.0/11
-      services: 100.64.0.0/13
+    shootDefaults: (( configValues.seed.shootDefaultNetworks || { "pods" = "100.96.0.0/11", "services" = "100.64.0.0/13" } ))
   taints: (( configValues.config.mode == "soil" ? [{ "key" = "seed.gardener.cloud/invisible" }] :~~ ))
 
 gardenletBootstrapKubeconfig:
