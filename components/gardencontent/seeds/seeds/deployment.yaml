@@ -50,4 +50,5 @@ providerconfig:
   seed:
     ingressdomain: (( "ingress." name "." .landscape.domain ))
     networks: (( {"nodes" = v.cluster.networks.nodes, "pods" = v.cluster.networks.pods, "services" = v.cluster.networks.services} ))
+    shootDefaultNetworks: (( v.shootDefaultNetworks || ~~ ))
   secretname: (( name "-" v.mode ))
