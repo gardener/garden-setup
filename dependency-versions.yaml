@@ -11,47 +11,47 @@
           "version": "v0.7.6"
         },
         "networking-calico": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
+          "version": "v1.3.0"
         },
         "os-coreos": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
+          "version": "v1.3.0"
         },
         "os-suse-jeos": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-os-suse-jeos.git",
+          "version": "v1.3.0"
         },
         "os-ubuntu": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
+          "version": "v1.3.0"
         },
         "provider-aws": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
+          "version": "v1.3.0"
         },
         "provider-azure": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
+          "version": "v1.3.0"
         },
         "provider-gcp": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
+          "version": "v1.3.0"
         },
         "provider-openstack": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
+          "version": "v1.3.0"
         },
         "shoot-cert-service": {
-          "repo": "https://github.com/gardener/gardener-extensions.git",
-          "version": "v1.2.0"
+          "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
+          "version": "v1.3.0"
         }
       }
     },
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.37.0"
+        "version": "1.37.1"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",

@@ -66,63 +66,63 @@ landscape:
           <<: (( merge ))
           tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-coreos.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.os-coreos.repo ))
-          chart_path: controllers/os-coreos/charts/os-coreos
+          chart_path: charts/gardener-extension-os-coreos
           image_tag: (( valid( os-coreos.tag ) ? os-coreos.tag :~~ ))
           image_repo: (( ~~ ))
         os-ubuntu:
           <<: (( merge ))
           tag: (( valid( os-ubuntu.branch ) -or valid( os-ubuntu.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-ubuntu.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.os-ubuntu.repo ))
-          chart_path: controllers/os-ubuntu/charts/os-ubuntu
+          chart_path: charts/gardener-extension-os-ubuntu
           image_tag: (( valid( os-ubuntu.tag ) ? os-ubuntu.tag :~~ ))
           image_repo: (( ~~ ))
         os-suse-jeos:
           <<: (( merge ))
           tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-suse-jeos.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.os-suse-jeos.repo ))
-          chart_path: controllers/os-suse-jeos/charts/os-suse-jeos
+          chart_path: charts/gardener-extension-os-suse-jeos
           image_tag: (( valid( os-suse-jeos.tag ) ? os-suse-jeos.tag :~~ ))
           image_repo: (( ~~ ))
         provider-aws:
           <<: (( merge ))
           tag: (( valid( provider-aws.branch ) -or valid( provider-aws.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-aws.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-aws.repo ))
-          chart_path: controllers/provider-aws/charts/provider-aws
+          chart_path: charts/gardener-extension-provider-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
         provider-gcp:
           <<: (( merge ))
           tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-gcp.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-gcp.repo ))
-          chart_path: controllers/provider-gcp/charts/provider-gcp
+          chart_path: charts/gardener-extension-provider-gcp
           image_tag: (( valid( provider-gcp.tag ) ? provider-gcp.tag :~~ ))
           image_repo: (( ~~ ))
         provider-azure:
           <<: (( merge ))
           tag: (( valid( provider-azure.branch ) -or valid( provider-azure.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-azure.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-azure.repo ))
-          chart_path: controllers/provider-azure/charts/provider-azure
+          chart_path: charts/gardener-extension-provider-azure
           image_tag: (( valid( provider-azure.tag ) ? provider-azure.tag :~~ ))
           image_repo: (( ~~ ))
         provider-openstack:
           <<: (( merge ))
           tag: (( valid( provider-openstack.branch ) -or valid( provider-openstack.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-openstack.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-openstack.repo ))
-          chart_path: controllers/provider-openstack/charts/provider-openstack
+          chart_path: charts/gardener-extension-provider-openstack
           image_tag: (( valid( provider-openstack.tag ) ? provider-openstack.tag :~~ ))
           image_repo: (( ~~ ))
         networking-calico:
           <<: (( merge ))
           tag: (( valid( networking-calico.branch ) -or valid( networking-calico.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.networking-calico.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.networking-calico.repo ))
-          chart_path: controllers/networking-calico/charts/networking-calico
+          chart_path: charts/gardener-extension-networking-calico
           image_tag: (( valid( networking-calico.tag ) ? networking-calico.tag :~~ ))
           image_repo: (( ~~ ))
         shoot-cert-service:
           <<: (( merge ))
           tag: (( valid( shoot-cert-service.branch ) -or valid( shoot-cert-service.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.shoot-cert-service.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.shoot-cert-service.repo ))
-          chart_path: controllers/extension-shoot-cert-service/charts/extension-shoot-cert-service
+          chart_path: charts/gardener-extension-shoot-cert-service
           image_tag: (( valid( shoot-cert-service.tag ) ? shoot-cert-service.tag :~~ ))
           image_repo: (( ~~ ))
     dashboard:
@@ -141,7 +141,7 @@ landscape:
       repo: https://github.com/gardener/terminal-controller-manager.git
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.6.0" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"v0.7.0" ))
     dns-controller:
       <<: (( merge ))
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
