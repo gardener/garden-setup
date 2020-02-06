@@ -286,3 +286,61 @@ providerConfig:
     versions:
     - urn: suse:sles-15-sp1-chost-byos:gen1:2019.12.11
       version: 15.1.20191211
+
+regions:
+  - name: eastus
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: eastus2
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: centralus
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: northeurope
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: westeurope
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: southeastasia
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: japaneast
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: westus2
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: uksouth
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: FranceCentral
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: EastUS2EUAP
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: uaenorth
