@@ -66,6 +66,14 @@ To install Gardener in your base cluster, a command line tool [sow](https://gith
 
     `sow` will replace the file specified in `landscape.cluster.kubeconfig` of your `acre.yaml` file by a kubeconfig file that uses basic authentication.
 
+    The basic autentication comes disabled by default starting on Kubernetes 1.12. [See more detais here](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#restrict_authn_methods)
+
+    In case it is disabled on your cluster, the following command can be used to enable it:
+
+    ```bash
+    gcloud container clusters update <your-cluster> --enable-basic-auth
+    ```
+
 1. Open a second terminal window which current directory is your `landscape` directory. Set the `KUBECONFIG` environment variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
 
     ```bash
