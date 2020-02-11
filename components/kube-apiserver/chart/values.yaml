@@ -15,7 +15,7 @@
 namespace: xxx
 serviceName: garden-kube-apiserver
 images:
-  hyperkube: k8s.gcr.io/hyperkube:v1.14.3
+  hyperkube: k8s.gcr.io/hyperkube:v1.15.10
 
 replicas: 3
 apiServer:

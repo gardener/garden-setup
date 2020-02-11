@@ -79,7 +79,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command:
         - /hyperkube
-        - apiserver
+        - kube-apiserver
         - --enable-admission-plugins=Priority,NamespaceLifecycle,LimitRanger,PodSecurityPolicy,ServiceAccount,NodeRestriction,DefaultStorageClass,DefaultTolerationSeconds,ResourceQuota,StorageObjectInUseProtection,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
         - --disable-admission-plugins=PersistentVolumeLabel
         - --allow-privileged=true
@@ -185,7 +185,7 @@ spec:
         imagePullPolicy: IfNotPresent
         command:
         - /hyperkube
-        - controller-manager
+        - kube-controller-manager
         - --cluster-signing-cert-file=/srv/kubernetes/ca/ca.crt
         - --cluster-signing-key-file=/srv/kubernetes/ca/ca.key
         - --controllers=namespace,serviceaccount,serviceaccount-token,clusterrole-aggregation,garbagecollector,csrapproving,csrcleaner,csrsigning,bootstrapsigner,tokencleaner
