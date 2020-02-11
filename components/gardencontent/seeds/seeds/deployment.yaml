@@ -30,7 +30,10 @@ pluginTemplate:
   - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
 
-bootstrapTokens: (( sum[.landscape.iaas_shooted_seeds|{}|s,elem|-> s { elem.name = { "id" = substr( elem.name, 0, 3 ) rand( "a-z0-9", 3 ), "secret" = substr( elem.name, 0, 3 ) rand( "a-z0-9", 13 ) } }] ))
+temp:
+  <<: (( &temporary ))
+  bootstrapNamePrefix: (( &temporary ( |x|-> replace( replace( substr( x, 0, 3 ), "-", "7" ), ".", "0" ) ) ))
+bootstrapTokens: (( sum[.landscape.iaas_shooted_seeds|{}|s,elem|-> s { elem.name = { "id" = temp.bootstrapNamePrefix( elem.name ) rand( "a-z0-9", 3 ), "secret" = temp.bootstrapNamePrefix( elem.name ) rand( "a-z0-9", 13 ) } }] ))
 
 renderedPluginSpecs: (( sum[.landscape.iaas_shooted_seeds|[]|s,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))
 
