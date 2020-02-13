@@ -21,6 +21,26 @@ source "$SOWLIB/k8s"
 
 set -eo pipefail
 
+# handle necessary delete preparation
+# args: type name [namespace]
+prepare_delete() {
+    case "$1" in
+        seed)
+            # abort if any shoot is still using the given seed
+            verbose "Check if shoots are still running on seed '$1' ..."
+            if [[ $(kubectl get shoots --all-namespaces -o json | jq -r '[.items[].spec.seedName] | contains(["'$2'"])') == "true" ]]; then
+                fail "there are still shoots running on seed '$2'"
+            fi
+            ;;
+        shoot)
+            ;&
+        project)
+            # annotate shoot/project
+            exec_cmd kubectl ${3:+"-n"}${3:-} annotate "$1" "$2" confirmation.garden.sapcloud.io/deletion=true --overwrite
+            ;;
+    esac
+}
+
 K8S_setKubeConfig "$PLUGININSTANCE" "$dir/kubeconfig"
 getRequiredValue type "type" PLUGINCONFIGJSON
 getRequiredValue name "name" PLUGINCONFIGJSON
@@ -31,6 +51,7 @@ case "$1" in
     deploy) ;&
     delete)
         if [[ "$step" == "$1" ]]; then
+            prepare_delete $type $name $namespace
             exec_cmd kubectl delete ${namespace:+"-n"}${namespace:-} $type $name --ignore-not-found
         else
             verbose "Nothing to do on $1."
