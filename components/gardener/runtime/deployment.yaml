@@ -59,8 +59,11 @@ kubeconfigs:
     config: (( *kubeconfig_scheme ))
 
 plugins:
-  - helm:
-    - gardener
+  - pinned:
+    - helm:
+      - gardener
+      - template
+    - kubectl: gardener
   - gardenready
   - shoot-check
 
@@ -73,6 +76,8 @@ gardenready:
 gardener:
   <<: (( imports.gardener_virtual.export.gardener ))
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "gardener/rendered_charts.yaml"
   source: "git/repo/charts/gardener/controlplane/charts/runtime"
   values: (( merge(.imports.gardener_virtual.export.gardener.values, spec) ))
   name: gardener

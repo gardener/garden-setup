@@ -18,7 +18,11 @@ imports: (( &temporary ))
 utilities: (( &temporary ))
 
 plugins:
-  - helm: kubeapiserver
+  - pinned:
+    - helm:
+      - kubeapiserver
+      - template
+    - kubectl: kubeapiserver
 
 settings:
   apiserver_dns: (( "api." imports.ingress_controller.export.ingress_domain ))
@@ -85,6 +89,8 @@ state:
 
 kubeapiserver:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "kubeapiserver/rendered_charts.yaml"
   source: chart
   name: "garden-kube-apiserver"
   namespace: (( .landscape.namespace ))

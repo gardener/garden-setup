@@ -25,7 +25,11 @@ pluginTemplate:
   - <<: (( &temporary &template ))
   - kubectl: (( "renderedPluginSpecs[" id "].deploySecrets" ))
   - (( valid( renderedPluginSpecs[id].namespace ) ? { "kubectl" = "renderedPluginSpecs[" id "].namespace" } :~~ ))
-  - helm: (( "renderedPluginSpecs[" id "].gardenlet" ))
+  - pinned:
+    - helm:
+      - (( "renderedPluginSpecs[" id "].gardenlet" ))
+      - template
+    - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
@@ -61,4 +65,4 @@ providerconfig:
     shootDefaultNetworks: (( v.shootDefaultNetworks || ~~ ))
   secretname: (( name "-" v.mode ))
 
-renderedPluginSpecs: (( sum[.iaasSeedsSoils|[]|s,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))
+renderedPluginSpecs: (( sum[.iaasSeedsSoils|[]|s,id,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))

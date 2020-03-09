@@ -17,13 +17,19 @@ landscape: (( &temporary ))
 imports: (( &temporary ))
 
 plugins:
-  - helm: ingresscontroller
+  - pinned:
+    - helm:
+      - ingresscontroller
+      - template
+    - kubectl: ingresscontroller
 
 settings:
   ingress_domain: (( "ing." landscape.domain ))
 
 ingresscontroller:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "ingresscontroller/rendered_charts.yaml"
   source: chart
   name: "nginx-ingress-controller"
   namespace: "kube-system" # for yet unknown reason, only kube-system works ...

@@ -27,7 +27,11 @@ caSpec:
 plugins:
   - kubectl: namespace
   - kubectl: crds
-  - helm
+  - pinned:
+    - helm:
+      - helm
+      - template
+    - kubectl: helm
   - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
   - kubectl: issuer
 
@@ -117,6 +121,8 @@ servers:
 
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "helm/rendered_charts.yaml"
   source: "chart-checkout/charts/cert-manager"
   name: cert-manager
   namespace: (( .namespace.name ))

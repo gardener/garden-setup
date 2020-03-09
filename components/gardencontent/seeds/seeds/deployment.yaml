@@ -25,7 +25,11 @@ pluginTemplate:
   - <<: (( &temporary &template ))
   - kubectl: (( "renderedPluginSpecs[" id "].deploySecrets" ))
   - (( valid( renderedPluginSpecs[id].namespace ) ? { "kubectl" = "renderedPluginSpecs[" id "].namespace" } :~~ ))
-  - helm: (( "renderedPluginSpecs[" id "].gardenlet" ))
+  - pinned:
+    - helm:
+      - (( "renderedPluginSpecs[" id "].gardenlet" ))
+      - template
+    - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
@@ -35,7 +39,7 @@ temp:
   bootstrapNamePrefix: (( &temporary ( |x|-> replace( replace( substr( x, 0, 3 ), "-", "7" ), ".", "0" ) ) ))
 bootstrapTokens: (( sum[.landscape.iaas_shooted_seeds|{}|s,elem|-> s { elem.name = { "id" = temp.bootstrapNamePrefix( elem.name ) rand( "a-z0-9", 3 ), "secret" = temp.bootstrapNamePrefix( elem.name ) rand( "a-z0-9", 13 ) } }] ))
 
-renderedPluginSpecs: (( sum[.landscape.iaas_shooted_seeds|[]|s,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))
+renderedPluginSpecs: (( sum[.landscape.iaas_shooted_seeds|[]|s,id,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))
 
 providerconfig:
   <<: (( &template &temporary ))

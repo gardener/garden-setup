@@ -194,6 +194,8 @@ pluginSpecs:
           name: (( landscape.namespace ))
   gardenlet:
     kubeconfig: (( configValues.kubeconfigs.seed ))
+    files:
+      - (( "renderedPluginSpecs[" id "].gardenlet/rendered_charts.yaml" ))
     source: "git/repo/charts/gardener/gardenlet/charts/runtime"
     name: gardenlet
     namespace: garden

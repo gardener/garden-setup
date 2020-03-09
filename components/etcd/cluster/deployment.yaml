@@ -24,10 +24,16 @@ temp:
   dir: (( __ctx.DIR "/provider/" config.type ))
 
 plugins:
-  - helm:
-    - etcd.main
-  - helm:
-    - etcd.events
+  - pinned:
+    - helm:
+      - etcd.main
+      - template
+    - kubectl: etcd.main
+  - pinned:
+    - helm:
+      - etcd.events
+      - template
+    - kubectl: etcd.events
 
 spec:
   <<: (( &temporary ))
@@ -69,6 +75,8 @@ state:
 etcd:
   main:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+    files:
+      - "etcd.main/rendered_charts.yaml"
     source: chart
     name: garden-etcd-main
     namespace: (( .landscape.namespace ))
@@ -102,6 +110,8 @@ etcd:
 
   events:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+    files:
+      - "etcd.events/rendered_charts.yaml"
     source: chart
     name: garden-etcd-events
     namespace: (( .landscape.namespace ))
