@@ -8,10 +8,16 @@ plugins_self_signed:
   - -echo: "Using self-signed certificates, no solver deployment necessary."
 
 plugins_not_self_signed:
-  - helm
+  - pinned:
+    - helm:
+      - helm
+      - template
+    - kubectl: helm
 
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "helm/rendered_charts.yaml"
   source: "git/repo/charts/certificate-dns-bridge"
   name: certificate-dns-bridge
   namespace: (( imports.cert-controller.export.namespace ))

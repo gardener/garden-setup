@@ -6,9 +6,12 @@ env: (( &temporary ))
 plugins:
   - kubectl: kubectl_sa
   - kubectl_patch
-  - helm:
-    - helm
-    - spiff
+  - pinned:
+    - helm:
+      - helm
+      - spiff
+      - template
+    - kubectl: helm
 
 kubectl_sa:
   kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
@@ -62,6 +65,8 @@ kubectl_patch:
 
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "helm/rendered_charts.yaml"
   source: "git/repo/charts/gardener-metrics-exporter"
   name: gardener-metrics-exporter
   namespace: (( .landscape.namespace ))

@@ -18,7 +18,11 @@ landscape: (( &temporary ))
 utilities: (( &temporary ))
 
 plugins:
-  - helm: identity
+  - pinned:
+    - helm:
+      - identity
+      - template
+    - kubectl: identity
 
 identity_version: (( &temporary ( .landscape.versions.identity ) ))
 
@@ -53,6 +57,8 @@ state:
 
 identity:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "identity/rendered_charts.yaml"
   source: "git/repo/charts/identity"
   name: "identity"
   namespace: (( .landscape.namespace ))

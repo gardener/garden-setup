@@ -19,9 +19,12 @@ env: (( &temporary ))
 
 plugins:
   - kubectl: kubectl_sa
-  - helm:
-    - dashboard
-    - spiff
+  - pinned:
+    - helm:
+      - dashboard
+      - spiff
+      - template
+    - kubectl: dashboard
   - kubectl: rbac
   - (( valid( .landscape.dashboard.cname ) ? { "kubectl" = "cname_dnsentry" } :~~ ))
   - -echo: "==================================================================="
@@ -32,6 +35,8 @@ dashboard_version: (( &temporary ( .landscape.versions.dashboard ) ))
 
 dashboard:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  files:
+    - "dashboard/rendered_charts.yaml"
   source: "git/repo/charts/gardener-dashboard"
   name: "dashboard"
   namespace: (( .landscape.namespace ))
