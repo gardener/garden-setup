@@ -1,6 +1,6 @@
 
 # configure default values for pull request tests
-test:
+test-gardener:
   hostprovider: gardener
   baseClusterCloudprovider: gcp
 
