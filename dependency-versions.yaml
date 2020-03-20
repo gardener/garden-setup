@@ -24,7 +24,7 @@
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
-          "version": "v1.3.0"
+          "version": "v1.4.0"
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
