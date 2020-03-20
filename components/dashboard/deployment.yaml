@@ -158,7 +158,7 @@ rbac:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       metadata:
-        name: garden.sapcloud.io:system:project-creation
+        name: gardener.cloud:system:project-creation
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
@@ -167,8 +167,7 @@ rbac:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       metadata:
-        annotations:
-        name: garden.sapcloud.io:system:administrators
+        name: gardener.cloud:system:administrators
       roleRef:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
