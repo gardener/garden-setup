@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.1.4"
+        "version": "v1.1.6"
       },
       "extensions": {
         "dns-external": {
@@ -12,7 +12,7 @@
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.3.0"
+          "version": "v1.4.0"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
@@ -24,7 +24,7 @@
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
-          "version": "v1.3.0"
+          "version": "v1.4.0"
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
@@ -51,7 +51,7 @@
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.39.0"
+        "version": "1.40.0"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
