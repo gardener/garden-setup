@@ -11,8 +11,8 @@ plugins_not_self_signed:
   - pinned:
     - helm:
       - helm
-      - template
-    - kubectl: helm
+      # - template
+    # - kubectl: helm
 
 helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
