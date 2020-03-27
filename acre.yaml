@@ -361,6 +361,11 @@ validation:
           - <<: (( iaas.openstack.credentials ))
           - ["mapfield", "region"]
         config: (( return_true ))
+      cloudflare-dns:
+        credentials:
+          - mapfield
+          - apiToken
+        config: (( return_true ))
   iaas_entry_validators:
     basic:
       - <<: (( &template ))

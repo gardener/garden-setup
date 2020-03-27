@@ -60,6 +60,7 @@ typeToProvider:
   google-clouddns: gcp
   azure-dns: azure
   openstack-designate: openstack
+  cloudflare-dns: cloudflare
 
 spec:
   <<: (( &temporary ))

@@ -309,8 +309,12 @@ Similar to `landscape.etcd`, missing values will be set to defaults based on the
 
 | Field | Type | Description | Example |IaaS Provider Documentation
 |:------|:--------|:--------|:--------|:------------|
-|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)), `azure-dns` ([Azure DNS](https://azure.microsoft.com/de-de/services/dns/)), and `openstack-designate` ([Openstack Designate](https://docs.openstack.org/designate/latest/)).|`google-clouddns`|n.a.|
-|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format.|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/azure-stack/user/azure-stack-create-service-principals)|
+|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)), `azure-dns` ([Azure DNS](https://azure.microsoft.com/de-de/services/dns/)), `openstack-designate` ([Openstack Designate](https://docs.openstack.org/designate/latest/)), and `cloudflare-dns` ([Cloudflare DNS](https://www.cloudflare.com/dns/)).|`google-clouddns`|n.a.|
+|`credentials`|IaaS provider specific|Service account credentials in a provider-specific format (see above).|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/azure-stack/user/azure-stack-create-service-principals)|
+
+#### Cloudflare Credentials
+
+The credentials to use Cloudflare DNS consist of a single key `apiToken`, containing your API token.
 
 
 ### landscape.identity
