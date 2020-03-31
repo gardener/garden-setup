@@ -14,6 +14,7 @@ plugins:
     - create_kubeconfig_secret: kcfg_sa # create secret manifest for sa kubeconfig (directly overrides checked-out charts)
     - kubectl: kubectl_admin_kubeconfig # apply admin kubeconfig secret
   - pinned:
+    - kustomize-edit: kustomize.runtime.edit
     - kustomize: kustomize.runtime.render
     - kubectl: kustomize.runtime.apply
 
@@ -67,15 +68,22 @@ kustomize:
   virtual:
     render:
       path: (( .settings.repo_path ))
-      kustomization: (( "config/overlay/multi-cluster/virtual-garden" ))
+      kustomization: "config/overlay/multi-cluster/virtual-garden"
     apply:
       kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
       files:
         - (( env.GENDIR "/kustomize.virtual.render/manifest.yaml" ))
   runtime:
-    render:
+    edit:
       path: (( .settings.repo_path ))
-      kustomization: (( "config/overlay/multi-cluster/runtime" ))
+      kustomization: "config/manager"
+      args:
+        - set
+        - image
+        - (( "controller=" .landscape.versions.terminal-controller-manager.image_repo ":" ( .landscape.versions.terminal-controller-manager.image_tag || "latest" ) ))
+    render:
+      path: (( env.GENDIR "/kustomize.runtime.edit/edit" ))
+      kustomization: "config/overlay/multi-cluster/runtime"
     apply:
       kubeconfig: (( .landscape.clusters[0].kubeconfig ))
       files:

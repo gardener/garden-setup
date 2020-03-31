@@ -3,9 +3,8 @@ kind: Shoot
 metadata:
   name: (( values.values.name ))
   namespace: (( values.values.namespace ))
-  annotations:
-    garden.sapcloud.io/purpose: infrastructure
 spec:
+  purpose: production # 'infrastructure' is only possible for shoots in the 'garden' namespace
   secretBindingName: (( values.values.secretbinding ))
   cloudProfileName: (( values.values.cloudprofile ))
   seedName: (( values.values.seed ))

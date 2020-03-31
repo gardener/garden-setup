@@ -7,4 +7,5 @@ This document links to all advanced configuration pages for a better overview.
 - [landscape.gardener](gardener.md)
 - [landscape.cert-manager](cert-manager.md)
 - [landscape.monitoring](monitoring.md)
+- [landscape.identity](identity.md)
 - [installation handler](installation-handler.md)
