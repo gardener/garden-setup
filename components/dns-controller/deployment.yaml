@@ -54,43 +54,13 @@ kubectl_cname_template:
   - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "provider_secret.yaml", landscape.clusters.[0].kubeconfig, .spec.cname ) ))
   - (( utilities.kubectl.generate( __ctx.DIR "/manifests/" "dns_provider.yaml", landscape.clusters.[0].kubeconfig, .spec.cname ) ))
 
-providers:
+typeToProvider:
   <<: (( &temporary ))
-  aws-route53:
-    <<: (( &template ))
-    name: aws
-    credentials:
-      AWS_ACCESS_KEY_ID: (( node.credentials.accessKeyID ))
-      AWS_SECRET_ACCESS_KEY: (( node.credentials.secretAccessKey ))
-      AWS_REGION: (( node.credentials.region || ~~ ))
-  google-clouddns:
-    <<: (( &template ))
-    name: google
-    credentials:
-      serviceaccount.json: (( node.credentials.["serviceaccount.json"] ))
-  azure-dns:
-    <<: (( &template ))
-    name: azure
-    credentials:
-      AZURE_CLIENT_ID: (( node.credentials.clientID ))
-      AZURE_CLIENT_SECRET: (( node.credentials.clientSecret ))
-      AZURE_SUBSCRIPTION_ID: (( node.credentials.subscriptionID ))
-      AZURE_TENANT_ID: (( node.credentials.tenantID ))
-  openstack-designate:
-    <<: (( &template ))
-    name: openstack
-    credentials:
-      OS_AUTH_URL: (( node.credentials.authURL ))
-      OS_REGION_NAME: (( node.credentials.region ))
-      OS_USERNAME: (( node.credentials.username ))
-      OS_PASSWORD: (( node.credentials.password ))
-      OS_DOMAIN_NAME: (( node.credentials.domainName ))
-      OS_USER_DOMAIN_NAME: (( node.credentials.userDomainName || "" ))
-      OS_PROJECT_NAME: (( node.credentials.tenantName ))
-
-func:
-  <<: (( &temporary ))
-  instantiateProvider: (( |type,node|-> *.providers[type] ))
+  aws-route53: aws
+  google-clouddns: gcp
+  azure-dns: azure
+  openstack-designate: openstack
+  cloudflare-dns: cloudflare
 
 spec:
   <<: (( &temporary ))
@@ -99,7 +69,9 @@ spec:
     dns_class: (( .settings.dns-class ))
   dns:
     type: (( .landscape.dns.type ))
-    provider: (( .func.instantiateProvider( type, .landscape.dns ) ))
+    provider:
+      name: (( .typeToProvider[type] ))
+      credentials: (( .landscape.dns.credentials ))
     domain: (( .landscape.domain ))
     zones: (( .landscape.dns.hostedZoneIDs || ~~ ))
     secret_name: (( .settings.fullname "-" provider.name ))
@@ -108,7 +80,9 @@ spec:
   cname:
     dns_fallback: (( .landscape.dashboard.cname.dns || .landscape.dns ))
     type: (( dns_fallback.type ))
-    provider: (( .func.instantiateProvider( type, dns_fallback ) ))
+    provider:
+      name: (( .typeToProvider[type] ))
+      credentials: (( dns_fallback.credentials ))
     domain: (( .landscape.dashboard.cname.domain || ~~ ))
     zones: (( dns_fallback.hostedZoneIDs || ~~ ))
     secret_name: (( .settings.fullname "-" provider.name "-cname" ))
