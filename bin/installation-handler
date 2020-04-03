@@ -68,11 +68,6 @@ prepare() {
       echo "Successfully restored secret '$sec_name' to '$dir'."
     done
   done
-
-  # all secrets have been restored to local disk, delete them (deletes all secrets with a "garden-setup.gardener.cloud/state" label, independent of its value)
-  if ! exec_retry 5 15 kubectl --kubeconfig "$kubeconfig" -n "$namespace" delete secrets -l "garden-setup.gardener.cloud/state"; then
-    fail "failed to delete secrets after restoring them to disk"
-  fi
   echo "### END PREPARE INSTALLATION ###"
 }
 
@@ -94,7 +89,12 @@ finalize() {
   if [[ "$backupLocation" == "null" ]] || [[ ! -d "$backupLocation" ]]; then
     backupLocation="$ROOT"
   fi  
-  
+
+  # delete all secrets with a "garden-setup.gardener.cloud/state" label, independent of their values
+  if ! exec_retry 5 15 kubectl --kubeconfig "$kubeconfig" -n "$namespace" delete secrets -l "garden-setup.gardener.cloud/state"; then
+    fail "failed to delete secrets after restoring them to disk"
+  fi
+
   # create timestamp
   local ts=$(timestamp)
   local failed_files=""
