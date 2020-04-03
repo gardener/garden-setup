@@ -18,13 +18,14 @@ landscape: (( &temporary ))
 env: (( &temporary ))
 
 plugins:
-  - kubectl: kubectl_sa
   - pinned:
-    - helm:
-      - dashboard
-      - spiff
-      - template
-    - kubectl: dashboard
+    - kubectl: kubectl_sa
+    - pinned:
+      - helm:
+        - dashboard
+        - spiff
+        - template
+      - kubectl: dashboard
   - kubectl: rbac
   - (( valid( .landscape.dashboard.cname ) ? { "kubectl" = "cname_dnsentry" } :~~ ))
   - -echo: "==================================================================="

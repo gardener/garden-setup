@@ -4,14 +4,15 @@ landscape: (( &temporary ))
 env: (( &temporary ))
 
 plugins:
-  - kubectl: kubectl_sa
-  - kubectl_patch
   - pinned:
-    - helm:
-      - helm
-      - spiff
-      - template
-    - kubectl: helm
+    - kubectl: kubectl_sa
+    - kubectl_patch
+    - pinned:
+      - helm:
+        - helm
+        - spiff
+        - template
+      - kubectl: helm
 
 kubectl_sa:
   kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
