@@ -37,15 +37,39 @@ cleanup()
       serviceaccount/prometheus \
       persistentvolumeclaim/alertmanager-db-alertmanager-0 \
       persistentvolumeclaim/prometheus-db-prometheus-0 \
+      persistentvolumeclaim/elasticsearch-logging-elasticsearch-logging-0 \
+      persistentvolumeclaim/fluentd-fluentd-es-0 \
+      persistentvolumeclaim/prometheus-db-aggregate-prometheus-0 \
+      persistentvolumeclaim/prometheus-db-garden-prometheus-0 \
+      daemonset.apps/fluent-bit \
+      deployment.apps/etcd-druid \
       deployment.apps/dependency-watchdog-endpoint \
       deployment.apps/dependency-watchdog-probe \
       deployment.apps/gardener-resource-manager \
       deployment.apps/grafana \
+      deployment.apps/kibana-logging \
+      deployment.apps/kube-state-metrics \
       deployment.apps/reserve-excess-capacity \
       deployment.apps/vpa-admission-controller \
       deployment.apps/vpa-exporter \
       deployment.apps/vpa-recommender \
       deployment.apps/vpa-updater \
+      statefulset.apps/aggregate-prometheus \
+      statefulset.apps/elasticsearch-logging \
+      statefulset.apps/fluentd-es \
+      cronjob.batch/daily-curator \
+      cronjob.batch/hourly-curator \
+      verticalpodautoscaler.autoscaling.k8s.io/aggregate-prometheus-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/dependency-watchdog-endpoint-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/dependency-watchdog-probe-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/elasticsearch-logging-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/etcd-druid-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/gardener-resource-manager-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/kube-state-metrics-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/prometheus-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/vpa-exporter-vpa \
+      ingress.networking.k8s.io/kibana \
+      ingress.extensions/kibana \
       ingress.extensions/aggregate-prometheus \
       ingress.extensions/grafana \
       rolebinding.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-endpoint:role-binding \
@@ -60,6 +84,14 @@ cleanup()
       serviceaccount/vpa-exporter \
       serviceaccount/vpa-recommender \
       serviceaccount/vpa-updater \
+      serviceaccount/etcd-druid \
+      serviceaccount/fluent-bit \
+      serviceaccount/kube-state-metrics \
+      service/elasticsearch-logging \
+      service/fluent-bit \
+      service/fluentd-es \
+      service/kibana-logging \
+      service/kube-state-metrics \
       service/aggregate-prometheus-web \
       service/grafana \
       service/vpa-exporter \
@@ -73,6 +105,21 @@ cleanup()
       configmap/grafana-dashboard-providers \
       configmap/grafana-dashboards \
       configmap/grafana-datasources \
+      configmap/controller-leader-election-helper \
+      configmap/curator-daily-config \
+      configmap/curator-hourly-config \
+      configmap/es-configmap \
+      configmap/fluent-bit-config \
+      configmap/fluentd-es-config \
+      configmap/kibana-configmap \
+      configmap/kibana-object-registration \
+      configmap/kibana-saved-objects \
+      networkpolicy.networking.k8s.io/allow-elasticsearch \
+      networkpolicy.networking.k8s.io/allow-fluentbit \
+      networkpolicy.networking.k8s.io/allow-fluentd \
+      networkpolicy.networking.k8s.io/allow-kibana \
+      networkpolicy.networking.k8s.io/allow-to-aggregate-prometheus \
+      networkpolicy.networking.k8s.io/allow-to-elasticsearch \
       networkpolicy.networking.k8s.io/allow-from-aggregate-prometheus \
       networkpolicy.networking.k8s.io/allow-to-all-shoot-apiservers \
       networkpolicy.networking.k8s.io/allow-to-blocked-cidrs \
@@ -88,6 +135,14 @@ cleanup()
       secret/grafana-basic-auth \
       secret/grafana-tls \
       secret/seed-monitoring-ingress-credentials \
+      secret/etcd-druid-token-555t6 \
+      secret/fluent-bit-token-6bzfc \
+      secret/fluentd-es-sg-credentials \
+      secret/kibana-basic-auth \
+      secret/kibana-tls \
+      secret/kube-state-metrics-token-sc87j \
+      secret/seed-logging-ingress-credentials \
+      secret/vpa-tls-certs \
       endpoints/dependency-watchdog \
       endpoints/dependency-watchdog-probe
   fi
