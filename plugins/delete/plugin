@@ -28,7 +28,7 @@ prepare_delete() {
         seed)
             # abort if any shoot is still using the given seed
             verbose "Check if shoots are still running on seed '$1' ..."
-            if [[ $(kubectl get shoots --all-namespaces -o json | jq -r '[.items[].spec.seedName] | contains(["'$2'"])') == "true" ]]; then
+            if [[ $(kubectl get shoots --all-namespaces -o json | jq -r 'reduce (.items[].spec.seedName | . == "'$2'") as $b (false; . or $b)') == "true" ]]; then
                 fail "there are still shoots running on seed '$2'"
             fi
             ;;

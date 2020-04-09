@@ -40,7 +40,6 @@ cleanup()
       persistentvolumeclaim/elasticsearch-logging-elasticsearch-logging-0 \
       persistentvolumeclaim/fluentd-fluentd-es-0 \
       persistentvolumeclaim/prometheus-db-aggregate-prometheus-0 \
-      persistentvolumeclaim/prometheus-db-garden-prometheus-0 \
       daemonset.apps/fluent-bit \
       deployment.apps/etcd-druid \
       deployment.apps/dependency-watchdog-endpoint \
