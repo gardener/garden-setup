@@ -59,8 +59,8 @@ core:
       kind: Namespace
       metadata:
         labels:
-          garden.sapcloud.io/role: project
-          project.garden.sapcloud.io/name: (( .settings.project_name ))
+          gardener.cloud/role: project
+          project.gardener.cloud/name: (( .settings.project_name ))
         name: (( .settings.project_namespace ))
     - apiVersion: core.gardener.cloud/v1beta1
       kind: Project

@@ -36,7 +36,7 @@ prepare_delete() {
             ;&
         project)
             # annotate shoot/project
-            exec_cmd kubectl ${3:+"-n"}${3:-} annotate "$1" "$2" confirmation.garden.sapcloud.io/deletion=true --overwrite
+            exec_cmd kubectl ${3:+"-n"}${3:-} annotate "$1" "$2" confirmation.gardener.cloud/deletion=true --overwrite
             ;;
     esac
 }
