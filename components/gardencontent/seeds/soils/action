@@ -58,15 +58,6 @@ cleanup()
       statefulset.apps/fluentd-es \
       cronjob.batch/daily-curator \
       cronjob.batch/hourly-curator \
-      verticalpodautoscaler.autoscaling.k8s.io/aggregate-prometheus-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/dependency-watchdog-endpoint-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/dependency-watchdog-probe-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/elasticsearch-logging-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/etcd-druid-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/gardener-resource-manager-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/kube-state-metrics-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/prometheus-vpa \
-      verticalpodautoscaler.autoscaling.k8s.io/vpa-exporter-vpa \
       ingress.networking.k8s.io/kibana \
       ingress.extensions/kibana \
       ingress.extensions/aggregate-prometheus \
