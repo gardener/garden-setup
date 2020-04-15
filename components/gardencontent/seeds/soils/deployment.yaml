@@ -36,7 +36,10 @@ pluginTemplate:
 
 iaasSeedsSoils: (( &temporary ( select[.landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"] ) ))
 
-bootstrapTokens: (( sum[.iaasSeedsSoils|{}|s,elem|-> s { elem.name = { "id" = substr( elem.name, 0, 3 ) rand( "a-z0-9", 3 ), "secret" = substr( elem.name, 0, 3 ) rand( "a-z0-9", 13 ) } }] ))
+temp:
+  <<: (( &temporary ))
+  bootstrapNamePrefix: (( &temporary ( |x|-> replace( replace( substr( x, 0, 3 ), "-", "7" ), ".", "0" ) ) ))
+bootstrapTokens: (( sum[.iaasSeedsSoils|{}|s,elem|-> s { elem.name = { "id" = temp.bootstrapNamePrefix( elem.name ) rand( "a-z0-9", 3 ), "secret" = temp.bootstrapNamePrefix( elem.name ) rand( "a-z0-9", 13 ) } }] ))
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
