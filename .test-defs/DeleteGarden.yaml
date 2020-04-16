@@ -8,7 +8,7 @@ spec:
 
   description: Delete a garden cluster
 
-  activeDeadlineSeconds: 1200
+  activeDeadlineSeconds: 3600
 
   command: [bash, -c]
   args: ["./test/scripts/delete"]
