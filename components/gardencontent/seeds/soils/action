@@ -53,6 +53,7 @@ cleanup()
       deployment.apps/vpa-exporter \
       deployment.apps/vpa-recommender \
       deployment.apps/vpa-updater \
+      deployment.apps/gardener-seed-admission-controller \
       statefulset.apps/aggregate-prometheus \
       statefulset.apps/elasticsearch-logging \
       statefulset.apps/fluentd-es \
@@ -86,6 +87,7 @@ cleanup()
       service/grafana \
       service/vpa-exporter \
       service/vpa-webhook \
+      service/gardener-seed-admission-controller \
       configmap/aggregate-prometheus-config \
       configmap/aggregate-prometheus-rules \
       configmap/dependency-watchdog-endpoint-config \
@@ -104,6 +106,7 @@ cleanup()
       configmap/kibana-configmap \
       configmap/kibana-object-registration \
       configmap/kibana-saved-objects \
+      validatingwebhookconfiguration.admissionregistration.k8s.io/gardener-seed-admission-controller \
       networkpolicy.networking.k8s.io/allow-elasticsearch \
       networkpolicy.networking.k8s.io/allow-fluentbit \
       networkpolicy.networking.k8s.io/allow-fluentd \
