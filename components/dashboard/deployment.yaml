@@ -57,6 +57,9 @@ dashboard:
       ca: (( imports.cert-controller.export.ca.crt || ~~ ))
       redirectUri: (( settings.dashboard_url "/auth/callback" ))
       clientSecret: (( imports.identity.export.dashboardClientSecret ))
+      public:
+        clientId: kube-kubectl
+        clientSecret: (( imports.identity.export.kubectlClientSecret ))
     tlsSecretName: (( imports.cert.export.certificate.secret_name ))
     tls: ~
     kubeconfig: (( format( "((! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
