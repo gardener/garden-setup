@@ -512,3 +512,8 @@ regions:
     - name: us-west-2c
     - name: us-west-2d
     name: us-west-2
+  - zones:
+    - name: us-gov-west-1a
+    - name: us-gov-west-1b
+    - name: us-gov-west-1c
+    name: us-gov-west-1
