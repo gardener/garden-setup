@@ -22,16 +22,14 @@ providerConfig:
     versions:
     - image: projects/coreos-cloud/global/images/coreos-stable-2303-3-0-v20191203
       version: 2303.3.0
-    - image: projects/coreos-cloud/global/images/coreos-stable-2135-6-0-v20190801
-      version: 2135.6.0
   - name: ubuntu
     versions:
-    - image: projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20190617
-      version: 18.4.20190617
+    - image: projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20200218
+      version: 18.4.20200228
   - name: suse-jeos
     versions:
-    - image: projects/suse-byos-cloud/global/images/sles-15-sp1-chost-byos-v20191219
-      version: 15.1.20191219
+    - image: projects/suse-byos-cloud/global/images/sles-15-sp1-chost-byos-v20200406
+      version: 15.1.20200406
 
 machineTypes:
   - cpu: "2"
