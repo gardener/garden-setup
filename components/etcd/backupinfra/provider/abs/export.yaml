@@ -1,3 +1,3 @@
-bucketname: (( data.terraform.modules.[0].outputs.bucketName.value ))
-azureStorageAccountName: (( data.terraform.modules.[0].outputs.storageAccountName.value ))
-azureStorageAccessKey: (( data.terraform.modules.[0].outputs.storageAccessKey.value ))
+bucketname: (( data.terraform.outputs.bucketName.value ))
+azureStorageAccountName: (( data.terraform.outputs.storageAccountName.value ))
+azureStorageAccessKey: (( data.terraform.outputs.storageAccessKey.value ))

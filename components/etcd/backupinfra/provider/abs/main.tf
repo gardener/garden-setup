@@ -1,9 +1,9 @@
 provider "azurerm" {
-  client_id       = "${var.CLIENT_ID}"
-  client_secret   = "${var.CLIENT_SECRET}"
-  tenant_id       = "${var.TENANT_ID}"
-  subscription_id = "${var.SUBSCRIPTION_ID}"
-  version         = "=1.22.0"
+  client_id       = var.CLIENT_ID
+  client_secret   = var.CLIENT_SECRET
+  tenant_id       = var.TENANT_ID
+  subscription_id = var.SUBSCRIPTION_ID
+  version         = "=1.27.0"
 }
 
 //=====================================================================
@@ -11,14 +11,14 @@ provider "azurerm" {
 //=====================================================================
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${var.RESOURCE_GROUP}"
-  location = "${var.REGION}"
+  name     = var.RESOURCE_GROUP
+  location = var.REGION
 }
 
 resource "azurerm_storage_account" "storageAccount" {
-  name                     = "${var.STORAGE_ACCOUNT_NAME}"
-  location                 = "${var.REGION}"
-  resource_group_name      = "${azurerm_resource_group.rg.name}"
+  name                     = var.STORAGE_ACCOUNT_NAME
+  location                 = var.REGION
+  resource_group_name      = azurerm_resource_group.rg.name
   account_kind             = "BlobStorage"
   access_tier              = "Hot"
   account_tier             = "Standard"
@@ -27,9 +27,9 @@ resource "azurerm_storage_account" "storageAccount" {
 }
 
 resource "azurerm_storage_container" "container" {
-  name                  = "${var.BUCKETNAME}"
-  resource_group_name   = "${azurerm_resource_group.rg.name}"
-  storage_account_name  = "${azurerm_storage_account.storageAccount.name}"
+  name                  = var.BUCKETNAME
+  resource_group_name   = azurerm_resource_group.rg.name
+  storage_account_name  = azurerm_storage_account.storageAccount.name
   container_access_type = "private"
 }
 
@@ -38,14 +38,15 @@ resource "azurerm_storage_container" "container" {
 //=====================================================================
 
 output "bucketName" {
-  value = "${azurerm_storage_container.container.name}"
+  value = azurerm_storage_container.container.name
 }
 
 output "storageAccountName" {
-  value = "${azurerm_storage_account.storageAccount.name}"
+  value = azurerm_storage_account.storageAccount.name
 }
 
 output "storageAccessKey" {
   sensitive = true
-  value     = "${azurerm_storage_account.storageAccount.primary_access_key}"
+  value     = azurerm_storage_account.storageAccount.primary_access_key
 }
+

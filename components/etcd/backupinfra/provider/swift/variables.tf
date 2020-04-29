@@ -14,41 +14,42 @@
 
 variable "USERNAME" {
   description = "Username"
-  type        = "string"
+  type        = string
 }
 
 variable "PASSWORD" {
   description = "Password"
-  type        = "string"
+  type        = string
 }
 
 variable "REGION" {
   description = "Region of the swift bucket"
-  type = "string"
+  type        = string
 }
 
 variable "BUCKETNAME" {
   description = "Name of the bucket"
-  type = "string"
+  type        = string
 }
 
 variable "TENANT_NAME" {
   description = "OpenStack Tenant"
-  type = "string"
+  type        = string
 }
 
 variable "AUTH_URL" {
   description = "OpenStack Auth URL"
-  type = "string"
+  type        = string
 }
 
 variable "DOMAIN_NAME" {
   description = "OpenStack Domain Name"
-  type = "string"
+  type        = string
 }
 
 variable "USER_DOMAIN_NAME" {
   description = "OpenStack User Domain Name"
-  type = "string"
-  default = ""
+  type        = string
+  default     = ""
 }
+
