@@ -112,8 +112,13 @@ machineTypes:
     usable: true
   - cpu: "8"
     gpu: "0"
-    memory: 64Gi
-    name: Standard_E8s_v3
+    memory: 16Gi
+    name: Standard_F8s_v2
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 32Gi
+    name: Standard_F16s_v2
     usable: true
   - cpu: "32"
     gpu: "0"
@@ -125,15 +130,20 @@ machineTypes:
     memory: 128Gi
     name: Standard_F64s_v2
     usable: true
-  - cpu: "64"
+  - cpu: "32"
     gpu: "0"
     memory: 256Gi
-    name: Standard_D64s_v3
+    name: Standard_M32ls
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 875Gi
+    name: Standard_M32ms
     usable: true
   - cpu: "64"
     gpu: "0"
-    memory: 432Gi
-    name: Standard_E64s_v3
+    memory: 512Gi
+    name: Standard_M64ls
     usable: true
   - cpu: "64"
     gpu: "0"
@@ -274,18 +284,70 @@ providerConfig:
   machineImages:
   - name: coreos
     versions:
-    - urn: CoreOS:CoreOS:Stable:2303.3.0
+    - acceleratedNetworking: true
+      urn: CoreOS:CoreOS:Stable:2303.3.0
       version: 2303.3.0
-    - urn: CoreOS:CoreOS:Stable:2135.6.0
-      version: 2135.6.0
   - name: ubuntu
     versions:
-    - urn: Canonical:UbuntuServer:18.04-LTS:18.04.201906170
-      version: 18.4.20190617
+    - acceleratedNetworking: true
+      urn: Canonical:UbuntuServer:18.04-LTS:18.04.202002180
+      version: 18.4.20200228
   - name: suse-jeos
     versions:
-    - urn: suse:sles-15-sp1-chost-byos:gen1:2019.12.11
-      version: 15.1.20191211
+    - acceleratedNetworking: true
+      urn: suse:sles-15-sp1-chost-byos:gen1:2020.04.06
+      version: 15.1.20200406
+  machineTypes:
+    - acceleratedNetworking: true
+      name: Standard_D4_v3
+    - acceleratedNetworking: true
+      name: Standard_D8_v3
+    - acceleratedNetworking: true
+      name: Standard_D16_v3
+    - acceleratedNetworking: true
+      name: Standard_D32_v3
+    - acceleratedNetworking: true
+      name: Standard_D4s_v3
+    - acceleratedNetworking: true
+      name: Standard_D8s_v3
+    - acceleratedNetworking: true
+      name: Standard_D16s_v3
+    - acceleratedNetworking: true
+      name: Standard_D32s_v3
+    - acceleratedNetworking: true
+      name: Standard_DS2_v2
+    - acceleratedNetworking: true
+      name: Standard_DS3_v2
+    - acceleratedNetworking: true
+      name: Standard_DS4_v2
+    - acceleratedNetworking: true
+      name: Standard_DS5_v2
+    - acceleratedNetworking: true
+      name: Standard_F2s
+    - acceleratedNetworking: true
+      name: Standard_F4s
+    - acceleratedNetworking: true
+      name: Standard_F8s
+    - acceleratedNetworking: true
+      name: Standard_F8s_v2
+    - acceleratedNetworking: true
+      name: Standard_F16s
+    - acceleratedNetworking: true
+      name: Standard_F16s_v2
+    - acceleratedNetworking: true
+      name: Standard_F32s_v2
+    - acceleratedNetworking: true
+      name: Standard_F64s_v2
+    - acceleratedNetworking: true
+      name: Standard_M32ls
+    - acceleratedNetworking: true
+      name: Standard_M32ms
+    - acceleratedNetworking: true
+      name: Standard_M64ls
+    - acceleratedNetworking: true
+      name: Standard_M64s
+    - acceleratedNetworking: true
+      name: Standard_M128
 
 regions:
   - name: eastus

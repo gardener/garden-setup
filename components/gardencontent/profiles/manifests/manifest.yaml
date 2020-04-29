@@ -31,13 +31,14 @@ defaults:
     kubernetes: (( defaults.providerspec.kubernetes || defaults.kubernetes ))
     machineImages:
       - name: coreos
-        versions: (( sum[values.coreosVersions|[]|s,e|-> s { "version" = e }] ))
+        versions:
+        - version: 2303.3.0
       - name: ubuntu
         versions:
-        - version: 18.4.20190617
+        - version: 18.4.20200228
       - name: suse-jeos
         versions:
-        - version: 15.1.20190927
+        - version: 15.1.20200406
       - <<: (( defaults.providerspec.machineImages || ~ ))
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))

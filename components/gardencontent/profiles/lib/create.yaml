@@ -16,7 +16,7 @@ utilities:
   <<: (( &temporary(merge || ~) ))
   profile:
     manifestfile: (( __ctx.DIR "/../manifests/manifest.yaml" ))
-    create: (( |iaasconfig,defaultCoreosVersions|->utilities.kubectl.generate(_.manifestfile, imports.kube_apiserver.export.kubeconfig, *_.values) ))
+    create: (( |iaasconfig|->utilities.kubectl.generate(_.manifestfile, imports.kube_apiserver.export.kubeconfig, *_.values) ))
     values:
       <<: (( &template ))
       profileoverwrite: (( iaasconfig.profile || {} ))
@@ -25,4 +25,3 @@ utilities:
       config: (( iaasconfig ))
       credentials: (( iaasconfig.credentials || ~~ ))
       providerspec: (( read( __ctx.DIR "/provider/" type "/iaas.yaml", "yaml" ) ))
-      coreosVersions: (( defaultCoreosVersions ))
