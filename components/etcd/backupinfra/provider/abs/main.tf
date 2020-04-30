@@ -3,7 +3,8 @@ provider "azurerm" {
   client_secret   = var.CLIENT_SECRET
   tenant_id       = var.TENANT_ID
   subscription_id = var.SUBSCRIPTION_ID
-  version         = "=1.27.0"
+  version         = "=2.8"
+  features          {}
 }
 
 //=====================================================================
@@ -23,12 +24,10 @@ resource "azurerm_storage_account" "storageAccount" {
   access_tier              = "Hot"
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  enable_blob_encryption   = true
 }
 
 resource "azurerm_storage_container" "container" {
   name                  = var.BUCKETNAME
-  resource_group_name   = azurerm_resource_group.rg.name
   storage_account_name  = azurerm_storage_account.storageAccount.name
   container_access_type = "private"
 }

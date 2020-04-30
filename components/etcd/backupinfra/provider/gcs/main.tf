@@ -16,6 +16,7 @@ provider "google" {
   credentials = var.SERVICEACCOUNT
   project     = var.PROJECT
   region      = var.REGION
+  version     = "=3.20"
 }
 
 //=====================================================================
