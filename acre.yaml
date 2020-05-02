@@ -211,6 +211,7 @@ dns_type_mapping:
   aws: aws-route53
   azure: azure-dns
   openstack: openstack-designate
+  cloudflare: cloudflare-dns
 
 backup_type_mapping:
   <<: (( &temporary ))

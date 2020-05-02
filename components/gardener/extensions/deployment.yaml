@@ -152,6 +152,8 @@ extension_manifests:
         type: google-clouddns
       - kind: DNSProvider
         type: openstack-designate
+      - kind: DNSProvider
+        type: cloudflare-dns
       deployment:
         type: helm
         providerConfig:
