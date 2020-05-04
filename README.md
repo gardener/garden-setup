@@ -156,7 +156,7 @@ landscape:
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
   <a href="#landscapedns">dns</a>:                                    # optional, default values based on `landscape.iaas`
-    type: &lt;google-clouddns|aws-route53|azure-dns|openstack-designate&gt;   # dns provider
+    type: &lt;google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns&gt;   # dns provider
     credentials: (( iaas.credentials ))   # credentials for the dns provider
 
   <a href="#landscapeidentity">identity</a>:
@@ -301,7 +301,7 @@ If you remove single values or the whole block, the missing values will be set t
 ### landscape.dns
 ```yaml
 dns:
-  type: <google-clouddns|aws-route53|azure-dns|openstack-designate>
+  type: <google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns>
   credentials:
 ```
 Configuration for the Domain Name Service (DNS) provider. If your IaaS provider also offers a DNS service you can use the same values for `dns.credentials` as for `iaas.creds` above by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff. If they belong to another account (or to another IaaS provider) the appropriate credentials (and their type) have to be configured.

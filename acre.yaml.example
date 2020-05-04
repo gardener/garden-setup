@@ -45,7 +45,7 @@ landscape:
 #      credentials: (( iaas[0].credentials ))
 
 #  dns: # optional
-#    type: <google-clouddns/aws-route53/azure-dns>
+#    type: <google-clouddns/aws-route53/azure-dns/openstack-designate/cloudflare-dns>
 #    credentials: (( iaas[0].credentials ))
 
   identity:
