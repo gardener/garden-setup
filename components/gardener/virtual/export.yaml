@@ -26,4 +26,3 @@ export:
         scheduler:
           <<: (( .gardener.values.global.scheduler ))
           kubeconfig: (( read( env.GENDIR "/kubectl_apply/sa_gardener-scheduler.kubeconfig", "text" ) ))
-  dns_credentials: (( .settings.dns_credentials ))
