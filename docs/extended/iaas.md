@@ -107,10 +107,58 @@ If you want to create shoots on all IaaS providers, best practise is to configur
 A few important things to know:
 - creating shoots takes some time, thus using shooted seeds will significantly increase the time needed for a complete setup
   - the shoots are created and deleted in parallel to minimize the delay
-- all shoots for the shooted seeds will be created in the `core` project with purpose set to `infrastructure`
+- all shoots for the shooted seeds will be created in the `core` project with purpose set to `production`
   - they use a big worker node size and are configured to scale between 1 and 100 workers depending on their load
   - **do not delete these shoots!**
 - shoots have a length restriction of 10 characters for their name - this restriction applies to the `name` fields of `seeds` entries
+
+
+### Example CIDRs
+
+Setting the CIDRs correctly is somewhat difficult and having them configured wrongly often results in very strange errors. Here are some example CIDRs for reference:
+
+This example assumes these CIDRs for your base cluster:
+```yaml
+networks:
+  nodes: 10.254.0.0/19
+  pods: 10.255.0.0/17
+  services: 10.255.128.0/17
+```
+Remember that the CIDRs of a shoot and its corresponding seed must not overlap. The base cluster is configured as initial seed, so the CIDRs for shooted seeds have to be disjunct. Furthermore, the shooted seed CIDRs should be disjunct from the dashboard's defaults. You can modify these defaults with the `iaas[*].shootDefaultNetworks` field per seed, see the example at the beginning of this page.
+Depending on where you get your base cluster from, you might not be able to influence its CIDRs.
+
+#### Shooted Seed CIDRs Example for AWS
+```yaml
+networks:
+  nodes: 10.242.0.0/16
+  pods: 10.243.128.0/17
+  services: 10.243.0.0/17
+  public: 10.242.96.0/22
+  internal: 10.242.112.0/22
+  vpc:
+    cidr: 10.242.0.0/16
+  workers: 10.242.0.0/19
+```
+
+#### Shooted Seed CIDRs Example for GCP
+```yaml
+networks:
+  nodes: 10.242.0.0/16
+  pods: 10.243.128.0/17
+  services: 10.243.0.0/17
+  workers: 10.242.0.0/19
+```
+
+#### Shooted Seed CIDRs Example for Azure
+```yaml
+networks:
+  nodes: 10.242.0.0/19
+  pods: 10.243.128.0/17
+  services: 10.243.0.0/17
+  vnet:
+    cidr: 10.242.0.0/16
+  workers: 10.242.0.0/19
+```
 
 
 ### Worker Configuration
