@@ -43,7 +43,7 @@ domain-secret:
           dns.gardener.cloud/provider: (( .landscape.dns.type ))
           dns.gardener.cloud/domain: (( "seed." .landscape.domain ))
       type: Opaque
-      data: (( imports.gardener.export.dns_credentials ))
+      data: (( sum[landscape.dns.credentials|{}|c,k,v|-> c {k=base64(v)}] ))
 
 shootconfig:
   <<: (( &template &temporary ))
