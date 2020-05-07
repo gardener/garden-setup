@@ -18,6 +18,8 @@ providerConfig:
   apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
   kind: CloudProfileConfig
   keystoneURL: (( values.config.keystoneURL || values.credentials.authURL ))
+  useOctavia: (( values.config.useOctavia || ~~ ))
+  dnsServers: (( values.config.dnsServers || ~~ ))
   constraints:
     floatingPools: (( values.config.floatingPools ))
     loadBalancerProviders: (( values.config.loadBalancerProviders ))
