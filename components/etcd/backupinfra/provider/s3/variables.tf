@@ -14,25 +14,26 @@
 
 variable "ACCESS_KEY" {
   description = "AWS Access Key"
-  type        = "string"
+  type        = string
 }
 
 variable "SECRET_KEY" {
   description = "AWS Secret Key"
-  type        = "string"
+  type        = string
 }
 
 variable "REGION" {
   description = "Region of the GCS bucket"
-  type = "string"
+  type        = string
 }
 
 variable "BUCKETNAME" {
   description = "Name of the bucket"
-  type = "string"
+  type        = string
 }
 
 variable "LANDSCAPE" {
   description = "Name of the Landscape (for tagging)"
-  type = "string"
+  type        = string
 }
+

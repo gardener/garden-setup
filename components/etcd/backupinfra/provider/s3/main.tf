@@ -13,22 +13,22 @@
 // limitations under the License.
 
 provider "aws" {
-  access_key  = "${var.ACCESS_KEY}"
-  secret_key  = "${var.SECRET_KEY}"
-  region      = "${var.REGION}"
+  access_key = var.ACCESS_KEY
+  secret_key = var.SECRET_KEY
+  region     = var.REGION
+  version    = "=2.60"
 }
-
 
 //=====================================================================
 //= S3 bucket
 //=====================================================================
 
 resource "aws_s3_bucket" "bucket" {
-  bucket_prefix = "${var.BUCKETNAME}"
-  region        = "${var.REGION}"
+  bucket_prefix = var.BUCKETNAME
+  region        = var.REGION
   force_destroy = true
-  tags          = {
-    Name        = "${var.LANDSCAPE}"
+  tags = {
+    Name = var.LANDSCAPE
   }
 }
 
@@ -37,5 +37,6 @@ resource "aws_s3_bucket" "bucket" {
 //=====================================================================
 
 output "bucketName" {
-  value = "${aws_s3_bucket.bucket.id}"
+  value = aws_s3_bucket.bucket.id
 }
+

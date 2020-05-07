@@ -13,22 +13,21 @@
 // limitations under the License.
 
 provider "google" {
-  credentials = "${var.SERVICEACCOUNT}"
-  project     = "${var.PROJECT}"
-  region      = "${var.REGION}"
+  credentials = var.SERVICEACCOUNT
+  project     = var.PROJECT
+  region      = var.REGION
+  version     = "=3.20"
 }
-
 
 //=====================================================================
 //= GCS bucket
 //=====================================================================
 
 resource "google_storage_bucket" "bucket" {
-  name          = "${var.BUCKETNAME}"
-  location      = "${var.REGION}"
+  name          = var.BUCKETNAME
+  location      = var.REGION
   force_destroy = true
   storage_class = "COLDLINE"
-
 }
 
 //=====================================================================
@@ -36,5 +35,6 @@ resource "google_storage_bucket" "bucket" {
 //=====================================================================
 
 output "bucketName" {
-  value = "${google_storage_bucket.bucket.name}"
+  value = google_storage_bucket.bucket.name
 }
+

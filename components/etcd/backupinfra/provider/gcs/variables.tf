@@ -14,20 +14,21 @@
 
 variable "SERVICEACCOUNT" {
   description = "ServiceAccount"
-  type        = "string"
+  type        = string
 }
 
 variable "REGION" {
   description = "Region of the GCS bucket"
-  type = "string"
+  type        = string
 }
 
 variable "BUCKETNAME" {
   description = "Name of the bucket"
-  type = "string"
+  type        = string
 }
 
 variable "PROJECT" {
   description = "GCS project"
-  type = "string"
+  type        = string
 }
+
