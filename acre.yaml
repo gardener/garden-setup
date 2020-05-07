@@ -313,6 +313,8 @@ validation:
                     - ["mapfield", "size"]
           - ["optionalfield", "dhcpDomain", "dnsdomain"]
           - ["optionalfield", "keystoneURL", "dnsdomain"]
+          - ["optionalfield", "useOctavia", ["type", "bool"]]
+          - ["optionalfield", "dnsServers", ["list", ["ip"]]]
           - - or
             - - mapfield
               - cloudprofile

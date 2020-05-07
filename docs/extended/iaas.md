@@ -231,6 +231,9 @@ landscape:
         - name: my-floating-pool-network
       loadBalancerProviders:
         - name: haproxy
+      useOctavia: false # optional
+      dnsServers: # optional
+        - "8.8.8.8"
       extensionConfig:
         machineImages:
           - name: coreos
