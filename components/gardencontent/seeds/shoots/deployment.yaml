@@ -56,6 +56,7 @@ shootconfig:
     iaas: (( read(__ctx.DIR "/../provider/" v.type "/shoot.yaml", "import") ))
     cloudprofile: (( v.cloudprofile || v.name ))
     k8sVersion: (( v.k8sVersion || imports.profiles.export.k8sVersions[cloudprofile] ))
+    defaultMachineImage: (( imports.profiles.export.machineImages[cloudprofile].name ))
     seed: (( v.seed ))
     secretbinding: (( ( "v" = { "type" = v.type, "name" = cloudprofile }, "settings" = { "project_name" = imports.project.export.project_name } ) *imports.project.export.secret_name_template ))
     config: (( v ))

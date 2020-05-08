@@ -33,6 +33,7 @@ deployment:
     - os-coreos
     - os-ubuntu
     - os-suse-jeos
+    - os-gardenlinux
     - dns-external
     - networking-calico
     - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))

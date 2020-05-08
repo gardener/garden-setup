@@ -14,8 +14,10 @@
 
 ---
 k8sVersions: (( &temporary ))
+machineImages: (( &temporary ))
 profiles: (( &temporary ))
 
 export:
   k8sVersions: (( .k8sVersions ))
+  machineImages: (( .machineImages ))
   profiles: (( .profiles ))

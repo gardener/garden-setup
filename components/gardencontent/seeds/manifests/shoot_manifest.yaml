@@ -71,7 +71,7 @@ templates:
     machine:
       type: (( elem.machine.type || cvalues.iaas.defaultMachineType ))
       image:
-        name: (( elem.machine.image.name || cvalues.type == "openstack" ? cvalues.config.machineImages[0].name :"coreos" ))
+        name: (( elem.machine.image.name || cvalues.defaultMachineImage ))
         version: (( elem.machine.image.version || cvalues.type == "openstack" ? cvalues.config.machineImages[0].versions[0].version :~~ ))
     volume:
       <<: (( cvalues.type == "openstack" ? ~~ :~ ))

@@ -26,6 +26,10 @@
           "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
           "version": "v1.5.0"
         },
+        "os-gardenlinux": {
+          "repo": "https://github.com/gardener/gardener-extension-os-gardenlinux.git",
+          "version": "v0.1.0"
+        },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
           "version": "v1.7.0"

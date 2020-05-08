@@ -26,3 +26,5 @@ kubectl: (( sum[profiles|[]|s,v|->s utilities.profile.create(v)] ))
 
 # contains a mapping from cloudprofile name to the first kubernetes version in the list of kubernetes versions for that cloudprofile
 k8sVersions: (( sum[kubectl.[*].manifests[0]|{}|s,e|-> s {e.metadata.name = e.spec.kubernetes.versions[0].version}] ))
+# contains a mapping from cloudprofile name to the first machineImage and its version in that cloudprofile
+machineImages: (( sum[kubectl.[*].manifests[0]|{}|s,e|-> s {e.metadata.name = {"name" = e.spec.machineImages[0].name, "version" = e.spec.machineImages[0].versions[0].version}}] ))

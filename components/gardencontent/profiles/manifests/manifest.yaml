@@ -30,6 +30,7 @@ defaults:
     providerConfig: (( defaults.providerspec.providerConfig || ~~ ))
     kubernetes: (( defaults.providerspec.kubernetes || defaults.kubernetes ))
     machineImages:
+      - <<: (( defaults.providerspec.machineImages || ~ ))
       - name: coreos
         versions:
         - version: 2303.3.0
@@ -39,7 +40,6 @@ defaults:
       - name: suse-jeos
         versions:
         - version: 15.1.20200406
-      - <<: (( defaults.providerspec.machineImages || ~ ))
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))
     volumeTypes:

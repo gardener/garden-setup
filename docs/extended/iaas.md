@@ -175,7 +175,7 @@ maxUnavailable: 0
 machine:
   type: <depends on iaas provider>
   image:
-    name: coreos # or first image from `machineImages` for openstack
+    name: <first image specified in the cloudprofile> # 'gardenlinux' by default
     version: <some coreos version>
 volume:
   type: <depends on iaas provider>
