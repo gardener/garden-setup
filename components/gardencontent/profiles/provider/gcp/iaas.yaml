@@ -14,10 +14,19 @@
 
 <<: (( &template ))
 
+machineImages:
+  - name: gardenlinux
+    versions:
+    - version: 11.29.2
+
 providerConfig:
   apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
   kind: CloudProfileConfig
   machineImages:
+  - name: gardenlinux
+    versions:
+    - image: projects/sap-se-gcp-gardenlinux/global/images/garden-linux-gcp-29-2
+      version: 11.29.2
   - name: coreos
     versions:
     - image: projects/coreos-cloud/global/images/coreos-stable-2303-3-0-v20191203

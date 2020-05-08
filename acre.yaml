@@ -76,6 +76,13 @@ landscape:
           chart_path: charts/gardener-extension-os-ubuntu
           image_tag: (( valid( os-ubuntu.tag ) ? os-ubuntu.tag :~~ ))
           image_repo: (( ~~ ))
+        os-gardenlinux:
+          <<: (( merge ))
+          tag: (( valid( os-gardenlinux.branch ) -or valid( os-gardenlinux.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-gardenlinux.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.os-gardenlinux.repo ))
+          chart_path: charts/gardener-extension-os-gardenlinux
+          image_tag: (( valid( os-gardenlinux.tag ) ? os-gardenlinux.tag :~~ ))
+          image_repo: (( ~~ ))
         os-suse-jeos:
           <<: (( merge ))
           tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-suse-jeos.version ))

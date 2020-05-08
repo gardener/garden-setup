@@ -104,6 +104,35 @@ extension_manifests:
         type: ubuntu
 
 ########################################
+  os-gardenlinux:
+########################################
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1beta1
+    kind: ControllerRegistration
+    metadata:
+      name: os-gardenlinux
+    spec:
+      deployment:
+        providerConfig:
+          chart: (( encoded_chart ))
+          values:
+            concurrentSyncs: 25
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                cpu: 300m
+                memory: 512Mi
+              requests:
+                cpu: 20m
+                memory: 128Mi
+        type: helm
+      resources:
+      - kind: OperatingSystemConfig
+        type: gardenlinux
+
+########################################
   os-suse-jeos:
 ########################################
     <<: (( &template ))
