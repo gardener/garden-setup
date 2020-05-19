@@ -288,7 +288,7 @@ etcd:
     credentials: (( iaas.credentials ))
 ```
 Configuration of what blob storage to use for the etcd key-value store. If your IaaS provider offers a blob storage you can use the same values for `etc.backup.region` and `etc.backup.credentials` as above for `iaas.region` and `iaas.credentials` correspondingly by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff.
-If you remove single values or the whole block, the missing values will be set to defaults derived from `landscape.iaas`. The `resourceGroup` cannot be defaulted and must be specified.
+If you remove single values or the whole block, the missing values will be set to defaults derived from `landscape.iaas`. The `resourceGroup` cannot be defaulted and must be specified. Make sure that the specified `resourceGroup` is empty and unused as deleting the cluster using `sow delete all` deletes this `resourceGroup`.
 
 | Field | Type | Description | Example&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:---------|
