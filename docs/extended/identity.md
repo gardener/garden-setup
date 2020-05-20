@@ -2,7 +2,7 @@
 
 The Gardener dashboard uses [dex](https://github.com/dexidp/dex) for identity management. Users can be specified in the `acre.yaml` file in two different ways, which are explained below. It is possible to combine both variants by specifying `landscape.identity.users` and `landscape.identity.connectors`.
 
-#### Privileges
+## Privileges
 
 The `dashboard` component deploys two `ClusterRoleBinding`s for privileges (both binding to the `ClusterRole` with the same name, respectively):
 - membership in `gardener.cloud:system:project-creation` allows a user to create projects (and thus clusters).
@@ -13,7 +13,7 @@ Of the variants below,
 - variant 1 adds each user to both groups, thus granting admin privileges
 - variant 2 doesn't add users to any group, thus granting no privileges
 
-#### Variant 1: hard-coded users
+### Variant 1: hard-coded users
 ```yaml
   identity:
     users:
@@ -25,7 +25,7 @@ Of the variants below,
 In `landscape.identity.users`, a list of hard-coded users can be specified. They will be able to login into the dashboard using the email and password. 
 
 
-#### Variant 2: OIDC connector
+### Variant 2: OIDC connector
 ```yaml
   identity:
     connectors:
@@ -35,7 +35,7 @@ In `landscape.identity.users`, a list of hard-coded users can be specified. They
         config:
           clientID: $GITHUB_CLIENT_ID
           clientSecret: $GITHUB_CLIENT_SECRET
-          redirectURI: http://example.com/oidc/callback
+          # redirectURI: http://example.com/oidc/callback
           orgs:
           - name: my-gardener-users
           teamNameField: slug
@@ -43,3 +43,14 @@ In `landscape.identity.users`, a list of hard-coded users can be specified. They
 In addition to providing a list of hard-coded users, it is also possible to connect dex to another identity provider (e.g. GitHub, SAML, ...). The request will then be forwarded and handled by the specified IDP.
 
 For a list of possible connectors and how to configure them, please check the documentation at https://github.com/dexidp/dex/tree/master/Documentation/connectors.
+
+The `redirectURI` does not have to be provided, garden-setup will automatically inject it into each connector's config if it is not there.
+
+
+## Configuration Options
+
+Apart from `users` and `connectors`, some other values can be configured in `landscape.iaas`:
+
+The issuer URL can be set via `landscape.identity.issuerURL`. The default is `https://gardener.ing.<landscape.domain>/oidc`.
+
+By setting `landscape.identity.dashboardClientSecret` or `landscape.identity.kubectlClientSecret`, the corresponding client secret(s) can be defined. By default, a random value is generated for the first deployment, which is then stored in the state so it doesn't change on redeployments.
