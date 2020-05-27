@@ -8,7 +8,7 @@ metrics_path: /probe
 scheme: http
 static_configs:
 - targets:
-  - (( .imports.identity.export.identity_url "/healthz" ))
+  - (( .imports.identity.export.issuer_url "/healthz" ))
   labels:
     purpose: availability
 relabel_configs:
