@@ -49,8 +49,8 @@ defaults:
     caBundle: (( values.config.caBundle || ~~ ))
   kubernetes:
     versions:
-      - version: 1.18.2
-      - version: 1.17.5
-      - version: 1.16.9
-      - version: 1.15.11
+      - version: 1.18.3
+      - version: 1.17.6
+      - version: 1.16.10
+      - version: 1.15.12
   providerspec: (( *values.providerspec ))
