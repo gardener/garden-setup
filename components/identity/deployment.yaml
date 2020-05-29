@@ -37,7 +37,7 @@ spec:
   <<: (( &temporary ))
 
   passwords:
-    input: (( landscape.identity.users || [] ))
+    input: (( landscape.identity.users ( landscape.identity.unprivilegedUsers || [] ) || [] ))
     value:
       <<: (( &template ))
       state: (( map[input|v|->{ "email"=v.email, "username"=v.username, "hash"=( v.hash || bcrypt(v.password) ) }] ))
