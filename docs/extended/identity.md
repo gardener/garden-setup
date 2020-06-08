@@ -35,7 +35,7 @@ In `landscape.identity.users`, a list of hard-coded users can be specified. They
         config:
           clientID: $GITHUB_CLIENT_ID
           clientSecret: $GITHUB_CLIENT_SECRET
-          # redirectURI: http://example.com/oidc/callback
+          # redirectURI: http://gardener.ing.<landscape.domain>/auth/callback
           orgs:
           - name: my-gardener-users
           teamNameField: slug
@@ -44,13 +44,15 @@ In addition to providing a list of hard-coded users, it is also possible to conn
 
 For a list of possible connectors and how to configure them, please check the documentation at https://github.com/dexidp/dex/tree/master/Documentation/connectors.
 
-The `redirectURI` does not have to be provided, garden-setup will automatically inject it into each connector's config if it is not there.
+The `redirectURI` does not have to be provided, garden-setup will automatically inject a default - see example above - into each connector's config if it is not there.
 
 
 ## Configuration Options
 
 Apart from `users` and `connectors`, some other values can be configured in `landscape.identity`:
 
-The issuer URL can be set via `landscape.identity.issuerUrl`. The default is `https://gardener.ing.<landscape.domain>/oidc`.
+The issuer URL can be set via `landscape.identity.issuerUrl`. The default is `https://gardener.ing.<landscape.domain>/oidc`. By setting `landscape.identity.useIdentityDomain` to `true`, Gardener dashboard and dex will use two different domains with the issuer URL defaulting to `https://identity.ing.<landscape.domain>/oidc` in this case.
 
 By setting `landscape.identity.dashboardClientSecret` or `landscape.identity.kubectlClientSecret`, the corresponding client secret(s) can be defined. By default, a random value is generated for the first deployment, which is then stored in the state so it doesn't change on redeployments.
+
+It is possible to create additional users with static passwords but without privileges by providing a list of users in `landscape.identity.unprivilegedUsers`. The syntax is the same as for `landscape.identity.users`. There has to be at least one entry in `lansdcape.identity.users` for this list to be evaluated.

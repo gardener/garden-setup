@@ -55,7 +55,7 @@ dashboard:
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))
       ca: (( imports.cert-controller.export.ca.crt || ~~ ))
-      redirectUri: (( settings.dashboard_url "/auth/callback" ))
+      redirectUri: (( imports.identity.export.callback_url ))
       clientSecret: (( imports.identity.export.dashboardClientSecret ))
       public:
         clientId: kube-kubectl
@@ -128,7 +128,7 @@ util:
 
 settings:
   serviceaccount_name: gardener-dashboard
-  dashboard_url: (( "https://" imports.identity.export.dashboard_dns ))
+  dashboard_url: (( .imports.identity.export.dashboard_url ))
 
 kubectl_sa:
   kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))
