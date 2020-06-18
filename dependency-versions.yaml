@@ -12,7 +12,7 @@
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.7.3"
+          "version": "v1.8.0"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
@@ -20,7 +20,7 @@
         },
         "os-suse-jeos": {
           "repo": "https://github.com/gardener/gardener-extension-os-suse-jeos.git",
-          "version": "v1.6.0"
+          "version": "v1.7.0"
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
@@ -32,11 +32,11 @@
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
-          "version": "v1.8.2"
+          "version": "v1.9.0"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
-          "version": "v1.8.3"
+          "version": "v1.8.4"
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
@@ -48,7 +48,7 @@
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
-          "version": "v1.6.4"
+          "version": "v1.6.5"
         }
       }
     },
