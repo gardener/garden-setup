@@ -26,7 +26,7 @@ landscape:
   versions:
     kube-apiserver:
       image_repo: k8s.gcr.io/hyperkube
-      image_tag: v1.15.10
+      image_tag: v1.18.3
     etcd:
       etcd:
         image_repo: quay.io/coreos/etcd
