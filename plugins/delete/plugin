@@ -36,7 +36,7 @@ prepare_delete() {
             ;&
         project)
             # annotate shoot/project
-            exec_cmd kubectl ${3:+"-n"}${3:-} annotate "$1" "$2" confirmation.gardener.cloud/deletion=true --overwrite
+            exec_cmd kubectl ${3:+"-n"} ${3:-} annotate "$1" "$2" confirmation.gardener.cloud/deletion=true --overwrite
             ;;
     esac
 }
@@ -52,7 +52,7 @@ case "$1" in
     delete)
         if [[ "$step" == "$1" ]]; then
             prepare_delete $type $name $namespace
-            exec_cmd kubectl delete ${namespace:+"-n"}${namespace:-} $type $name --ignore-not-found
+            exec_cmd kubectl ${namespace:+"-n"} ${namespace:-} delete $type $name --ignore-not-found
         else
             verbose "Nothing to do on $1."
         fi
