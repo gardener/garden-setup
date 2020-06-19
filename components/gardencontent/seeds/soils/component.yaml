@@ -16,7 +16,7 @@
 landscape: (( &temporary ))
 component:
   imports:
-    - project: gardencontent/coreproject
+    - project: gardencontent/gardenproject
     - profiles: gardencontent/profiles
     - gardener_virtual: gardener/virtual
     - gardener_runtime: gardener/extensions

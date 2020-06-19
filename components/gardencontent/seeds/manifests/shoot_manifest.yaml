@@ -4,7 +4,7 @@ metadata:
   name: (( values.values.name ))
   namespace: (( values.values.namespace ))
 spec:
-  purpose: production # 'infrastructure' is only possible for shoots in the 'garden' namespace
+  purpose: infrastructure
   secretBindingName: (( values.values.secretbinding ))
   cloudProfileName: (( values.values.cloudprofile ))
   seedName: (( values.values.seed ))
