@@ -48,6 +48,9 @@ providerconfig:
   config: (( v ))
   isBaseCluster: false
   bootstrapToken: (( bootstrapTokens[v.name] ))
+  imageVectorOverwrites:
+    imageVectorOverwrite: (( v.imageVectorOverwrite || ~~ ))
+    componentImageVectorOverwrite: (( valid( v.componentImageVectorOverwrite ) ? { "components" = sum[v.componentImageVectorOverwrite.components|[]|cs,celem|-> s { "name" = celem.name, "imageVectorOverwrite" = asyaml( celem.imageVectorOverwrite ) }] } :~~ ))
   kubeconfigs:
     virtual: (( .imports.kube_apiserver.export.kubeconfig ))
     seed: (( .imports.shoots.export.shoots[v.name].kubeconfig ))

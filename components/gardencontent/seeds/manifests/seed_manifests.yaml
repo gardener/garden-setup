@@ -106,6 +106,8 @@ gardenletSpec:
       additionalVolumeMounts: []
       env: []
       vpa: false
+      imageVectorOverwrite: (( asyaml( configValues.imageVectorOverwrites.imageVectorOverwrite ) || ~~ ))
+      componentImageVectorOverwrites: (( asyaml( configValues.imageVectorOverwrites.componentImageVectorOverwrite ) || ~~ ))
       config:
         gardenClientConnection:
           acceptContentTypes: application/json

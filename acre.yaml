@@ -390,6 +390,35 @@ validation:
       - - optionalfield
         - credentials
         - (( types.iaas[values.type].credentials ))
+      - - optionalfield
+        - imageVectorOverwrite
+        - - mapfield
+          - images
+          - - list
+            - - and
+              - ["mapfield", "name"]
+              - ["mapfield", "sourceRepository"]
+              - ["mapfield", "repository"]
+              - ["optionalfield", "tag"]
+              - ["optionalfield", "version"]
+      - - optionalfield
+        - componentImageVectorOverwrite
+        - - mapfield
+          - components
+          - - list
+            - - and
+              - ["mapfield", "name"]
+              - - mapfield
+                - imageVectorOverwrite
+                - - mapfield
+                  - images
+                  - - list
+                    - - and
+                      - ["mapfield", "name"]
+                      - ["mapfield", "sourceRepository"]
+                      - ["mapfield", "repository"]
+                      - ["optionalfield", "tag"]
+                      - ["optionalfield", "version"]
       - <<: (( types.iaas[values.type].config ))
     initial_seed:
       - <<: (( &template ))

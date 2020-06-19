@@ -210,6 +210,38 @@ This would configure two worker groups, the first one completely with default va
 Note that if you don't overwrite the name, the first worker group will be named `cpu-worker` and each following worker group will be named `worker`, followed by its index. In the above example, the second worker group would have been named `worker1`, if the name wasn't overwritten.
 
 
+## Image Vector Overwrites
+
+The gardenlet takes an optional image vector overwrite, in case the default image registry is not reachable from the seed cluster (or shouldn't be used for some other reason). The syntax for overwriting the image vectors in the acre.yaml file is as shown below.
+
+```yaml
+iaas:
+  - name: (( type ))
+    ...
+    imageVectorOverwrite:                        # optional, overwrites image vector of gardenlet
+      images:
+        - name: pause-container
+          sourceRepository: github.com/kubernetes/kubernetes/blob/master/build/pause/Dockerfile
+          repository: my-custom-image-registry/pause-amd64
+          tag: "3.0"
+          version: 1.11.x
+    componentImageVectorOverwrite:               # optional, overwrites component image vector of gardenlet
+      components:
+        - name: etcd-druid
+          imageVectorOverwrite:
+            images:
+              - name: pause-container
+                sourceRepository: github.com/kubernetes/kubernetes/blob/master/build/pause/Dockerfile
+                repository: my-custom-image-registry/pause-amd64
+                tag: "3.0"
+                version: 1.11.x
+
+```
+
+For further information regarding the image vector overwrites, have a look at the documentation [here](https://github.com/gardener/gardener/blob/master/docs/deployment/image_vector.md).
+Please note that the component image vector overwrites should be specified as YAML objects and not strings as shown in the aforementioned documentation. The conversion into strings is handled automatically by garden-setup.
+
+
 ## Overwriting Cloudprofiles
 
 By adding a `profile` node in a iaas entry, it is possible to overwrite parts of the cloudprofile. If the node is present, everything under it will be merged into the `spec` node of the cloudprofile. In this context, 'merged' means that every node that is directly under `spec` will be overwritten by what you specify here. You can add nodes that are not part of the default cloudprofile this way. Nodes on these levels that are not given here will use their defaults. A more fine-grained merge of values is not possible - the example above will not add `1.13.0` to the possible kubernetes versions in this cloudprofile, but instead set it to be the only available option.
