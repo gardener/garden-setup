@@ -344,6 +344,45 @@ extension_manifests:
         type: openstack
 
 ########################################
+  provider-vsphere:
+########################################
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1beta1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-vsphere
+    spec:
+      deployment:
+        providerConfig:
+          chart: (( encoded_chart ))
+          values:
+            config:
+              etcd:
+                storage:
+                  capacity: 25Gi
+            controllers:
+              controlplane:
+                concurrentSyncs: 50
+              infrastructure:
+                concurrentSyncs: 50
+              worker:
+                concurrentSyncs: 50
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: vsphere
+      - kind: ControlPlane
+        type: vsphere
+      - kind: Worker
+        type: vsphere
+
+########################################
   networking-calico:
 ########################################
     <<: (( &template ))

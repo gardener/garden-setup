@@ -74,7 +74,7 @@ templates:
         name: (( elem.machine.image.name || cvalues.defaultMachineImage ))
         version: (( elem.machine.image.version || cvalues.type == "openstack" ? cvalues.config.machineImages[0].versions[0].version :~~ ))
     volume:
-      <<: (( cvalues.type == "openstack" ? ~~ :~ ))
+      <<: (( cvalues.type == "openstack" -or cvalues.type == "vsphere" ? ~~ :~ ))
       type: (( cvalues.type != "openstack" ? elem.volume.type || cvalues.iaas.defaultVolumeType :~~ ))
       size: (( cvalues.type != "openstack" ? elem.volume.size || cvalues.iaas.defaultVolumeSize || "50Gi" :~~ ))
     caBundle: (( elem.caBundle || ~~ ))

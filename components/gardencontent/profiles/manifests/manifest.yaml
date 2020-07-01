@@ -19,11 +19,11 @@ metadata:
   name: (( values.name ))
 spec:
   type: (( values.type ))
-  <<: (( ( values.type == "openstack" ? defaults.openstack :defaults.spec ) values.profileoverwrite ))
+  <<: (( ( values.type == "openstack" -or values.type == "vsphere" ? defaults.custom :defaults.spec ) values.profileoverwrite ))
 
 defaults:
   <<: (( &temporary ))
-  openstack:
+  custom:
     kubernetes: (( spec.kubernetes ))
     <<: (( defaults.providerspec ))
   spec:
