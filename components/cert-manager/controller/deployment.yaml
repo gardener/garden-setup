@@ -43,7 +43,7 @@ namespace:
       kind: Namespace
       metadata:
         labels:
-          certmanager.k8s.io/disable-validation: "true"
+          cert-manager.io/disable-validation: "true"
         name: (( .namespace.name ))
 
 crds:
@@ -69,7 +69,7 @@ acme_issuer:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   manifests:
     - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :~ ))
-    - apiVersion: certmanager.k8s.io/v1alpha1
+    - apiVersion: cert-manager.io/v1alpha2
       kind: ClusterIssuer
       metadata:
         name: (( settings.issuerName ))
@@ -101,7 +101,7 @@ ca_issuer:
       data:
         tls.crt: (( base64( .settings.ca.crt ) ))
         tls.key: (( base64( .settings.ca.key ) ))
-    - apiVersion: certmanager.k8s.io/v1alpha1
+    - apiVersion: cert-manager.io/v1alpha2
       kind: ClusterIssuer
       metadata:
         name: (( settings.issuerName ))
