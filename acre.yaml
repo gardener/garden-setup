@@ -148,7 +148,7 @@ landscape:
       repo: https://github.com/gardener/terminal-controller-manager.git
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: eu.gcr.io/gardener-project/gardener/terminal-controller-manager
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"v0.9.0" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"v0.10.0" ))
     dns-controller:
       <<: (( merge ))
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
