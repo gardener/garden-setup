@@ -17,7 +17,7 @@
 machineImages:
   - name: gardenlinux
     versions:
-    - version: 27.0.0
+    - version: 27.1.0
 
 providerConfig:
   apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
@@ -26,39 +26,39 @@ providerConfig:
   - name: gardenlinux
     versions:
     - regions:
-      - ami: ami-0584b2caee8857555
+      - ami: ami-07ccc13d414bcef3c
         name: ap-northeast-1
-      - ami: ami-09a34ad7106aace88
+      - ami: ami-0b2c6a4ec631bccf9
         name: ap-northeast-2
-      - ami: ami-0d95190eb2ff5ba3b
+      - ami: ami-0ad05a1ae793d06fa
         name: ap-south-1
-      - ami: ami-0386f99e7bf70b795
+      - ami: ami-022ce9ff49b3ea2ab
         name: ap-southeast-1
-      - ami: ami-07242ec7aa1c31b06
+      - ami: ami-034a6a56910b96871
         name: ap-southeast-2
-      - ami: ami-06ca450bb4514331d
+      - ami: ami-0e4c5323dbb3e6935
         name: ca-central-1
-      - ami: ami-0a042a6b37bf4b70f
+      - ami: ami-04191efdc08e5aef6
         name: eu-central-1
-      - ami: ami-0daee2b2ab8fd4f0f
+      - ami: ami-0bb8dc8950bb9443c
         name: eu-north-1
-      - ami: ami-0da98578b7edcfcc9
+      - ami: ami-0af0155fee34b4a4e
         name: eu-west-1
-      - ami: ami-00ff2b7c0febe68a2
+      - ami: ami-0d45e63a6e0e64049
         name: eu-west-2
-      - ami: ami-05f54ee98e031d67c
+      - ami: ami-04efa08d390e6c1b8
         name: eu-west-3
-      - ami: ami-0834a9ce7bcf60754
+      - ami: ami-0973e4ec7b8cb9f4f
         name: sa-east-1
-      - ami: ami-0fd4040cce673bef2
+      - ami: ami-06ad56a1fb921d8f1
         name: us-east-1
-      - ami: ami-059955694dbbf5793
+      - ami: ami-0945b5300ed828e38
         name: us-east-2
-      - ami: ami-095d5458d84357c09
+      - ami: ami-09a83cb715f5b5637
         name: us-west-1
-      - ami: ami-087f729fc4e044757
+      - ami: ami-088e94e12398d7fce
         name: us-west-2
-      version: 27.0.0
+      version: 27.1.0
   - name: coreos
     versions:
     - regions:

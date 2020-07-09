@@ -17,7 +17,7 @@
 machineImages:
   - name: gardenlinux
     versions:
-    - version: 27.0.0
+    - version: 27.1.0
 
 providerConfig:
   apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
@@ -25,8 +25,8 @@ providerConfig:
   machineImages:
   - name: gardenlinux
     versions:
-    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-27-0
-      version: 27.0.0
+    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-27-1-0
+      version: 27.1.0
   - name: coreos
     versions:
     - image: projects/coreos-cloud/global/images/coreos-stable-2303-3-0-v20191203
