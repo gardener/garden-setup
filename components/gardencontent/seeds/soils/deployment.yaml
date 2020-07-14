@@ -31,10 +31,18 @@ pluginTemplate:
       - template
     - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
-  - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
+  - parallel:
+    - pinned:
+      - wait: wait15
+      - delete_controllerinstallations_belonging_to_seed: (( "renderedPluginSpecs[" id "].deleteControllerInstallationWorkaround" ))
+    - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
 
 iaasSeedsSoils: (( &temporary ( select[.landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"] ) ))
+
+wait15:
+  step: delete
+  seconds: 15
 
 temp:
   <<: (( &temporary ))
