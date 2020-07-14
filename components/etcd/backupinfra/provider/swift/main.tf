@@ -20,7 +20,6 @@ provider "openstack" {
   auth_url         = var.AUTH_URL
   domain_name      = var.DOMAIN_NAME
   user_domain_name = var.USER_DOMAIN_NAME
-  Version          = "=1.28"
 }
 
 //=====================================================================
