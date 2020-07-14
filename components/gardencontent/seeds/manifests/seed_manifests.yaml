@@ -210,6 +210,9 @@ pluginSpecs:
     step: delete
     type: seed
     name: (( configValues.name ))
+  deleteControllerInstallationWorkaround: #TODO remove once fixed in Gardener
+    kubeconfig: (( configValues.kubeconfigs.virtual ))
+    seed: (( configValues.name ))
   deleteBootstrapToken:
     # delete duplicate bootstrap tokens that are created during re-deployment
     kubeconfig: (( configValues.kubeconfigs.virtual ))
