@@ -37,9 +37,9 @@ defaults:
       - name: ubuntu
         versions:
         - version: 18.4.20200228
-      - name: suse-jeos
+      - name: suse-chost
         versions:
-        - version: 15.1.20200406
+        - version: 15.1.20200615
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))
     volumeTypes:

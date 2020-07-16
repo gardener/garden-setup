@@ -83,12 +83,12 @@ landscape:
           chart_path: charts/gardener-extension-os-gardenlinux
           image_tag: (( valid( os-gardenlinux.tag ) ? os-gardenlinux.tag :~~ ))
           image_repo: (( ~~ ))
-        os-suse-jeos:
+        os-suse-chost:
           <<: (( merge ))
-          tag: (( valid( os-suse-jeos.branch ) -or valid( os-suse-jeos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-suse-jeos.version ))
-          repo: (( .dependency_versions.versions.gardener.extensions.os-suse-jeos.repo ))
-          chart_path: charts/gardener-extension-os-suse-jeos
-          image_tag: (( valid( os-suse-jeos.tag ) ? os-suse-jeos.tag :~~ ))
+          tag: (( valid( os-suse-chost.branch ) -or valid( os-suse-chost.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-suse-chost.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.os-suse-chost.repo ))
+          chart_path: charts/gardener-extension-os-suse-chost
+          image_tag: (( valid( os-suse-chost.tag ) ? os-suse-chost.tag :~~ ))
           image_repo: (( ~~ ))
         provider-aws:
           <<: (( merge ))
