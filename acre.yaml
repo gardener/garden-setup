@@ -164,7 +164,7 @@ landscape:
         helm_tag: "v0.11.1"
       cert-dns-bridge:
         <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"1.0.1" ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.0.0" ))
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
         repo: "https://github.com/gardener/certificate-dns-bridge.git"
