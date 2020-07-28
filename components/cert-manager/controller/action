@@ -22,6 +22,12 @@ webhookready()
     K8S_setKubeConfig "$field_path" "$GENDIR/$field_path/kubeconfig"
 
     getRequiredValue namespace "namespace" PLUGINCONFIGJSON
+    getValue webhook "webhook" PLUGINCONFIGJSON
+
+    if [[ ${webhook:-""} == "false" ]]; then
+      debug "webhook disabled, no check needed"
+      return
+    fi
 
     debug "webhook replicas: $(kubectl -n "$namespace" get deployment cert-manager-webhook -o jsonpath='{.status.readyReplicas}')"
     while true; do

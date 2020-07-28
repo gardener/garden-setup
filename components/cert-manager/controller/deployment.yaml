@@ -55,6 +55,7 @@ crds:
 webhookready:
   kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
   namespace: (( .settings.namespace ))
+  webhook: (( .temp_webhook_state ))
 
 issuer: (( .settings.self-signed ? *ca_issuer :*acme_issuer ))
 
@@ -135,6 +136,12 @@ helm:
     serviceAccount:
       create: true
       name: (( .settings.serviceAccountName ))
+    webhook:
+      enabled: (( .temp_webhook_state ))
+    cainjector:
+      enabled: (( .temp_webhook_state ))
+
+temp_webhook_state: (( &temporary ( valid( .landscape.cert-manager.enableWebhook ) ? .landscape.cert-manager.enableWebhook :true ) ))
 
 state:
   <<: (( &state(merge none) ))
