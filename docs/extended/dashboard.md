@@ -52,6 +52,6 @@ The terminals need trusted certificates and won't work with self-signed ones. Th
 - If you have a private key for the ACME server, you can specify it at `privateKey`.
   - If `landscape.dashboard.terminals.cert.server` is not set, this field defaults to `landscape.cert-manager.privateKey`, otherwise it is empty.
 
-Due to technical limitations, some ingresses in shoot will have a `certmanager.k8s.io/cluster-issuer: ...` annotation despite the cert-manager not being deployed on the shoots. To avoid conflicts when valid certificates are needed on a shoot, you can either use the [shoot-cert-service](https://github.com/gardener/gardener-extensions/tree/master/controllers/extension-shoot-cert-service), which is deployed on the shoot, or, if you want to use your own cert-manager deployment, make sure you choose a different name for your clusterissuer(s).
+Due to technical limitations, some ingresses in shoot will have a `cert-manager.io/cluster-issuer: ...` annotation despite the cert-manager not being deployed on the shoots. To avoid conflicts when valid certificates are needed on a shoot, you can either use the [shoot-cert-service](https://github.com/gardener/gardener-extensions/tree/master/controllers/extension-shoot-cert-service), which is deployed on the shoot, or, if you want to use your own cert-manager deployment, make sure you choose a different name for your clusterissuer(s).
 
 Check out the [terminal-controller-manager](https://github.com/gardener/terminal-controller-manager) for more information on the terminals.

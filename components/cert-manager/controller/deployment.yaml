@@ -32,6 +32,7 @@ plugins:
       - helm
       - template
     - kubectl: helm
+  - webhookready
   - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
   - kubectl: issuer
 
@@ -43,13 +44,18 @@ namespace:
       kind: Namespace
       metadata:
         labels:
-          certmanager.k8s.io/disable-validation: "true"
+          cert-manager.io/disable-validation: "true"
         name: (( .namespace.name ))
 
 crds:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   files:
     - "git/repo/deploy/manifests/00-crds.yaml"
+
+webhookready:
+  kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
+  namespace: (( .settings.namespace ))
+  webhook: (( .temp_webhook_state ))
 
 issuer: (( .settings.self-signed ? *ca_issuer :*acme_issuer ))
 
@@ -69,7 +75,7 @@ acme_issuer:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   manifests:
     - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :~ ))
-    - apiVersion: certmanager.k8s.io/v1alpha1
+    - apiVersion: cert-manager.io/v1alpha2
       kind: ClusterIssuer
       metadata:
         name: (( settings.issuerName ))
@@ -101,7 +107,7 @@ ca_issuer:
       data:
         tls.crt: (( base64( .settings.ca.crt ) ))
         tls.key: (( base64( .settings.ca.key ) ))
-    - apiVersion: certmanager.k8s.io/v1alpha1
+    - apiVersion: cert-manager.io/v1alpha2
       kind: ClusterIssuer
       metadata:
         name: (( settings.issuerName ))
@@ -130,6 +136,12 @@ helm:
     serviceAccount:
       create: true
       name: (( .settings.serviceAccountName ))
+    webhook:
+      enabled: (( .temp_webhook_state ))
+    cainjector:
+      enabled: (( .temp_webhook_state ))
+
+temp_webhook_state: (( &temporary ( valid( .landscape.cert-manager.enableWebhook ) ? .landscape.cert-manager.enableWebhook :true ) ))
 
 state:
   <<: (( &state(merge none) ))
