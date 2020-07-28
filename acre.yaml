@@ -180,7 +180,7 @@ landscape:
         image_tag: v0.0.1
       grafana:
         image_repo: grafana/grafana
-        image_tag: "6.3.2"
+        image_tag: "7.0.3"
       gardener-metrics-exporter:
         <<: (( merge ))
         repo: https://github.com/gardener/gardener-metrics-exporter.git
