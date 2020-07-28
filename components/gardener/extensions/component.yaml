@@ -32,7 +32,7 @@ deployment:
   extensions:
     - os-coreos
     - os-ubuntu
-    - os-suse-jeos
+    - os-suse-chost
     - os-gardenlinux
     - dns-external
     - networking-calico

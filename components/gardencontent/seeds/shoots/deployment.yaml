@@ -37,8 +37,6 @@ domain-secret:
       metadata:
         name: (( .settings.domain_secret ))
         namespace: (( imports.project.export.project_namespace ))
-        labels:
-          garden.sapcloud.io/role: internal-domain
         annotations:
           dns.gardener.cloud/provider: (( .landscape.dns.type ))
           dns.gardener.cloud/domain: (( "seed." .landscape.domain ))

@@ -133,13 +133,13 @@ extension_manifests:
         type: gardenlinux
 
 ########################################
-  os-suse-jeos:
+  os-suse-chost:
 ########################################
     <<: (( &template ))
     apiVersion: core.gardener.cloud/v1beta1
     kind: ControllerRegistration
     metadata:
-      name: os-suse-jeos
+      name: os-suse-chost
     spec:
       deployment:
         providerConfig:
@@ -159,7 +159,7 @@ extension_manifests:
         type: helm
       resources:
       - kind: OperatingSystemConfig
-        type: suse-jeos
+        type: suse-chost
 
 ########################################
   dns-external:

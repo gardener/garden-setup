@@ -62,7 +62,7 @@ dashboard:
         clientSecret: (( imports.identity.export.kubectlClientSecret ))
     tlsSecretName: (( imports.cert.export.certificate.secret_name ))
     tls: ~
-    kubeconfig: (( format( "((! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
+    kubeconfig: (( format( "((!!! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
     podLabels:
       <<: (( ( .landscape.gardener.network-policies.active || false ) ? ~ :~~ ))
       networking.gardener.cloud/to-dns: allowed

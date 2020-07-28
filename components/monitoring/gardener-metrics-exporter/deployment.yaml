@@ -75,7 +75,7 @@ helm:
     image:
       repository: (( .landscape.versions.monitoring.gardener-metrics-exporter.image_repo || ~~ ))
       tag: (( .landscape.versions.monitoring.gardener-metrics-exporter.image_tag || ~~ ))
-    kubeconfig: (( format( "((! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
+    kubeconfig: (( format( "((!!! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
 
 settings:
   dashboard_path_prefix: (( env.GENDIR "/git/repo/dashboards/" ))

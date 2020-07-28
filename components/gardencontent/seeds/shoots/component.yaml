@@ -19,7 +19,7 @@ component:
   imports:
     - soils: gardencontent/seeds/soils
     - profiles: gardencontent/profiles
-    - project: gardencontent/coreproject
+    - project: gardencontent/gardenproject
     - kube_apiserver: kube-apiserver
     - gardener: gardener/virtual
 
