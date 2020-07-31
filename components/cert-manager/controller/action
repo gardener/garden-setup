@@ -29,14 +29,23 @@ webhookready()
       return
     fi
 
-    debug "webhook replicas: $(kubectl -n "$namespace" get deployment cert-manager-webhook -o jsonpath='{.status.readyReplicas}')"
-    while true; do
-      replicas=$(kubectl -n "$namespace" get deployment cert-manager-webhook -o jsonpath='{.status.readyReplicas}')
-      if [[ ${replicas:-0} -gt 0 ]]; then
-        break
-      fi
-      echo "waiting for cert-manager webhook to be running"
-      sleep 10
-    done
+    local starttime
+    local endtime
+    local timeout=600
+    starttime=$(date +%s)
+    endtime=$(( starttime + timeout ))
+
+    if [[ -z "$DRYRUN" ]]; then
+      debug "webhook replicas: $(kubectl -n "$namespace" get deployment cert-manager-webhook -o jsonpath='{.status.readyReplicas}')"
+      while [[ $(date +%s) -le $endtime ]]; do
+        replicas=$(kubectl -n "$namespace" get deployment cert-manager-webhook -o jsonpath='{.status.readyReplicas}')
+        if [[ ${replicas:-0} -gt 0 ]]; then
+          return
+        fi
+        echo "waiting for cert-manager webhook to be running"
+        sleep 10
+      done
+      fail "cert-manager-webhook did not become ready within $timeout seconds"
+    fi
   fi
 }
