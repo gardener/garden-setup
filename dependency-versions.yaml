@@ -16,7 +16,7 @@
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
-          "version": "v1.4.0"
+          "version": "v1.5.0"
         },
         "os-suse-chost": {
           "repo": "https://github.com/gardener/gardener-extension-os-suse-jeos.git",
