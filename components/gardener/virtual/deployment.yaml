@@ -90,6 +90,7 @@ gardener:
   values:
     global:
       apiserver:
+        clusterIdentity: (( .landscape.name ))
         kubeconfig: dummy
         caBundle: (( .state.gardener_ca.value.cert ))
         enabled: true
