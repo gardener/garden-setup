@@ -15,17 +15,6 @@
 
 source "$SOWLIB/k8s"
 
-delete_controllerinstallations_belonging_to_seed() {
-  if [[ ${1:-""} != "delete" ]]; then
-    return
-  fi
-  PLUGIN_setup delete_controllerinstallations_belonging_to_seed
-  K8S_setKubeConfig "$PLUGININSTANCE"
-  getRequiredValue seed "seed" PLUGINCONFIGJSON
-
-  exec_cmd kubectl delete --ignore-not-found controllerinstallation $(kubectl get controllerinstallation -o json | jq -r '.items[] | select(.spec.seedRef.name == "'$seed'") | .metadata.name')
-}
-
 cleanup()
 {
   if [ "$1" = "delete" ]; then
