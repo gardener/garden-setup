@@ -31,16 +31,8 @@ pluginTemplate:
       - template
     - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
-  - parallel:
-    - pinned:
-      - wait: wait15
-      - delete_controllerinstallations_belonging_to_seed: (( "renderedPluginSpecs[" id "].deleteControllerInstallationWorkaround" ))
-    - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
+  - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
-
-wait15:
-  step: delete
-  seconds: 15
 
 bootstrapTokens: (( sum[.landscape.iaas_shooted_seeds|{}|s,elem|-> s { elem.name = { "id" = rand( "a-z", 1 ) rand( "a-z0-9", 5 ), "secret" = rand( "a-z", 1 ) rand( "a-z0-9", 15 ) } }] ))
 
