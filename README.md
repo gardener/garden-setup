@@ -14,8 +14,11 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
   * Kubernetes version >= 1.11 or enable the feature gate `CustomResourceSubresources` for 1.10 clusters
   * [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/creating-a-cluster) on Google Cloud Platform (GCP)
   * [Elastic Container Service for Kubernetes (EKS)](https://docs.aws.amazon.com/eks/) or [Kubernetes Operations (kops)](https://github.com/kubernetes/kops) on Amazon Web Services (AWS)
+    * Standard EKS clusters impose some additional difficulties for deploying a Gardener, one example being the EKS networking plugin that uses the same CIDR for nodes and pods, which Gardener can't handle. We are working on an improved documentation for this case. In the meantime, it is recommended to use other means for getting the initial cluster to avoid additional efforts.
   * [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/) on Microsoft Azure
 * Your base cluster needs at least 4 nodes with a size of 8GB for each node
+  * This is only a rough estimate for the required resources, you can also use fewer or more nodes if the node size is adjusted accordingly
+  * If you don't create additional seeds, all shoots' controlplanes will be hosted on your base cluster and these minimal requirements won't hold
 * You need a service account for the virtual machine instance of your IaaS provider where your Kubernetes version runs
 * You need to have permissions to access your base cluster's private key
 * You are connected to your Kubernetes cluster (environment variable `KUBECONFIG` is set)
@@ -57,22 +60,26 @@ To install Gardener in your base cluster, a command line tool [sow](https://gith
 
     > Do not use file `acre.yaml` in directory `crop`. This file is used internally by the installation tool.
 
-1. If you created the base cluster using GKE convert your `kubeconfig` file to one that uses basic authentication with Google-specific configuration parameters:
+1. The Gardener itself, but also garden-setup can only handle kubeconfigs with standard authentication methods (basic auth, token, ...). Authentication methods that require a third party tool, e.g. the `aws` or `gcloud` CLI, are not supported. 
 
-    ```bash
-    sow convertkubeconfig
-    ```
-    When asked for credentials, enter the ones that the GKE dashboard shows when clicking on `show credentials`.
+    - If you created the base cluster using GKE, you can convert your `kubeconfig` file to one that uses basic authentication by using the `sow convertkubeconfig` command:
 
-    `sow` will replace the file specified in `landscape.cluster.kubeconfig` of your `acre.yaml` file by a kubeconfig file that uses basic authentication.
+      ```bash
+      sow convertkubeconfig
+      ```
+      When asked for credentials, enter the ones that the GKE dashboard shows when clicking on `show credentials`.
 
-    The basic autentication comes disabled by default starting on Kubernetes 1.12. [See more detais here](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#restrict_authn_methods)
+      `sow` will replace the file specified in `landscape.cluster.kubeconfig` of your `acre.yaml` file by a kubeconfig file that uses basic authentication.
 
-    In case it is disabled on your cluster, the following command can be used to enable it:
+      The basic autentication is disabled by default starting with Kubernetes `1.12`, [see more details here](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#restrict_authn_methods).
 
-    ```bash
-    gcloud container clusters update <your-cluster> --enable-basic-auth
-    ```
+      In case it is disabled on your cluster, the following command can be used to enable it:
+
+      ```bash
+      gcloud container clusters update <your-cluster> --enable-basic-auth
+      ```
+    
+    - If you are not using GKE and don't know how to get a kubeconfig with standard authentication, you can also create a serviceaccount, grant it cluster-admin privileges by adding it to the corresponding `ClusterRoleBinding`, and construct a kubeconfig using that serviceaccount's token.
 
 1. Open a second terminal window which current directory is your `landscape` directory. Set the `KUBECONFIG` environment variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
 
@@ -107,7 +114,7 @@ More information: [Most Important Commands and Directories](#most-important-comm
 
 This file will be evaluated using `spiff`, a dynamic templating language for yaml files. For example, this simplifies the specification of field values that are used multiple times in the yaml file. For more information, see the [spiff repository](https://github.com/mandelsoft/spiff/blob/master/README.md).
 
-> Please note that, for the sake of clarity, not all configuration options are listed in this readme. Instead, the more advanced configuration options have been moved into a set of additional documentation files. You can access these files via their [index](docs/extended/README.md) and each page is usually linked in its corresponding section below.
+> Please note that, for the sake of clarity, not all configuration options are listed in this readme. Instead, the more advanced configuration options have been moved into a set of additional documentation files. You can access these pages via their [index](docs/extended/README.md) and they are usually linked in their corresponding sections below.
 
 <pre>
 landscape:
