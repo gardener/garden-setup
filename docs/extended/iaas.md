@@ -272,6 +272,30 @@ By adding a `profile` node in a iaas entry, it is possible to overwrite parts of
 This is incompatible with the `cloudprofile` field explained above (because no cloudprofile will be created in this case).
 
 
+## Seed Configuration
+
+```yaml
+iaas:
+  - name: ...
+    ...
+    seedConfig:                               # optional
+      backup:                                 # optional
+        active: <true|false>                  # optional, defaults to true
+      providerConfig:                         # optional
+        foo: bar
+        ...
+```
+The `seedConfig` node can be added to any iaas entry that has mode `seed` or `soil` (including shooted seed entries).
+
+### Seed Backup
+
+By default, garden-setup configures Gardener to store snapshots of the etcds in shoot controlplanes in a blob store. To disable storing of backups, set `seedConfig.backup.active` to `false`.
+
+### Seed Provider Config
+
+While usually not needed, in some cases it can be necessary to provide a certain seed with some provider-specific configuration. Everything that is provided under `seedConfig.providerConfig` of a iaas entry will be rendered into `spec.provider.providerConfig` of the corresponding seed. A map structure is expected.
+
+
 ## Openstack
 
 Since every Openstack installation is different, configuring the setup for Openstack needs some additional configuration. See below for an example configuration:

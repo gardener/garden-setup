@@ -397,6 +397,17 @@ validation:
       swift:
         credentials: (( iaas.openstack.credentials ))
         config: (( return_true ))
+    backup_config:
+      - <<: (( &template ))
+      - and
+      - - mapfield
+        - type
+        - - valueset
+          - (( keys( types.etcd_backup ) ))
+      - ["mapfield", "region"]
+      - - mapfield
+        - credentials
+        - (( types.etcd_backup[values.type].credentials ))
     dns:
       google-clouddns:
         credentials: (( iaas.gcp.credentials ))
@@ -493,6 +504,15 @@ validation:
       - - mapfield
         - credentials
         - (( types.iaas[values.type].credentials ))
+      - - optionalfield
+        - seedConfig
+        - - and
+          - - optionalfield
+            - backup
+            - - and
+              - ["optionalfield", "active", ["type", "bool"]]
+              - (( defined( values.seedConfig.backup.type ) -or defined( values.seedConfig.backup.credentials ) -or defined( values.seedConfig.backup.region ) ? validation.instantiate_validator( values.seedConfig.backup, validation.types.backup_config ) :~~ ))
+          - ["optionalfield", "providerConfig", "map"]
     seed:
       - <<: (( &template ))
       - and
@@ -506,6 +526,14 @@ validation:
           - - mapfield
             - networks
             - (( validation.networks ))
+      - - optionalfield
+        - seedConfig
+        - - and
+          - - optionalfield
+            - backup
+            - - and
+              - ["optionalfield", "active", ["type", "bool"]]
+          - ["optionalfield", "providerConfig", "map"]
     cloudprofile: (( &template( return_true ) ))
     shooted_seed:
       - <<: (( &template ))
@@ -525,6 +553,14 @@ validation:
         - - mapfield
           - networks
           - (( validation.networks types.iaas[values.type].networks ))
+      - - optionalfield
+        - seedConfig
+        - - and
+          - - optionalfield
+            - backup
+            - - and
+              - ["optionalfield", "active", ["type", "bool"]]
+          - ["optionalfield", "providerConfig", "map"]
   dashboard_validator:
     - and
     - - optionalfield
@@ -613,11 +649,7 @@ validation:
     shooted_seed: (( map[validation.flatten( select[select[landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"]|elem|-> valid( elem.seeds )].[*].seeds ) |entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic), validation.instantiate_validator(entry, iaas_entry_validators.shooted_seed) )] ))
   ##### landscape.etcd
   etcd:
-    backup:
-      type: (( validate( landscape.etcd.backup, ["mapfield", "type", ["valueset", keys( types.etcd_backup )]] ) ))
-      region: (( validate( landscape.etcd.backup, ["mapfield", "region"] ) ))
-      provider_config: (( validate( landscape.etcd.backup, types.etcd_backup[landscape.etcd.backup.type].config ) ))
-      credentials: (( validate( landscape.etcd.backup, ["mapfield", "credentials", types.etcd_backup[landscape.etcd.backup.type].credentials] ) ))
+    backup: (( validate( landscape.etcd.backup, [ "and", validation.instantiate_validator( landscape.etcd.backup, validation.types.backup_config ), validation.types.etcd_backup[landscape.etcd.backup.type].config ] ) ))
   ##### landscape.dns
   dns:
     type: (( validate( landscape.dns, ["mapfield", "type", ["valueset", keys( types.dns )]] ) ))
