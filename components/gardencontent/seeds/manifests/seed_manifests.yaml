@@ -171,7 +171,7 @@ gardenletSpec:
         logLevel: info
         kubernetesLogLevel: 0
         featureGates:
-          Logging: false # TODO temporary workaround, revert once fixed in Gardener
+          Logging: true
         seedConfig:
           metadata:
             name: (( configValues.name ))
