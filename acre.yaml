@@ -497,10 +497,8 @@ validation:
                       - ["optionalfield", "tag"]
                       - ["optionalfield", "version"]
       - <<: (( types.iaas[values.type].config ))
-    initial_seed:
+    seeds_common:
       - <<: (( &template ))
-      - and
-      - ["mapfield", "mode", ["valueset", ["seed", "soil"]]]
       - - mapfield
         - credentials
         - (( types.iaas[values.type].credentials ))
@@ -513,12 +511,14 @@ validation:
               - ["optionalfield", "active", ["type", "bool"]]
               - (( defined( values.seedConfig.backup.type ) -or defined( values.seedConfig.backup.credentials ) -or defined( values.seedConfig.backup.region ) ? validation.instantiate_validator( values.seedConfig.backup, validation.types.backup_config ) :~~ ))
           - ["optionalfield", "providerConfig", "map"]
+    initial_seed:
+      - <<: (( &template ))
+      - and
+      - ["mapfield", "mode", ["valueset", ["seed", "soil"]]]
+      - <<: (( *validation.iaas_entry_validators.seeds_common ))
     seed:
       - <<: (( &template ))
       - and
-      - - mapfield
-        - credentials
-        - (( types.iaas[values.type].credentials ))
       - - mapfield
         - cluster
         - - and
@@ -526,14 +526,7 @@ validation:
           - - mapfield
             - networks
             - (( validation.networks ))
-      - - optionalfield
-        - seedConfig
-        - - and
-          - - optionalfield
-            - backup
-            - - and
-              - ["optionalfield", "active", ["type", "bool"]]
-          - ["optionalfield", "providerConfig", "map"]
+      - <<: (( *validation.iaas_entry_validators.seeds_common ))
     cloudprofile: (( &template( return_true ) ))
     shooted_seed:
       - <<: (( &template ))
@@ -546,21 +539,11 @@ validation:
         - mode
         - ["valueset", ["seed", "soil"]]
       - - mapfield
-        - credentials
-        - (( types.iaas[values.type].credentials ))
-      - - mapfield
         - cluster
         - - mapfield
           - networks
           - (( validation.networks types.iaas[values.type].networks ))
-      - - optionalfield
-        - seedConfig
-        - - and
-          - - optionalfield
-            - backup
-            - - and
-              - ["optionalfield", "active", ["type", "bool"]]
-          - ["optionalfield", "providerConfig", "map"]
+      - <<: (( *validation.iaas_entry_validators.seeds_common ))
   dashboard_validator:
     - and
     - - optionalfield
