@@ -2,7 +2,7 @@
 
 ```yaml
 iaas:
-  - name: (( type ))                             # name of the seed
+  - name: (( type ))                             # name of the seed (can be chosen, must be unique among iaas entries)
     type: <gcp|aws|azure|openstack>              # iaas provider
     mode: <seed|soil>                            # optional, defaults to 'seed'
     cloudprofile: <name of cloudprofile>         # optional, will deploy its own cloudprofile if not specified
@@ -278,10 +278,13 @@ This is incompatible with the `cloudprofile` field explained above (because no c
 iaas:
   - name: ...
     ...
-    seedConfig:                               # optional
-      backup:                                 # optional
-        active: <true|false>                  # optional, defaults to true
-      providerConfig:                         # optional
+    seedConfig:                     # optional
+      backup:                       # optional
+        active: <true|false>        # optional, defaults to true
+        type: <gcs|s3|abs|...>      # optional (type, region, and credentials must be provided together)
+        region: <region>            # optional (type, region, and credentials must be provided together)
+        credentials:                # optional (type, region, and credentials must be provided together)
+      providerConfig:               # optional
         foo: bar
         ...
 ```
@@ -290,6 +293,9 @@ The `seedConfig` node can be added to any iaas entry that has mode `seed` or `so
 ### Seed Backup
 
 By default, garden-setup configures Gardener to store snapshots of the etcds in shoot controlplanes in a blob store. To disable storing of backups, set `seedConfig.backup.active` to `false`.
+
+Usually, the seed credentials - the ones provided in the corresponding iaas entry - are also used for backing up the etcds of the shoots. If this is not desired, it is possible to configure a different blobstore for the backup. The configuration is basically the same as for `landscape.etcd.backup`, but if one of `type`, `region`, or `credentials` is specified - indicating not to use the default blobstore - no defaulting is done and the other two have to be specified too.
+If `active` is set to `false`, this configuration has no effect.
 
 ### Seed Provider Config
 
@@ -375,3 +381,85 @@ landscape:
           - version: 2303.3.0            # B
 ```
 Each entry in `machineImages` must have a corresponding entry in `extensionConfig.machineImages` with matching `name` and `version`.
+
+
+## vSphere
+
+Similarly to Openstack, vSphere also needs additional configuration, see the example below:
+
+```yaml
+  iaas:
+    - name: vsphere                                                           # can be chosen, must be unique among iaas entries
+      type: vsphere
+      loadBalancerConfig:
+        classes:
+          - ipPoolName: <IP pool name>                                        # name of the NSX-T IP pool (must be set for the default load balancer class)
+            # tcpAppProfileName: <tcp profile name>                             # optional, profile name of the load balaner profile for TCP
+            # udpAppProfileName: <udp profile name>                             # optional, profile name of the load balaner profile for UDP
+            name: default
+        size: <SMALL|MEDIUM|LARGE>
+      defaultClassStoragePolicyName: <default storage class policy name>      # name of vSphere storage policy to use for the 'default-class' storage class
+      dnsServers:                                                             # list of IPs
+      - <dns server IP>
+      folder: <folder>                                                        # vSphere folder name for storing the cloned machine VMs
+      machineImageDefinitions:
+        - name: <machine image name> # A
+          versions:
+            - path: <image path>
+              version: <image version> # B
+              # guestId: <guest id>                                             # optional, overwrites the guestId of the VM template
+      machineTypeOptions:                                                     # optional
+        - name: std-02-reserved # C
+          memoryReservationLockedToMax: true                                  # optional, flag to reserve all guest OS memory (no swapping in ESXi host)
+          extraConfig: {}                                                     # optional, allows to specify additional VM options (e.g. sched.swap.vmxSwapEnabled=false to disable the VMX process swap file)
+      namePrefix: <name prefix>                                               # name prefix for naming NSX-T resources
+      # csiResizerDisabled: false                                               # optional
+      # failureDomainLabels:                                                    # optional, tag categories used for regions and zones
+      #   region: <region>
+      #   zone: <zone>
+      regionDefinitions:                                                      # regions and zones topology
+        - datacenter: <datacenter name>                                       # optional, name of the vSphere data center (data center can either be defined at region or zone level)
+          edgeCluster: <edge cluster>
+          logicalTier0Router: <local tier 0 router>
+          name: <region name>
+          nsxtHost: <nsxt host IP>
+          # nsxtInsecureSSL: true                                               # optional, insecure HTTPS is allowed for NSXTHost
+          nsxtRemoteAuth: true                                                # NSX-T uses remote authentication (authentication done through the vIDM)?
+          snatIPPool: <snat IP pool name>
+          transportZone: <transport zone name>
+          vsphereHost: <vsphere host IP>
+          vsphereInsecureSSL: true                                            # insecure HTTPS is allowed for VsphereHost?
+          # datastore: <datastore name>                                         # optional, vSphere datastore to store the cloned machine VM (either datastore or datastoreCluster must be specified at region or zones level)
+          # datastoreCluster: <datastore cluster name>                          # vSphere  datastore cluster to store the cloned machine VM (either datastore or datastoreCluster must be specified at region or zones level)
+          # caFile: <certificate>                                               # optional, CA file to be trusted when connecting to vCenter (if not set, the node's CA certificates will be used)
+          # thumbprint: <thumbprint>                                            # optional, vCenter certificate thumbprint
+          zones:
+            - datastore: NFS                                                  # vSphere datastore to store the cloned machine VM (either datastore or datastoreCluster must be specified at region or zones level)
+              # datacenter: <datacenter name>                                     # optional, name of the vSphere data center (data center can either be defined at region or zone level)
+              # computeCluster: <compute cluster>                                 # name of the vSphere compute cluster (either computeCluster or resourcePool or hostSystem must be specified)
+              # hostSystem: <host system>                                         # name of the vSphere host system (either computeCluster or resourcePool or hostSystem must be specified)
+              resourcePool: <resource pool>                                       # name of the vSphere resource pool (either computeCluster or resourcePool or hostSystem must be specified)
+              name: <zone name>
+              # switchUuid: 00 11 22 33 44 55 66 77-88 99 00 aa bb cc dd ee       # UUID of the virtual distributed switch the network is assigned to (only needed if there are multiple vds)
+      machineTypes:
+        - cpu: "2"
+          gpu: "0"
+          memory: 8Gi
+          name: std-02
+          usable: true
+        - cpu: "4"
+          gpu: "0"
+          memory: 16Gi
+          name: std-04
+          usable: true
+        - cpu: "2"
+          gpu: "0"
+          memory: 8Gi
+          name: std-02-reserved # C
+          usable: true
+      machineImages:
+        - name: <machine image name> # A
+          versions:
+            - version: <machine image version> # B
+```
+> Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
