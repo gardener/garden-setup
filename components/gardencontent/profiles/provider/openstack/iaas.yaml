@@ -24,7 +24,7 @@ providerConfig:
     floatingPools: (( values.config.floatingPools ))
     loadBalancerProviders: (( values.config.loadBalancerProviders ))
     dhcpDomain: (( values.config.dhcpDomain || ~~ ))
-  machineImages: (( values.config.extensionConfig.machineImages ))
+  machineImages: (( values.config.machineImageDefinitions ))
 
 machineImages: (( values.config.machineImages ))
 

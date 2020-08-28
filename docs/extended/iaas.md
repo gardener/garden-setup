@@ -319,23 +319,22 @@ landscape:
       useOctavia: false # optional
       dnsServers: # optional
         - "8.8.8.8"
-      extensionConfig:
-        machineImages:
-          - name: coreos
-            versions:
-              - image: coreos-2303.3.0
-                version: 2303.3.0
-              - image: coreos-2135.6.0
-                version: 2135.6.0
-          - name: ubuntu
-            versions:
-              - image: ubuntu-18.04
-                version: 18.4.20190617
-      machineImages:
-        - name: coreos
+      machineImageDefinitions:
+        - name: coreos # A
           versions:
-          - version: 2303.3.0
-          - version: 2135.6.0
+            - image: coreos-2303.3.0
+              version: 2303.3.0 # B
+            - image: coreos-2135.6.0
+              version: 2135.6.0 # C
+        - name: ubuntu
+          versions:
+            - image: ubuntu-18.04
+              version: 18.4.20190617
+      machineImages:
+        - name: coreos # A
+          versions:
+          - version: 2303.3.0 # B
+          - version: 2135.6.0 # C
         - name: ubuntu
           versions:
           - version: 18.4.20190617
@@ -360,27 +359,9 @@ landscape:
             size: 40Gi
 ```
 
-All of the Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml), with `extensionConfig.machineImages` providing the values for `spec.providerConfig.machineImages`.
+All of the Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml), with `machineImageDefinitions` providing the values for `spec.providerConfig.machineImages`.
 
-### Openstack 'extensionConfig'
-
-The `extensionConfig` node in the openstack iaas configuration is somewhat special - some values there have to match other values of your configuration, otherwise you won't be able to create shoots:
-```yaml
-landscape:
-  iaas:
-      ...
-      extensionConfig:
-        machineImages:
-          - name: coreos                 # A
-            versions:
-              - image: coreos-2303.3.0
-                version: 2303.3.0        # B
-      machineImages:
-        - name: coreos                   # A
-          versions:
-          - version: 2303.3.0            # B
-```
-Each entry in `machineImages` must have a corresponding entry in `extensionConfig.machineImages` with matching `name` and `version`.
+> Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff++ templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
 
 
 ## vSphere
@@ -462,4 +443,4 @@ Similarly to Openstack, vSphere also needs additional configuration, see the exa
           versions:
             - version: <machine image version> # B
 ```
-> Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
+> Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff++ templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
