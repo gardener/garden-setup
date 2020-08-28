@@ -275,6 +275,9 @@ validation:
   ### VALIDATOR DEFINITIONS ###
   types:
     iaas:
+      # <type>.config: validated for each iaas entry
+      # <type>.profileConfig: validated for each iaas entry that results in a cloudprofile (= doesn't have a 'cloudprofile' field referencing another iaas entry)
+      # <type>.networks: validated for shooted seed iaas entries
       gcp:
         credentials:
           - mapfield
@@ -282,6 +285,8 @@ validation:
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
+        profileConfig:
+          - (( return_true ))
         networks:
           - ["mapfield", "workers", ["cidr"]]
       aws:
@@ -292,6 +297,8 @@ validation:
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
+        profileConfig:
+          - (( return_true ))
         networks:
           - ["mapfield", "internal", ["cidr"]]
           - ["mapfield", "public", ["cidr"]]
@@ -305,6 +312,8 @@ validation:
           - ["mapfield", "tenantID"]
         config:
           - ["mapfield", "region"]
+        profileConfig:
+          - (( return_true ))
         networks:
           - ["mapfield", "workers", ["cidr"]]
           - ["mapfield", "vnet", ["or", ["mapfield", "name"], ["mapfield", "cidr", ["cidr"]]]]
@@ -318,6 +327,60 @@ validation:
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
+        profileConfig:
+          - and
+          - - mapfield
+            - loadBalancerConfig
+            - - and
+              - - mapfield
+                - size
+                - ["valueset", ["SMALL", "MEDIUM", "LARGE"]]
+              - - mapfield
+                - classes
+                - - list
+                  - ["mapfield", "name"]
+          - ["mapfield", "defaultClassStoragePolicyName"]
+          - ["mapfield", "dnsServers", ["list", ["ip"]]]
+          - ["mapfield", "folder"]
+          - - mapfield
+            - machineImageDefinitions
+            - - list
+              - - and
+                - ["mapfield", "name"]
+                - - mapfield
+                  - versions
+                  - - list
+                    - - and
+                      - ["mapfield", "guestId"]
+                      - ["mapfield", "path"]
+                      - ["mapfield", "version"]
+          - - optionalfield
+            - machineTypeOptions
+            - - list
+              - - and
+                - ["mapfield", "name"]
+                - ["mapfield", "memoryReservationLockedToMax", ["type", "bool"]]
+                - ["optionalfield", "extraConfig", "map"]
+          - - mapfield
+            - regionDefinitions
+            - - list
+              - - and
+                - ["mapfield", "name"]
+                - ["mapfield", "vsphereHost"]
+                - ["mapfield", "vsphereInsecureSSL", ["type", "bool"]]
+                - ["mapfield", "nsxtHost"]
+                - ["mapfield", "nsxtInsecureSSL", ["type", "bool"]]
+                - ["optionalfield", "nsxtRemoteAuth", ["type", "bool"]]
+                - ["mapfield", "transportZone"]
+                - ["mapfield", "logicalTier0Router"]
+                - ["mapfield", "edgeCluster"]
+                - ["mapfield", "snatIPPool"]
+          - ["optionalfield", "csiResizerDisabled", ["type", "bool"]]
+          - - optionalfield
+            - failureDomainLabels
+            - - and
+              - ["mapfield", "region"]
+              - ["mapfield", "zone"]
         networks: []
       openstack:
         credentials:
@@ -328,6 +391,10 @@ validation:
           - ["mapfield", "password"]
           - ["mapfield", "authURL"]
         config:
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
+        profileConfig:
+          - and
           - - mapfield
             - floatingPools
             - - list
@@ -364,24 +431,19 @@ validation:
           - ["optionalfield", "keystoneURL", "dnsdomain"]
           - ["optionalfield", "useOctavia", ["type", "bool"]]
           - ["optionalfield", "dnsServers", ["list", ["ip"]]]
-          - - or
+          - - mapfield
+            - extensionConfig
             - - mapfield
-              - cloudprofile
-            - - mapfield
-              - extensionConfig
-              - - mapfield
-                - machineImages
-                - - list
-                  - - and
-                    - ["mapfield", "name"]
-                    - - mapfield
-                      - versions
-                      - - list
-                        - - and
-                          - ["mapfield", "image"]
-                          - ["mapfield", "version"]
-          - ["mapfield", "region"]
-          - ["mapfield", "zones", ["list"]]
+              - machineImages
+              - - list
+                - - and
+                  - ["mapfield", "name"]
+                  - - mapfield
+                    - versions
+                    - - list
+                      - - and
+                        - ["mapfield", "image"]
+                        - ["mapfield", "version"]
         networks:
           - ["mapfield", "workers", ["cidr"]]
     etcd_backup:
@@ -527,7 +589,9 @@ validation:
             - networks
             - (( validation.networks ))
       - <<: (( *validation.iaas_entry_validators.seeds_common ))
-    cloudprofile: (( &template( return_true ) ))
+    cloudprofile:
+      - <<: (( &template ))
+      - <<: (( types.iaas[values.type].profileConfig ))
     shooted_seed:
       - <<: (( &template ))
       - and
@@ -628,7 +692,7 @@ validation:
     basic: (( map[landscape.iaas|entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic) )] ))
     initial_seed: (( validate( landscape.iaas[0], validation.instantiate_validator(landscape.iaas[0], iaas_entry_validators.initial_seed) ) ))
     seed_soil: (( map[select[landscape.iaas.[1..]|elem|-> elem.mode == "seed" -or elem.mode == "soil"]|id,entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.seed) )] ))
-    cloudprofile: (( map[select[landscape.iaas.[1..]|elem|-> elem.mode == "profile" -or elem.mode == "cloudprofile"]|id,entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.cloudprofile) )] ))
+    cloudprofile: (( map[select[landscape.iaas landscape.iaas_shooted_seeds|elem|-> ! valid( elem.cloudprofile )]|id,entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.cloudprofile) )] ))
     shooted_seed: (( map[validation.flatten( select[select[landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"]|elem|-> valid( elem.seeds )].[*].seeds ) |entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic), validation.instantiate_validator(entry, iaas_entry_validators.shooted_seed) )] ))
   ##### landscape.etcd
   etcd:
