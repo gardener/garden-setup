@@ -137,6 +137,18 @@ landscape:
       repo: (( .dependency_versions.versions.dashboard.core.repo ))
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dashboard.core.version ))
       image_tag: (( valid( tag ) ? tag :~~ ))
+    ingress-controller:
+      <<: (( merge ))
+      repo: https://github.com/kubernetes/ingress-nginx.git
+      image_tag: (( valid( tag ) ? tag :~~ ))
+      image_repo: eu.gcr.io/k8s-artifacts-prod/ingress-nginx/controller
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"v0.34.1" ))
+    nginx-ingress-k8s-backend:
+      <<: (( merge ))
+      repo: https://github.com/gardener/ingress-default-backend.git
+      image_tag: (( valid( tag ) ? tag :~~ ))
+      image_repo: eu.gcr.io/gardener-project/gardener/ingress-default-backend
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"0.8.0" ))
     identity:
       <<: (( merge ))
       repo: (( .dependency_versions.versions.dashboard.identity.repo ))
