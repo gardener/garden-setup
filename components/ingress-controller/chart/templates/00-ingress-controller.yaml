@@ -50,6 +50,7 @@ rules:
       - watch
   - apiGroups:
       - extensions
+      - "networking.k8s.io"
     resources:
       - ingresses
     verbs:
@@ -169,7 +170,7 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
         - name: {{ .Values.name }}
-          image: quay.io/kubernetes-ingress-controller/{{ .Values.name }}:0.20.0
+          image: {{ index .Values.images "nginx-ingress" }}
           imagePullPolicy: "IfNotPresent"
           args:
           - /{{ .Values.name }}
@@ -187,8 +188,8 @@ spec:
                 - ALL
                 add:
                 - NET_BIND_SERVICE
-            # www-data -> 33
-            runAsUser: 33
+            # www-data -> 101
+            runAsUser: 101
           env:
           - name: POD_NAME
             valueFrom:
@@ -302,7 +303,7 @@ spec:
         fsGroup: 65534
       containers:
         - name: nginx-ingress-k8s-backend
-          image: eu.gcr.io/gardener-project/gardener/ingress-default-backend:0.7.0
+          image: {{ index .Values.images "ingress-k8s-backend" }}
           imagePullPolicy: "IfNotPresent"
           args:
           livenessProbe:
