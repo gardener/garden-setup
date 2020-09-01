@@ -440,7 +440,14 @@ validation:
                   - versions
                   - - list
                     - - and
-                      - ["mapfield", "image"]
+                      - - or
+                        - ["mapfield", "image"]
+                        - - mapfield
+                          - regions
+                          - - list
+                            - - and
+                              - ["mapfield", "name"]
+                              - ["mapfield", "id"]
                       - ["mapfield", "version"]
         networks:
           - ["mapfield", "workers", ["cidr"]]
