@@ -46,6 +46,10 @@
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
           "version": "v1.9.0"
         },
+        "provider-alicloud": {
+          "repo": "https://github.com/gardener/gardener-extension-provider-alicloud.git",
+          "version": "v1.16.1"
+        },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
           "version": "v1.7.1"

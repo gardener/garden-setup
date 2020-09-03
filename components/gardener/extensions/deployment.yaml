@@ -232,6 +232,38 @@ extension_manifests:
         type: aws
 
 ########################################
+  provider-alicloud:
+########################################
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1beta1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-alicloud
+    spec:
+      deployment:
+        providerConfig:
+          chart: (( encoded_chart ))
+          values:
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+        - kind: Infrastructure
+          type: alicloud
+        - kind: ControlPlane
+          type: alicloud
+        - kind: Worker
+          type: alicloud
+        - kind: BackupBucket
+          type: alicloud
+        - kind: BackupEntry
+          type: alicloud
+
+########################################
   provider-azure:
 ########################################
     <<: (( &template ))
