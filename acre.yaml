@@ -403,6 +403,15 @@ validation:
         - credentials
         - (( types.iaas[values.type].credentials ))
       - - optionalfield
+        - featureGates
+        - - and
+          - ["optionalfield", "Logging", ["type", "bool"]]
+          - ["optionalfield", "HVPA", ["type", "bool"]]
+          - ["optionalfield", "HVPAForShootedSeed", ["type", "bool"]]
+          - ["optionalfield", "ManagedIstio", ["type", "bool"]]
+          - ["optionalfield", "APIServerSNI", ["type", "bool"]]
+          - ["optionalfield", "KonnectivityTunnel", ["type", "bool"]]
+      - - optionalfield
         - imageVectorOverwrite
         - - mapfield
           - images
