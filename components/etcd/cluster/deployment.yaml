@@ -43,6 +43,7 @@ spec:
     s3: S3
     abs: ABS
     swift: Swift
+    oss: OSS
 
   server:
     commonName: garden:etcd-server:etcd

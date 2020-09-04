@@ -12,5 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-blockCIDRs:
-- 100.100.100.200/32
+env:
+  - name: "ALICLOUD_ENDPOINT"
+    value: (( config.region ))
+  - name: "ALICLOUD_ACCESS_KEY_ID"
+    value: (( config.credentials.accessKeyID ))
+  - name: "ALICLOUD_ACCESS_KEY_SECRET"
+    value: (( config.credentials.accessKeySecret ))
+
+volumeMounts: []

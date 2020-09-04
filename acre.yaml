@@ -244,6 +244,7 @@ backup_type_mapping:
   aws: s3
   azure: abs
   openstack: swift
+  alicloud: oss
 
 
 ######################
@@ -288,7 +289,7 @@ validation:
         credentials:
           - and
           - ["mapfield", "accessKeyID"]
-          - ["mapfield", "secretAccessKey"]
+          - ["mapfield", "accessKeySecret"]
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
@@ -385,6 +386,9 @@ validation:
         config: ["mapfield", "resourceGroup"]
       swift:
         credentials: (( iaas.openstack.credentials ))
+        config: (( return_true ))
+      oss:
+        credentials: (( iaas.alicloud.credentials ))
         config: (( return_true ))
     dns:
       google-clouddns:

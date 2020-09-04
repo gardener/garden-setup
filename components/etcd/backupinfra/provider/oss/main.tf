@@ -16,7 +16,7 @@ provider "alicloud" {
   access_key = var.ACCESS_KEY
   secret_key = var.SECRET_KEY
   region     = var.REGION
-  version    = "=2.60"
+  version    = "=1.95.0"
 }
 
 //=====================================================================
@@ -37,6 +37,6 @@ resource "alicloud_oss_bucket" "bucket" {
 //=====================================================================
 
 output "bucketName" {
-  value = aws_s3_bucket.bucket.id
+  value = alicloud_oss_bucket.bucket.id
 }
 
