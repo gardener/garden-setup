@@ -170,8 +170,9 @@ gardenletSpec:
           resourceLock: configmaps
         logLevel: info
         kubernetesLogLevel: 0
-        featureGates:
-          Logging: true
+        featureGates: 
+          <<: (( configValues.config.featureGates || {} ))
+          Logging: (( configValues.config.featureGates.Logging || true ))
         seedConfig:
           metadata:
             name: (( configValues.name ))
