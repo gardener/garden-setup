@@ -6,6 +6,8 @@ iaas:
     type: <gcp|aws|azure|openstack>              # iaas provider
     mode: <seed|soil>                            # optional, defaults to 'seed'
     cloudprofile: <name of cloudprofile>         # optional, will deploy its own cloudprofile if not specified
+    featureGates:                                # optional, set featureGates for the gardenlet. Logging is enable by default
+      Logging: true
     shootDefaultNetworks:                        # optional, overwrites defaults of .spec.networks.shootDefaults in the seed manifest
       pods: 100.96.0.0/11
       services: 100.64.0.0/13
@@ -71,6 +73,12 @@ If `mode` is set to `inactive`, the complete entry will be removed before the se
 
 By default - that means there is no `cloudprofile` field - each seed will be deployed with its own cloudprofile. However, you might want to have additional seeds (e.g. to support different regions) without having additional cloudprofiles. If the entry has mode `seed` or `soil` and has a `cloudprofile` node, it will not deploy a cloudprofile and instead use the one with the given name.
 Cloudprofiles are created first, before any seed. Thus, entries of `landscape.iaas` (as well as nested entries for shooted seeds, see below) can reference cloudprofiles defined by any other entry, independent of the position of either entry.
+
+
+## The 'featureGates' Field
+
+The `featureGates` field enable/disable featureGates for the gardenlet. By default - that means there is no `featureGates` field or no value for `featureGates.Logging` - the `Logging` featureGate will be enabled. To diasble the `Logging` featureGate you have to set the `featureGates.Logging` to `false`.
+A list of available featureGates you can find in the gardener documentation - [Feature Gates in Gardener](https://github.com/gardener/gardener/blob/master/docs/deployment/feature_gates.md)
 
 
 ## Shooted Seeds
