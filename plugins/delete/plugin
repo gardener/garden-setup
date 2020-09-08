@@ -41,9 +41,52 @@ prepare_delete() {
     esac
 }
 
+# evaluates customFields field, if existing
+# - either 'name' or 'customFields' has to be specified
+# - 'name' is the name of the resource that should be deleted
+# - if the name is not known, 'customFields' can be used instead
+# - customFields contains a list of {key: ..., value: ...} objects, mapping a json path to an expected value
+# - all resources of the specified type will be filtered using these mappings
+# - it is expected that exactly one resource matches
+#   - if more than one resource matches, the delete will fail (deleting multiple resources at once is currently not possible)
+#   - if no resource matches, an info will be printed and the delete will exit (without error)
+evaluate_custom_fields() {
+    if [[ -n ${name:-""} ]]; then
+        debug "ignoring custom fields, as name is already set"
+        return
+    fi
+    if [[ ${#customFields[@]} -eq 0 ]]; then
+        fail "neither 'name' nor 'customFields' is set"
+    fi
+    # name is not set but customFields is set
+
+    local cmd="kubectl ${namespace:+"-n"} ${namespace:-} get $type -o json"
+    local items
+    local jsonexp='.items[]'
+    if [ -n "$VERBOSE" ]; then
+        echo "$cmd"
+    fi
+    items=$(eval $(echo "$cmd"))
+    for filter in ${customFields[@]}; do
+        jsonexp=${jsonexp}' | select('$(jq -r '.key' <<< $filter)' == "'$(jq -r '.value' <<< $filter)'")'
+    done
+    debug "filter expression: '$jsonexp'"
+    filtered_items=$(jq -r '[ '"${jsonexp}"' | .metadata.name ]' <<< $items)
+    len=$(jq -r 'length' <<< $filtered_items)
+    if [[ $len -lt 1 ]]; then
+        info "No resource found for filter expression 'jq -r [ ${jsonexp} ]'"
+        return
+    fi
+    if [[ $len -gt 1 ]]; then
+        fail "More than one resource found for filter expression 'jq -r [ ${jsonexp} ]'"
+    fi
+    name=$(jq -r '.[0]' <<< $filtered_items)
+}
+
 K8S_setKubeConfig "$PLUGININSTANCE" "$dir/kubeconfig"
 getRequiredValue type "type" PLUGINCONFIGJSON
-getRequiredValue name "name" PLUGINCONFIGJSON
+getValue name "name" PLUGINCONFIGJSON
+getJSONList customFields "customFields" PLUGINCONFIGJSON
 getRequiredValue step "step" PLUGINCONFIGJSON
 getValue namespace "namespace" PLUGINCONFIGJSON
 
@@ -51,6 +94,13 @@ case "$1" in
     deploy) ;&
     delete)
         if [[ "$step" == "$1" ]]; then
+            evaluate_custom_fields
+            if [[ -z ${name:-""} ]]; then
+                # should only be the case if customFields was used and didn't match any resources
+                # thus the resource that should be deleted is expected to be already gone
+                debug "no resource name given, aborting delete"
+                return
+            fi
             prepare_delete $type $name $namespace
             exec_cmd kubectl ${namespace:+"-n"} ${namespace:-} delete $type $name --ignore-not-found
         else
