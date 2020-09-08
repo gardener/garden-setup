@@ -32,6 +32,7 @@ pluginTemplate:
     - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
+  - delete: (( "renderedPluginSpecs[" id "].deleteBackupBucket" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
 
 bootstrapTokens: (( sum[.landscape.iaas_shooted_seeds|{}|s,elem|-> s { elem.name = { "id" = rand( "a-z", 1 ) rand( "a-z0-9", 5 ), "secret" = rand( "a-z", 1 ) rand( "a-z0-9", 15 ) } }] ))

@@ -206,6 +206,15 @@ pluginSpecs:
   seedReady:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     seed: (( configValues.name ))
+  deleteBackupBucket:
+    kubeconfig: (( configValues.kubeconfigs.virtual ))
+    step: delete
+    type: backupbucket
+    customFields:
+      - key: .spec.seedName
+        value: (( configValues.name ))
+      - key: .spec.seedName
+        value: (( configValues.name ))
   deleteSeed:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     step: delete

@@ -32,6 +32,7 @@ pluginTemplate:
     - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
+  - delete: (( "renderedPluginSpecs[" id "].deleteBackupBucket" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
 
 iaasSeedsSoils: (( &temporary ( select[.landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"] ) ))
