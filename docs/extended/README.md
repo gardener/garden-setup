@@ -8,4 +8,5 @@ This document links to all advanced configuration pages for a better overview.
 - [landscape.cert-manager](cert-manager.md)
 - [landscape.monitoring](monitoring.md)
 - [landscape.identity](identity.md)
+- [landscape.extensionsValuesOverwrite](extensionsValuesOverwrite.md)
 - [installation handler](installation-handler.md)

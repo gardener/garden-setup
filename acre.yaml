@@ -223,7 +223,18 @@ landscape:
     <<: (( merge ))
     type: (( .dns_type_mapping[iaas[0].type] ))
     credentials: (( iaas[0].credentials ))
-
+  extensionsValuesOverwrite:
+    dns-external:
+    os-coreos:
+    os-ubuntu:
+    os-gardenlinux:
+    os-suse-chost:
+    provider-aws:
+    provider-gcp:
+    provider-azure:
+    provider-openstack:
+    networking-calico:
+    shoot-cert-service: 
 dns_type_mapping:
   <<: (( &temporary ))
   gcp: google-clouddns
@@ -558,7 +569,19 @@ validation:
     selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-manager.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
     acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-manager.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
     email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-manager.email' or 'landscape.identity.users[0].email' needs to be set"] ))
-
+  extensionsValuesOverwrite_validator:
+    - and
+    - ["mapfield", "dns-external"]
+    - ["mapfield", "os-coreos"]
+    - ["mapfield", "os-ubuntu"]
+    - ["mapfield", "os-gardenlinux"]
+    - ["mapfield", "os-suse-chost"]
+    - ["mapfield", "provider-aws"]
+    - ["mapfield", "provider-gcp"]
+    - ["mapfield", "provider-azure"]
+    - ["mapfield", "provider-openstack"]
+    - ["mapfield", "networking-calico"]
+    - ["mapfield", "shoot-cert-service"]
 
 
   ### VALIDATIONS ###
@@ -596,6 +619,8 @@ validation:
   dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator, validation.dashboard_no_seed_strategy_validator, [validation.dashboard_terminals_validator, landscape.cert-manager] ) :~~ ))
   ##### landscape.certmanager
   cert-manager: (( validate( landscape.cert-manager, validation.cert-manager_validators.basic, [validation.cert-manager_validators.email, landscape.identity] ) ))
+  ##### landscape.extensionsValuesOverwrite
+  extensionsValuesOverwrite: (( defined( landscape.extensionsValuesOverwrite ) ? validate( landscape.extensionsValuesOverwrite, validation.extensionsValuesOverwrite_validator ) :~~ ))
   ##### landscape.identity TODO
   identity:
     userspec:
