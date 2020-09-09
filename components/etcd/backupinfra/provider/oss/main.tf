@@ -24,8 +24,12 @@ provider "alicloud" {
 //=====================================================================
 
 resource "alicloud_oss_bucket" "bucket" {
-  bucket        = var.BUCKETNAME
-  location      = var.REGION
+  bucket_prefix = var.BUCKETNAME
+  region        = var.REGION
+  force_destroy = true
+  tags = {
+    Name = var.LANDSCAPE
+  }
 }
 
 //=====================================================================
