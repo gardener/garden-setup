@@ -14,7 +14,7 @@
 
 env:
   - name: "ALICLOUD_ENDPOINT"
-    value: (( "oss-" config.region ".aliyuncs.com" ))
+    value: (( "oss-" config.region "-internal.aliyuncs.com" ))
   - name: "ALICLOUD_ACCESS_KEY_ID"
     value: (( config.credentials.accessKeyID ))
   - name: "ALICLOUD_ACCESS_KEY_SECRET"
