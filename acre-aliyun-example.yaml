@@ -251,7 +251,7 @@ landscape:
         image_tag: "v3.3.13"
       backup_restore:
         image_repo: vesoft/etcdbrctl
-        image_tag: "0.6.1"
+        image_tag: "0.7.1"
     gardener:
       repo: "https://github.com/gardener/gardener.git"
       tag: v1.9.0
