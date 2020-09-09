@@ -19,17 +19,17 @@ provider "alicloud" {
   version    = "=1.95.0"
 }
 
+resource "random_id" "storage_account_name_unique" {
+  byte_length = 8
+}
+
 //=====================================================================
-//= S3 bucket
+//= OSS bucket
 //=====================================================================
 
-resource "alicloud_oss_bucket" "bucket" {
-  bucket_prefix = var.BUCKETNAME
-  region        = var.REGION
-  force_destroy = true
-  tags = {
-    Name = var.LANDSCAPE
-  }
+resource "alicloud_oss_bucket" "bucket-acl" {
+  bucket        = var.BUCKETNAME
+  acl           = "private"
 }
 
 //=====================================================================
@@ -37,6 +37,6 @@ resource "alicloud_oss_bucket" "bucket" {
 //=====================================================================
 
 output "bucketName" {
-  value = alicloud_oss_bucket.bucket.id
+  value = var.BUCKETNAME
 }
 
