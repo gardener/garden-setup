@@ -19,7 +19,7 @@ provider "alicloud" {
   version    = "=1.95.0"
 }
 
-resource "random_id" "storage_account_name_unique" {
+resource "random_id" "storage_account" {
   byte_length = 8
 }
 
@@ -28,7 +28,7 @@ resource "random_id" "storage_account_name_unique" {
 //=====================================================================
 
 resource "alicloud_oss_bucket" "bucket-acl" {
-  bucket        = var.BUCKETNAME
+  bucket        = "${var.BUCKETNAME}${random_id.storage_account.hex}"
   acl           = "private"
 }
 
@@ -37,6 +37,5 @@ resource "alicloud_oss_bucket" "bucket-acl" {
 //=====================================================================
 
 output "bucketName" {
-  value = var.BUCKETNAME
+  value = "${var.BUCKETNAME}${random_id.storage_account.hex}"
 }
-
