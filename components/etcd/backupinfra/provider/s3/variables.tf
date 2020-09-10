@@ -13,17 +13,17 @@
 // limitations under the License.
 
 variable "ACCESS_KEY" {
-  description = "OSS Access Key"
+  description = "AWS Access Key"
   type        = string
 }
 
 variable "SECRET_KEY" {
-  description = "OSS Secret Key"
+  description = "AWS Secret Key"
   type        = string
 }
 
 variable "REGION" {
-  description = "Region of the Oss bucket"
+  description = "Region of the AWS bucket"
   type        = string
 }
 
