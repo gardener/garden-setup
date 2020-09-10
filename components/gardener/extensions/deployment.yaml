@@ -382,3 +382,25 @@ extension_manifests:
       - kind: Extension
         type: shoot-cert-service
         globallyEnabled: true
+
+########################################
+  shoot-dns-service:
+########################################
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1beta1
+    kind: ControllerRegistration
+    metadata:
+      name: shoot-dns-service
+    spec:
+      deployment:
+        type: helm
+        providerConfig:
+          chart: (( encoded_chart ))
+          values:
+            image:
+              repo: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+      resources:
+      - kind: Extension
+        type: shoot-dns-service
+        globallyEnabled: true
