@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-provider "alicloud" {
+provider "aws" {
   access_key = var.ACCESS_KEY
   secret_key = var.SECRET_KEY
   region     = var.REGION
@@ -23,7 +23,7 @@ provider "alicloud" {
 //= S3 bucket
 //=====================================================================
 
-resource "alicloud_oss_bucket" "bucket" {
+resource "aws_s3_bucket" "bucket" {
   bucket_prefix = var.BUCKETNAME
   region        = var.REGION
   force_destroy = true

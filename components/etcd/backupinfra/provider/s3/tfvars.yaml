@@ -13,5 +13,5 @@
 # limitations under the License.
 
 ACCESS_KEY: (( config.credentials.accessKeyID ))
-SECRET_KEY: (( config.credentials.accessKeySecret ))
+SECRET_KEY: (( config.credentials.secretAccessKey ))
 LANDSCAPE: (( landscape.name ))
