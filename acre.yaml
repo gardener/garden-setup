@@ -406,6 +406,9 @@ validation:
           - <<: (( iaas.openstack.credentials ))
           - ["mapfield", "region"]
         config: (( return_true ))
+      alicloud-dns:
+        credentials: (( iaas.alicloud.credentials ))
+        config: (( return_true ))
       cloudflare-dns:
         credentials:
           - mapfield
