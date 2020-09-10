@@ -49,6 +49,10 @@
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
           "version": "v1.7.1"
+        },
+        "shoot-dns-service": {
+          "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
+          "version": "v1.5.1"
         }
       }
     },
