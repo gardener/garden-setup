@@ -1,6 +1,6 @@
 landscape:
   name: gardener
-  domain: riesen.nebulacloudservice.com
+  domain: #your demain here
   cluster:
     kubeconfig: ./kubeconfig # optional
     networks:
@@ -231,7 +231,7 @@ landscape:
             tag: "v0.1.0"
 
   dns:
-    type: aws-route53
+    type: alicloud-dns
     credentials:
       # your credentials here
 
