@@ -33,11 +33,11 @@ providerConfig:
       version: 18.4.20200228
   - name: coreos
     versions:
-      - regions:
-        - id: coreos_2345_3.0_x64_30G_alibase_20200519.vhd
-          name: cn-hangzhou
-        - id: coreos_2345_3.0_x64_30G_alibase_20200519.vhd
-          name: cn-shanghai
+    - regions:
+      - id: coreos_2345_3.0_x64_30G_alibase_20200519.vhd
+        name: cn-hangzhou
+      - id: coreos_2345_3.0_x64_30G_alibase_20200519.vhd
+        name: cn-shanghai
       version: 2303.3.0
 
 machineTypes:
