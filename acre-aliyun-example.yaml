@@ -33,6 +33,7 @@ landscape:
           - name: gardener-seed-admission-controller
             sourceRepository: github.com/gardener/gardener
             repository: vesoft/seed-admission-controller
+            tag: v1.9.0
           - name: pause-container
             sourceRepository: github.com/kubernetes/kubernetes/blob/master/build/pause/Dockerfile
             repository: vesoft/pause-amd64
