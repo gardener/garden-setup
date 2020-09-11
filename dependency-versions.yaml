@@ -64,6 +64,12 @@
       "identity": {
         "repo": "(( dashboard.core.repo ))",
         "version": "(( dashboard.core.version ))"
+      },
+      "terminals": {
+        "terminal-controller-manager": {
+          "repo": "https://github.com/gardener/terminal-controller-manager.git",
+          "version": "v0.13.0"
+        }
       }
     }
   }
