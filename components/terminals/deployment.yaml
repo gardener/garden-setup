@@ -14,7 +14,8 @@ plugins:
     - create_kubeconfig_secret: kcfg_sa # create secret manifest for sa kubeconfig (directly overrides checked-out charts)
     - kubectl: kubectl_admin_kubeconfig # apply admin kubeconfig secret
   - pinned:
-    - kustomize-edit: kustomize.runtime.edit
+    - kustomize-edit: kustomize.runtime.edit-tcm-image
+    - (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? { "kustomize-edit" = "kustomize.runtime.edit-rbac-image" } :~~ ))
     - kustomize: kustomize.runtime.render
     - kubectl: kustomize.runtime.apply
 
@@ -74,15 +75,22 @@ kustomize:
       files:
         - (( env.GENDIR "/kustomize.virtual.render/manifest.yaml" ))
   runtime:
-    edit:
+    edit-tcm-image:
       path: (( .settings.repo_path ))
       kustomization: "config/manager"
       args:
         - set
         - image
         - (( "controller=" .landscape.versions.terminal-controller-manager.image_repo ":" ( .landscape.versions.terminal-controller-manager.image_tag || "latest" ) ))
+    edit-rbac-image:
+      path: (( env.GENDIR "/kustomize.runtime.edit-tcm-image/edit" ))
+      kustomization: "config/default"
+      args:
+        - set
+        - image
+        - (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? ( "gcr.io/kubebuilder/kube-rbac-proxy=" .landscape.versions.terminal-kube-rbac-proxy.image_repo ":" ( .landscape.versions.terminal-kube-rbac-proxy.image_tag || "latest" ) ) :~~ ))
     render:
-      path: (( env.GENDIR "/kustomize.runtime.edit/edit" ))
+      path: (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? env.GENDIR "/kustomize.runtime.edit-rbac-image/edit" :env.GENDIR "/kustomize.runtime.edit-tcm-image/edit" ))
       kustomization: "config/overlay/multi-cluster/runtime"
     apply:
       kubeconfig: (( .landscape.clusters[0].kubeconfig ))

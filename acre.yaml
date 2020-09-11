@@ -164,10 +164,15 @@ landscape:
       commit: (( dashboard.commit || ~~ ))
     terminal-controller-manager:
       <<: (( merge ))
-      repo: https://github.com/gardener/terminal-controller-manager.git
+      repo: (( .dependency_versions.versions.dashboard.terminals.terminal-controller-manager.repo ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dashboard.terminals.terminal-controller-manager.version ))
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: eu.gcr.io/gardener-project/gardener/terminal-controller-manager
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"v0.13.0" ))
+    terminal-kube-rbac-proxy:
+      <<: (( merge ))
+      # to overwrite:
+      # set image_repo here (mandatory)
+      # set image_tag here (defaults to latest, if image_repo is set and image_tag is not given)
     dns-controller:
       <<: (( merge ))
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
