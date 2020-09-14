@@ -33,7 +33,7 @@ kubectl:
 spec_template:
   <<: (( &temporary &template ))
   version: (( &temporary( .landscape.versions.gardener.extensions[n] ) ))
-  valuesOverwrite: (( &temporary( valid(.landscape.gardener.extensions[n].valueOverwrites) ? .landscape.gardener.extensions[n].valueOverwrites :nil ) ))
+  valuesOverwrite: (( &temporary( valid(.landscape.gardener.extensions[n].valueOverwrites) ? .landscape.gardener.extensions[n].valueOverwrites :~ ) ))
   manifest: (( *.extension_manifests[n] ))
   encoded_chart: (( &temporary( .extension_controllers_func.chartConfig( paths.prefix, paths.suffix ) ) ))
   paths:

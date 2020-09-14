@@ -18,7 +18,7 @@ The `landscape.gardener.extensions` is optional.
 Whatever is specified in `landscape.gardener.extensions.<extensionName>.valueOverwrites` will be given directly to the helm values for the extension, so you can overwrite the corresponding default values. 
 Some values are set by default (take a look in the [deployment.yaml](../../components/gardener/extensions/deployment.yaml)), this values can also overwrite with the `landscape.gardener.extensions.<extensionName>.valueOverwrites`.
 
-The following extentions are availibe in `landscape.gardener.extensions`:
+The following extensions are availibe in `landscape.gardener.extensions`:
 
 - dns-external: [values.yaml](https://github.com/gardener/gardener-extension-shoot-dns-service/blob/master/charts/gardener-extension-shoot-dns-service/values.yaml)
 - os-coreos: [values.yaml](https://github.com/gardener/gardener-extension-os-coreos/blob/master/charts/gardener-extension-os-coreos/values.yaml)
