@@ -28,7 +28,7 @@ identity_version: (( &temporary ( .landscape.versions.identity ) ))
 
 injector:
   <<: (( &temporary ))
-  injectall: (( |list|->map[list|c|->merge(c, _.stub)] ))
+  injectall: (( |list|->map[list|c|-> valid( c.config.redirectURI ) ? c :merge(c, _.stub)] ))
   stub:
     config:
       redirectURI: (( &inject(settings.callbackUrl) ))
