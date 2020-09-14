@@ -44,7 +44,7 @@ spec:
 
 settings:
   issuerUrl: (( .landscape.identity.issuerUrl || "https://" identity_dns "/oidc" ))
-  callbackUrl: (( dashboardUrl "/auth/callback" ))
+  callbackUrl: (( dashboardUrl "/oidc/callback" ))
   dashboardUrl: (( "https://" dashboard_dns ))
   identityUrl: (( "https://" identity_dns ))
   identity_dns: (( ( .landscape.identity.useIdentityDomain || false ) ? "identity." .imports.ingress-controller.export.ingress_domain :dashboard_dns ))
