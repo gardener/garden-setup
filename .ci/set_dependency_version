@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 dep_file = Path(__file__).resolve().parent.parent / 'dependency-versions.yaml'
+sow_version_file = Path(__file__).resolve().parent.parent / 'SOW_VERSION'
 dep_name = os.getenv('DEPENDENCY_NAME')
 dep_version = os.getenv('DEPENDENCY_VERSION')
 
@@ -17,3 +18,6 @@ if dep_name == 'github.com/gardener/gardener':
     
     with dep_file.open(mode='w') as f:
         f.write(json.dumps(deps, indent=2))
+elif dep_name == 'github.com/gardener/sow':
+    with sow_version_file.open(mode='w') as f:
+        f.write(dep_version)

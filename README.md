@@ -25,10 +25,13 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
   * [Viewing kubeconfig (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#viewing_kubeconfig)
   * [Create a kubeconfig for Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html)
   * [Use Azure role-based access controls to define access to the Kubernetes configuration file in Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/control-kubeconfig-access)
+* You need to have the [Vertical Pod Autoscaler (VPA)](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler) installed. 
 
 ## Procedure
 
 To install Gardener in your base cluster, a command line tool [sow](https://github.com/gardener/sow) is used. It depends on other tools to be installed. To make it simple, we have created a Docker image that already contains `sow` and all required tools. To execute `sow` you call a [wrapper script](https://github.com/gardener/sow/tree/master/docker/bin) which starts `sow` in a Docker container (Docker will download the image from [eu.gcr.io/gardener-project/sow](http://eu.gcr.io/gardener-project/sow) if it is not available locally yet). Docker executes the sow command with the given arguments, and mounts parts of your file system into that container so that `sow` can read configuration files for the installation of Gardener components, and can persist the state of your installation. After `sow`'s execution Docker removes the container again.
+
+Which version of `sow` is compatible with this version of garden-setup is specified in the [SOW_VERSION](SOW_VERSION) file. Other versions might work too, but especially older versions of `sow` are probably incompatible with newer versions of garden-setup.
 
 1. Clone the `sow` repository and add the path to our [wrapper script](https://github.com/gardener/sow/tree/master/docker/bin) to your `PATH` variable so you can call `sow` on the command line.
 

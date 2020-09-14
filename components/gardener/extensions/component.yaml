@@ -37,6 +37,7 @@ deployment:
     - dns-external
     - networking-calico
     - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))
-    - (( ( .landscape.dashboard.terminals.active || false ) ? "shoot-cert-service" :~~ ))
+    - (( ( .landscape.dashboard.terminals.active || .landscape.gardener.extensions.shoot-cert-service.active || false ) ? "shoot-cert-service" :~~ ))
+    - (( ( .landscape.gardener.extensions.shoot-dns-service.active || false ) ? "shoot-dns-service" :~~ ))
 
 infrastructures: (( &temporary ( uniq( sum[.landscape.iaas|[]|s,e|-> s e.type ( e.seeds.[*].type || ~ ) ] ) ) ))
