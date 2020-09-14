@@ -2,10 +2,13 @@
 
 SOURCE_PATH="$(readlink -f "$(dirname ${0})/..")"
 GARDENER_VERSION_PATH="$SOURCE_PATH/dependency-versions.yaml"
+SOW_VERSION=$(cat "$SOURCE_PATH/SOW_VERSION")
 
 ${ADD_DEPENDENCIES_CMD} \
     --component-dependencies \
     '{"name": "github.com/gardener/gardener", "version": "'$(cat $GARDENER_VERSION_PATH | jq -r ".versions.gardener.core.version")'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/sow", "version": "'$SOW_VERSION'"}' \
     --container-image-dependencies \
-    '{"image_reference": "eu.gcr.io/gardener-project/sow:1.3.0", "version": "1.3.0", "name": "eu.gcr.io/gardener-project/sow"}'
+    '{"image_reference": "eu.gcr.io/gardener-project/sow:'$SOW_VERSION'", "version": "'$SOW_VERSION'", "name": "eu.gcr.io/gardener-project/sow"}'
 cp "${BASE_DEFINITION_PATH}" "${COMPONENT_DESCRIPTOR_PATH}"
