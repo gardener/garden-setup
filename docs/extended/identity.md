@@ -35,7 +35,7 @@ In `landscape.identity.users`, a list of hard-coded users can be specified. They
         config:
           clientID: $GITHUB_CLIENT_ID
           clientSecret: $GITHUB_CLIENT_SECRET
-          # redirectURI: http://gardener.ing.<landscape.domain>/auth/callback
+          # redirectURI: https://gardener.ing.<landscape.domain>/oidc/callback
           orgs:
           - name: my-gardener-users
           teamNameField: slug
