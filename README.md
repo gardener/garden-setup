@@ -31,6 +31,8 @@ Gardener uses Kubernetes to manage Kubernetes clusters. This documentation descr
 
 To install Gardener in your base cluster, a command line tool [sow](https://github.com/gardener/sow) is used. It depends on other tools to be installed. To make it simple, we have created a Docker image that already contains `sow` and all required tools. To execute `sow` you call a [wrapper script](https://github.com/gardener/sow/tree/master/docker/bin) which starts `sow` in a Docker container (Docker will download the image from [eu.gcr.io/gardener-project/sow](http://eu.gcr.io/gardener-project/sow) if it is not available locally yet). Docker executes the sow command with the given arguments, and mounts parts of your file system into that container so that `sow` can read configuration files for the installation of Gardener components, and can persist the state of your installation. After `sow`'s execution Docker removes the container again.
 
+Which version of `sow` is compatible with this version of garden-setup is specified in the [SOW_VERSION](SOW_VERSION) file. Other versions might work too, but especially older versions of `sow` are probably incompatible with newer versions of garden-setup.
+
 1. Clone the `sow` repository and add the path to our [wrapper script](https://github.com/gardener/sow/tree/master/docker/bin) to your `PATH` variable so you can call `sow` on the command line.
 
     ```bash
