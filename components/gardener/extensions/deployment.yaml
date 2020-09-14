@@ -33,6 +33,7 @@ kubectl:
 spec_template:
   <<: (( &temporary &template ))
   version: (( &temporary( .landscape.versions.gardener.extensions[n] ) ))
+  valuesOverwrite: (( &temporary( valid(.landscape.gardener.extensions[n].valueOverwrites) ? .landscape.gardener.extensions[n].valueOverwrites :~ ) ))
   manifest: (( *.extension_manifests[n] ))
   encoded_chart: (( &temporary( .extension_controllers_func.chartConfig( paths.prefix, paths.suffix ) ) ))
   paths:
@@ -58,6 +59,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             concurrentSyncs: 25
             image:
               repo: (( version.image_repo || ~~ ))
@@ -87,6 +89,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             concurrentSyncs: 25
             image:
               repo: (( version.image_repo || ~~ ))
@@ -116,6 +119,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             concurrentSyncs: 25
             image:
               repo: (( version.image_repo || ~~ ))
@@ -145,6 +149,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             concurrentSyncs: 20
             image:
               repo: (( version.image_repo || ~~ ))
@@ -188,6 +193,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             createCRDs: false
             fullnameOverride: seed-dns-controller-manager
             image:
@@ -212,6 +218,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
@@ -244,6 +251,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
@@ -276,6 +284,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
@@ -308,6 +317,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             controllers:
               infrastructure:
                 concurrentSyncs: 50
@@ -346,6 +356,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
@@ -368,6 +379,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             certificateConfig:
               defaultIssuer:
                 name: garden
@@ -397,6 +409,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
