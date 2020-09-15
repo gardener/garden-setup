@@ -244,6 +244,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            imageVectorOverwrite: (( version.imageVectorOverwrite || ~~ ))
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
@@ -381,6 +382,7 @@ extension_manifests:
             image:
               repo: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
+            imageVectorOverwrite: (( version.imageVectorOverwrite || ~~ ))
         type: helm
       resources:
       - kind: Network

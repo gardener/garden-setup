@@ -323,12 +323,125 @@ landscape:
           chart_path: charts/gardener-extension-provider-alicloud
           image_tag: v1.16.1
           image_repo: vesoft/provider-alicloud
+          imageVectorOverwrite: |
+            images:
+            - name: terraformer
+              sourceRepository: github.com/gardener/terraformer
+              repository: vesoft/terraformer
+              tag: "v1.3.0"
+            - name: machine-controller-manager
+              sourceRepository: github.com/gardener/machine-controller-manager
+              repository: vesoft/machine-controller-manager
+              tag: "v0.33.0"
+            - name: alicloud-controller-manager
+              sourceRepository: https://github.com/kubernetes/cloud-provider-alibaba-cloud
+              repository: vesoft/alibaba-cloud-controller-manager
+              tag: "1.9.8"
+            - name: csi-attacher
+              sourceRepository: https://github.com/kubernetes-csi/external-attacher
+              repository: quay.io/k8scsi/csi-attacher
+              tag: v1.0.1
+              targetVersion: 1.13.x
+            - name: csi-attacher
+              sourceRepository: https://github.com/kubernetes-csi/external-attacher
+              repository: quay.io/k8scsi/csi-attacher
+              tag: v2.2.0
+              targetVersion: ">= 1.14"
+            - name: csi-node-driver-registrar
+              sourceRepository: https://github.com/kubernetes-csi/node-driver-registrar
+              repository: quay.io/k8scsi/csi-node-driver-registrar
+              tag: v1.0.1
+              targetVersion: 1.13.x
+            - name: csi-node-driver-registrar
+              sourceRepository: https://github.com/kubernetes-csi/node-driver-registrar
+              repository: quay.io/k8scsi/csi-node-driver-registrar
+              tag: v1.3.0
+              targetVersion: ">= 1.14"
+            - name: csi-provisioner
+              sourceRepository: https://github.com/kubernetes-csi/external-provisioner
+              repository: quay.io/k8scsi/csi-provisioner
+              tag: v1.0.2
+              targetVersion: 1.13.x
+            - name: csi-provisioner
+              sourceRepository: https://github.com/kubernetes-csi/external-provisioner
+              repository: quay.io/k8scsi/csi-provisioner
+              tag: v1.6.0
+              targetVersion: ">= 1.14"
+            - name: csi-snapshotter
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/csi-snapshotter
+              tag: v1.0.2
+              targetVersion: 1.13.x
+            - name: csi-snapshotter
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/csi-snapshotter
+              tag: v1.2.2
+              targetVersion: ">= 1.14"
+            - name: csi-snapshotter
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/csi-snapshotter
+              tag: v2.1.1
+              targetVersion: ">= 1.17"
+            - name: csi-snapshot-controller
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/snapshot-controller
+              tag: v2.1.1
+            - name: csi-resizer
+              sourceRepository: https://github.com/kubernetes-csi/external-resizer
+              repository: quay.io/k8scsi/csi-resizer
+              tag: v0.3.0
+              targetVersion: 1.13.x
+            - name: csi-resizer
+              sourceRepository: https://github.com/kubernetes-csi/external-resizer
+              repository: quay.io/k8scsi/csi-resizer
+              tag: v0.5.0
+              targetVersion: ">= 1.14"
+            - name: csi-plugin-alicloud
+              sourceRepository: https://github.com/AliyunContainerService/csi-plugin
+              repository: vesoft/csi-plugin-alicloud
+              tag: v1.13.2-3
+              targetVersion: 1.13.x
+            - name: csi-plugin-alicloud
+              sourceRepository: https://github.com/AliyunContainerService/csi-plugin
+              repository: vesoft/csi-plugin-alicloud
+              tag: v1.14.8-41 # the upstream image is using non-semver tags which is causing issues in the CI/CD pipelines of Gardener, thus the image is replicated and tagged with semver version in another registry (registry.cn-hangzhou.aliyuncs.com/acs/csi-plugin:v1.14.8.41-e97402d1-aliyun).
+              targetVersion: ">= 1.14"
         networking-calico:
           tag: v1.9.1
           repo: https://github.com/gardener/gardener-extension-networking-calico.git
           chart_path: charts/gardener-extension-networking-calico
           image_tag: v1.9.1
           image_repo: vesoft/networking-calico
+          imageVectorOverwrite: |
+            images:
+            - name: calico-node
+              sourceRepository: github.com/projectcalico/calico
+              repository: quay.io/calico/node
+              tag: v3.13.4
+            - name: calico-cni
+              sourceRepository: github.com/projectcalico/cni-plugin
+              repository: quay.io/calico/cni
+              tag: v3.13.4
+            - name: calico-typha
+              sourceRepository: github.com/projectcalico/typha
+              repository: quay.io/calico/typha
+              tag: v3.13.4
+            - name: calico-kube-controllers
+              sourceRepository: github.com/projectcalico/kube-controllers
+              repository: quay.io/calico/kube-controllers
+              tag: v3.13.4
+            - name: calico-podtodaemon-flex
+              sourceRepository: github.com/projectcalico/pod2daemon
+              repository: quay.io/calico/pod2daemon-flexvol
+              tag: v3.13.4
+            - name: calico-cpa
+              sourceRepository: github.com/kubernetes-sigs/cluster-proportional-autoscaler
+              repository: vesoft/cluster-proportional-autoscaler-amd64
+              tag: 1.7.1
+            - name: calico-cpva
+              sourceRepository: github.com/kubernetes-sigs/cluster-proportional-vertical-autoscaler
+              repository: vesoft/cpvpa-amd64
+              tag: v0.8.3
         shoot-cert-service:
           tag: v1.7.1
           repo: https://github.com/gardener/gardener-extension-shoot-cert-service.git
