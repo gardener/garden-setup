@@ -595,6 +595,7 @@ validation:
     seedCandidateDeterminationStrategy:  (( validate( landscape.gardener, ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]] ) ))
     network-policies: (( defined( landscape.gardener.network-policies ) ? validate( landscape.gardener.network-policies, ["optionalfield", "active", ["type", "bool"]] ) :~~ ))
     extensions: (( defined( landscape.gardener.extensions ) ? validate( keys( landscape.gardener.extensions ), ["list", ["valueset", keys( landscape.versions.gardener.extensions )]] ) :~~ ))
+    shootDomainPrefix: (( defined( landscape.gardener.shootDomainPrefix ) ? validate( landscape.gardener, ["optionalfield", "shootDomainPrefix", "dnslabel"] ) :~~ ))
   ##### landscape.dashboard
   dashboard: (( defined( landscape.dashboard ) ? validate( landscape.dashboard, validation.dashboard_validator, validation.dashboard_no_seed_strategy_validator, [validation.dashboard_terminals_validator, landscape.cert-manager] ) :~~ ))
   ##### landscape.certmanager
