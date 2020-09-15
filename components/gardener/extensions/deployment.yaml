@@ -62,7 +62,7 @@ extension_manifests:
             <<: (( valuesOverwrite ))
             concurrentSyncs: 25
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -92,7 +92,7 @@ extension_manifests:
             <<: (( valuesOverwrite ))
             concurrentSyncs: 25
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -122,7 +122,7 @@ extension_manifests:
             <<: (( valuesOverwrite ))
             concurrentSyncs: 25
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -152,7 +152,7 @@ extension_manifests:
             <<: (( valuesOverwrite ))
             concurrentSyncs: 20
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -197,7 +197,7 @@ extension_manifests:
             createCRDs: false
             fullnameOverride: seed-dns-controller-manager
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             configuration:
               poolSize: 20
@@ -220,7 +220,7 @@ extension_manifests:
           values:
             <<: (( valuesOverwrite ))
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -253,7 +253,7 @@ extension_manifests:
           values:
             <<: (( valuesOverwrite ))
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -286,7 +286,7 @@ extension_manifests:
           values:
             <<: (( valuesOverwrite ))
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -325,7 +325,7 @@ extension_manifests:
               worker:
                 concurrentSyncs: 50
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
@@ -358,7 +358,7 @@ extension_manifests:
           values:
             <<: (( valuesOverwrite ))
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
         type: helm
       resources:
@@ -388,7 +388,7 @@ extension_manifests:
                   server: (( valid( landscape.dashboard.terminals.cert.server ) ? landscape.dashboard.terminals.cert.server :( landscape.cert-manager.server.url == "live" ? "https://acme-v02.api.letsencrypt.org/directory" :landscape.cert-manager.server.url ) ))
                   privateKey: (( ( valid( landscape.dashboard.terminals.cert.privateKey ) ? landscape.dashboard.terminals.cert.privateKey :( ! valid( landscape.dashboard.terminals.cert.server ) ? landscape.cert-manager.privateKey :~~ ) ) || ~~ ))
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
       resources:
       - kind: Extension
@@ -411,7 +411,7 @@ extension_manifests:
           values:
             <<: (( valuesOverwrite ))
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
       resources:
       - kind: Extension
