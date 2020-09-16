@@ -205,7 +205,7 @@ gardener:
         # kubeconfig: is only needed for the runtime chart and will be added in export step
       defaultDomains:
         - credentials: (( .settings.dns_credentials ))
-          domain: (( "shoot." .landscape.domain ))
+          domain: (( defined( .landscape.gardener.shootDomainPrefix ) ? .landscape.gardener.shootDomainPrefix "." .landscape.domain :"shoot." .landscape.domain ))
           provider: (( .landscape.dns.type ))
       internalDomain:
         credentials: (( .settings.dns_credentials ))

@@ -54,3 +54,6 @@ Example to set the `imageVectorOverwrite` (see [values.yaml](https://github.com/
               repository: some-other-registry/calico/typha
             ...
 ```
+
+#### Change default shoot prefix domain
+Per default all shoot api server domains are something like '<clustername>.<project>.shoot.<basedomain>'. If you want to change the 'shoot' term you can use `landscape.gardener.shootDomainPrefix` and set a value you like.  
