@@ -592,7 +592,7 @@ validation:
     credentials: (( validate( landscape.dns, ["mapfield", "credentials", types.dns[landscape.dns.type].credentials] ) ))
   ##### landscape.gardener
   gardener:
-    seedCandidateDeterminationStrategy:  (( validate( landscape.gardener, ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]] ) ))
+    seedCandidateDeterminationStrategy: (( defined( landscape.gardener.seedCandidateDeterminationStrategy ) ? validate( landscape.gardener, ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]] ) :~~ ))    
     network-policies: (( defined( landscape.gardener.network-policies ) ? validate( landscape.gardener.network-policies, ["optionalfield", "active", ["type", "bool"]] ) :~~ ))
     extensions: (( defined( landscape.gardener.extensions ) ? validate( keys( landscape.gardener.extensions ), ["list", ["valueset", keys( landscape.versions.gardener.extensions )]] ) :~~ ))
     shootDomainPrefix: (( defined( landscape.gardener.shootDomainPrefix ) ? validate( landscape.gardener, ["optionalfield", "shootDomainPrefix", "dnslabel"] ) :~~ ))
