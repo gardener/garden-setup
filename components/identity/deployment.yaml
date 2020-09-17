@@ -31,7 +31,7 @@ injector:
   injectall: (( |list|->map[list|c|-> valid( c.config.redirectURI ) ? c :merge(c, _.stub)] ))
   stub:
     config:
-      redirectURI: (( &inject(settings.callbackUrl) ))
+      redirectURI: (( &inject(settings.connectorCallbackUrl) ))
 
 spec:
   <<: (( &temporary ))
@@ -44,7 +44,8 @@ spec:
 
 settings:
   issuerUrl: (( .landscape.identity.issuerUrl || "https://" identity_dns "/oidc" ))
-  callbackUrl: (( dashboardUrl "/oidc/callback" ))
+  callbackUrl: (( dashboardUrl "/auth/callback" ))
+  connectorCallbackUrl: (( dashboardUrl "/oidc/callback" ))
   dashboardUrl: (( "https://" dashboard_dns ))
   identityUrl: (( "https://" identity_dns ))
   identity_dns: (( ( .landscape.identity.useIdentityDomain || false ) ? "identity." .imports.ingress-controller.export.ingress_domain :dashboard_dns ))
@@ -72,6 +73,7 @@ identity:
     kubectlClientSecret: (( .state.kubectlClientSecret.value ))
     dashboardOrigins:
       - (( .settings.dashboardUrl ))
+      - (( .settings.issuerUrl ))
     hosts:
       - (( .settings.identity_dns ))
     issuerUrl: (( .settings.issuerUrl ))
