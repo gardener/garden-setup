@@ -112,8 +112,8 @@ gardenletSpec:
         gardenClientConnection:
           acceptContentTypes: application/json
           contentType: application/json
-          qps: 100
-          burst: 130
+          qps: (( configValues.config.gardenClientConnection.qps || 100 ))
+          burst: (( configValues.config.gardenClientConnection.burst || 130 ))
           gardenClusterAddress: (( .imports.kube_apiserver.export.apiserver_url ))
           gardenClusterCACert: (( base64( .imports.kube_apiserver.export.kube_apiserver_ca.cert ) ))
           bootstrapKubeconfig:
@@ -126,13 +126,13 @@ gardenletSpec:
         seedClientConnection:
           acceptContentTypes: application/json
           contentType: application/json
-          qps: 25
-          burst: 50
+          qps: (( configValues.config.seedClientConnection.qps || 25 ))
+          burst: (( configValues.config.seedClientConnection.burst || 50 ))
         shootClientConnection:
           acceptContentTypes: application/json
           contentType: application/json
-          qps: 25
-          burst: 50
+          qps: (( configValues.config.shootClientConnection.qps || 25 ))
+          burst: (( configValues.config.shootClientConnection.burst || 50 ))
         controllers:
           backupBucket:
             concurrentSyncs: 20
