@@ -99,7 +99,7 @@ case "$1" in
                 # should only be the case if customFields was used and didn't match any resources
                 # thus the resource that should be deleted is expected to be already gone
                 debug "no resource name given, aborting delete"
-                return
+                exit
             fi
             prepare_delete $type $name $namespace
             exec_cmd kubectl ${namespace:+"-n"} ${namespace:-} delete $type $name --ignore-not-found
