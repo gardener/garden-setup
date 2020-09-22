@@ -423,6 +423,21 @@ validation:
           - ["optionalfield", "APIServerSNI", ["type", "bool"]]
           - ["optionalfield", "KonnectivityTunnel", ["type", "bool"]]
       - - optionalfield
+        - gardenClientConnection
+        - - and
+          - ["optionalfield", "qps", ["type", "int"]]
+          - ["optionalfield", "burst", ["type", "int"]]
+      - - optionalfield
+        - seedClientConnection
+        - - and
+          - ["optionalfield", "qps", ["type", "int"]]
+          - ["optionalfield", "burst", ["type", "int"]]
+      - - optionalfield
+        - shootClientConnection
+        - - and
+          - ["optionalfield", "qps", ["type", "int"]]
+          - ["optionalfield", "burst", ["type", "int"]]
+      - - optionalfield
         - imageVectorOverwrite
         - - mapfield
           - images

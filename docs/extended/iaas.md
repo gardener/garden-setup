@@ -81,6 +81,21 @@ The `featureGates` field enable/disable featureGates for the gardenlet. By defau
 A list of available featureGates you can find in the gardener documentation - [Feature Gates in Gardener](https://github.com/gardener/gardener/blob/master/docs/deployment/feature_gates.md)
 
 
+## The 'gardenClientConnection' Field
+
+The `gardenClientConnection.qps` and `gardenClientConnection.burst` is to overwrite the `qps`  and `burst` default values in gardenlet-configmap - [20-componentconfig-gardenlet.yaml](https://github.com/gardener/gardener/blob/master/example/20-componentconfig-gardenlet.yaml)
+
+
+## The 'seedClientConnection' Field
+
+The `seedClientConnection.qps` and `seedClientConnection.burst` is to overwrite the `qps`  and `burst` default values in gardenlet-configmap - [20-componentconfig-gardenlet.yaml](https://github.com/gardener/gardener/blob/master/example/20-componentconfig-gardenlet.yaml)
+
+
+## The 'shootClientConnection' Field
+
+The `shootClientConnection.qps` and `shootClientConnection.burst` is to overwrite the `qps`  and `burst` default values in gardenlet-configmap - [20-componentconfig-gardenlet.yaml](https://github.com/gardener/gardener/blob/master/example/20-componentconfig-gardenlet.yaml)
+
+
 ## Shooted Seeds
 
 ```yaml
