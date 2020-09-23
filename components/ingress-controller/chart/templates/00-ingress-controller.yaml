@@ -65,6 +65,7 @@ rules:
       - create
       - patch
   - apiGroups:
+      - "networking.k8s.io"
       - extensions
     resources:
       - ingresses/status
