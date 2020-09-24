@@ -118,6 +118,13 @@ landscape:
           chart_path: charts/gardener-extension-provider-openstack
           image_tag: (( valid( provider-openstack.tag ) ? provider-openstack.tag :~~ ))
           image_repo: (( ~~ ))
+        provider-alicloud:
+          <<: (( merge ))
+          tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-alicloud.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-alicloud.repo ))
+          chart_path: charts/gardener-extension-provider-alicloud
+          image_tag: (( valid( provider-alicloud.tag ) ? provider-alicloud.tag :~~ ))
+          image_repo: (( ~~ ))
         networking-calico:
           <<: (( merge ))
           tag: (( valid( networking-calico.branch ) -or valid( networking-calico.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.networking-calico.version ))
@@ -241,6 +248,7 @@ dns_type_mapping:
   aws: aws-route53
   azure: azure-dns
   openstack: openstack-designate
+  alicloud: alicloud-dns
 
 backup_type_mapping:
   <<: (( &temporary ))
@@ -248,6 +256,7 @@ backup_type_mapping:
   aws: s3
   azure: abs
   openstack: swift
+  alicloud: oss
 
 
 ######################
@@ -281,6 +290,18 @@ validation:
           - and
           - ["mapfield", "accessKeyID"]
           - ["mapfield", "secretAccessKey"]
+        config:
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
+        networks:
+          - ["mapfield", "internal", ["cidr"]]
+          - ["mapfield", "public", ["cidr"]]
+          - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
+      alicloud:
+        credentials:
+          - and
+          - ["mapfield", "accessKeyID"]
+          - ["mapfield", "accessKeySecret"]
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
@@ -378,6 +399,9 @@ validation:
       swift:
         credentials: (( iaas.openstack.credentials ))
         config: (( return_true ))
+      oss:
+        credentials: (( iaas.alicloud.credentials ))
+        config: (( return_true ))
     dns:
       google-clouddns:
         credentials: (( iaas.gcp.credentials ))
@@ -392,6 +416,9 @@ validation:
         credentials:
           - <<: (( iaas.openstack.credentials ))
           - ["mapfield", "region"]
+        config: (( return_true ))
+      alicloud-dns:
+        credentials: (( iaas.alicloud.credentials ))
         config: (( return_true ))
       cloudflare-dns:
         credentials:

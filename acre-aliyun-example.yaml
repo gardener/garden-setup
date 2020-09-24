@@ -1,0 +1,506 @@
+landscape:
+  name: gardener
+  domain: #your demain here
+  cluster:
+    kubeconfig: ./kubeconfig # optional
+    networks:
+      nodes: 192.168.0.0/24
+      pods: 172.27.0.0/16
+      services: 172.21.0.0/16
+  iaas:
+    - name: alicloud              # name of the seed
+      type: alicloud              # iaas provider
+      shootDefaultNetworks:  # .spec.networks.shootDefaults in the seed manifest
+        pods: 100.128.0.0/11
+        services: 100.72.0.0/13
+      region: cn-hangzhou                     # region for initial seed
+      zones:                                 # remove zones block for Azure
+        - cn-hangzhou-b   # example: europe-west1-c
+        - cn-hangzhou-c
+        - cn-hangzhou-d
+        - cn-hangzhou-e
+        - cn-hangzhou-f
+        - cn-hangzhou-g
+        - cn-hangzhou-h
+        - cn-hangzhou-i
+      credentials:     # provide access to IaaS layer used for creating resources for shoot clusters
+        # your credentials here
+      imageVectorOverwrite:
+        images:
+          - name: gardenlet
+            sourceRepository: github.com/gardener/gardener
+            repository: vesoft/gardenlet
+          - name: gardener-seed-admission-controller
+            sourceRepository: github.com/gardener/gardener
+            repository: vesoft/seed-admission-controller
+            tag: v1.9.0
+          - name: pause-container
+            sourceRepository: github.com/kubernetes/kubernetes/blob/master/build/pause/Dockerfile
+            repository: vesoft/pause-amd64
+            tag: "3.1"
+          - name: etcd-druid
+            sourceRepository: github.com/gardener/etcd-druid
+            repository: vesoft/etcd-druid
+            tag: "v0.3.0"
+          - name: gardener-resource-manager
+            sourceRepository: github.com/gardener/gardener-resource-manager
+            repository: vesoft/gardener-resource-manager
+            tag: "v0.17.0"
+          - name: dependency-watchdog
+            sourceRepository: github.com/gardener/dependency-watchdog
+            repository: vesoft/dependency-watchdog
+            tag: "v0.5.0"
+          - name: hyperkube # used for kubectl + kubelet binaries on the worker nodes
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/hyperkube
+          - name: kube-apiserver
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/hyperkube
+            targetVersion: "< 1.17"
+          - name: kube-apiserver
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/kube-apiserver
+            targetVersion: ">= 1.17"
+          - name: kube-controller-manager
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/hyperkube
+            targetVersion: "< 1.17"
+          - name: kube-controller-manager
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/kube-controller-manager
+            targetVersion: ">= 1.17"
+          - name: kube-scheduler
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/hyperkube
+            targetVersion: "< 1.17"
+          - name: kube-scheduler
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/kube-scheduler
+            targetVersion: ">= 1.17"
+          - name: kube-proxy
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/hyperkube
+            targetVersion: "< 1.17"
+          - name: kube-proxy
+            sourceRepository: github.com/kubernetes/kubernetes
+            repository: vesoft/kube-proxy
+            targetVersion: ">= 1.17"
+          - name: cluster-autoscaler
+            sourceRepository: github.com/gardener/autoscaler
+            repository: vesoft/cluster-autoscaler
+            tag: "v0.10.0"
+          - name: vpn-seed
+            sourceRepository: github.com/gardener/vpn
+            repository: vesoft/vpn-seed
+            tag: "0.19.0"
+          - name: konnectivity-server
+            sourceRepository: github.com/kubernetes-sigs/apiserver-network-proxy
+            repository: vesoft/proxy-server
+            tag: "v0.0.12"
+          - name: alertmanager
+            sourceRepository: github.com/prometheus/alertmanager
+            repository: quay.io/prometheus/alertmanager
+            tag: v0.18.0
+          - name: prometheus
+            sourceRepository: github.com/prometheus/prometheus
+            repository: quay.io/prometheus/prometheus
+            tag: v2.12.0
+          - name: configmap-reloader
+            sourceRepository: github.com/jimmidyson/configmap-reload
+            repository: quay.io/coreos/configmap-reload
+            tag: v0.0.1
+          - name: kube-state-metrics
+            sourceRepository: github.com/kubernetes/kube-state-metrics
+            repository: quay.io/coreos/kube-state-metrics
+            tag: v1.9.3
+          - name: node-exporter
+            sourceRepository: github.com/prometheus/node_exporter
+            repository: quay.io/prometheus/node-exporter
+            tag: v0.18.1
+          - name: grafana
+            sourceRepository: github.com/grafana/grafana
+            repository: grafana/grafana
+            tag: "7.0.3"
+          - name: blackbox-exporter
+            sourceRepository: github.com/prometheus/blackbox_exporter
+            repository: quay.io/prometheus/blackbox-exporter
+            tag: v0.14.0
+          - name: metrics-server
+            sourceRepository: github.com/kubernetes-incubator/metrics-server
+            repository: vesoft/metrics-server-amd64
+            tag: v0.3.6
+            targetVersion: ">= 1.11"
+          - name: metrics-server
+            sourceRepository: github.com/kubernetes-incubator/metrics-server
+            repository: vesoft/metrics-server-amd64
+            tag: v0.3.1
+            targetVersion: 1.10.x
+          - name: vpn-shoot
+            sourceRepository: github.com/gardener/vpn
+            repository: vesoft/vpn-shoot
+            tag: "0.19.0"
+          - name: konnectivity-agent
+            sourceRepository: github.com/kubernetes-sigs/apiserver-network-proxy
+            repository: vesoft/proxy-agent
+            tag: "v0.0.12"
+          - name: coredns
+            sourceRepository: github.com/coredns/coredns
+            repository: coredns/coredns
+            tag: "1.7.0"
+          - name: node-local-dns
+            sourceRepository: github.com/kubernetes/kubernetes/blob/master/cluster/addons/dns/nodelocaldns
+            repository: vesoft/k8s-dns-node-cache
+            tag: "1.15.13"
+          - name: node-problem-detector
+            sourceRepository: github.com/kubernetes/node-problem-detector
+            repository: vesoft/node-problem-detector
+            tag: "v0.8.2"
+          - name: kubernetes-dashboard
+            sourceRepository: github.com/kubernetes/dashboard
+            repository: vesoft/kubernetes-dashboard-amd64
+            tag: v1.10.1
+            targetVersion: "< 1.16"
+          - name: kubernetes-dashboard
+            sourceRepository: github.com/kubernetes/dashboard
+            repository: kubernetesui/dashboard
+            tag: v2.0.0
+            targetVersion: ">= 1.16"
+          - name: kubernetes-dashboard-metrics-scraper
+            sourceRepository: github.com/kubernetes/dashboard
+            repository: kubernetesui/metrics-scraper
+            tag: v1.0.4
+            targetVersion: ">= 1.16"
+          - name: nginx-ingress-controller
+            sourceRepository: github.com/kubernetes/ingress-nginx
+            repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
+            tag: "0.22.0"
+          - name: ingress-default-backend
+            sourceRepository: github.com/gardener/ingress-default-backend
+            repository: vesoft/ingress-default-backend
+            tag: "0.8.0"
+          - name: busybox
+            sourceRepository: github.com/mirror/busybox
+            repository: busybox
+            tag: "1.29.2"
+          - name: alpine-iptables
+            sourceRepository: github.com/DockToFuture/alpine-iptables
+            repository: vesoft/alpine-iptables
+            tag: "3.10.3"
+          - name: fluent-bit
+            sourceRepository: github.com/gardener/logging
+            repository: vesoft/fluent-bit-to-loki
+            tag: "v0.24.0"
+          - name: loki
+            sourceRepository: github.com/grafana/loki
+            repository: grafana/loki
+            tag: "1.5.0"
+          - name: vpa-admission-controller
+            sourceRepository: github.com/kubernetes/autoscaler
+            repository: vesoft/vpa-admission-controller
+            tag: "0.8.0"
+          - name: vpa-recommender
+            sourceRepository: github.com/kubernetes/autoscaler
+            repository: vesoft/vpa-recommender
+            tag: "0.8.0"
+          - name: vpa-updater
+            sourceRepository: github.com/kubernetes/autoscaler
+            repository: vesoft/vpa-updater
+            tag: "0.8.0"
+          - name: vpa-exporter
+            sourceRepository: github.com/gardener/vpa-exporter
+            repository: vesoft/vpa-exporter
+            tag: "0.1.5"
+          - name: hvpa-controller
+            sourceRepository: github.com/gardener/hvpa-controller
+            repository: vesoft/hvpa-controller
+            tag: "v0.3.1"
+          - name: istio-proxy
+            sourceRepository: github.com/istio/istio
+            repository: docker.io/istio/proxyv2
+            tag: "1.6.4"
+          - name: istio-istiod
+            sourceRepository: github.com/istio/istio
+            repository: docker.io/istio/pilot
+            tag: "1.6.4"
+          - name: apiserver-proxy
+            sourceRepository: github.com/nginxinc/docker-nginx
+            repository: nginx
+            tag: "1.17.8"
+          - name: apiserver-proxy-sidecar
+            sourceRepository: github.com/gardener/apiserver-proxy
+            repository: vesoft/apiserver-proxy
+            tag: "v0.1.0"
+
+  dns:
+    type: alicloud-dns
+    credentials:
+      # your credentials here
+
+  identity:
+    users:
+      - email: "admin@mydomain.org"
+        username: "Admin"
+        password: "MyHardPassword123$"
+
+  versions:
+    kube-apiserver:
+      image_repo: k8s.gcr.io/hyperkube
+      image_tag: v1.18.3
+    etcd:
+      etcd:
+        image_repo: quay.io/coreos/etcd
+        image_tag: "v3.3.13"
+      backup_restore:
+        image_repo: vesoft/etcdbrctl
+        image_tag: "0.7.1"
+    gardener:
+      repo: "https://github.com/gardener/gardener.git"
+      tag: v1.9.0
+      apiserver:
+        image_repo: "vesoft/gardener-apiserver"
+        image_tag: v1.9.0
+      controller_manager:
+        image_repo: "vesoft/gardener-controller-manager"
+        image_tag: v1.9.0
+      scheduler:
+        image_repo: "vesoft/gardener-scheduler"
+        image_tag: v1.9.0
+      gardenlet:
+        image_repo: "vesoft/gardenlet"
+        image_tag: v1.9.0
+      extensions:
+        dns-external:
+          tag: v0.7.18
+          image_tag: v0.7.18
+          image_repo: vesoft/dns-controller-manager
+          repo: https://github.com/gardener/external-dns-management.git
+          chart_path: charts/external-dns-management
+        os-coreos:
+          tag: v1.5.0
+          repo: https://github.com/gardener/gardener-extension-os-coreos.git
+          chart_path: charts/gardener-extension-os-coreos
+          image_tag: v1.5.0
+          image_repo: vesoft/os-coreos
+        os-ubuntu:
+          tag: v1.6.0
+          repo: https://github.com/gardener/gardener-extension-os-ubuntu.git
+          chart_path: charts/gardener-extension-os-ubuntu
+          image_tag: v1.6.0
+          image_repo: vesoft/os-ubuntu
+        os-gardenlinux:
+          tag: v0.1.0
+          repo: https://github.com/gardener/gardener-extension-os-gardenlinux.git
+          chart_path: charts/gardener-extension-os-gardenlinux
+          image_tag: v0.1.0
+          image_repo: vesoft/os-gardenlinux
+        os-suse-chost:
+          tag: v1.8.0
+          repo: https://github.com/gardener/gardener-extension-os-suse-jeos.git
+          chart_path: charts/gardener-extension-os-suse-chost
+          image_tag: v1.8.0
+          image_repo: vesoft/os-suse-chost
+        provider-aws:
+          tag: v1.13.0
+          repo: https://github.com/gardener/gardener-extension-provider-aws.git
+          chart_path: charts/gardener-extension-provider-aws
+          image_tag: v1.13.0
+          image_repo: vesoft/provider-aws
+        provider-gcp:
+          tag: v1.9.1
+          repo: https://github.com/gardener/gardener-extension-provider-gcp.git
+          chart_path: charts/gardener-extension-provider-gcp
+          image_tag: v1.9.1
+          image_repo: vesoft/provider-gcp
+        provider-azure:
+          tag: v1.11.0
+          repo: https://github.com/gardener/gardener-extension-provider-azure.git
+          chart_path: charts/gardener-extension-provider-azure
+          image_tag: v1.11.0
+          image_repo: vesoft/provider-azure
+        provider-alicloud:
+          tag: v1.16.1
+          repo: https://github.com/gardener/gardener-extension-provider-alicloud.git
+          chart_path: charts/gardener-extension-provider-alicloud
+          image_tag: v1.16.1
+          image_repo: vesoft/provider-alicloud
+          imageVectorOverwrite: |
+            images:
+            - name: terraformer
+              sourceRepository: github.com/gardener/terraformer
+              repository: vesoft/terraformer
+              tag: "v1.3.0"
+            - name: machine-controller-manager
+              sourceRepository: github.com/gardener/machine-controller-manager
+              repository: vesoft/machine-controller-manager
+              tag: "v0.33.0"
+            - name: alicloud-controller-manager
+              sourceRepository: https://github.com/kubernetes/cloud-provider-alibaba-cloud
+              repository: vesoft/alibaba-cloud-controller-manager
+              tag: "1.9.8"
+            - name: csi-attacher
+              sourceRepository: https://github.com/kubernetes-csi/external-attacher
+              repository: quay.io/k8scsi/csi-attacher
+              tag: v1.0.1
+              targetVersion: 1.13.x
+            - name: csi-attacher
+              sourceRepository: https://github.com/kubernetes-csi/external-attacher
+              repository: quay.io/k8scsi/csi-attacher
+              tag: v2.2.0
+              targetVersion: ">= 1.14"
+            - name: csi-node-driver-registrar
+              sourceRepository: https://github.com/kubernetes-csi/node-driver-registrar
+              repository: quay.io/k8scsi/csi-node-driver-registrar
+              tag: v1.0.1
+              targetVersion: 1.13.x
+            - name: csi-node-driver-registrar
+              sourceRepository: https://github.com/kubernetes-csi/node-driver-registrar
+              repository: quay.io/k8scsi/csi-node-driver-registrar
+              tag: v1.3.0
+              targetVersion: ">= 1.14"
+            - name: csi-provisioner
+              sourceRepository: https://github.com/kubernetes-csi/external-provisioner
+              repository: quay.io/k8scsi/csi-provisioner
+              tag: v1.0.2
+              targetVersion: 1.13.x
+            - name: csi-provisioner
+              sourceRepository: https://github.com/kubernetes-csi/external-provisioner
+              repository: quay.io/k8scsi/csi-provisioner
+              tag: v1.6.0
+              targetVersion: ">= 1.14"
+            - name: csi-snapshotter
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/csi-snapshotter
+              tag: v1.0.2
+              targetVersion: 1.13.x
+            - name: csi-snapshotter
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/csi-snapshotter
+              tag: v1.2.2
+              targetVersion: ">= 1.14"
+            - name: csi-snapshotter
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/csi-snapshotter
+              tag: v2.1.1
+              targetVersion: ">= 1.17"
+            - name: csi-snapshot-controller
+              sourceRepository: https://github.com/kubernetes-csi/external-snapshotter
+              repository: quay.io/k8scsi/snapshot-controller
+              tag: v2.1.1
+            - name: csi-resizer
+              sourceRepository: https://github.com/kubernetes-csi/external-resizer
+              repository: quay.io/k8scsi/csi-resizer
+              tag: v0.3.0
+              targetVersion: 1.13.x
+            - name: csi-resizer
+              sourceRepository: https://github.com/kubernetes-csi/external-resizer
+              repository: quay.io/k8scsi/csi-resizer
+              tag: v0.5.0
+              targetVersion: ">= 1.14"
+            - name: csi-plugin-alicloud
+              sourceRepository: https://github.com/AliyunContainerService/csi-plugin
+              repository: vesoft/csi-plugin-alicloud
+              tag: v1.13.2-3
+              targetVersion: 1.13.x
+            - name: csi-plugin-alicloud
+              sourceRepository: https://github.com/AliyunContainerService/csi-plugin
+              repository: vesoft/csi-plugin-alicloud
+              tag: v1.14.8-41 # the upstream image is using non-semver tags which is causing issues in the CI/CD pipelines of Gardener, thus the image is replicated and tagged with semver version in another registry (registry.cn-hangzhou.aliyuncs.com/acs/csi-plugin:v1.14.8.41-e97402d1-aliyun).
+              targetVersion: ">= 1.14"
+        networking-calico:
+          tag: v1.9.1
+          repo: https://github.com/gardener/gardener-extension-networking-calico.git
+          chart_path: charts/gardener-extension-networking-calico
+          image_tag: v1.9.1
+          image_repo: vesoft/networking-calico
+          imageVectorOverwrite: |
+            images:
+            - name: calico-node
+              sourceRepository: github.com/projectcalico/calico
+              repository: quay.io/calico/node
+              tag: v3.13.4
+            - name: calico-cni
+              sourceRepository: github.com/projectcalico/cni-plugin
+              repository: quay.io/calico/cni
+              tag: v3.13.4
+            - name: calico-typha
+              sourceRepository: github.com/projectcalico/typha
+              repository: quay.io/calico/typha
+              tag: v3.13.4
+            - name: calico-kube-controllers
+              sourceRepository: github.com/projectcalico/kube-controllers
+              repository: quay.io/calico/kube-controllers
+              tag: v3.13.4
+            - name: calico-podtodaemon-flex
+              sourceRepository: github.com/projectcalico/pod2daemon
+              repository: quay.io/calico/pod2daemon-flexvol
+              tag: v3.13.4
+            - name: calico-cpa
+              sourceRepository: github.com/kubernetes-sigs/cluster-proportional-autoscaler
+              repository: vesoft/cluster-proportional-autoscaler-amd64
+              tag: 1.7.1
+            - name: calico-cpva
+              sourceRepository: github.com/kubernetes-sigs/cluster-proportional-vertical-autoscaler
+              repository: vesoft/cpvpa-amd64
+              tag: v0.8.3
+        shoot-cert-service:
+          tag: v1.7.1
+          repo: https://github.com/gardener/gardener-extension-shoot-cert-service.git
+          chart_path: charts/gardener-extension-shoot-cert-service
+          image_tag: v1.7.1
+          image_repo: vesoft/shoot-cert-service
+    dashboard:
+      repo: https://github.com/gardener/dashboard.git
+      tag: 1.45.0
+      chart_path: charts/gardener-dashboard
+      image_tag: 1.45.0
+      image_repo: vesoft/gardener-dashboard
+    ingress-controller:
+      repo: https://github.com/kubernetes/ingress-nginx.git
+      image_tag: v0.34.1
+      image_repo: vesoft/ingress-nginx-controller
+      tag: v0.34.1
+    nginx-ingress-k8s-backend:
+      repo: https://github.com/gardener/ingress-default-backend.git
+      image_tag: 0.8.0
+      image_repo: vesoft/ingress-default-backend
+      tag: 0.8.0
+    terminal-controller-manager:
+      repo: https://github.com/gardener/terminal-controller-manager.git
+      image_tag: v0.11.0
+      image_repo: vesoft/terminal-controller-manager
+      tag: v0.11.0
+    dns-controller:
+      tag: v0.7.18
+      image_tag: v0.7.18
+      image_repo: vesoft/dns-controller-manager
+      repo: "https://github.com/gardener/external-dns-management.git"
+    cert-manager:
+      controller:
+        tag: v0.13.1  # only used for CRDs
+        repo: "https://github.com/jetstack/cert-manager.git"
+        helm_repo: "https://charts.jetstack.io"
+        helm_tag: "v0.13.1"
+      cert-dns-bridge:
+        tag: 2.0.0
+        image_tag: 2.0.0
+        image_repo: vesoft/certificate-dns-bridge
+        chart_path: charts/certificate-dns-bridge
+        repo: "https://github.com/gardener/certificate-dns-bridge.git"
+    monitoring:
+      prometheus:
+        image_repo: quay.io/prometheus/prometheus
+        image_tag: v2.12.0
+      blackbox-exporter:
+        image_repo: quay.io/prometheus/blackbox-exporter
+        image_tag: v0.14.0
+      configmap-reload:
+        image_repo: quay.io/coreos/configmap-reload
+        image_tag: v0.0.1
+      grafana:
+        image_repo: grafana/grafana
+        image_tag: "7.0.3"
+      gardener-metrics-exporter:
+        repo: https://github.com/gardener/gardener-metrics-exporter.git
+        tag: 0.12.0
+        image_tag: 0.12.0
+        image_repo: vesoft/gardener-metrics-exporter

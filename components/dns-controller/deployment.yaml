@@ -61,6 +61,7 @@ typeToProvider:
   azure-dns: azure
   openstack-designate: openstack
   cloudflare-dns: cloudflare
+  alicloud-dns: alicloud
 
 spec:
   <<: (( &temporary ))

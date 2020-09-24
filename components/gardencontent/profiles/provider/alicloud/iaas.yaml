@@ -1,0 +1,348 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+<<: (( &template ))
+
+machineImages:
+  - name: ubuntu
+    versions:
+    - version: 18.4.20200228
+
+providerConfig:
+  apiVersion: alicloud.provider.extensions.gardener.cloud/v1alpha1
+  kind: CloudProfileConfig
+  machineImages:
+  - name: ubuntu
+    versions:
+    - regions:
+      - id: ubuntu_18_04_x64_20G_alibase_20200717.vhd
+        name: cn-hangzhou
+      - id: ubuntu_18_04_x64_20G_alibase_20200717.vhd
+        name: cn-shanghai
+      version: 18.4.20200228
+  - name: coreos
+    versions:
+    - regions:
+      - id: coreos_2345_3.0_x64_30G_alibase_20200519.vhd
+        name: cn-hangzhou
+      - id: coreos_2345_3.0_x64_30G_alibase_20200519.vhd
+        name: cn-shanghai
+      version: 2303.3.0
+
+machineTypes:
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.g6.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.g6.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.g6.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.g6.4xlarge
+    usable: true
+  - cpu: "24"
+    gpu: "0"
+    memory: 96Gi
+    name: ecs.g6.6xlarge
+    usable: true
+
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.g6e.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.g6e.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.g6e.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.g6e.4xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: ecs.g6e.8xlarge
+    usable: true
+
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.g5.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.g5.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.g5.2xlarge
+    usable: true
+  - cpu: "12"
+    gpu: "0"
+    memory: 48Gi
+    name: ecs.g5.3xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.g5.4xlarge
+    usable: true
+  - cpu: "24"
+    gpu: "0"
+    memory: 96Gi
+    name: ecs.g5.6xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: ecs.g5.8xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: ecs.g5.16xlarge
+    usable: true
+
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.g5se.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.g5se.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.g5se.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.g5se.4xlarge
+    usable: true
+  - cpu: "24"
+    gpu: "0"
+    memory: 96Gi
+    name: ecs.g5se.6xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: ecs.g5se.8xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: ecs.g5se.16xlarge
+    usable: true
+
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.g5ne.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.g5ne.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.g5ne.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.g5ne.4xlarge
+    usable: true
+  - cpu: "24"
+    gpu: "0"
+    memory: 96Gi
+    name: ecs.g5ne.6xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: ecs.g5ne.8xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: ecs.g5ne.16xlarge
+    usable: true
+
+  - cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.r6.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.r6.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.r6.2xlarge
+    usable: true
+  - cpu: "12"
+    gpu: "0"
+    memory: 96Gi
+    name: ecs.r6.3xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: ecs.r6.4xlarge
+    usable: true
+  - cpu: "24"
+    gpu: "0"
+    memory: 196Gi
+    name: ecs.r6.6xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 256Gi
+    name: ecs.r6.8xlarge
+    usable: true
+
+  - cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.i2.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.i2.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: ecs.i2.4xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 256Gi
+    name: ecs.i2.8xlarge
+    usable: true
+  - cpu: "64"
+    gpu: "0"
+    memory: 512Gi
+    name: ecs.i2.16xlarge
+    usable: true
+
+  - cpu: "1"
+    gpu: "0"
+    memory: 1Gi
+    name: ecs.xn4.small
+    usable: true
+
+  - cpu: "1"
+    gpu: "0"
+    memory: 2Gi
+    name: ecs.n4.small
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: ecs.n4.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.n4.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.n4.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.n4.4xlarge
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.n4.8xlarge
+    usable: true
+
+volumeTypes:
+  - class: standard
+    name: cloud_efficiency
+    usable: true
+  - class: ssd
+    name: cloud_ssd
+    usable: true
+
+regions:
+  - zones:
+    - name: cn-hangzhou-a
+    - name: cn-hangzhou-b
+    - name: cn-hangzhou-c
+    - name: cn-hangzhou-d
+    - name: cn-hangzhou-e
+    - name: cn-hangzhou-f
+    - name: cn-hangzhou-g
+    - name: cn-hangzhou-h
+    - name: cn-hangzhou-i
+    name: cn-hangzhou
+  - zones:
+    - name: cn-shanghai-a
+    - name: cn-shanghai-b
+    - name: cn-shanghai-c
+    - name: cn-shanghai-d
+    - name: cn-shanghai-e
+    - name: cn-shanghai-f
+    - name: cn-shanghai-g
+    - name: cn-shanghai-h
+    name: cn-shanghai
+  - zones:
+    - name: cn-beijing-a
+    - name: cn-beijing-b
+    - name: cn-beijing-c
+    - name: cn-beijing-d
+    - name: cn-beijing-e
+    - name: cn-beijing-f
+    - name: cn-beijing-g
+    - name: cn-beijing-h
+    - name: cn-beijing-i
+    name: cn-beijing
