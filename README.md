@@ -166,7 +166,7 @@ landscape:
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
   <a href="#landscapedns">dns</a>:                                    # optional, default values based on `landscape.iaas`
-    type: &lt;google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns&gt;   # dns provider
+    type: &lt;google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns|infoblox-dns&gt;   # dns provider
     credentials: (( iaas.credentials ))   # credentials for the dns provider
 
   <a href="#landscapeidentity">identity</a>:
@@ -311,7 +311,7 @@ If you remove single values or the whole block, the missing values will be set t
 ### landscape.dns
 ```yaml
 dns:
-  type: <google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns>
+  type: <google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns|infoblox-dns>
   credentials:
 ```
 Configuration for the Domain Name Service (DNS) provider. If your IaaS provider also offers a DNS service you can use the same values for `dns.credentials` as for `iaas.creds` above by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff. If they belong to another account (or to another IaaS provider) the appropriate credentials (and their type) have to be configured.
@@ -319,12 +319,17 @@ Similar to `landscape.etcd`, missing values will be set to defaults based on the
 
 | Field | Type | Description | Example |IaaS Provider Documentation
 |:------|:--------|:--------|:--------|:------------|
-|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)), `azure-dns` ([Azure DNS](https://azure.microsoft.com/de-de/services/dns/)), `openstack-designate` ([Openstack Designate](https://docs.openstack.org/designate/latest/)), and `cloudflare-dns` ([Cloudflare DNS](https://www.cloudflare.com/dns/)).|`google-clouddns`|n.a.|
+|`type`|Fixed value|Your DNS provider. Supported providers: `google-clouddns` ([Google Cloud DNS](https://cloud.google.com/dns/docs/)), `aws-route53` ([Amazon Route 53](https://aws.amazon.com/route53/)), `azure-dns` ([Azure DNS](https://azure.microsoft.com/de-de/services/dns/)), `openstack-designate` ([Openstack Designate](https://docs.openstack.org/designate/latest/)), `cloudflare-dns` ([Cloudflare DNS](https://www.cloudflare.com/dns/)), and `infoblox-dns` ([Infoblox DNS](https://www.infoblox.com/products/dns/)).|`google-clouddns`|n.a.|
 |`credentials`|IaaS provider specific|Service account credentials in a provider-specific format (see above).|`(( iaas.credentials ))`|[GCP](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys), [AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html#id_users_service_accounts), [Azure](https://docs.microsoft.com/en-us/azure/azure-stack/user/azure-stack-create-service-principals)|
 
 #### Cloudflare Credentials
 
 The credentials to use Cloudflare DNS consist of a single key `apiToken`, containing your API token.
+
+#### Infoblox Credentials and Configuration
+
+For Infoblox DNS, you have to specify `USERNAME` and `PASSWORD`.
+Additionally, a `host` and a `version` need to be specified, both directly under `landscape.dns`. See [here](https://github.com/gardener/external-dns-management/blob/master/doc/infoblox/README.md#create-dns-provider) for further information on optional configuration fields.
 
 
 ### landscape.identity

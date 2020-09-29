@@ -188,6 +188,8 @@ extension_manifests:
         type: openstack-designate
       - kind: DNSProvider
         type: cloudflare-dns
+      - kind: DNSProvider
+        type: infoblox-dns
       deployment:
         type: helm
         providerConfig:
