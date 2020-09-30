@@ -292,6 +292,7 @@ The `region` field in the openstack credentials is only evaluated within the `dn
 ```yaml
 etcd:
   backup:
+    # active: true
     type: <gcs|s3|abs|swift>
     resourceGroup: ...
     region: (( iaas.region ))
@@ -302,6 +303,7 @@ If you remove single values or the whole block, the missing values will be set t
 
 | Field | Type | Description | Example&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Iaas Provider Documentation |
 |:------|:--------|:--------|:--------|:---------|
+|`backup.active`|Boolean|If set to `false`, deactivates the etcd backup for the virtual cluster etcd. Defaults to `true`.|`true`|n.a.|
 |`backup.type`|Fixed value| Type of your blob store. Supported blob stores: `gcs` ([Google Cloud Storage](https://cloud.google.com/storage/)), `s3` ([Amazon S3](https://aws.amazon.com/s3/)), `abs` ([Azure Blob Storage](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview)), and `swift` ([Openstack Swift](https://docs.openstack.org/swift/latest/)).|`gcs`|n.a.|
 |`backup.resourceGroup`|IaaS provider specific |Azure specific. Create an Azure blob store first which uses a resource group. Provide the resource group here. | `my-Azure-RG` | [Azure](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?tabs=azure-portal) (HowTo) |
 |`backup.region`|IaaS provider specific|Region of blob storage. |`(( iaas.region ))` |[GCP (overview)](https://cloud.google.com/docs/geography-and-regions), [AWS (overview)](https://docs.aws.amazon.com/general/latest/gr/rande.html)|

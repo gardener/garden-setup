@@ -225,6 +225,7 @@ landscape:
     <<: (( merge ))
     backup:
       <<: (( merge ))
+      active: true
       type: (( .backup_type_mapping[iaas[0].type] ))
       region: (( iaas[0].region ))
       credentials: (( iaas[0].credentials ))
@@ -718,7 +719,8 @@ validation:
     shooted_seed: (( map[validation.flatten( select[select[landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"]|elem|-> valid( elem.seeds )].[*].seeds ) |entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic), validation.instantiate_validator(entry, iaas_entry_validators.shooted_seed) )] ))
   ##### landscape.etcd
   etcd:
-    backup: (( validate( landscape.etcd.backup, [ "and", validation.instantiate_validator( landscape.etcd.backup, validation.types.backup_config ), validation.types.etcd_backup[landscape.etcd.backup.type].config ] ) ))
+    backup_active: (( validate( landscape.etcd.backup.active, ["type", "bool"] ) ))
+    backup: (( landscape.etcd.backup.active == true ? validate( landscape.etcd.backup, [ "and", validation.instantiate_validator( landscape.etcd.backup, validation.types.backup_config ), validation.types.etcd_backup[landscape.etcd.backup.type].config ] ) :~~ ))
   ##### landscape.dns
   dns:
     type: (( validate( landscape.dns, ["mapfield", "type", ["valueset", keys( types.dns )]] ) ))

@@ -13,9 +13,11 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
+
 component:
   imports:
-    - backupinfra: etcd/backupinfra
+    - (( landscape.etcd.backup.active ? { "backupinfra" = "etcd/backupinfra" } :~~ ))
     - namespace
 
   stubs:

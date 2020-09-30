@@ -13,4 +13,7 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
+
 component:
+  active: (( landscape.etcd.backup.active ))
