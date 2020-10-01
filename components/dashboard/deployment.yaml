@@ -82,8 +82,10 @@ dashboard:
 
 terminal_config:
   <<: (( &temporary &template ))
-  containerImage: eu.gcr.io/gardener-project/gardener/ops-toolbelt:0.9.0
-  containerImageOperator: eu.gcr.io/gardener-project/gardener/ops-toolbelt:0.9.0
+  container:
+    image: eu.gcr.io/gardener-project/gardener/ops-toolbelt:0.9.0
+  containerOperator:
+    image: eu.gcr.io/gardener-project/gardener/ops-toolbelt:0.9.0
   containerImageDescriptions:
   - image: /eu.gcr.io/gardener-project/gardener/ops-toolbelt:.*/
     description: Run `ghelp` to get information about installed tools and packages
