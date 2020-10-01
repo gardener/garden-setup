@@ -141,11 +141,10 @@ landscape:
           image_repo: (( ~~ ))
         provider-vsphere:
           <<: (( merge ))
-          # tag: (( valid( provider-vsphere.branch ) -or valid( provider-vsphere.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-vsphere.version ))
-          commit: 97920f0589321ff5570aadecf0a47a4ae863647a
+          tag: (( valid( provider-vsphere.branch ) -or valid( provider-vsphere.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-vsphere.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-vsphere.repo ))
           chart_path: charts/gardener-extension-provider-vsphere
-          image_tag: v1.3.0-dev-97920f0589321ff5570aadecf0a47a4ae863647a #(( valid( provider-vsphere.tag ) ? provider-vsphere.tag :~~ ))
+          image_tag: (( valid( provider-vsphere.tag ) ? provider-vsphere.tag :~~ ))
           image_repo: (( ~~ ))
     dashboard:
       <<: (( merge ))

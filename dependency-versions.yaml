@@ -55,7 +55,8 @@
           "version": "v1.5.1"
         },
         "provider-vsphere": {
-          "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git"
+          "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
+          "version": "v0.1.0"
         }
       }
     },
