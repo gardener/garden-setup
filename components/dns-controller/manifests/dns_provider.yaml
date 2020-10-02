@@ -27,3 +27,4 @@ spec:
     include:
     - (( values.domain ))
   zones: (( values.zones || ~~ ))
+  providerConfig: (( values.providerConfig || ~~ ))

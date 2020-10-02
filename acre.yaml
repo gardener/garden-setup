@@ -501,17 +501,19 @@ validation:
           - ["mapfield", "USERNAME"]
           - ["mapfield", "PASSWORD"]
         config:
-          - and
-          - ["mapfield", "host", ["ip"]]
-          - ["optionalfield", "port", ["type", "int"]]
-          - ["optionalfield", "sslVerify", ["type", "bool"]]
-          - ["mapfield", "version"]
-          - ["optionalfield", "view"]
-          - ["optionalfield", "httpPoolConnections", ["type", "int"]]
-          - ["optionalfield", "httpRequestTimeout", ["type", "int"]]
-          - ["optionalfield", "caCert", ["ca"]]
-          - ["optionalfield", "maxResults", ["type", "int"]]
-          - ["optionalfield", "proxyUrl"]
+          - mapfield
+          - providerConfig
+          - - and
+            - ["mapfield", "host", ["ip"]]
+            - ["optionalfield", "port", ["type", "int"]]
+            - ["optionalfield", "sslVerify", ["type", "bool"]]
+            - ["mapfield", "version"]
+            - ["optionalfield", "view"]
+            - ["optionalfield", "httpPoolConnections", ["type", "int"]]
+            - ["optionalfield", "httpRequestTimeout", ["type", "int"]]
+            - ["optionalfield", "caCert", ["ca"]]
+            - ["optionalfield", "maxResults", ["type", "int"]]
+            - ["optionalfield", "proxyUrl"]
   iaas_entry_validators:
     basic:
       - <<: (( &template ))
