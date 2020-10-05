@@ -19,7 +19,7 @@ With `landscape.dashboard.cname`, you can provide another domain from which the 
     cname:
       domain: dashboard.my-other-domain.org
       dns:   # optional
-        type: <google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns>
+        type: <google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns|infoblox-dns>
         credentials: ...
 ```
 If you specify `landscape.dashboard.cname`, the `domain` field has to exist. A `CNAME` DNS entry will be created for that domain, pointing to the Gardener dashboard domain. This differs from `landscape.domain`, where you enter a base domain for your cluster and the dashboard will be available on a subdomain of that domain - this one will point directly to the dashboard.

@@ -15,23 +15,24 @@
 <<: (( &template ))
 
 providerConfig:
-  apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
+  apiVersion: vsphere.provider.extensions.gardener.cloud/v1alpha1
   kind: CloudProfileConfig
-  keystoneURL: (( values.config.keystoneURL || values.credentials.authURL ))
-  useOctavia: (( values.config.useOctavia || ~~ ))
-  dnsServers: (( values.config.dnsServers || ~~ ))
   constraints:
-    floatingPools: (( values.config.floatingPools ))
-    loadBalancerProviders: (( values.config.loadBalancerProviders ))
-    dhcpDomain: (( values.config.dhcpDomain || ~~ ))
+    loadBalancerConfig: (( values.config.loadBalancerConfig ))
+  defaultClassStoragePolicyName: (( values.config.defaultClassStoragePolicyName ))
+  dnsServers: (( values.config.dnsServers ))
+  namePrefix: (( values.config.namePrefix ))
+  folder: (( values.config.folder ))
   machineImages: (( values.config.machineImageDefinitions ))
-
-machineImages: (( values.config.machineImages ))
+  machineTypeOptions: (( values.config.machineTypeOptions || ~~ ))
+  regions: (( values.config.regionDefinitions ))
+  csiResizerDisabled: (( values.config.csiResizerDisabled || ~~ ))
+  failureDomainLabels: (( values.config.failureDomainLabels || ~~ ))
 
 machineTypes: (( values.config.machineTypes ))
 
+machineImages: (( values.config.machineImages ))
+
 volumeTypes: (( values.config.volumeTypes || [] ))
 
-regions:
-  - name: (( values.config.region ))
-    zones: (( sum[values.config.zones|[]|s,e|-> s { "name" = e }] ))
+regions: (( sum[providerConfig.regions|[]|s,idx,elem|-> s {"name" = elem.name, "zones" = sum[elem.zones|[]|s2,idx2,elem2|-> s2 {"name" = elem2.name}] }] ))

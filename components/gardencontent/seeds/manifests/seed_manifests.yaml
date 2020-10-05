@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+temp:
+  <<: (( &temporary ))
+  blobstoreToProvider:
+    gcs: gcp
+    s3: aws
+    abs: azure
+    swift: openstack
+
 secretManifests:
 - apiVersion: v1
   kind: Secret
@@ -28,7 +36,7 @@ secretManifests:
     namespace: (( configValues.namespace ))
   type: Opaque
   data:
-    <<: (( sum[configValues.config.credentials|{}|s,k,v|->s { k = base64(v) }] ))
+    <<: (( sum[(configValues.config.seedConfig.backup.credentials || configValues.config.credentials)|{}|ss,sk,sv|-> ss { sk = base64(sv) }] ))
 - apiVersion: v1
   kind: Secret
   name: (( &temporary ( "bootstrap" ) ))
@@ -46,12 +54,14 @@ secretManifests:
 seedSpec:
   <<: (( &temporary ))
   provider:
+    providerConfig: (( configValues.config.seedConfig.providerConfig || ~~ ))
     type: (( configValues.config.type ))
     region: (( configValues.config.region ))
   blockCIDRs: (( configValues.iaas.blockCIDRs ))
   backup:
-    provider: (( configValues.config.type ))
-    region: (( configValues.config.region ))
+    <<: (( ( ! valid( configValues.config.seedConfig.backup.active ) ) -or ( configValues.config.seedConfig.backup.active || false ) ? ~ :~~ ))
+    provider: (( temp.blobstoreToProvider[configValues.config.seedConfig.backup.type] || configValues.config.type ))
+    region: (( configValues.config.seedConfig.backup.region || configValues.config.region ))
     secretRef:
       name: (( configValues.secretname "-backup" ))
       namespace: (( configValues.namespace ))

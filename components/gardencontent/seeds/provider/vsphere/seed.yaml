@@ -12,19 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: dns.gardener.cloud/v1alpha1
-kind: DNSProvider
-metadata:
-  name: (( values.provider_name ))
-  namespace: (( values.namespace ))
-  annotations: (( { "dns.gardener.cloud/class"=values.dns_class} || ~~ ))
-  
-spec:
-  type: (( values.type ))
-  secretRef:
-    name: (( values.secret_name ))
-  domains:
-    include:
-    - (( values.domain ))
-  zones: (( values.zones || ~~ ))
-  providerConfig: (( values.providerConfig || ~~ ))
+blockCIDRs:
+- 169.254.169.254/32

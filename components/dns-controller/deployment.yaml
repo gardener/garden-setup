@@ -61,6 +61,7 @@ typeToProvider:
   azure-dns: azure
   openstack-designate: openstack
   cloudflare-dns: cloudflare
+  infoblox-dns: infoblox
 
 spec:
   <<: (( &temporary ))
@@ -76,6 +77,7 @@ spec:
     zones: (( .landscape.dns.hostedZoneIDs || ~~ ))
     secret_name: (( .settings.fullname "-" provider.name ))
     provider_name: (( provider.name ))
+    providerConfig: (( .landscape.dns.providerConfig || ~~ ))
     <<: (( common ))
   cname:
     dns_fallback: (( .landscape.dashboard.cname.dns || .landscape.dns ))
@@ -87,6 +89,7 @@ spec:
     zones: (( dns_fallback.hostedZoneIDs || ~~ ))
     secret_name: (( .settings.fullname "-" provider.name "-cname" ))
     provider_name: (( provider.name "-cname" ))
+    providerConfig: (( .landscape.dns.providerConfig || ~~ ))
     <<: (( common ))
   helm:
     nameOverride: (( settings.fullname ))
