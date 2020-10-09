@@ -25,6 +25,7 @@ providerConfig:
     loadBalancerProviders: (( values.config.loadBalancerProviders ))
     dhcpDomain: (( values.config.dhcpDomain || ~~ ))
   machineImages: (( values.config.machineImageDefinitions ))
+  nodeVolumeAttachLimit: (( values.config.nodeVolumeAttachLimit || ~~ ))
 
 machineImages: (( values.config.machineImages ))
 
