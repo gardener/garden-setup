@@ -40,3 +40,5 @@ ingresscontroller:
     images:
         nginx-ingress: (( .landscape.versions.ingress-controller.image_repo ":" .landscape.versions.ingress-controller.image_tag ))
         ingress-k8s-backend: (( .landscape.versions.nginx-ingress-k8s-backend.image_repo ":" .landscape.versions.nginx-ingress-k8s-backend.image_tag ))
+    ingress:
+      annotations: (( .landscape.ingress.annotations || ~~ ))

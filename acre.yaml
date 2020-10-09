@@ -230,6 +230,8 @@ landscape:
       credentials: (( iaas[0].credentials ))
   dashboard: (( ~~ ))
   identity:
+  ingress:
+    annotations: (( ~~ ))
   gardener: (( ~~ ))
   monitoring:
     active: false
