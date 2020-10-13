@@ -247,6 +247,9 @@ metadata:
     heritage: Tiller
     release: addons
   annotations:
+  {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
 {{- if .Values.dnsclass }}
     "dns.gardener.cloud/class": {{ .Values.dnsclass | quote }}
 {{- end }}

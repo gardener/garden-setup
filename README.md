@@ -349,6 +349,15 @@ identity:
 Configures the identity provider that allows access to the Gardener dashboard. The easiest method is to provide a list of `users`, each containing `email`, `username`, and either a clear-text `password` or a bcrypted `hash` of the password.
 You can then login into the dashboard using one of the specified email/password combinations.
 
+### landscape.ingress
+```yaml
+ingress:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"  # example for internal loadbalancers on aws
+    ...
+```
+
+You can add [annotations](https://github.com/gardener/garden-setup/blob/master/components/ingress-controller/chart/templates/00-ingress-controller.yaml#L249) for the ingress controller load balancer service. This can be used for example to deploy an internal load balancer on your cloud provider (see the example for aws above).
 
 ### landscape.cert-manager
 
