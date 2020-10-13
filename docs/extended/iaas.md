@@ -33,6 +33,15 @@ iaas:
             pods: <CIDR IP range>
             services: <CIDR IP range>
             <additional fields depending on type>
+    seedSettings:                                    # settings for the seed
+      excessCapacityReservation:
+        enabled: true
+      scheduling:
+        visible: true
+      shootDNS:
+        enabled: true
+      verticalPodAutoscaler:
+        enabled: true
       ...
   - name:                                        # see above
     mode: <seed|cloudprofile|profile|inactive>   # what should be deployed
@@ -80,6 +89,9 @@ Cloudprofiles are created first, before any seed. Thus, entries of `landscape.ia
 The `featureGates` field enable/disable featureGates for the gardenlet. By default - that means there is no `featureGates` field or no value for `featureGates.Logging` - the `Logging` featureGate will be enabled. To diasble the `Logging` featureGate you have to set the `featureGates.Logging` to `false`.
 A list of available featureGates you can find in the gardener documentation - [Feature Gates in Gardener](https://github.com/gardener/gardener/blob/master/docs/deployment/feature_gates.md)
 
+## The 'seedSettings' Field
+
+The `seedSettings` field let you modify the settings for you seed for further customization. See [here](https://github.com/gardener/gardener/blob/master/docs/usage/seed_settings.md#settings-for-seeds) the documentation.
 
 ## The 'gardenClientConnection' Field
 
