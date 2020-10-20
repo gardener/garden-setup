@@ -329,6 +329,7 @@ extension_manifests:
         providerConfig:
           chart: (( encoded_chart ))
           values:
+            <<: (( valuesOverwrite ))
             config:
               etcd:
                 storage:
@@ -341,7 +342,7 @@ extension_manifests:
               worker:
                 concurrentSyncs: 50
             image:
-              repo: (( version.image_repo || ~~ ))
+              repository: (( version.image_repo || ~~ ))
               tag: (( version.image_tag || ~~ ))
             resources:
               limits:
