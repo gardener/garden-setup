@@ -18,6 +18,7 @@ landscape:
   name: (( error("landscape name required") ))
   domain:
   namespace: garden
+  defaultTTL: 120
   cluster:
     kubeconfig: ./kubeconfig
     networks: ~
@@ -702,7 +703,7 @@ validation:
     selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-manager.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
     acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-manager.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
     email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-manager.email' or 'landscape.identity.users[0].email' needs to be set"] ))
-    
+
 
   ### VALIDATIONS ###
   # structure resembles structure of landscape where possible
@@ -732,7 +733,7 @@ validation:
     credentials: (( validate( landscape.dns, ["mapfield", "credentials", types.dns[landscape.dns.type].credentials] ) ))
   ##### landscape.gardener
   gardener:
-    seedCandidateDeterminationStrategy: (( defined( landscape.gardener.seedCandidateDeterminationStrategy ) ? validate( landscape.gardener, ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]] ) :~~ ))    
+    seedCandidateDeterminationStrategy: (( defined( landscape.gardener.seedCandidateDeterminationStrategy ) ? validate( landscape.gardener, ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]] ) :~~ ))
     network-policies: (( defined( landscape.gardener.network-policies ) ? validate( landscape.gardener.network-policies, ["optionalfield", "active", ["type", "bool"]] ) :~~ ))
     extensions: (( defined( landscape.gardener.extensions ) ? validate( keys( landscape.gardener.extensions ), ["list", ["valueset", keys( landscape.versions.gardener.extensions )]] ) :~~ ))
     shootDomainPrefix: (( defined( landscape.gardener.shootDomainPrefix ) ? validate( landscape.gardener, ["optionalfield", "shootDomainPrefix", "dnslabel"] ) :~~ ))

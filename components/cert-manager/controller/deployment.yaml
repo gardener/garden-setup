@@ -93,6 +93,7 @@ acme_issuer:
                   config:
                     dns-class: (( .imports.dns-controller.export.dns-class ))
                     namespace: (( .imports.dns-controller.export.namespace ))
+                    ttl: (( .landscape.defaultTTL ))
 
 ca_issuer:
   <<: (( &template &temporary ))
@@ -119,7 +120,7 @@ ca_issuer:
 servers:
   <<: (( &temporary ))
   live: https://acme-v02.api.letsencrypt.org/directory
-  staging: 
+  staging:
     <<: (( &template )) # to not download the letsencrypt certs every time
     url: https://acme-staging-v02.api.letsencrypt.org/directory
     ca:
