@@ -44,7 +44,7 @@
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
-          "version": "v1.11.4"
+          "version": "v1.12.0"
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
