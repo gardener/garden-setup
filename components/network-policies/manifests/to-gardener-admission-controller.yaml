@@ -1,0 +1,19 @@
+# Allows outgoing traffic to the gardener-admission-controller.
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: to-gardener-admission-controller
+  namespace: (( landscape.namespace ))
+spec:
+  podSelector:
+    matchLabels:
+      networking.gardener.cloud/to-gardener-admission-controller: allowed
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: gardener
+          role: admission-controller

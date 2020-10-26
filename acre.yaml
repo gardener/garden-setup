@@ -46,6 +46,10 @@ landscape:
         <<: (( merge ))
         image_repo: "eu.gcr.io/gardener-project/gardener/controller-manager"
         image_tag: (( valid( tag ) ? tag :~~ ))
+      admission_controller:
+        <<: (( merge ))
+        image_repo: "eu.gcr.io/gardener-project/gardener/admission-controller"
+        image_tag: (( valid( tag ) ? tag :~~ ))
       scheduler:
         <<: (( merge ))
         image_repo: "eu.gcr.io/gardener-project/gardener/scheduler"
