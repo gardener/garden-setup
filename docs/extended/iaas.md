@@ -371,7 +371,7 @@ landscape:
             size: 40Gi
 ```
 
-All of the Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile-openstack.yaml), with `machineImageDefinitions` providing the values for `spec.providerConfig.machineImages`.
+All of the Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile.yaml), with `machineImageDefinitions` providing the values for `spec.providerConfig.machineImages`.
 
 > Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff++ templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
 
