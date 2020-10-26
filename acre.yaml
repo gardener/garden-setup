@@ -365,7 +365,7 @@ validation:
               - - and
                 - ["mapfield", "name"]
                 - ["mapfield", "vsphereHost"]
-                - ["mapfield", "vsphereInsecureSSL", ["type", "bool"]]
+                - ["optionalfield", "vsphereInsecureSSL", ["type", "bool"]]
                 - ["mapfield", "nsxtHost"]
                 - ["optionalfield", "nsxtInsecureSSL", ["type", "bool"]]
                 - ["optionalfield", "nsxtRemoteAuth", ["type", "bool"]]
@@ -559,7 +559,7 @@ validation:
           - - list
             - - and
               - ["mapfield", "name"]
-              - ["mapfield", "sourceRepository"]
+              - ["optionalfield", "sourceRepository"]
               - ["mapfield", "repository"]
               - ["optionalfield", "tag"]
               - ["optionalfield", "version"]
@@ -577,7 +577,7 @@ validation:
                   - - list
                     - - and
                       - ["mapfield", "name"]
-                      - ["mapfield", "sourceRepository"]
+                      - ["optionalfield", "sourceRepository"]
                       - ["mapfield", "repository"]
                       - ["optionalfield", "tag"]
                       - ["optionalfield", "version"]
