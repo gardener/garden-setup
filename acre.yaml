@@ -434,6 +434,7 @@ validation:
           - ["optionalfield", "keystoneURL", "dnsdomain"]
           - ["optionalfield", "useOctavia", ["type", "bool"]]
           - ["optionalfield", "dnsServers", ["list", ["ip"]]]
+          - ["optionalfield", "nodeVolumeAttachLimit", ["type", "int"]]
           - - mapfield
             - machineImageDefinitions
             - - list

@@ -329,6 +329,7 @@ landscape:
       loadBalancerProviders:
         - name: haproxy
       useOctavia: false # optional
+      nodeVolumeAttachLimit: 256 # optional, sets the maximum volumes per node in the csi driver
       dnsServers: # optional
         - "8.8.8.8"
       machineImageDefinitions:
