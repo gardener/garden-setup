@@ -374,6 +374,8 @@ landscape:
 
 All of the Openstack-specific nodes go into the [cloudprofile](https://github.com/gardener/gardener/blob/master/example/30-cloudprofile.yaml), with `machineImageDefinitions` providing the values for `spec.providerConfig.machineImages`.
 
+The version inside the ``machineImageDefinitions`` and ``machineImages`` sections has to be specified using the [semantic versioning](https://semver.org) format.
+
 > Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff++ templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
 
 
