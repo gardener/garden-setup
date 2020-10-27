@@ -101,5 +101,6 @@ spec:
     configuration:
       dnsClass: (( common.dns_class ))
       identifier: (( "setup.gardener.cloud/" .landscape.name ))
+      kubeconfigId: (( .landscape.name ))
       controllers: (( "dnssources," dns.type ( cname.type != dns.type ? "," cname.type :"" ) ))
       ttl: (( .landscape.dns.ttl || ~~ ))

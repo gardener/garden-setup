@@ -42,14 +42,25 @@ spec:
       - Signature
       - KeyEncipherment
     hosts: (( utilities.svcHosts(name, landscape.namespace) ))
+  admissioncontroller:
+    name: "gardener-admission-controller"
+    commonName: (( name ".garden.svc.cluster.local" ))
+    validity: 87600
+    usage:
+      - ServerAuth
+      - Signature
+      - KeyEncipherment
+    hosts: (( utilities.svcHosts(name, landscape.namespace) ))
 
 state:
   <<: (( &state(merge none) ))
   gardener_ca: (( utilities.certs.selfSignedCA("ca-gardener", false) ))
   gardener_apiserver: (( utilities.certs.keyCertForCA(spec.apiserver, gardener_ca, false) ))
   gardener_controller_manager: (( utilities.certs.keyCertForCA(spec.controllermanager, gardener_ca, false) ))
+  gardener_admission_controller: (( utilities.certs.keyCertForCA(spec.admissioncontroller, gardener_ca, false) ))
 
 plugins:
+  - kubectl: workaround
   - pinned:
     - helm:
       - gardener
@@ -58,6 +69,20 @@ plugins:
       - kubectl_apply
   - kubectl:
     - garden_secret
+
+workaround:
+  - kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
+    manifests:
+    - apiVersion: v1
+      kind: Namespace
+      metadata:
+        labels:
+        name: (( .landscape.namespace ))
+    - apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: (( .gardener.values.global.admission.serviceAccountName ))
+        namespace: (( .landscape.namespace ))
 
 kubectl_apply:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
@@ -121,6 +146,38 @@ gardener:
           crt: (( .state.gardener_apiserver.value.cert ))
           key: (( .state.gardener_apiserver.value.key ))
         versionPriority: 20
+      admission:
+        enabled: true
+        replicaCount: 3
+        kubeconfig: dummy
+        serviceAccountName: gardener-admission-controller
+        image:
+          pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
+          repository: (( .gardener_version.admission_controller.image_repo ))
+          tag: (( .gardener_version.admission_controller.image_tag || ~~ ))
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
+        vpa: false
+        config:
+          gardenClientConnection:
+            acceptContentTypes: application/json
+            contentType: application/json
+            qps: 100
+            burst: 130
+          server:
+            https:
+              bindAddress: 0.0.0.0
+              port: 2719
+              tls:
+                caBundle: (( .state.gardener_ca.value.cert ))
+                crt: (( .state.gardener_admission_controller.value.cert ))
+                key: (( .state.gardener_admission_controller.value.key ))
+          resourceAdmissionConfiguration: (( .landscape.gardener.resourceAdmissionConfiguration || ~~ ))
       controller:
         kubeconfig: dummy
         additionalVolumeMounts: []

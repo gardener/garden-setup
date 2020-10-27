@@ -25,4 +25,7 @@ export:
         <<: (( .gardener.values.global ))
         scheduler:
           <<: (( .gardener.values.global.scheduler ))
-          kubeconfig: (( read( env.GENDIR "/kubectl_apply/sa_gardener-scheduler.kubeconfig", "text" ) ))
+          kubeconfig: (( read( env.GENDIR "/kubectl_apply/sa_" .gardener.values.global.scheduler.serviceAccountName ".kubeconfig", "text" ) ))
+        admission:
+          <<: (( .gardener.values.global.admission ))
+          kubeconfig: (( read(env.GENDIR "/kubectl_apply/sa_" .gardener.values.global.admission.serviceAccountName ".kubeconfig", "text") ))

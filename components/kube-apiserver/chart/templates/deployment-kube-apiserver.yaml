@@ -52,6 +52,7 @@ spec:
         networking.gardener.cloud/to-ingress: allowed # needed for communication to identity
         networking.gardener.cloud/to-terminal-controller-manager: allowed # needed for webhooks
         networking.gardener.cloud/to-world: allowed # necessary, except for GCP because GCP puts IP table rules on the nodes that allow in-cluster routing
+        networking.gardener.cloud/to-gardener-admission-controller: allowed # needed for webhooks
         {{- end }}
     spec:
       affinity:
