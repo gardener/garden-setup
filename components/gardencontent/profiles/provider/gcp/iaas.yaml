@@ -27,10 +27,6 @@ providerConfig:
     versions:
     - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-27-1-0
       version: 27.1.0
-  - name: coreos
-    versions:
-    - image: projects/coreos-cloud/global/images/coreos-stable-2303-3-0-v20191203
-      version: 2303.3.0
   - name: ubuntu
     versions:
     - image: projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20200218

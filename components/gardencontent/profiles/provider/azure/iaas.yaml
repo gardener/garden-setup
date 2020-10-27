@@ -282,11 +282,6 @@ providerConfig:
     - count: 5
       region: westus2
   machineImages:
-  - name: coreos
-    versions:
-    - acceleratedNetworking: true
-      urn: CoreOS:CoreOS:Stable:2303.3.0
-      version: 2303.3.0
   - name: ubuntu
     versions:
     - acceleratedNetworking: true

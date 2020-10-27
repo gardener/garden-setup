@@ -67,13 +67,6 @@ landscape:
           image_repo: (( ~~ ))
           repo: (( .dependency_versions.versions.gardener.extensions.dns-external.repo ))
           chart_path: charts/external-dns-management
-        os-coreos:
-          <<: (( merge ))
-          tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-coreos.version ))
-          repo: (( .dependency_versions.versions.gardener.extensions.os-coreos.repo ))
-          chart_path: charts/gardener-extension-os-coreos
-          image_tag: (( valid( os-coreos.tag ) ? os-coreos.tag :~~ ))
-          image_repo: (( ~~ ))
         os-ubuntu:
           <<: (( merge ))
           tag: (( valid( os-ubuntu.branch ) -or valid( os-ubuntu.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-ubuntu.version ))

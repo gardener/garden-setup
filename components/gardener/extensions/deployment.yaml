@@ -47,36 +47,6 @@ extension_manifests:
   <<: (( &temporary ))
 
 ########################################
-  os-coreos:
-########################################
-    <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: os-coreos
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            concurrentSyncs: 25
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                cpu: 100m
-                memory: 256Mi
-              requests:
-                cpu: 20m
-                memory: 64Mi
-        type: helm
-      resources:
-      - kind: OperatingSystemConfig
-        type: coreos
-
-########################################
   os-ubuntu:
 ########################################
     <<: (( &template ))

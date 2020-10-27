@@ -31,9 +31,6 @@ defaults:
     kubernetes: (( defaults.providerspec.kubernetes || defaults.kubernetes ))
     machineImages:
       - <<: (( defaults.providerspec.machineImages || ~ ))
-      - name: coreos
-        versions:
-        - version: 2303.3.0
       - name: ubuntu
         versions:
         - version: 18.4.20200228
