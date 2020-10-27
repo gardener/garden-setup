@@ -25,6 +25,8 @@ providerConfig:
   machineImages:
   - name: gardenlinux
     versions:
+    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-184-0-e5a157
+      version: 184.0.0
     - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-27-1-0
       version: 27.1.0
   - name: ubuntu
@@ -33,8 +35,8 @@ providerConfig:
       version: 18.4.20200228
   - name: suse-chost
     versions:
-    - image: projects/suse-byos-cloud/global/images/sles-15-sp1-chost-byos-v20200610
-      version: 15.1.20200615
+    - image: projects/suse-byos-cloud/global/images/sles-15-sp2-chost-byos-v20201016
+      version: 15.2.20201016
 
 machineTypes:
   - cpu: "2"

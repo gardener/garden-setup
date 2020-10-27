@@ -31,12 +31,16 @@ defaults:
     kubernetes: (( defaults.providerspec.kubernetes || defaults.kubernetes ))
     machineImages:
       - <<: (( defaults.providerspec.machineImages || ~ ))
+      - name: gardenlinux
+        versions:
+        - version: 184.0.0
+        - version: 27.1.0
       - name: ubuntu
         versions:
         - version: 18.4.20200228
       - name: suse-chost
         versions:
-        - version: 15.1.20200615
+        - version: 15.2.20201016
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))
     volumeTypes:

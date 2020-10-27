@@ -282,6 +282,12 @@ providerConfig:
     - count: 5
       region: westus2
   machineImages:
+  - name: gardenlinux
+    versions:
+    - urn: sap:gardenlinux:greatest:184.0.0
+      version: 184.0.0
+    - urn: sap:gardenlinux:greatest:27.1.0
+      version: 27.1.0
   - name: ubuntu
     versions:
     - acceleratedNetworking: true
@@ -290,8 +296,8 @@ providerConfig:
   - name: suse-chost
     versions:
     - acceleratedNetworking: true
-      urn: suse:sles-15-sp1-chost-byos:gen1:2020.06.10
-      version: 15.1.20200615
+      urn: suse:sles-15-sp2-chost-byos:gen1:2020.10.16
+      version: 15.2.20201016
   machineTypes:
     - acceleratedNetworking: true
       name: Standard_D4_v3

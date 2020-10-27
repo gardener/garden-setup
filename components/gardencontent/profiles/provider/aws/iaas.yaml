@@ -14,17 +14,50 @@
 
 <<: (( &template ))
 
-machineImages:
-  - name: gardenlinux
-    versions:
-    - version: 27.1.0
-
 providerConfig:
   apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
   kind: CloudProfileConfig
   machineImages:
   - name: gardenlinux
     versions:
+    - regions:
+      - ami: ami-0a7380651a94f34af
+        name: eu-north-1
+      - ami: ami-0f32041348763f71c
+        name: ap-south-1
+      - ami: ami-026f095584d001426
+        name: eu-west-3
+      - ami: ami-096b4e0e74268868e
+        name: eu-west-2
+      - ami: ami-06672bb04fdda3653
+        name: eu-west-1
+      - ami: ami-0f747a4612321e16d
+        name: ap-northeast-2
+      - ami: ami-064f4f4a6ae883ef1
+        name: ap-northeast-1
+      - ami: ami-0cce0186c61c3f502
+        name: sa-east-1
+      - ami: ami-09d6ef5e7a53a9972
+        name: ca-central-1
+      - ami: ami-0bbb464d2bad84aa4
+        name: ap-southeast-1
+      - ami: ami-084302575ffe36a40
+        name: ap-southeast-2
+      - ami: ami-0e5b90e9d0988a82d
+        name: eu-central-1
+      - ami: ami-03a6f7727025a545d
+        name: us-east-1
+      - ami: ami-09d1a0dcdd315fd22
+        name: us-east-2
+      - ami: ami-041b905f7b38e8e9b
+        name: us-west-1
+      - ami: ami-0d1ee9478903ca81f
+        name: us-west-2
+      - ami: ami-af1d25ce
+        name: us-gov-west-1
+      - ami: ami-0e05a9dbe093f2152
+        name: us-gov-east-1
+      version: 184.0.0
     - regions:
       - ami: ami-07ccc13d414bcef3c
         name: ap-northeast-1
