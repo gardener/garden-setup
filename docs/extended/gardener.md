@@ -31,7 +31,7 @@ The following extensions are availibe in `landscape.gardener.extensions`:
 - networking-calico: [values.yaml](https://github.com/gardener/gardener-extension-networking-calico/blob/master/charts/gardener-extension-networking-calico/values.yaml)
 - shoot-cert-service: [values.yaml](https://github.com/gardener/gardener-extension-shoot-cert-service/blob/master/charts/gardener-extension-shoot-cert-service/values.yaml)
 
-Example to set the `imageVectorOverwrite` (see [values.yaml](https://github.com/gardener/gardener-extension-networking-calico/blob/master/charts/gardener-extension-networking-calico/values.yaml#L7-L19)) for `gardener-extension-networking-calico`:
+Example to set the `imageVectorOverwrite` (see [values.yaml](https://github.com/gardener/gardener-extension-networking-calico/blob/master/charts/gardener-extension-networking-calico/values.yaml#L14-L26)) for `gardener-extension-networking-calico`:
 
 ```yaml
   ...
