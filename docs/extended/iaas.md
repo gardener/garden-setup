@@ -211,7 +211,7 @@ machine:
   type: <depends on iaas provider>
   image:
     name: <first image specified in the cloudprofile> # 'gardenlinux' by default
-    version: <some coreos version>
+    version: <some image version>
 volume:
   type: <depends on iaas provider>
   size: "50Gi"
@@ -333,24 +333,14 @@ landscape:
       dnsServers: # optional
         - "8.8.8.8"
       machineImageDefinitions:
-        - name: coreos # A
-          versions:
-            - image: coreos-2303.3.0
-              version: 2303.3.0 # B
-            - image: coreos-2135.6.0
-              version: 2135.6.0 # C
-        - name: ubuntu
+        - name: ubuntu # A
           versions:
             - image: ubuntu-18.04
-              version: 18.4.20190617
+              version: 18.4.20190617 # B
       machineImages:
-        - name: coreos # A
+        - name: ubuntu # A
           versions:
-          - version: 2303.3.0 # B
-          - version: 2135.6.0 # C
-        - name: ubuntu
-          versions:
-          - version: 18.4.20190617
+            - version: 18.4.20190617 # B
       machineTypes:
         - name: medium_2_4
           cpu: "2"
