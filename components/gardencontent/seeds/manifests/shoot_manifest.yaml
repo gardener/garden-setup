@@ -18,6 +18,8 @@ spec:
   kubernetes:
     version: (( values.values.k8sVersion ))
     allowPrivilegedContainers: true # 'true' means that all authenticated users can use the "gardener.privileged" PodSecurityPolicy, allowing full unrestricted access to Pod features.
+    verticalPodAutoscaler:
+      enabled: true
     kubeAPIServer:
       tmpBaseVersion: (( &temporary ( substr( values.values.k8sVersion, 0, 4 ) ) ))
       enableBasicAuthentication: (( tmpBaseVersion == "1.14" -or tmpBaseVersion == "1.15" -or tmpBaseVersion == "1.16" -or tmpBaseVersion == "1.17" -or tmpBaseVersion == "1.18" ? true :false ))
