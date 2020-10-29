@@ -75,8 +75,16 @@ seedSpec:
     pods: (( configValues.seed.networks.pods ))
     services: (( configValues.seed.networks.services ))
     shootDefaults: (( configValues.seed.shootDefaultNetworks || { "pods" = "100.96.0.0/11", "services" = "100.64.0.0/13" } ))
-  taints: (( configValues.config.mode == "soil" ? [{ "key" = "seed.gardener.cloud/invisible" }, { "key" = "seed.gardener.cloud/protected" }] :~~ ))
-  settings: (( configValues.seed.settings || ~~ ))
+  taints: (( configValues.config.mode == "soil" ? [{ "key" = "seed.gardener.cloud/protected" }] :~~ ))
+  settings: (( element( merge( seedSettingMergeTemplate, configValues.seed || {} ), "settings" ) ))
+
+seedSettingMergeTemplate:
+  <<: (( &template &temporary ))
+  settings:
+    <<: (( merge ))
+    scheduling:
+      <<: (( merge ))
+      visible: (( configValues.config.mode == "soil" ? false :true ))
 
 gardenletBootstrapKubeconfig:
   apiVersion: v1
@@ -217,20 +225,17 @@ pluginSpecs:
   seedReady:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     seed: (( configValues.name ))
-  deleteBackupBucket:
-    kubeconfig: (( configValues.kubeconfigs.virtual ))
-    step: delete
-    type: backupbucket
-    customFields:
-      - key: .spec.seedName
-        value: (( configValues.name ))
-      - key: .spec.seedName
-        value: (( configValues.name ))
   deleteSeed:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     step: delete
     type: seed
     name: (( configValues.name ))
+  deleteClusterAutoscalerManagedResource: # workaround
+    kubeconfig: (( configValues.kubeconfigs.seed ))
+    step: delete
+    type: managedresource
+    name: cluster-autoscaler
+    namespace: garden
   deleteBootstrapToken:
     # delete duplicate bootstrap tokens that are created during re-deployment
     kubeconfig: (( configValues.kubeconfigs.virtual ))
