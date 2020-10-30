@@ -144,6 +144,13 @@ landscape:
           chart_path: charts/gardener-extension-provider-vsphere
           image_tag: (( valid( provider-vsphere.tag ) ? provider-vsphere.tag :~~ ))
           image_repo: (( ~~ ))
+        provider-packet:
+          <<: (( merge ))
+          tag: (( valid( provider-packet.branch ) -or valid( provider-packet.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-packet.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-packet.repo ))
+          chart_path: charts/gardener-extension-provider-packet
+          image_tag: (( valid( provider-packet.tag ) ? provider-packet.tag :~~ ))
+          image_repo: (( ~~ ))
     dashboard:
       <<: (( merge ))
       repo: (( .dependency_versions.versions.dashboard.core.repo ))
@@ -452,6 +459,15 @@ validation:
                       - ["mapfield", "version"]
         networks:
           - ["mapfield", "workers", ["cidr"]]
+      packet:
+        credentials:
+          - and
+          - ["mapfield", "apiToken"]
+          - ["mapfield", "projectID"]
+        config:
+          - (( return_true ))
+        profileConfig:
+          - (( return_true ))
     etcd_backup:
       gcs:
         credentials: (( iaas.gcp.credentials ))

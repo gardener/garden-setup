@@ -317,6 +317,45 @@ extension_manifests:
         type: openstack
 
 ########################################
+  provider-packet:
+########################################
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1beta1
+    kind: ControllerRegistration
+    metadata:
+      name: provider-packet
+    spec:
+      deployment:
+        providerConfig:
+          chart: (( encoded_chart ))
+          values:
+            <<: (( valuesOverwrite ))
+            controllers:
+              infrastructure:
+                concurrentSyncs: 50
+                ignoreOperationAnnotation: false
+              worker:
+                concurrentSyncs: 50
+            image:
+              repository: (( version.image_repo || ~~ ))
+              tag: (( version.image_tag || ~~ ))
+            resources:
+              limits:
+                memory: 1Gi
+        type: helm
+      resources:
+      - kind: Infrastructure
+        type: packet
+      - kind: ControlPlane
+        type: packet
+      - kind: Worker
+        type: packet
+      - kind: BackupBucket
+        type: packet
+      - kind: BackupEntry
+        type: packet
+
+########################################
   provider-vsphere:
 ########################################
     <<: (( &template ))

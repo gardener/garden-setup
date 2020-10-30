@@ -1,0 +1,209 @@
+# Copyright 2020 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+<<: (( &template ))
+
+machineImages:
+  - name: gardenlinux
+    versions:
+    - version: 27.1.0
+
+providerConfig:
+  apiVersion: packet.provider.extensions.gardener.cloud/v1alpha1
+  kind: CloudProfileConfig
+  machineImages:
+  - name: gardenlinux
+    versions:
+    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-184-0-e5a157
+      version: 184.0.0
+    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-27-1-0
+      version: 27.1.0
+  - name: ubuntu
+    versions:
+    - image: projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20200218
+      version: 18.4.20200228
+  - name: suse-chost
+    versions:
+    - image: projects/suse-byos-cloud/global/images/sles-15-sp2-chost-byos-v20201016
+      version: 15.2.20201016
+
+machineTypes:
+  - cpu: "1"
+    gpu: "0"
+    memory: 264Gi
+    name: c1.bloomberg.x86
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 128Gi
+    name: c2.large.arm
+    usable: true
+  - cpu: "3"
+    gpu: "0"
+    memory: 64Gi
+    name: c2.medium.x86
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 64Gi
+    name: c3.medium.x86
+    usable: true
+  - cpu: "5"
+    gpu: "0"
+    memory: 32Gi
+    name: c3.small.x86
+    usable: true
+  - cpu: "7"
+    gpu: "0"
+    memory: 128Gi
+    name: cpe1.g1.4028gr
+    usable: true
+  - cpu: "9"
+    gpu: "0"
+    memory: 192Gi
+    name: cpe1.m2.r640
+    usable: true
+  - cpu: "11"
+    gpu: "0"
+    memory: 256Gi
+    name: cpe1.s1.r730
+    usable: true
+  - cpu: "13"
+    gpu: "0"
+    memory: 128Gi
+    name: cpe1.x1.supermicro
+    usable: true
+  - cpu: "15"
+    gpu: "0"
+    memory: 192Gi
+    name: g2.large.x86
+    usable: true
+  - cpu: "17"
+    gpu: "0"
+    memory: 384Gi
+    name: m2.xlarge.x86
+    usable: true
+  - cpu: "18"
+    gpu: "0"
+    memory: 256Gi
+    name: m3.large.x86
+    usable: true
+  - cpu: "20"
+    gpu: "0"
+    memory: 384Gi
+    name: n2.xlarge.x86
+    usable: true
+  - cpu: "22"
+    gpu: "0"
+    memory: 192Gi
+    name: s3.xlarge.x86
+    usable: true
+  - cpu: "23"
+    gpu: "0"
+    memory: 16Gi
+    name: t3.small.x86
+    usable: true
+  - cpu: "25"
+    gpu: "0"
+    memory: 384Gi
+    name: x2.xlarge.x86
+    usable: true
+  - cpu: "27"
+    gpu: "0"
+    memory: 256Gi
+    name: x.large.arm
+    usable: true
+  - cpu: "28"
+    gpu: "0"
+    memory: 32Gi
+    name: x.small.x86
+    usable: true
+  - cpu: "30"
+    gpu: "0"
+    memory: 128Gi
+    name: c1.large.arm
+    usable: true
+  - cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: c1.large.arm.xda
+    usable: true
+  - cpu: "33"
+    gpu: "0"
+    memory: 32Gi
+    name: c1.small.x86
+    usable: true
+  - cpu: "35"
+    gpu: "0"
+    memory: 128Gi
+    name: c1.xlarge.x86
+    usable: true
+  - cpu: "37"
+    gpu: "0"
+    memory: 256Gi
+    name: m1.xlarge.x86
+    usable: true
+  - cpu: "38"
+    gpu: "0"
+    memory: 64Gi
+    name: s1.large.x86
+    usable: true
+  - cpu: "39"
+    gpu: "0"
+    memory: 8Gi
+    name: t1.small.x86
+    usable: true
+  - cpu: "40"
+    gpu: "0"
+    memory: 32Gi
+    name: x1.small.x86
+    usable: true
+
+
+regions:
+  - name: "sin2"
+  - name: "syd2"
+  - name: "da3"
+  - name: "pit1"
+  - name: "iad2"
+  - name: "sin3"
+  - name: "sjc1"
+  - name: "sv15"
+  - name: "fra2"
+  - name: "sea2"
+  - name: "dfw1"
+  - name: "ams1"
+  - name: "den42"
+  - name: "nrt1"
+  - name: "dtw1"
+  - name: "gsp1"
+  - name: "yyz1"
+  - name: "atl2"
+  - name: "lax1"
+  - name: "dfw2"
+  - name: "am6"
+  - name: "dc13"
+  - name: "ewr1"
+  - name: "iah1"
+  - name: "phx1"
+  - name: "sin1"
+  - name: "lax2"
+  - name: "ny5"
+  - name: "hkg1"
+  - name: "bos2"
+  - name: "mci1"
+  - name: "iad1"
+  - name: "sea1"
+  - name: "mrs1"
+  - name: "ord4"
