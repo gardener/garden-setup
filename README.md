@@ -132,8 +132,8 @@ landscape:
       services: &lt;CIDR IP range&gt;
 
   <a href="#landscapeiaas">iaas</a>:
-    - name: (( type ))                           # name of the seed
-      type: &lt;gcp|aws|azure|openstack&gt;            # iaas provider
+    - name: (( iaas[0].type ))                   # name of the seed
+      type: &lt;gcp|aws|azure|openstack|vsphere&gt;    # iaas provider
       region: &lt;major region&gt;-&lt;minor region&gt;      # region for initial seed
       zones:                                     # remove zones block for Azure
         - &lt;major region&gt;-&lt;minor region&gt;-&lt;zone&gt;   # example: europe-west1-b
@@ -158,14 +158,14 @@ landscape:
           ...
       credentials:
 
-  <a href="#landscapeetcd">etcd</a>:                                       # optional, default values based on `landscape.iaas`
+  <a href="#landscapeetcd">etcd</a>:                                       # optional for gcp/aws/azure/openstack, default values based on `landscape.iaas`
     backup:
-      type: &lt;gcs|s3|abs|swift&gt;               # type of blob storage
+      type: &lt;gcs|s3|abs|swift&gt;                # type of blob storage
       resourceGroup:                          # Azure resource group you would like to use for your backup
       region: (( iaas.region ))               # region of blob storage (default: same as above)
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
 
-  <a href="#landscapedns">dns</a>:                                    # optional, default values based on `landscape.iaas`
+  <a href="#landscapedns">dns</a>:                                    # optional for gcp/aws/azure/openstack, default values based on `landscape.iaas`
     type: &lt;google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns|infoblox-dns&gt;   # dns provider
     credentials: (( iaas.credentials ))   # credentials for the dns provider
 
@@ -219,7 +219,7 @@ Finding out CIDR ranges of your cluster is not trivial. For example, GKE only te
 ```yaml
 iaas:
   - name: (( type ))                           # name of the seed
-    type: <gcp|aws|azure|openstack>            # iaas provider
+    type: <gcp|aws|azure|openstack|vsphere>    # iaas provider
     region: <major region>-<minor region>      # region for initial seed
     zones:                                     # remove zones block for Azure
       - <major region>-<minor region>-<zone>   # example: europe-west1-b
@@ -227,7 +227,7 @@ iaas:
       - <major region>-<minor region>-<zone>   # example: europe-west1-d
     credentials:                               # provide access to IaaS layer used for creating resources for shoot clusters
   - name:                                      # see above
-    type: <gcp|aws|azure|openstack>            # see above
+    type: <gcp|aws|azure|openstack|vsphere>    # see above
     region: <major region>-<minor region>      # region for seed
     zones:                                     # remove zones block for Azure
       - <major region>-<minor region>-<zone>   # example: europe-west1-b
@@ -299,7 +299,7 @@ etcd:
     credentials: (( iaas.credentials ))
 ```
 Configuration of what blob storage to use for the etcd key-value store. If your IaaS provider offers a blob storage you can use the same values for `etc.backup.region` and `etc.backup.credentials` as above for `iaas.region` and `iaas.credentials` correspondingly by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff.
-If you remove single values or the whole block, the missing values will be set to defaults derived from `landscape.iaas`. The `resourceGroup` cannot be defaulted and must be specified. Make sure that the specified `resourceGroup` is empty and unused as deleting the cluster using `sow delete all` deletes this `resourceGroup`.
+If the type of `landscape.iaas[0]` is one of `gcp`, `aws`, `azure`, or `openstack`, this block can be defaulted - either partly or as a whole - based on values from `landscape.iaas`. The `resourceGroup`, which is necessary for Azure, cannot be defaulted and must be specified. Make sure that the specified `resourceGroup` is empty and unused as deleting the cluster using `sow delete all` deletes this `resourceGroup`.
 
 | Field                  | Type                   | Description                                                                                                                                                                                                                                                                                                                                              | Example             | Iaas Provider Documentation                                                                                                                                                                                                                                                                                                     |
 |:---------------------- |:---------------------- |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |:------------------- |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -317,7 +317,7 @@ dns:
   credentials:
 ```
 Configuration for the Domain Name Service (DNS) provider. If your IaaS provider also offers a DNS service you can use the same values for `dns.credentials` as for `iaas.creds` above by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff. If they belong to another account (or to another IaaS provider) the appropriate credentials (and their type) have to be configured.
-Similar to `landscape.etcd`, missing values will be set to defaults based on the values given in `landscape.iaas`.
+Similar to `landscape.etcd`, this block - and parts of it - are optional if the type of `landscape.iaas[0]` is one of `gcp`, `aws`, `azure`, or `openstack`. Missing values will be derived from `landscape.iaas`.
 
 | Field         | Type                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Example                  | IaaS Provider Documentation                                                                                                                                                                                                                                                                                            |
 |:------------- |:---------------------- |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |:------------------------ |:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

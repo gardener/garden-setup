@@ -10,8 +10,8 @@ landscape:
       services: <service CIDR>
 
   iaas:
-    - name: (( type ))                           # name of the seed
-      type: <gcp|aws|azure|openstack>            # iaas provider
+    - name: (( iaas[0].type ))                   # name of the seed
+      type: <gcp|aws|azure|openstack|vsphere>    # iaas provider
       region: <major region>-<minor region>      # region for initial seed
       zones:                                     # remove zones block for Azure
         - <major region>-<minor region>-<zone>   # example: europe-west1-b
@@ -20,7 +20,7 @@ landscape:
       credentials:                               # provide access to IaaS layer used for creating resources for shoot clusters
         # your credentials here
     # - name:                                      # see above
-    #   type: <gcp|aws|azure|openstack>            # see above
+    #   type: <gcp|aws|azure|openstack|vsphere>    # see above
     #   region: <major region>-<minor region>      # region for seed
     #   zones:                                     # remove zones block for Azure
     #     - <major region>-<minor region>-<zone>   # example: europe-west1-b
@@ -38,13 +38,13 @@ landscape:
     #   credentials:
     #     # your credentials here
 
-#  etcd: # optional
+#  etcd: # optional for gcp/aws/azure/openstack
 #    backup:
-#      type: <gcs/s3/abs>
-#      region: (( iaas.region ))
+#      type: <gcs|s3|abs|swift>
+#      region: (( iaas[0].region ))
 #      credentials: (( iaas[0].credentials ))
 
-#  dns: # optional
+#  dns: # optional for gcp/aws/azure/openstack
 #    type: <google-clouddns/aws-route53/azure-dns/openstack-designate/cloudflare-dns/infoblox-dns>
 #    credentials: (( iaas[0].credentials ))
 
