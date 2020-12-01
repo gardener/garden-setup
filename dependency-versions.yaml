@@ -12,15 +12,15 @@
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.13.0"
+          "version": "v1.14.0"
         },
         "os-suse-chost": {
           "repo": "https://github.com/gardener/gardener-extension-os-suse-jeos.git",
-          "version": "v1.8.0"
+          "version": "v1.9.0"
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
-          "version": "v1.8.0"
+          "version": "v1.9.0"
         },
         "os-gardenlinux": {
           "repo": "https://github.com/gardener/gardener-extension-os-gardenlinux.git",
@@ -28,23 +28,23 @@
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
-          "version": "v1.16.0"
+          "version": "v1.17.2"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
-          "version": "v1.14.0"
+          "version": "v1.14.1"
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
-          "version": "v1.12.0"
+          "version": "v1.13.1"
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
-          "version": "v1.12.0"
+          "version": "v1.13.0"
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
-          "version": "v1.10.0"
+          "version": "v1.10.1"
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
@@ -52,7 +52,7 @@
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
-          "version": "v0.2.0"
+          "version": "v0.4.1"
         }
       }
     },

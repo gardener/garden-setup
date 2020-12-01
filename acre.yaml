@@ -223,9 +223,9 @@ landscape:
     backup:
       <<: (( merge ))
       active: true
-      type: (( .backup_type_mapping[iaas[0].type] ))
-      region: (( iaas[0].region ))
-      credentials: (( iaas[0].credentials ))
+      type: (( active ? .backup_type_mapping[iaas[0].type] :~~ ))
+      region: (( active ? iaas[0].region :~~ ))
+      credentials: (( active ? iaas[0].credentials :~~ ))
   dashboard: (( ~~ ))
   identity:
   ingress:
