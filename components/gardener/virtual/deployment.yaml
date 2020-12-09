@@ -135,6 +135,7 @@ gardener:
         insecureSkipTLSVerify: false
         replicaCount: 1
         resources:
+          <<: (( merge landscape.gardener.apiserver.resources ))
           limits:
             cpu: 300m
             memory: 256Mi
@@ -156,6 +157,7 @@ gardener:
           repository: (( .gardener_version.admission_controller.image_repo ))
           tag: (( .gardener_version.admission_controller.image_tag || ~~ ))
         resources:
+          <<: (( merge landscape.gardener.admission.resources ))
           requests:
             cpu: 100m
             memory: 200Mi
@@ -240,6 +242,7 @@ gardener:
           tag: (( .gardener_version.controller_manager.image_tag || ~~ ))
         replicaCount: 1
         resources:
+          <<: (( merge landscape.gardener.controller.resources ))
           limits:
             cpu: 750m
             memory: 512Mi
@@ -259,6 +262,14 @@ gardener:
               retrySyncPeriod: 15s
               concurrentSyncs: 5
               candidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
+        resources:
+          <<: (( merge landscape.gardener.scheduler.resources ))
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 300m
+            memory: 256Mi
         # kubeconfig: is only needed for the runtime chart and will be added in export step
       defaultDomains:
         - credentials: (( .settings.dns_credentials ))
