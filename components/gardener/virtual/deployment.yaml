@@ -60,7 +60,6 @@ state:
   gardener_admission_controller: (( utilities.certs.keyCertForCA(spec.admissioncontroller, gardener_ca, false) ))
 
 plugins:
-  - kubectl: workaround
   - pinned:
     - helm:
       - gardener
@@ -69,20 +68,6 @@ plugins:
       - kubectl_apply
   - kubectl:
     - garden_secret
-
-workaround:
-  - kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
-    manifests:
-    - apiVersion: v1
-      kind: Namespace
-      metadata:
-        labels:
-        name: (( .landscape.namespace ))
-    - apiVersion: v1
-      kind: ServiceAccount
-      metadata:
-        name: (( .gardener.values.global.admission.serviceAccountName ))
-        namespace: (( .landscape.namespace ))
 
 kubectl_apply:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
