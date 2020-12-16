@@ -31,7 +31,6 @@ pluginTemplate:
       - template
     - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
-  - delete: (( "renderedPluginSpecs[" id "].deleteClusterAutoscalerManagedResource" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
 
