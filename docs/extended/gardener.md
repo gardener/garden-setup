@@ -56,3 +56,25 @@ Example to set the `imageVectorOverwrite` (see [values.yaml](https://github.com/
 
 #### Change default shoot prefix domain
 Per default all shoot api server domains are something like '<clustername>.<project>.shoot.<basedomain>'. If you want to change the 'shoot' term you can use `landscape.gardener.shootDomainPrefix` and set a value you like.  
+
+
+### Resources
+
+It is possible to overwrite the default values for the resource requests/limits of the Gardener components by setting the corresponding values in `landscape.gardener.resources`.
+```yaml
+  ...
+  gardener:
+    ...
+    resources:
+      apiserver:
+        limits:
+          cpu: 300m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 100Mi
+      admission: <see above>
+      controller: <see above>
+      scheduler: <see above>
+```
+All fields are optional.

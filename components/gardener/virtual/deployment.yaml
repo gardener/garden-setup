@@ -92,6 +92,37 @@ garden_secret:
 
 gardener_version: (( &temporary ( .landscape.versions.gardener ) ))
 
+default_resources:
+  <<: (( &temporary ))
+  apiserver:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  admission:
+    requests:
+      cpu: 100m
+      memory: 200Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  controller:
+    limits:
+      cpu: 750m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  scheduler:
+    limits:
+      cpu: (( ~~ ))
+      memory: (( ~~ ))
+    requests:
+      cpu: (( ~~ ))
+      memory: (( ~~ ))
+
 gardener:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   source: "git/repo/charts/gardener/controlplane/charts/application"
@@ -119,13 +150,7 @@ gardener:
           tag: (( .gardener_version.apiserver.image_tag || ~~ ))
         insecureSkipTLSVerify: false
         replicaCount: 1
-        resources:
-          limits:
-            cpu: 300m
-            memory: 256Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
+        resources: (( merge( default_resources.apiserver, ( landscape.gardener.resources.apiserver || {} ) ) ))
         serviceAccountName: gardener-apiserver
         tls:
           crt: (( .state.gardener_apiserver.value.cert ))
@@ -140,13 +165,7 @@ gardener:
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
           repository: (( .gardener_version.admission_controller.image_repo ))
           tag: (( .gardener_version.admission_controller.image_tag || ~~ ))
-        resources:
-          requests:
-            cpu: 100m
-            memory: 200Mi
-          limits:
-            cpu: 300m
-            memory: 512Mi
+        resources: (( merge( default_resources.admission, ( landscape.gardener.resources.admission || {} ) ) ))
         vpa: false
         config:
           gardenClientConnection:
@@ -224,13 +243,7 @@ gardener:
           repository: (( .gardener_version.controller_manager.image_repo ))
           tag: (( .gardener_version.controller_manager.image_tag || ~~ ))
         replicaCount: 1
-        resources:
-          limits:
-            cpu: 750m
-            memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
+        resources: (( merge( default_resources.controller, ( landscape.gardener.resources.controller || {} ) ) ))
         serviceAccountName: gardener-controller-manager
       scheduler:
         image:
@@ -238,6 +251,7 @@ gardener:
           repository: (( .gardener_version.scheduler.image_repo ))
           tag: (( .gardener_version.scheduler.image_tag || ~~ ))
         serviceAccountName: gardener-scheduler
+        resources: (( merge( default_resources.scheduler, ( landscape.gardener.resources.scheduler || {} ) ) ))
         config:
           schedulers:
             shoot:
