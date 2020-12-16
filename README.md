@@ -113,6 +113,34 @@ Which version of `sow` is compatible with this version of garden-setup is specif
 
 More information: [Most Important Commands and Directories](#most-important-commands-and-directories)
 
+
+## Concept: The 'Virtual' Cluster
+
+As a part of garden-setup, a `kube-apiserver` and `kube-controller-manager` will be deployed into your base cluster, creating the so-called 'virtual' cluster. The name comes from the fact that it behaves like a kubernetes cluster, but there aren't any nodes behind this kube-apiserver and thus no workload will actually run on this cluster. This kube-apiserver is then extended by the Gardener apiserver.
+
+### Reasoning
+
+At first glance, this feels unintuitive. Why do we create another kube-apiserver which needs its own kubeconfig? However, there are two major reasons for this approach:
+
+#### Full Control
+
+The kube-apiserver needs to be configured in a certain way so that it can be used for a Gardener landscape. For example, the Gardener dashboard needs some OIDC configuration to be set on the kube-apiserver, otherwise authentication at the dashboard won't work. However, since garden-setup relies on a base cluster created by other means, many people will probably use a managed kubernetes service (like GKE) to create the initial cluster - but most of the managed services do not grant access to the kube-apiserver to the end-users.
+By deploying an own kube-apiserver, garden-setup ensures full control over its configuration, which improves stability and reduces complexity of the landscape setup.
+
+#### Disaster Recovery
+
+Garden-setup also deploys an own etcd for the kube-apiserver. Because the kube-apiserver - and thus its etcd - is only being used for Gardener resources, restoring the state of a Gardener landscape from an etcd backup is significantly easier than it would be if the Gardener resources were mixed with other resources in the etcd.
+
+### Disadvantage: Two kubeconfigs
+
+The major disadvantage of this approach is that two kubeconfigs are needed to operate the Gardener: one for the base cluster, where all the pods are running, and one for the 'virtual' cluster where the Gardener resources - `shoot`, `seed`, `cloudprofile`, ... - are maintained. The kubeconfig for the 'virtual' cluster can be found in the landscape folder at `export/kube-apiserver/kubeconfig` or it can be pulled from the secret `garden-kubeconfig-for-admin` in the `garden` namespace of the base cluster after the `kube-apiserver` component of garden-setup has been deployed.
+
+
+### TL;DR
+
+Use the kubeconfig at `export/kube-apiserver/kubeconfig` to access the cluster where the Gardener resources - `shoot`, `seed`, `cloudprofile`, and so on - are maintained.
+
+
 ## Configuration File acre.yaml
 
 This file will be evaluated using `spiff`, a dynamic templating language for yaml files. For example, this simplifies the specification of field values that are used multiple times in the yaml file. For more information, see the [spiff repository](https://github.com/mandelsoft/spiff/blob/master/README.md).
