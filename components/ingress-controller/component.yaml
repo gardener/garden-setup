@@ -13,6 +13,15 @@
 # limitations under the License.
 
 ---
+landscape: (( &temporary ))
 component:
   imports:
     - dns-controller
+  
+  plugins:
+    - git
+
+git:
+  <<: (( .landscape.versions.ingress-controller ))
+  files:
+    - "charts"

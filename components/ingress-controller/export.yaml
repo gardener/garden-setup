@@ -28,7 +28,7 @@ temp:
     - (( .ingresscontroller.namespace ))
     - "get"
     - "service"
-    - (( .ingresscontroller.values.name ))
+    - (( .ingresscontroller.name "-" .ingresscontroller.values.controller.name ))
     - "-o"
     - "json"
   target: (( sync( exec_uncached( command ), defined(value.status.loadBalancer.ingress.[0]), value.status.loadBalancer.ingress.[0], 120 ) ))

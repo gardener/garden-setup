@@ -30,16 +30,62 @@ ingresscontroller:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   files:
     - "ingresscontroller/rendered_charts.yaml"
-  source: chart
-  name: "nginx-ingress-controller"
-  namespace: "kube-system" # for yet unknown reason, only kube-system works ...
+  source: "git/repo/charts/ingress-nginx"
+  name: "nginx-ingress"
+  namespace: "kube-system"
   values:
-    name: (( .ingresscontroller.name ))
-    dns: (( "*." .settings.ingress_domain ))
-    dnsclass: (( imports.dns-controller.export.dns-class ))
-    ttl: (( .landscape.defaultTTL ))
-    images:
-        nginx-ingress: (( .landscape.versions.ingress-controller.image_repo ":" .landscape.versions.ingress-controller.image_tag ))
-        ingress-k8s-backend: (( .landscape.versions.nginx-ingress-k8s-backend.image_repo ":" .landscape.versions.nginx-ingress-k8s-backend.image_tag ))
-    ingress:
-      annotations: (( .landscape.ingress.annotations || ~~ ))
+    fullnameOverride: (( .ingresscontroller.name ))
+    controller:
+      name: "controller"
+      image:
+        repository: (( .landscape.versions.ingress-controller.image_repo ))
+        tag: (( .landscape.versions.ingress-controller.image_tag ))
+        digest: ~
+      nodeSelector: {}
+      replicaCount: 3
+      priorityClassName: system-cluster-critical
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/instance
+                  operator: In
+                  values:
+                  - (( ingresscontroller.name ))
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - (( controller.name ))
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - ingress-nginx
+      service:
+        enabled: true
+        annotations:
+          "dns.gardener.cloud/class": (( imports.dns-controller.export.dns-class ))
+          "dns.gardener.cloud/dnsnames": (( "*." .settings.ingress_domain ))
+          "dns.gardener.cloud/ttl": (( landscape.defaultTTL ))
+      admissionWebhooks:
+        enabled: false
+      extraArgs:
+        enable-ssl-passthrough: true
+        update-status: true
+    defaultBackend:
+      enabled: true
+      name: "k8s-backend"
+      image:
+        repository: (( .landscape.versions.nginx-ingress-k8s-backend.image_repo ))
+        tag: (( .landscape.versions.nginx-ingress-k8s-backend.image_tag ))
+        pullPolicy: IfNotPresent
+      livenessProbe:
+        initialDelaySeconds: 30
+        timeoutSeconds: 5
+      port: 8080
+      extraEnvs:
+        - name: HEALTH_ENDPOINT
+          value: "/healthz"
