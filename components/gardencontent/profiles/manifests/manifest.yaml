@@ -50,9 +50,18 @@ defaults:
     caBundle: (( values.config.caBundle || ~~ ))
   kubernetes:
     versions:
-      - version: 1.19.3
-      - version: 1.18.10
-      - version: 1.17.13
+      - classification: supported
+        version: 1.19.4
+      - classification: deprecated
+        version: 1.19.3
+      - classification: supported
+        version: 1.18.12
+      - classification: deprecated
+        version: 1.18.10
+      - classification: supported
+        version: 1.17.14
+      - classification: deprecated
+        version: 1.17.13
       - version: 1.16.15
         classification: deprecated
       - version: 1.15.12
