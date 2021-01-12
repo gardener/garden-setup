@@ -1,12 +1,40 @@
 #!/usr/bin/env bash
 
 SOURCE_PATH="$(readlink -f "$(dirname ${0})/..")"
-GARDENER_VERSION_PATH="$SOURCE_PATH/dependency-versions.yaml"
+DEP_VERSIONS=$(cat "$SOURCE_PATH/dependency-versions.yaml")
 SOW_VERSION=$(cat "$SOURCE_PATH/SOW_VERSION")
 
 ${ADD_DEPENDENCIES_CMD} \
     --component-dependencies \
-    '{"name": "github.com/gardener/gardener", "version": "'$(cat $GARDENER_VERSION_PATH | jq -r ".versions.gardener.core.version")'"}' \
+    '{"name": "github.com/gardener/gardener", "version": "'$(jq -r ".versions.gardener.core.version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "ggithub.com/gardener/external-dns-management", "version": "'$(jq -r ".versions.gardener.extensions[\"dns-external\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-networking-calico", "version": "'$(jq -r ".versions.gardener.extensions[\"networking-calico\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-os-suse-jeos", "version": "'$(jq -r ".versions.gardener.extensions[\"os-suse-chost\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-os-ubuntu", "version": "'$(jq -r ".versions.gardener.extensions[\"os-ubuntu\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-os-gardenlinux", "version": "'$(jq -r ".versions.gardener.extensions[\"os-gardenlinux\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-provider-aws", "version": "'$(jq -r ".versions.gardener.extensions[\"provider-aws\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-provider-azure", "version": "'$(jq -r ".versions.gardener.extensions[\"provider-azure\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-provider-gcp", "version": "'$(jq -r ".versions.gardener.extensions[\"provider-gcp\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-provider-openstack", "version": "'$(jq -r ".versions.gardener.extensions[\"provider-openstack\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-shoot-cert-service", "version": "'$(jq -r ".versions.gardener.extensions[\"shoot-cert-service\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-shoot-dns-service", "version": "'$(jq -r ".versions.gardener.extensions[\"shoot-dns-service\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-provider-vsphere", "version": "'$(jq -r ".versions.gardener.extensions[\"provider-vsphere\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/dashboard", "version": "'$(jq -r ".versions.dashboard.core.version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
+    '{"name": "github.com/gardener/terminal-controller-manager", "version": "'$(jq -r ".versions.dashboard.terminals[\"terminal-controller-manager\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
     '{"name": "github.com/gardener/sow", "version": "'$SOW_VERSION'"}' \
     --container-image-dependencies \

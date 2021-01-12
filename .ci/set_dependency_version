@@ -11,13 +11,47 @@ dep_name = os.getenv('DEPENDENCY_NAME')
 dep_version = os.getenv('DEPENDENCY_VERSION')
 
 if dep_name == 'github.com/gardener/gardener':
-    with dep_file.open() as f:
-        deps = yaml.safe_load(f)
-    
-    deps['versions']['gardener']['core']['version'] = dep_version
-    
-    with dep_file.open(mode='w') as f:
-        f.write(json.dumps(deps, indent=2))
+    set_dep_version(dep_version, 'versions', 'gardener', 'core', 'version')
+elif dep_name == 'github.com/gardener/external-dns-management':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'dns-external', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-networking-calico':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'networking-calico', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-os-suse-jeos':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'os-suse-chost', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-os-ubuntu':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'os-ubuntu', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-os-gardenlinux':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'os-gardenlinux', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-provider-aws':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'provider-aws', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-provider-azure':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'provider-azure', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-provider-gcp':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'provider-gcp', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-provider-openstack':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'provider-openstack', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-shoot-cert-service':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'shoot-cert-service', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-shoot-dns-service':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'shoot-dns-service', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-provider-vsphere':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'provider-vsphere', 'version')
+elif dep_name == 'github.com/gardener/dashboard':
+    set_dep_version(dep_version, 'versions', 'dashboard', 'core', 'version')
+elif dep_name == 'github.com/gardener/terminal-controller-manager':
+    set_dep_version(dep_version, 'versions', 'dashboard', 'terminals', 'terminal-controller-manager', 'version')
 elif dep_name == 'github.com/gardener/sow':
     with sow_version_file.open(mode='w') as f:
         f.write(dep_version)
+
+def set_dep_version(dep_version, *path):
+    with dep_file.open() as f:
+        deps = yaml.safe_load(f)
+    
+    cur = deps
+    for p in path[:-1]:
+        cur = cur[p]
+    cur[path[-1]] = dep_version
+    
+    with dep_file.open(mode='w') as f:
+        f.write(json.dumps(deps, indent=2))
