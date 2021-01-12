@@ -8,7 +8,7 @@ ${ADD_DEPENDENCIES_CMD} \
     --component-dependencies \
     '{"name": "github.com/gardener/gardener", "version": "'$(jq -r ".versions.gardener.core.version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
-    '{"name": "ggithub.com/gardener/external-dns-management", "version": "'$(jq -r ".versions.gardener.extensions[\"dns-external\"].version" <<< $DEP_VERSIONS)'"}' \
+    '{"name": "github.com/gardener/external-dns-management", "version": "'$(jq -r ".versions.gardener.extensions[\"dns-external\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
     '{"name": "github.com/gardener/gardener-extension-networking-calico", "version": "'$(jq -r ".versions.gardener.extensions[\"networking-calico\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
