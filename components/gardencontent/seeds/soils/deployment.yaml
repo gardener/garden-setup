@@ -55,6 +55,7 @@ providerconfig:
   namespace: (( landscape.namespace ))
   dns:
     type: (( landscape.dns.type ))
+    credentials: (( landscape.dns.credentials ))
   iaas: (( read(__ctx.DIR "/../provider/" v.type "/seed.yaml", "import") ))
   config: (( v ))
   isBaseCluster: (( ! valid( v.cluster.kubeconfig ) ))

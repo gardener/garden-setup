@@ -50,6 +50,15 @@ secretManifests:
     token-secret: (( configValues.bootstrapToken.secret ))
     usage-bootstrap-authentication: "true"
     usage-bootstrap-signing: "true"
+- <<: (( configValues.isBaseCluster ? ~~ :~ ))
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: ingress-dns-secret
+    namespace: (( configValues.namespace ))
+  type: Opaque
+  data:
+    <<: (( sum[configValues.dns.credentials|{}|ss,sk,sv|-> ss { sk = base64(sv) }] ))
 
 seedSpec:
   <<: (( &temporary ))
@@ -65,8 +74,8 @@ seedSpec:
     secretRef:
       name: (( configValues.secretname "-backup" ))
       namespace: (( configValues.namespace ))
-  dns:
-    ingressDomain: (( configValues.seed.ingressdomain ))
+  dns: (( configValues.isBaseCluster ? ingressTemplate.baseCluster.dns :ingressTemplate.default.dns ))
+  ingress: (( configValues.isBaseCluster ? ~~ :ingressTemplate.default.ingress ))
   secretRef:
     name: (( configValues.secretname ))
     namespace: (( configValues.namespace ))
@@ -77,6 +86,23 @@ seedSpec:
     shootDefaults: (( configValues.seed.shootDefaultNetworks || { "pods" = "100.96.0.0/11", "services" = "100.64.0.0/13" } ))
   taints: (( configValues.config.mode == "soil" ? [{ "key" = "seed.gardener.cloud/protected" }] :~~ ))
   settings: (( element( merge( seedSettingMergeTemplate, configValues.seed || {} ), "settings" ) ))
+
+ingressTemplate:
+  <<: (( &temporary ))
+  baseCluster:
+    dns:
+      ingressDomain: (( configValues.seed.ingressdomain ))
+  default:
+    dns:
+      provider:
+        type: (( configValues.dns.type ))
+        secretRef:
+          name: ingress-dns-secret
+          namespace: (( configValues.namespace ))
+    ingress:
+      domain: (( configValues.seed.ingressdomain ))
+      controller:
+        kind: nginx
 
 seedSettingMergeTemplate:
   <<: (( &template &temporary ))
