@@ -12,7 +12,7 @@ ${ADD_DEPENDENCIES_CMD} \
     --component-dependencies \
     '{"name": "github.com/gardener/gardener-extension-networking-calico", "version": "'$(jq -r ".versions.gardener.extensions[\"networking-calico\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
-    '{"name": "github.com/gardener/gardener-extension-os-suse-jeos", "version": "'$(jq -r ".versions.gardener.extensions[\"os-suse-chost\"].version" <<< $DEP_VERSIONS)'"}' \
+    '{"name": "github.com/gardener/gardener-extension-os-suse-chost", "version": "'$(jq -r ".versions.gardener.extensions[\"os-suse-chost\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
     '{"name": "github.com/gardener/gardener-extension-os-ubuntu", "version": "'$(jq -r ".versions.gardener.extensions[\"os-ubuntu\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \

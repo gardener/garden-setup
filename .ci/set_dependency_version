@@ -28,7 +28,7 @@ elif dep_name == 'github.com/gardener/external-dns-management':
     set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'dns-external', 'version')
 elif dep_name == 'github.com/gardener/gardener-extension-networking-calico':
     set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'networking-calico', 'version')
-elif dep_name == 'github.com/gardener/gardener-extension-os-suse-jeos':
+elif dep_name == 'github.com/gardener/gardener-extension-os-suse-chost':
     set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'os-suse-chost', 'version')
 elif dep_name == 'github.com/gardener/gardener-extension-os-ubuntu':
     set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'os-ubuntu', 'version')
