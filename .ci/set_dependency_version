@@ -5,6 +5,18 @@ import json
 import os
 from pathlib import Path
 
+def set_dep_version(dep_version, *path):
+    with dep_file.open() as f:
+        deps = yaml.safe_load(f)
+    
+    cur = deps
+    for p in path[:-1]:
+        cur = cur[p]
+    cur[path[-1]] = dep_version
+    
+    with dep_file.open(mode='w') as f:
+        f.write(json.dumps(deps, indent=2))
+
 dep_file = Path(__file__).resolve().parent.parent / 'dependency-versions.yaml'
 sow_version_file = Path(__file__).resolve().parent.parent / 'SOW_VERSION'
 dep_name = os.getenv('DEPENDENCY_NAME')
@@ -43,15 +55,3 @@ elif dep_name == 'github.com/gardener/terminal-controller-manager':
 elif dep_name == 'github.com/gardener/sow':
     with sow_version_file.open(mode='w') as f:
         f.write(dep_version)
-
-def set_dep_version(dep_version, *path):
-    with dep_file.open() as f:
-        deps = yaml.safe_load(f)
-    
-    cur = deps
-    for p in path[:-1]:
-        cur = cur[p]
-    cur[path[-1]] = dep_version
-    
-    with dep_file.open(mode='w') as f:
-        f.write(json.dumps(deps, indent=2))
