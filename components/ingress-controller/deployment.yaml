@@ -70,6 +70,7 @@ ingresscontroller:
           "dns.gardener.cloud/class": (( imports.dns-controller.export.dns-class ))
           "dns.gardener.cloud/dnsnames": (( "*." .settings.ingress_domain ))
           "dns.gardener.cloud/ttl": (( landscape.defaultTTL ))
+          <<: (( landscape.ingress.annotations || ~ ))
       admissionWebhooks:
         enabled: false
       extraArgs:
