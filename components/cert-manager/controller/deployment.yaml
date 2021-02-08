@@ -134,6 +134,9 @@ helm:
   name: cert-manager
   namespace: (( .namespace.name ))
   values:
+    image:
+      repository: (( .landscape.versions.cert-manager.controller.image_repo || ~~ ))
+      tag: (( .landscape.versions.cert-manager.controller.image_tag || ~~ ))
     serviceAccount:
       create: true
       name: (( .settings.serviceAccountName ))

@@ -349,7 +349,7 @@ validation:
                   - versions
                   - - list
                     - - and
-                      - ["mapfield", "guestId"]
+                      - ["optionalfield", "guestId"]
                       - ["mapfield", "path"]
                       - ["mapfield", "version"]
           - - optionalfield
@@ -365,9 +365,9 @@ validation:
               - - and
                 - ["mapfield", "name"]
                 - ["mapfield", "vsphereHost"]
-                - ["mapfield", "vsphereInsecureSSL", ["type", "bool"]]
+                - ["optionalfield", "vsphereInsecureSSL", ["type", "bool"]]
                 - ["mapfield", "nsxtHost"]
-                - ["mapfield", "nsxtInsecureSSL", ["type", "bool"]]
+                - ["optionalfield", "nsxtInsecureSSL", ["type", "bool"]]
                 - ["optionalfield", "nsxtRemoteAuth", ["type", "bool"]]
                 - ["mapfield", "transportZone"]
                 - ["mapfield", "logicalTier0Router"]
@@ -559,7 +559,7 @@ validation:
           - - list
             - - and
               - ["mapfield", "name"]
-              - ["mapfield", "sourceRepository"]
+              - ["optionalfield", "sourceRepository"]
               - ["mapfield", "repository"]
               - ["optionalfield", "tag"]
               - ["optionalfield", "version"]
@@ -577,7 +577,7 @@ validation:
                   - - list
                     - - and
                       - ["mapfield", "name"]
-                      - ["mapfield", "sourceRepository"]
+                      - ["optionalfield", "sourceRepository"]
                       - ["mapfield", "repository"]
                       - ["optionalfield", "tag"]
                       - ["optionalfield", "version"]

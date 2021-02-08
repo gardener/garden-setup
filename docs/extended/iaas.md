@@ -447,5 +447,10 @@ Similarly to Openstack, vSphere also needs additional configuration, see the exa
         - name: <machine image name> # A
           versions:
             - version: <machine image version> # B
+      seedConfig:
+        providerConfig:
+          # storage policy name used on seed for etcd main of shoots control plane
+          storagePolicyName: vSAN Default Storage Policy
+
 ```
 > Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff++ templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
