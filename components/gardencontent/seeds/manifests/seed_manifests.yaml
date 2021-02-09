@@ -54,7 +54,7 @@ secretManifests:
   apiVersion: v1
   kind: Secret
   metadata:
-    name: ingress-dns-secret
+    name: (( configValues.secretname "-ingress-dns-secret" ))
     namespace: (( configValues.namespace ))
   type: Opaque
   data:
@@ -97,7 +97,7 @@ ingressTemplate:
       provider:
         type: (( configValues.dns.type ))
         secretRef:
-          name: ingress-dns-secret
+          name: (( configValues.secretname "-ingress-dns-secret" ))
           namespace: (( configValues.namespace ))
     ingress:
       domain: (( configValues.seed.ingressdomain ))
