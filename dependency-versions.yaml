@@ -3,12 +3,12 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.16.1"
+        "version": "v1.16.2"
       },
       "extensions": {
         "dns-external": {
           "repo": "https://github.com/gardener/external-dns-management.git",
-          "version": "v0.7.22"
+          "version": "v0.8.0"
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
@@ -28,11 +28,11 @@
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
-          "version": "v1.20.2"
+          "version": "v1.20.3"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
-          "version": "v1.18.0"
+          "version": "v1.18.1"
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
