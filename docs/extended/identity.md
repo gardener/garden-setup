@@ -56,3 +56,5 @@ The issuer URL can be set via `landscape.identity.issuerUrl`. The default is `ht
 By setting `landscape.identity.dashboardClientSecret` or `landscape.identity.kubectlClientSecret`, the corresponding client secret(s) can be defined. By default, a random value is generated for the first deployment, which is then stored in the state so it doesn't change on redeployments.
 
 It is possible to create additional users with static passwords but without privileges by providing a list of users in `landscape.identity.unprivilegedUsers`. The syntax is the same as for `landscape.identity.users`. There has to be at least one entry in `lansdcape.identity.users` for this list to be evaluated.
+
+To allow project creation for all authenticated users, set `landscape.identity.allowProjectCreationForAll` to `true`.

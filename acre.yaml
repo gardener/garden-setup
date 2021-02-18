@@ -703,6 +703,30 @@ validation:
     selfsigned: (( |ca,url|-> [url == "self-signed" ? valid( ca.crt ) -and valid( ca.key ) :true, "valid", "if 'landscape.cert-manager.server.url' is set to 'self-signed', you should either specify a CA with key ('server.ca.crt' and 'server.ca.key' set), or no CA at all ('server.ca' node not present)"] ))
     acme: (( |ca,url|-> [url != "self-signed" ? valid( ca.crt ) -and ( ! defined( ca.key ) ) :true, "if 'landscape.cert-manager.server.url' is not set to 'self-signed', you should either specify a CA without key ('server.ca.crt' set, no 'server.ca.key'), or the 'server.ca' node should not be present at all"] ))
     email: (( |ca,id|-> [valid( ca.email ) -or valid( id.users[0].email ), "either 'landscape.cert-manager.email' or 'landscape.identity.users[0].email' needs to be set"] ))
+  identity_validator:
+    - and
+    - - optionalfield
+      - users
+      - - list
+        - - and
+          - - mapfield
+            - email
+            - - match
+              - (( validation.email_regex ))
+          - - mapfield
+            - username
+          - - or
+            - ["mapfield", "password"]
+            - ["mapfield", "hash"]
+    - - optionalfield
+      - connectors
+      - - list
+        - - and
+          - ["mapfield", "type"]
+          - ["mapfield", "id"]
+          - ["mapfield", "name"]
+    - ["optionalfield", "allowProjectCreationForAll", ["type", "bool"]]
+    - ["optionalfield", "useIdentityDomain", ["type", "bool"]]
 
 
   ### VALIDATIONS ###
@@ -743,21 +767,5 @@ validation:
   cert-manager: (( validate( landscape.cert-manager, validation.cert-manager_validators.basic, [validation.cert-manager_validators.email, landscape.identity] ) ))
   ##### landscape.identity TODO
   identity:
-    userspec:
-      - and
-      - - mapfield
-        - email
-        - - match
-          - (( validation.email_regex ))
-      - - mapfield
-        - username
-      - - or
-        - ["mapfield", "password"]
-        - ["mapfield", "hash"]
-    connectorspec:
-      - and
-      - ["mapfield", "type"]
-      - ["mapfield", "id"]
-      - ["mapfield", "name"]
     identityspec: (( |id|-> [valid( id.users || id.connectors ), "valid", "identity config needs to contain either 'users' or 'connectors' (or both)"] ))
-    validator: (( validate( landscape.identity, identityspec, ["optionalfield", "users", ["list", identity.userspec]], ["optionalfield", "connectors", ["list", identity.connectorspec]] ) ))
+    validator: (( validate( landscape.identity, identityspec, validation.identity_validator ) ))
