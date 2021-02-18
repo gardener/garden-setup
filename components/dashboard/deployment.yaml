@@ -160,6 +160,10 @@ spec:
     apiGroup: rbac.authorization.k8s.io
     kind: User
     name: (( user ))
+  authenticatedGroup:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: "system:authenticated"
   users: (( map[.landscape.identity.users|v|->v.email]))
 
 rbac:
@@ -173,7 +177,9 @@ rbac:
         apiGroup: rbac.authorization.k8s.io
         kind: ClusterRole
         name: gardener.cloud:system:project-creation
-      subjects: (( util.userbindings(spec.users) ))
+      subjects:
+        - <<: (( util.userbindings(spec.users) ))
+        -  (( ( .landscape.identity.allowProjectCreationForAll || false ) ? .spec.authenticatedGroup :~~ ))
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       metadata:
