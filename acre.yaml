@@ -499,6 +499,15 @@ validation:
           - and
           - ["mapfield", "USERNAME"]
           - ["mapfield", "PASSWORD"]
+          - ["mapfield", "HOST", ["ip"]]
+          - ["optionalfield", "PORT", ["type", "int"]]
+          - ["optionalfield", "SSL_VERIFY", ["type", "bool"]]
+          - ["optionalfield", "VERSION"]
+          - ["optionalfield", "VIEW"]
+          - ["optionalfield", "HTTP_POOL_CONNECTIONS", ["type", "int"]]
+          - ["optionalfield", "HTTP_REQUEST_TIMEOUT", ["type", "int"]]
+          - ["optionalfield", "CA_CERT", ["ca"]]
+          - ["optionalfield", "PROXY_URL"]
         config:
           - mapfield
           - providerConfig
@@ -506,7 +515,7 @@ validation:
             - ["mapfield", "host", ["ip"]]
             - ["optionalfield", "port", ["type", "int"]]
             - ["optionalfield", "sslVerify", ["type", "bool"]]
-            - ["mapfield", "version"]
+            - ["optionalfield", "version"]
             - ["optionalfield", "view"]
             - ["optionalfield", "httpPoolConnections", ["type", "int"]]
             - ["optionalfield", "httpRequestTimeout", ["type", "int"]]
