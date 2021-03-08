@@ -46,7 +46,7 @@ After creating a TKC cluster, perform these steps:
     metadata:
       annotations:
         gardener.cloud/description: |
-        Allow all authenticated users to use the unprivileged PSP.
+          Allow all authenticated users to use the unprivileged PSP.
       name: gardener.cloud:psp:unprivileged
     roleRef:
       apiGroup: rbac.authorization.k8s.io
