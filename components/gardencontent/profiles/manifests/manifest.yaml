@@ -51,17 +51,19 @@ defaults:
   kubernetes:
     versions:
       - classification: supported
+        version: 1.20.2
+      - classification: supported
+        version: 1.19.6
+      - classification: deprecated
         version: 1.19.4
-      - classification: deprecated
-        version: 1.19.3
       - classification: supported
+        version: 1.18.14
+      - classification: deprecated
         version: 1.18.12
-      - classification: deprecated
-        version: 1.18.10
       - classification: supported
-        version: 1.17.14
+        version: 1.17.16
       - classification: deprecated
-        version: 1.17.13
+        version: 1.17.14
       - version: 1.16.15
         classification: deprecated
       - version: 1.15.12
