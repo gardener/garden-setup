@@ -26,36 +26,36 @@ After creating a TKC cluster, perform these steps:
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata:
-    annotations:
+      annotations:
         gardener.cloud/description: |
-        Allow all authenticated users to use the privileged PSP.
-        The subject field is configured via .spec.kubernetes.allowPrivilegedContainers flag on the Shoot resource.
-    name: gardener.cloud:psp:privileged
+          Allow all authenticated users to use the privileged PSP.
+          The subject field is configured via .spec.kubernetes.allowPrivilegedContainers flag on the Shoot resource.
+      name: gardener.cloud:psp:privileged
     roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    #name: gardener.cloud:psp:privileged
-    name: psp:vmware-system-privileged
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      #name: gardener.cloud:psp:privileged
+      name: psp:vmware-system-privileged
     subjects:
     - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:authenticated
+      kind: Group
+      name: system:authenticated
     ---
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata:
-    annotations:
+      annotations:
         gardener.cloud/description: |
         Allow all authenticated users to use the unprivileged PSP.
-    name: gardener.cloud:psp:unprivileged
+      name: gardener.cloud:psp:unprivileged
     roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    #name: gardener.cloud:psp:unprivileged
-    name: psp:vmware-system-restricted
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      #name: gardener.cloud:psp:unprivileged
+      name: psp:vmware-system-restricted
     subjects:
     - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:authenticated
+      kind: Group
+      name: system:authenticated
     EOF
     ```
