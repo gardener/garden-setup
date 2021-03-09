@@ -358,8 +358,8 @@ The credentials to use Cloudflare DNS consist of a single key `apiToken`, contai
 
 #### Infoblox Credentials and Configuration
 
-For Infoblox DNS, you have to specify `USERNAME` and `PASSWORD` in the `credentials` node.
-Additionally, a `host` and a `version` need to be specified, both under `landscape.dns.providerConfig`. See [here](https://github.com/gardener/external-dns-management/blob/master/doc/infoblox/README.md#create-dns-provider) for further information on optional configuration fields that can also be specified in `landscape.dns.providerConfig`.
+For Infoblox DNS, you have to specify `USERNAME`, `PASSWORD`, and `HOST` in the `credentials` node.
+Additionally, a `host` needs to be specified, both under `landscape.dns.providerConfig`. See [here](https://github.com/gardener/external-dns-management/blob/master/doc/infoblox/README.md#create-dns-provider) for further information on optional configuration fields that can also be specified in `landscape.dns.providerConfig`.
 
 
 ### landscape.identity
