@@ -508,20 +508,22 @@ validation:
           - ["optionalfield", "HTTP_REQUEST_TIMEOUT", ["type", "int"]]
           - ["optionalfield", "CA_CERT", ["ca"]]
           - ["optionalfield", "PROXY_URL"]
-        config:
-          - mapfield
-          - providerConfig
-          - - and
-            - ["mapfield", "host", ["ip"]]
-            - ["optionalfield", "port", ["type", "int"]]
-            - ["optionalfield", "sslVerify", ["type", "bool"]]
-            - ["optionalfield", "version"]
-            - ["optionalfield", "view"]
-            - ["optionalfield", "httpPoolConnections", ["type", "int"]]
-            - ["optionalfield", "httpRequestTimeout", ["type", "int"]]
-            - ["optionalfield", "caCert", ["ca"]]
-            - ["optionalfield", "maxResults", ["type", "int"]]
-            - ["optionalfield", "proxyUrl"]
+        config: (( return_true ))
+# providerConfig support not complete in Gardener
+#        config:
+#          - mapfield
+#          - providerConfig
+#          - - and
+#            - ["mapfield", "host", ["ip"]]
+#            - ["optionalfield", "port", ["type", "int"]]
+#            - ["optionalfield", "sslVerify", ["type", "bool"]]
+#            - ["optionalfield", "version"]
+#            - ["optionalfield", "view"]
+#            - ["optionalfield", "httpPoolConnections", ["type", "int"]]
+#            - ["optionalfield", "httpRequestTimeout", ["type", "int"]]
+#            - ["optionalfield", "caCert", ["ca"]]
+#            - ["optionalfield", "maxResults", ["type", "int"]]
+#            - ["optionalfield", "proxyUrl"]
   iaas_entry_validators:
     basic:
       - <<: (( &template ))
