@@ -95,7 +95,7 @@ etcd:
         secretData: (( sum[temp.config.credentials|{}|c,k,v|->c {k=base64(v)}] ))
         storageContainer: (( landscape.etcd.backup.active ? imports.backupinfra.export.bucketname :~ ))
         env: (( temp.addon.env ))
-        volumeMounts: (( temp.addon.volumeMounts ))
+        volumeMounts: (( landscape.etcd.backup.active ? temp.addon.volumeMounts :[] ))
 
       tls:
         ca:
