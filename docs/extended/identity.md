@@ -22,7 +22,7 @@ Of the variants below,
         password: "myTotallySafePassword#111"
         # hash: instead of a clear-text password, also a bcrypted hash is possible
 ```
-In `landscape.identity.users`, a list of hard-coded users can be specified. They will be able to login into the dashboard using the email and password. 
+In `landscape.identity.users`, a list of hard-coded users can be specified. They will be able to login into the dashboard using the email and password.
 
 
 ### Variant 2: OIDC connector
@@ -42,7 +42,7 @@ In `landscape.identity.users`, a list of hard-coded users can be specified. They
 ```
 In addition to providing a list of hard-coded users, it is also possible to connect dex to another identity provider (e.g. GitHub, SAML, ...). The request will then be forwarded and handled by the specified IDP.
 
-For a list of possible connectors and how to configure them, please check the documentation at https://github.com/dexidp/dex/tree/master/Documentation/connectors.
+For a list of possible connectors and how to configure them, please check the documentation at https://dexidp.io/docs/connectors/.
 
 The `redirectURI` does not have to be provided, garden-setup will automatically inject a default - see example above - into each connector's config if it is not there.
 
