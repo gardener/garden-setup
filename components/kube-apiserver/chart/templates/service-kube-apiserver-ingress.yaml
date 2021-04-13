@@ -17,6 +17,7 @@ kind: Ingress
 metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    kubernetes.io/ingress.class: "nginx"
   name: apiserver-ingress
   namespace: {{ .Release.Namespace }}
 spec:
