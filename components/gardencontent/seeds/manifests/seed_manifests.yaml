@@ -131,6 +131,116 @@ gardenletBootstrapKubeconfig:
     user:
       token: (( configValues.bootstrapToken.id "." configValues.bootstrapToken.secret ))
 
+managedSeedManifest:
+  apiVersion: seedmanagement.gardener.cloud/v1alpha1
+  kind: ManagedSeed
+  metadata:
+    name: (( configValues.name ))
+    namespace: garden
+  spec:
+    shoot:
+      name: (( configValues.name ))
+    # gardenlet specifies that the ManagedSeed controller should deploy a gardenlet into the cluster
+    # with the given deployment parameters and GardenletConfiguration.
+    gardenlet:
+      bootstrap: ServiceAccount
+      deployment: # gardenlet deployment parameters
+        replicaCount: 1
+        serviceAccountName: gardenlet
+        image:
+          repository: (( .landscape.versions.gardener.gardenlet.image_repo ))
+          tag: (( .landscape.versions.gardener.gardenlet.image_tag ))
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 2000m
+            memory: 512Mi
+        additionalVolumes: []
+        additionalVolumeMounts: []
+        env: []
+        vpa: false
+      config: # GardenletConfiguration resource
+        apiVersion: gardenlet.config.gardener.cloud/v1alpha1
+        kind: GardenletConfiguration
+        gardenClientConnection:
+          qps: 100
+          burst: 130
+        seedClientConnection:
+          qps: 100
+          burst: 130
+        shootClientConnection:
+          qps: 25
+          burst: 50
+        controllers:
+          backupBucket:
+            concurrentSyncs: 20
+          backupEntry:
+            concurrentSyncs: 20
+            deletionGracePeriodHours: 0
+          controllerInstallation:
+            concurrentSyncs: 20
+          controllerInstallationCare:
+            concurrentSyncs: 20
+            syncPeriod: 30s
+          controllerInstallationRequired:
+            concurrentSyncs: 1
+          seedAPIServerNetworkPolicy:
+            concurrentSyncs: 5
+          shoot:
+            concurrentSyncs: 20
+            syncPeriod: 1h
+            retryDuration: 12h
+          shootCare:
+            concurrentSyncs: 5
+            syncPeriod: 30s
+            staleExtensionHealthChecks:
+              enabled: true
+            # threshold: 5m
+            conditionThresholds:
+            - type: APIServerAvailable
+              duration: 1m
+            - type: ControlPlaneHealthy
+              duration: 1m
+            - type: SystemComponentsHealthy
+              duration: 1m
+            - type: EveryNodeReady
+              duration: 5m
+          shootStateSync:
+            concurrentSyncs: 1
+            syncPeriod: 30s
+          seed:
+            concurrentSyncs: 5
+            syncPeriod: 1m
+          managedSeed:
+            concurrentSyncs: 5
+            syncJitterPeriod: 5m
+        resources:
+          capacity:
+            shoots: 200
+        leaderElection:
+          leaderElect: true
+          leaseDuration: 15s
+          renewDeadline: 10s
+          retryPeriod: 2s
+          resourceLock: leases
+        logLevel: info
+        kubernetesLogLevel: 0
+        server:
+          https:
+            bindAddress: 0.0.0.0
+            port: 2720
+          # optional, will be self-generated during startup when empty
+          # tls:
+          #   serverCertPath: dev/tls/gardenlet.crt
+          #   serverKeyPath: dev/tls/gardenlet.key
+        featureGates: (( gardenletSpec.global.gardenlet.config.featureGates ))
+        seedConfig:
+          metadata:
+            name: (( configValues.isManagedSeed ? ~~ :configValues.name ))
+          spec: (( seedSpec ))
+
 gardenletSpec:
   global:
     gardenlet:
@@ -145,7 +255,7 @@ gardenletSpec:
           cpu: 100m
           memory: 100Mi
         limits:
-          cpu: 750m
+          cpu: 2000m
           memory: 512Mi
       additionalVolumes: []
       additionalVolumeMounts: []
@@ -251,6 +361,10 @@ pluginSpecs:
     name: gardenlet
     namespace: garden
     values: (( gardenletSpec ))
+  managedSeed:
+    kubeconfig: (( configValues.kubeconfigs.virtual ))
+    manifests:
+      - (( managedSeedManifest ))
   seedReady:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     seed: (( configValues.name ))

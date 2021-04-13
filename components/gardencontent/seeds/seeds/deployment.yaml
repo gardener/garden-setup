@@ -29,13 +29,8 @@ pluginTemplate:
     - delete: (( "renderedPluginSpecs[" id "].deleteIstioIngressNamespace" ))
     - delete: (( "renderedPluginSpecs[" id "].deleteIstioSystemNamespace" ))
   - (( valid( renderedPluginSpecs[id].namespace ) ? { "kubectl" = "renderedPluginSpecs[" id "].namespace" } :~~ ))
-  - pinned:
-    - helm:
-      - (( "renderedPluginSpecs[" id "].gardenlet" ))
-      - template
-    - kubectl: (( "renderedPluginSpecs[" id "].gardenlet" ))
+  - kubectl: (( "renderedPluginSpecs[" id "].managedSeed" ))
   - seed-ready: (( "renderedPluginSpecs[" id "].seedReady" ))
-  - delete: (( "renderedPluginSpecs[" id "].deleteSeed" ))
   - delete: (( "renderedPluginSpecs[" id "].deleteBootstrapToken" ))
 
 bootstrapTokens: (( sum[.landscape.iaas_shooted_seeds|{}|s,elem|-> s { elem.name = { "id" = rand( "a-z", 1 ) rand( "a-z0-9", 5 ), "secret" = rand( "a-z", 1 ) rand( "a-z0-9", 15 ) } }] ))
@@ -52,6 +47,7 @@ providerconfig:
   iaas: (( read(__ctx.DIR "/../provider/" v.type "/seed.yaml", "import") ))
   config: (( v ))
   isBaseCluster: false
+  isManagedSeed: true
   bootstrapToken: (( bootstrapTokens[v.name] ))
   imageVectorOverwrites:
     imageVectorOverwrite: (( v.imageVectorOverwrite || ~~ ))

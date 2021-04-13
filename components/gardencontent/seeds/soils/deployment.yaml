@@ -63,6 +63,7 @@ providerconfig:
   iaas: (( read(__ctx.DIR "/../provider/" v.type "/seed.yaml", "import") ))
   config: (( v ))
   isBaseCluster: (( ! valid( v.cluster.kubeconfig ) ))
+  isManagedSeed: false
   bootstrapToken: (( bootstrapTokens[v.name] ))
   imageVectorOverwrites:
     imageVectorOverwrite: (( v.imageVectorOverwrite || ~~ ))
