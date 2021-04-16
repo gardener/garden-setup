@@ -218,6 +218,8 @@ gardenletSpec:
         featureGates: 
           <<: (( configValues.config.featureGates || {} ))
           Logging: (( configValues.config.featureGates.Logging || true ))
+          ManagedIstio: (( pluginSpecs.managedIstioActive ))
+          APIServerSNI: (( configValues.config.featureGates.APIServerSNI || false ))
         seedConfig:
           metadata:
             name: (( configValues.name ))
@@ -228,6 +230,7 @@ gardenletSpec:
         enabled: true
 
 pluginSpecs:
+  managedIstioActive: (( configValues.config.featureGates.ManagedIstio || false ))
   deploySecrets:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     manifests: (( secretManifests ))
@@ -256,6 +259,16 @@ pluginSpecs:
     step: delete
     type: seed
     name: (( configValues.name ))
+  deleteIstioIngressNamespace:
+    kubeconfig: (( configValues.kubeconfigs.seed ))
+    step: delete
+    type: namespace
+    name: "istio-ingress"
+  deleteIstioSystemNamespace:
+    kubeconfig: (( configValues.kubeconfigs.seed ))
+    step: delete
+    type: namespace
+    name: "istio-system"
   deleteBootstrapToken:
     # delete duplicate bootstrap tokens that are created during re-deployment
     kubeconfig: (( configValues.kubeconfigs.virtual ))
