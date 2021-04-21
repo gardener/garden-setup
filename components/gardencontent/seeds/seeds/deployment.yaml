@@ -24,6 +24,10 @@ plugins:
 pluginTemplate:
   - <<: (( &temporary &template ))
   - kubectl: (( "renderedPluginSpecs[" id "].deploySecrets" ))
+  - parallel:
+    - <<: (( renderedPluginSpecs[id].managedIstioActive == true ? ~ :~~ ))
+    - delete: (( "renderedPluginSpecs[" id "].deleteIstioIngressNamespace" ))
+    - delete: (( "renderedPluginSpecs[" id "].deleteIstioSystemNamespace" ))
   - (( valid( renderedPluginSpecs[id].namespace ) ? { "kubectl" = "renderedPluginSpecs[" id "].namespace" } :~~ ))
   - pinned:
     - helm:
@@ -44,6 +48,7 @@ providerconfig:
   namespace: (( landscape.namespace ))
   dns:
     type: (( landscape.dns.type ))
+    credentials: (( landscape.dns.credentials ))
   iaas: (( read(__ctx.DIR "/../provider/" v.type "/seed.yaml", "import") ))
   config: (( v ))
   isBaseCluster: false

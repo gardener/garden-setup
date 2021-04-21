@@ -164,7 +164,7 @@ spec:
     apiGroup: rbac.authorization.k8s.io
     kind: Group
     name: "system:authenticated"
-  users: (( map[.landscape.identity.users|v|->v.email]))
+  users: (( valid( landscape.identity.users ) ? map[.landscape.identity.users|v|->v.email] :[] ))
 
 rbac:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
