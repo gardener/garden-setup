@@ -28,7 +28,7 @@
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
-          "version": "v1.23.0"
+          "version": "v1.25.0-dev-af14c1d868eba9ba65c0cb5ea0f765df8d53d839"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
