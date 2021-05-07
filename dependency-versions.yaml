@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.21.0"
+        "version": "v1.23.0-dev-e7d4ef84889b4680e7b6d991de537722c233bb90"
       },
       "extensions": {
         "dns-external": {
