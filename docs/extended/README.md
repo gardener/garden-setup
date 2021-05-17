@@ -9,3 +9,4 @@ This document links to all advanced configuration pages for a better overview.
 - [landscape.monitoring](monitoring.md)
 - [landscape.identity](identity.md)
 - [installation handler](installation-handler.md)
+- [installation Tanzu Kubernetes Cluster](vsphere-tkc-base-cluster.md)
