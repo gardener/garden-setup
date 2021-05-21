@@ -45,9 +45,12 @@ dashboard:
     apiServerUrl: (( imports.kube_apiserver.export.apiserver_url ))
     apiServerCa: (( imports.kube_apiserver.export.kube_apiserver_ca.cert ))
     sessionSecret: (( rand("[:alnum:]", 30) ))
-    hosts:
-      - (( imports.identity.export.dashboard_dns ))
-      - (( .landscape.dashboard.cname.domain || ~~ ))
+    ingress:
+      tls:
+        secretName: (( imports.cert.export.certificate.secret_name ))
+      hosts:
+        - (( imports.identity.export.dashboard_dns ))
+        - (( .landscape.dashboard.cname.domain || ~~ ))
     image:
       repository: (( .dashboard_version.image_repo || ~~ ))
       tag: (( .dashboard_version.image_tag || ~~ ))
@@ -60,8 +63,6 @@ dashboard:
       public:
         clientId: kube-kubectl
         clientSecret: (( imports.identity.export.kubectlClientSecret ))
-    tlsSecretName: (( imports.cert.export.certificate.secret_name ))
-    tls: ~
     kubeconfig: (( format( "((!!! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
     podLabels:
       <<: (( ( .landscape.gardener.network-policies.active || false ) ? ~ :~~ ))
