@@ -188,7 +188,7 @@ landscape:
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :helm_tag )) # only used for CRDs
         repo: "https://github.com/jetstack/cert-manager.git"
         helm_repo: "https://charts.jetstack.io"
-        helm_tag: "v0.13.1"
+        helm_tag: "v1.3.1"
       cert-dns-bridge:
         <<: (( merge ))
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.0.0" ))

@@ -26,7 +26,6 @@ caSpec:
 
 plugins:
   - kubectl: namespace
-  - kubectl: crds
   - pinned:
     - helm:
       - helm
@@ -46,11 +45,6 @@ namespace:
         labels:
           cert-manager.io/disable-validation: "true"
         name: (( .namespace.name ))
-
-crds:
-  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
-  files:
-    - "git/repo/deploy/manifests/00-crds.yaml"
 
 webhookready:
   kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
@@ -144,6 +138,7 @@ helm:
       enabled: (( .temp_webhook_state ))
     cainjector:
       enabled: (( .temp_webhook_state ))
+    installCRDs: true
 
 temp_webhook_state: (( &temporary ( valid( .landscape.cert-manager.enableWebhook ) ? .landscape.cert-manager.enableWebhook :true ) ))
 
