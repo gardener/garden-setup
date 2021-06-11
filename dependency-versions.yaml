@@ -12,7 +12,7 @@
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.17.0"
+          "version": "v1.19.0-dev-70a8bfe3467c5820b8090d8ceb7178207c4144af"
         },
         "os-suse-chost": {
           "repo": "https://github.com/gardener/gardener-extension-os-suse-chost.git",
