@@ -24,7 +24,7 @@
         },
         "os-gardenlinux": {
           "repo": "https://github.com/gardener/gardener-extension-os-gardenlinux.git",
-          "version": "v0.8.0"
+          "version": "v0.9.0-dev-bc577f9f53ee8cedea05d8e1ad4cbdedb7da5760"
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
