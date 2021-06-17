@@ -9,11 +9,15 @@ If `landscape.gardener.network-policies.active` is set to `true`, garden-setup w
 
 The default for `landscape.gardener.network-policies.active` is `false`, because the network policies have been shown to cause problems in some environments. It is planned to enable the policies by default, though, once the problems have been solved.
 
-### extensions
+### Extensions
 
-The `landscape.gardener.extensions` is optional. 
+The `landscape.gardener.extensions` is optional.
 
-#### valueOverwrites for extensions
+#### Activating/Deactivating Extensions
+
+While garden-setup automatically decides which Gardener extensions to deploy, it is possible to overwrite this decision manually. By setting `landscape.gardener.<extension_name>.active` to `true`, the extension will be deployed, independently of whether it is needed or not. Similarly, setting the flag to `false` will deactivate the extension and it won't be deployed. You should handle the latter one with care, as most extensions which are deployed by default are needed and deactivating them will result in a broken Gardener landscape.
+
+#### valueOverwrites for Extensions
 
 Whatever is specified in `landscape.gardener.extensions.<extensionName>.valueOverwrites` will be given directly to the helm values for the extension, so you can overwrite the corresponding default values. 
 Some values are set by default (take a look in the [deployment.yaml](../../components/gardener/extensions/deployment.yaml)), this values can also overwrite with the `landscape.gardener.extensions.<extensionName>.valueOverwrites`.
