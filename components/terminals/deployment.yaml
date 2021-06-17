@@ -88,7 +88,7 @@ kustomize:
       args:
         - set
         - image
-        - (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? ( "gcr.io/kubebuilder/kube-rbac-proxy=" .landscape.versions.terminal-kube-rbac-proxy.image_repo ":" ( .landscape.versions.terminal-kube-rbac-proxy.image_tag || "latest" ) ) :~~ ))
+        - (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? ( "quay.io/brancz/kube-rbac-proxy=" .landscape.versions.terminal-kube-rbac-proxy.image_repo ":" ( .landscape.versions.terminal-kube-rbac-proxy.image_tag || "latest" ) ) :~~ ))
     render:
       path: (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? env.GENDIR "/kustomize.runtime.edit-rbac-image/edit" :env.GENDIR "/kustomize.runtime.edit-tcm-image/edit" ))
       kustomization: "config/overlay/multi-cluster/runtime"
