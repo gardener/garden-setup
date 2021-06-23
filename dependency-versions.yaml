@@ -8,7 +8,7 @@
       "extensions": {
         "dns-external": {
           "repo": "https://github.com/gardener/external-dns-management.git",
-          "version": "v0.10.2"
+          "version": "v0.10.3-dev-61e64ba0c2086e2400755aa4c4008dc5d33cb7c1"
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
