@@ -11,13 +11,7 @@ component:
     - lib/templates/state.yaml
 
   plugins:
-    - git
     - chart-checkout
-
-git:
-  <<: (( landscape.versions.cert-manager.controller ))
-  files:
-    - "deploy/manifests/00-crds.yaml"
 
 chart-checkout:
   repo: (( landscape.versions.cert-manager.controller.helm_repo ))

@@ -22,12 +22,6 @@ webhookready()
     K8S_setKubeConfig "$field_path" "$GENDIR/$field_path/kubeconfig"
 
     getRequiredValue namespace "namespace" PLUGINCONFIGJSON
-    getValue webhook "webhook" PLUGINCONFIGJSON
-
-    if [[ ${webhook:-""} == "false" ]]; then
-      debug "webhook disabled, no check needed"
-      return
-    fi
 
     local starttime
     local endtime

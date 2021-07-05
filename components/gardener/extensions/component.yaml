@@ -29,14 +29,17 @@ deployment:
   # which extensions should be deployed
   # all need a matching node in landscape.versions.gardener.extensions in the acre.yaml file
   # and a manifest template in extension_manifests in this component's deployment.yaml
-  extensions:
-    - os-ubuntu
-    - os-suse-chost
-    - os-gardenlinux
-    - dns-external
-    - networking-calico
-    - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))
-    - (( ( .landscape.dashboard.terminals.active || .landscape.gardener.extensions.shoot-cert-service.active || false ) ? "shoot-cert-service" :~~ ))
-    - (( ( .landscape.gardener.extensions.shoot-dns-service.active || false ) ? "shoot-dns-service" :~~ ))
+  extensions: (( uniq( sum[.default_extensions|[]|s,e|->s ( contains(.deactivated_extensions, e) ? ~ :e )] .activated_extensions ) ))
+
+default_extensions:
+  - os-ubuntu
+  - os-suse-chost
+  - os-gardenlinux
+  - dns-external
+  - networking-calico
+  - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))
+  - (( ( .landscape.dashboard.terminals.active || false ) ? "shoot-cert-service" :~~ ))
+activated_extensions: (( valid( landscape.gardener.extensions ) ? keys(select{landscape.gardener.extensions|e|-> valid( e.active ) -and ( e.active == true )}) :[] ))
+deactivated_extensions: (( valid( landscape.gardener.extensions ) ? keys(select{landscape.gardener.extensions|e|-> valid( e.active ) -and ( e.active == false )}) :[] ))
 
 infrastructures: (( &temporary ( uniq( sum[.landscape.iaas|[]|s,e|-> s e.type ( e.seeds.[*].type || ~ ) ] ) ) ))
