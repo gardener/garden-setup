@@ -78,7 +78,7 @@ helm:
     kubeconfig: (( format( "((!!! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
 
 settings:
-  dashboard_path_prefix: (( env.GENDIR "/git/repo/dashboards/" ))
+  dashboard_path_prefix: (( env.GENDIR "/git/repo/dashboards" ))
   serviceaccount_name: gardener-metrics-exporter
   excluded_dashboards:
     - shoot-state-overview-dashboard.json
@@ -86,7 +86,7 @@ settings:
 patch:
   <<: (( &temporary ))
   deploy:
-    data: (( sum[list_files( .settings.dashboard_path_prefix )|{}|s,f|-> contains( .settings.excluded_dashboards, f ) ? s :s { f = read( .settings.dashboard_path_prefix f, "text" ) }] ))
+    data: (( sum[list_files( .settings.dashboard_path_prefix )|{}|s,f|-> contains( .settings.excluded_dashboards, f ) ? s :s { f = read( .settings.dashboard_path_prefix "/" f, "text" ) }] ))
   delete:
     data: (( sum[list_files( .settings.dashboard_path_prefix )|{}|s,f|-> contains( .settings.excluded_dashboards, f ) ? s :s { f = "null" }] ))
   
