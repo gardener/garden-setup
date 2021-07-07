@@ -33,14 +33,14 @@ defaults:
       - <<: (( defaults.providerspec.machineImages || ~ ))
       - name: gardenlinux
         versions:
+        - version: 318.8.0
         - version: 184.0.0
-        - version: 27.1.0
       - name: ubuntu
         versions:
         - version: 18.4.20200228
       - name: suse-chost
         versions:
-        - version: 15.2.20201016
+        - version: 15.2.20210610
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))
     volumeTypes:
@@ -50,22 +50,22 @@ defaults:
     caBundle: (( values.config.caBundle || ~~ ))
   kubernetes:
     versions:
+      - classification: preview
+        version: 1.21.2
       - classification: supported
+        version: 1.20.6
+      - classification: deprecated
         version: 1.20.4
-      - classification: deprecated
-        version: 1.20.2
       - classification: supported
+        version: 1.19.10
+      - classification: deprecated
         version: 1.19.8
-      - classification: deprecated
-        version: 1.19.6
       - classification: supported
-        version: 1.18.16
+        version: 1.18.18
       - classification: deprecated
-        version: 1.18.14
+        version: 1.18.16
       - classification: supported
         version: 1.17.17
-      - classification: deprecated
-        version: 1.17.16
       - version: 1.16.15
         classification: deprecated
       - version: 1.15.12
