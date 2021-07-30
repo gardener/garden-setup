@@ -188,7 +188,10 @@ networks:
   workers: 10.242.0.0/19
 ```
 
+Regarding the `workers` and `nodes` the same as for AWS applies (see above).
+
 #### Shooted Seed CIDRs Example for Azure
+
 ```yaml
 networks:
   nodes: 10.242.0.0/19
