@@ -70,7 +70,7 @@ iaas:
 
 ## The 'mode' Field
 
-In addition to the fields mentioned in the readme, there is also a field `mode` in each iaas entry. 
+In addition to the fields mentioned in the readme, there is also a field `mode` in each iaas entry.
 This decides what actually will be deployed:
 The default value is `seed`. In this case, the setup will deploy a cloudprofile, a seed, a seed secret, and a provider secret (which will be visible in the dashboard to create shoots from it).
 The value `soil` basically behaves like `seed`, but the field `spec.visible` in the seed resource will be set to `false`. The seed will not be taken into account when scheduling shoots - although shoots can be scheduled on that seed if they specifically reference it - and the corresponding provider option may not be visible in the dashboard. You should at least have one visible seed, otherwise you won't be able to create shoots via the dashboard.
@@ -163,6 +163,7 @@ Remember that the CIDRs of a shoot and its corresponding seed must not overlap. 
 Depending on where you get your base cluster from, you might not be able to influence its CIDRs.
 
 #### Shooted Seed CIDRs Example for AWS
+
 ```yaml
 networks:
   nodes: 10.242.0.0/16
@@ -175,7 +176,10 @@ networks:
   workers: 10.242.0.0/19
 ```
 
+You might notice that the `node` CIDR is larger than the `workers` CIDR. The reason is that for AWS the `workers` is the configuration for the subnet used by nodes in a single zone.  Since the shoot may span multiple zones you can have more nodes than workers generally (`nodes >= workers`). The AWS Extension repo has [more details](https://github.com/gardener/gardener-extension-provider-aws/blob/master/docs/usage-as-end-user.md#infrastructureconfig).
+
 #### Shooted Seed CIDRs Example for GCP
+
 ```yaml
 networks:
   nodes: 10.242.0.0/16
@@ -194,6 +198,8 @@ networks:
     cidr: 10.242.0.0/16
   workers: 10.242.0.0/19
 ```
+
+Unlike GCP or AWS, in Azure a single subnet is used for all zones. Hence here `workers` and `nodes` setting is identical.
 
 
 ### Worker Configuration
