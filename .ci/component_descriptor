@@ -38,5 +38,5 @@ ${ADD_DEPENDENCIES_CMD} \
     --component-dependencies \
     '{"name": "github.com/gardener/sow", "version": "'$SOW_VERSION'"}' \
     --container-image-dependencies \
-    '{"image_reference": "eu.gcr.io/gardener-project/sow:'$SOW_VERSION'", "version": "'$SOW_VERSION'", "name": "eu.gcr.io/gardener-project/sow"}'
+    '{"image_reference": "eu.gcr.io/gardener-project/sow:'$SOW_VERSION'", "version": "'$SOW_VERSION'", "name": "sow"}'
 cp "${BASE_DEFINITION_PATH}" "${COMPONENT_DESCRIPTOR_PATH}"

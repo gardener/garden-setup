@@ -41,6 +41,9 @@ ingresscontroller:
         repository: (( .landscape.versions.ingress-controller.image_repo ))
         tag: (( .landscape.versions.ingress-controller.image_tag ))
         digest: ~
+      podLabels:
+        app: nginx-ingress
+        component: controller
       nodeSelector: {}
       replicaCount: 3
       priorityClassName: system-cluster-critical

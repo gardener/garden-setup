@@ -169,16 +169,18 @@ providerConfig:
   kind: CloudProfileConfig
   countFaultDomains:
     - count: 2
+      region: australiacentral
+    - count: 2
       region: australiaeast
     - count: 2
       region: australiasoutheast
-    - count: 2
+    - count: 3
       region: brazilsouth
     - count: 3
       region: canadacentral
     - count: 2
       region: canadaeast
-    - count: 2
+    - count: 3
       region: centralindia
     - count: 3
       region: centralus
@@ -188,8 +190,10 @@ providerConfig:
       region: eastus
     - count: 3
       region: eastus2
-    - count: 2
+    - count: 3
       region: francecentral
+    - count: 2
+      region: germanywestcentral
     - count: 2
       region: japaneast
     - count: 2
@@ -210,6 +214,8 @@ providerConfig:
       region: southeastasia
     - count: 2
       region: southindia
+    - count: 2
+      region: uaenorth
     - count: 2
       region: uksouth
     - count: 2
@@ -222,9 +228,11 @@ providerConfig:
       region: westindia
     - count: 3
       region: westus
-    - count: 2
+    - count: 3
       region: westus2
   countUpdateDomains:
+    - count: 5
+      region: australiacentral
     - count: 5
       region: australiaeast
     - count: 5
@@ -248,6 +256,8 @@ providerConfig:
     - count: 5
       region: francecentral
     - count: 5
+      region: germanywestcentral
+    - count: 5
       region: japaneast
     - count: 5
       region: japanwest
@@ -267,6 +277,8 @@ providerConfig:
       region: southeastasia
     - count: 5
       region: southindia
+    - count: 5
+      region: uaenorth
     - count: 5
       region: uksouth
     - count: 5
@@ -284,10 +296,10 @@ providerConfig:
   machineImages:
   - name: gardenlinux
     versions:
+    - urn: sap:gardenlinux:greatest:318.8.0
+      version: 318.8.0
     - urn: sap:gardenlinux:greatest:184.0.0
       version: 184.0.0
-    - urn: sap:gardenlinux:greatest:27.1.0
-      version: 27.1.0
   - name: ubuntu
     versions:
     - acceleratedNetworking: true
@@ -296,8 +308,8 @@ providerConfig:
   - name: suse-chost
     versions:
     - acceleratedNetworking: true
-      urn: suse:sles-15-sp2-chost-byos:gen1:2020.10.16
-      version: 15.2.20201016
+      urn: suse:sles-15-sp2-chost-byos:gen1:2021.06.10
+      version: 15.2.20210610
   machineTypes:
     - acceleratedNetworking: true
       name: Standard_D4_v3
@@ -351,6 +363,31 @@ providerConfig:
       name: Standard_M128
 
 regions:
+  - name: australiacentral
+  - name: australiaeast
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: australiasoutheast
+  - name: brazilsouth
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: canadacentral
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: canadaeast
+  - name: centralindia
+  - name: centralus
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: eastasia
   - name: eastus
     zones:
     - name: "1"
@@ -361,22 +398,16 @@ regions:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: centralus
+  - labels:
+      seed.gardener.cloud/eu-access: "true"
+    name: francecentral
     zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: northeurope
-    zones:
-    - name: "1"
-    - name: "2"
-    - name: "3"
-  - name: westeurope
-    zones:
-    - name: "1"
-    - name: "2"
-    - name: "3"
-  - name: southeastasia
+  - labels:
+      seed.gardener.cloud/eu-access: "true"
+    name: germanywestcentral
     zones:
     - name: "1"
     - name: "2"
@@ -386,24 +417,48 @@ regions:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: westus2
+  - name: japanwest
+  - name: koreacentral
+  - name: koreasouth
+  - name: northcentralus
+  - labels:
+      seed.gardener.cloud/eu-access: "true"
+    name: northeurope
     zones:
     - name: "1"
     - name: "2"
     - name: "3"
+  - name: southafricanorth
+  - name: southcentralus
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: southeastasia
+    zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+  - name: southindia
+  - name: uaenorth
   - name: uksouth
     zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: FranceCentral
+  - name: ukwest
+  - name: westcentralus
+  - labels:
+      seed.gardener.cloud/eu-access: "true"
+    name: westeurope
     zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: EastUS2EUAP
+  - name: westindia
+  - name: westus
+  - name: westus2
     zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: uaenorth

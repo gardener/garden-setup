@@ -21,6 +21,42 @@ providerConfig:
   - name: gardenlinux
     versions:
     - regions:
+      - ami: ami-077967ddf49bd7822
+        name: eu-north-1
+      - ami: ami-07f7b310124c898e1
+        name: ap-south-1
+      - ami: ami-00e17f38ab1ba55f4
+        name: eu-west-3
+      - ami: ami-0774a6896e4ac35e0
+        name: eu-west-2
+      - ami: ami-032de7308a9eb91f5
+        name: eu-west-1
+      - ami: ami-08e8b1a5ad052751f
+        name: ap-northeast-3
+      - ami: ami-0fc6badc68b7b7dd1
+        name: ap-northeast-2
+      - ami: ami-06a5e5183080d4345
+        name: ap-northeast-1
+      - ami: ami-0f4797d1ea0ffbe21
+        name: sa-east-1
+      - ami: ami-0320e4ff5c5004a6b
+        name: ca-central-1
+      - ami: ami-041d6354bb257235d
+        name: ap-southeast-1
+      - ami: ami-0ef9fbc659adf4a7e
+        name: ap-southeast-2
+      - ami: ami-066eb78156cb8e30d
+        name: us-east-1
+      - ami: ami-08782642e97383550
+        name: us-east-2
+      - ami: ami-088a63ebb9b6d8cca
+        name: us-west-1
+      - ami: ami-0d3df510f088f6728
+        name: us-west-2
+      - ami: ami-0b8eda557039b448e
+        name: eu-central-1
+      version: 318.8.0
+    - regions:
       - ami: ami-0a7380651a94f34af
         name: eu-north-1
       - ami: ami-0f32041348763f71c
@@ -53,89 +89,45 @@ providerConfig:
         name: us-west-1
       - ami: ami-0d1ee9478903ca81f
         name: us-west-2
-      - ami: ami-af1d25ce
-        name: us-gov-west-1
-      - ami: ami-0e05a9dbe093f2152
-        name: us-gov-east-1
       version: 184.0.0
-    - regions:
-      - ami: ami-07ccc13d414bcef3c
-        name: ap-northeast-1
-      - ami: ami-0b2c6a4ec631bccf9
-        name: ap-northeast-2
-      - ami: ami-0ad05a1ae793d06fa
-        name: ap-south-1
-      - ami: ami-022ce9ff49b3ea2ab
-        name: ap-southeast-1
-      - ami: ami-034a6a56910b96871
-        name: ap-southeast-2
-      - ami: ami-0e4c5323dbb3e6935
-        name: ca-central-1
-      - ami: ami-04191efdc08e5aef6
-        name: eu-central-1
-      - ami: ami-0bb8dc8950bb9443c
-        name: eu-north-1
-      - ami: ami-0af0155fee34b4a4e
-        name: eu-west-1
-      - ami: ami-0d45e63a6e0e64049
-        name: eu-west-2
-      - ami: ami-04efa08d390e6c1b8
-        name: eu-west-3
-      - ami: ami-0973e4ec7b8cb9f4f
-        name: sa-east-1
-      - ami: ami-06ad56a1fb921d8f1
-        name: us-east-1
-      - ami: ami-0945b5300ed828e38
-        name: us-east-2
-      - ami: ami-09a83cb715f5b5637
-        name: us-west-1
-      - ami: ami-088e94e12398d7fce
-        name: us-west-2
-      version: 27.1.0
   - name: suse-chost
     versions:
     - regions:
-      - ami: ami-02579785f2b05157b
-        name: ap-northeast-1
-      - ami: ami-067508a84d7b6641f
-        name: ap-northeast-2
-      - ami: ami-069f3f4f56e924f63
-        name: ap-south-1
-      - ami: ami-0d4c14c79f6e310a5
-        name: ap-southeast-1
-      - ami: ami-0d74a68da62cc2ac3
-        name: ap-southeast-2
-      - ami: ami-0989317611619fef1
-        name: ca-central-1
-      - ami: ami-0c7126fabc4abaaa0
-        name: cn-north-1
-      - ami: ami-0a89bb145dc365f37
-        name: cn-northwest-1
-      - ami: ami-020aaee0bf8836bf0
-        name: eu-central-1
-      - ami: ami-07bf72646b6bf8b71
+      - ami: ami-0e8062501ac12dbdd
         name: eu-north-1
-      - ami: ami-03a23edcab5de0d24
-        name: eu-west-1
-      - ami: ami-028d904bdb398e5ca
-        name: eu-west-2
-      - ami: ami-07766d2fe3b6740bf
+      - ami: ami-0671a99072813baf2
+        name: ap-south-1
+      - ami: ami-0e0308c8101d7f36b
         name: eu-west-3
-      - ami: ami-0baf4819962cc32aa
+      - ami: ami-07c0a1b083fc3ffc0
+        name: eu-west-2
+      - ami: ami-0cae8a3a77df68846
+        name: eu-west-1
+      - ami: ami-02ffb4369087b4028
+        name: ap-northeast-3
+      - ami: ami-0870cae5572c5105d
+        name: ap-northeast-2
+      - ami: ami-007e785d4d6a7179b
+        name: ap-northeast-1
+      - ami: ami-0530c0f865aaeebe5
         name: sa-east-1
-      - ami: ami-04a20610a822532cf
+      - ami: ami-0aacb9d80505415b4
+        name: ca-central-1
+      - ami: ami-082c46d6f9c9ae133
+        name: ap-southeast-1
+      - ami: ami-04cdfdd8c04cb2314
+        name: ap-southeast-2
+      - ami: ami-0ec423476668d5d78
+        name: eu-central-1
+      - ami: ami-0ef7782793c55a691
         name: us-east-1
-      - ami: ami-0664f494d17a05314
+      - ami: ami-047e8e9eb9e2c1f82
         name: us-east-2
-      - ami: ami-0844897520bf0b0bf
-        name: us-gov-east-1
-      - ami: ami-bd350adc
-        name: us-gov-west-1
-      - ami: ami-023976e01bf1f5eb7
+      - ami: ami-0ab716bd991c0a905
         name: us-west-1
-      - ami: ami-07174570cb87e95c5
+      - ami: ami-0d5ec825ae5166bc2
         name: us-west-2
-      version: 15.1.20200615
+      version: 15.2.20210610
   - name: ubuntu
     versions:
     - regions:

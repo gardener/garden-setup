@@ -27,14 +27,14 @@ extension_controllers_func:
 
 kubectl:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
-  manifests: (( rendered_extension_manifests.[*].manifest ))
+  manifests: (( sum[rendered_extension_manifests.[*].manifests|[]|s,e|->s e.[*]] ))
 
 # this template gets evaluated for each entry in extension_manifests
 spec_template:
   <<: (( &temporary &template ))
   version: (( &temporary( .landscape.versions.gardener.extensions[n] ) ))
   valuesOverwrite: (( &temporary( valid(.landscape.gardener.extensions[n].valueOverwrites) ? .landscape.gardener.extensions[n].valueOverwrites :~ ) ))
-  manifest: (( *.extension_manifests[n] ))
+  manifests: (( manifest_templates.render_manifest_template( *.extension_specs[n] ) ))
   encoded_chart: (( &temporary( .extension_controllers_func.chartConfig( paths.prefix, paths.suffix ) ) ))
   paths:
     <<: (( &temporary ))
@@ -43,391 +43,391 @@ spec_template:
     prefix: (( substr( raw, 0, pos ) ))
     suffix: (( substr( raw, pos + 1 ) ))
 
-extension_manifests:
+manifest_templates:
+  <<: (( &temporary ))
+  render_manifest_template: (( |data|-> [ *_.deployment, *_.registration ] ))
+  deployment:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1beta1
+    kind: ControllerDeployment
+    metadata:
+      name: (( data.extensionName ))
+    type: (( data.type ))
+    providerConfig: (( data.providerConfig ))
+  registration:
+    <<: (( &template ))
+    apiVersion: core.gardener.cloud/v1beta1
+    kind: ControllerRegistration
+    metadata:
+      name: (( data.extensionName ))
+    spec:
+      deployment:
+        deploymentRefs:
+        - name: (( data.extensionName ))
+      resources: (( data.resources ))
+
+
+extension_specs:
   <<: (( &temporary ))
 
 ########################################
   os-ubuntu:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: os-ubuntu
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            concurrentSyncs: 25
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                cpu: 100m
-                memory: 256Mi
-              requests:
-                cpu: 20m
-                memory: 64Mi
-        type: helm
-      resources:
+    extensionName: os-ubuntu
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        concurrentSyncs: 25
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 20m
+            memory: 64Mi
+    resources:
       - kind: OperatingSystemConfig
         type: ubuntu
+        primary: true
 
 ########################################
   os-gardenlinux:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: os-gardenlinux
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            concurrentSyncs: 25
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                cpu: 300m
-                memory: 512Mi
-              requests:
-                cpu: 20m
-                memory: 128Mi
-        type: helm
-      resources:
-      - kind: OperatingSystemConfig
-        type: gardenlinux
+    extensionName: os-gardenlinux
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        concurrentSyncs: 25
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            cpu: 300m
+            memory: 512Mi
+          requests:
+            cpu: 20m
+            memory: 128Mi
+    resources:
+    - kind: OperatingSystemConfig
+      type: gardenlinux
+      primary: true
 
 ########################################
   os-suse-chost:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: os-suse-chost
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            concurrentSyncs: 20
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                cpu: 100m
-                memory: 256Mi
-              requests:
-                cpu: 20m
-                memory: 64Mi
-        type: helm
-      resources:
-      - kind: OperatingSystemConfig
-        type: suse-chost
+    extensionName: os-suse-chost
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        concurrentSyncs: 20
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 20m
+            memory: 64Mi
+    resources:
+    - kind: OperatingSystemConfig
+      type: suse-chost
+      primary: true
 
 ########################################
   dns-external:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: dns-external
-    spec:
-      resources:
-      - kind: DNSProvider
-        type: aws-route53
-      - kind: DNSProvider
-        type: alicloud-dns
-      - kind: DNSProvider
-        type: azure-dns
-      - kind: DNSProvider
-        type: google-clouddns
-      - kind: DNSProvider
-        type: openstack-designate
-      - kind: DNSProvider
-        type: cloudflare-dns
-      - kind: DNSProvider
-        type: infoblox-dns
-      deployment:
-        type: helm
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            createCRDs: false
-            fullnameOverride: seed-dns-controller-manager
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            configuration:
-              poolSize: 20
-              controllers: dnscontrollers
-              identifier: ""
-              serverPortHttp: 8080
-              ttl: (( .landscape.defaultTTL ))
+    extensionName: dns-external
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        createCRDs: false
+        fullnameOverride: seed-dns-controller-manager
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        configuration:
+          poolSize: 20
+          controllers: dnscontrollers
+          identifier: ""
+          serverPortHttp: 8080
+          ttl: (( .landscape.defaultTTL ))
+    resources:
+    - kind: DNSProvider
+      type: aws-route53
+      primary: true
+    - kind: DNSProvider
+      type: alicloud-dns
+      primary: true
+    - kind: DNSProvider
+      type: azure-dns
+      primary: true
+    - kind: DNSProvider
+      type: google-clouddns
+      primary: true
+    - kind: DNSProvider
+      type: openstack-designate
+      primary: true
+    - kind: DNSProvider
+      type: cloudflare-dns
+      primary: true
+    - kind: DNSProvider
+      type: infoblox-dns
+      primary: true
 
 ########################################
   provider-aws:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: provider-aws
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                memory: 1Gi
-        type: helm
-      resources:
-      - kind: Infrastructure
-        type: aws
-      - kind: ControlPlane
-        type: aws
-      - kind: Worker
-        type: aws
-      - kind: BackupBucket
-        type: aws
-      - kind: BackupEntry
-        type: aws
+    extensionName: provider-aws
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            memory: 1Gi
+    resources:
+    - kind: Infrastructure
+      type: aws
+      primary: true
+    - kind: ControlPlane
+      type: aws
+      primary: true
+    - kind: Worker
+      type: aws
+      primary: true
+    - kind: BackupBucket
+      type: aws
+      primary: true
+    - kind: BackupEntry
+      type: aws
+      primary: true
 
 ########################################
   provider-azure:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: provider-azure
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                memory: 1Gi
-        type: helm
-      resources:
-      - kind: Infrastructure
-        type: azure
-      - kind: ControlPlane
-        type: azure
-      - kind: Worker
-        type: azure
-      - kind: BackupBucket
-        type: azure
-      - kind: BackupEntry
-        type: azure
+    extensionName: provider-azure
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            memory: 1Gi
+    resources:
+    - kind: Infrastructure
+      type: azure
+      primary: true
+    - kind: ControlPlane
+      type: azure
+      primary: true
+    - kind: Worker
+      type: azure
+      primary: true
+    - kind: BackupBucket
+      type: azure
+      primary: true
+    - kind: BackupEntry
+      type: azure
+      primary: true
 
 ########################################
   provider-gcp:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: provider-gcp
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                memory: 1Gi
-        type: helm
-      resources:
-      - kind: Infrastructure
-        type: gcp
-      - kind: ControlPlane
-        type: gcp
-      - kind: Worker
-        type: gcp
-      - kind: BackupBucket
-        type: gcp
-      - kind: BackupEntry
-        type: gcp
+    extensionName: provider-gcp
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            memory: 1Gi
+    resources:
+    - kind: Infrastructure
+      type: gcp
+      primary: true
+    - kind: ControlPlane
+      type: gcp
+      primary: true
+    - kind: Worker
+      type: gcp
+      primary: true
+    - kind: BackupBucket
+      type: gcp
+      primary: true
+    - kind: BackupEntry
+      type: gcp
+      primary: true
 
 ########################################
   provider-openstack:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: provider-openstack
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            controllers:
-              infrastructure:
-                concurrentSyncs: 50
-                ignoreOperationAnnotation: false
-              worker:
-                concurrentSyncs: 50
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                memory: 1Gi
-        type: helm
-      resources:
-      - kind: Infrastructure
-        type: openstack
-      - kind: ControlPlane
-        type: openstack
-      - kind: Worker
-        type: openstack
-      - kind: BackupBucket
-        type: openstack
-      - kind: BackupEntry
-        type: openstack
+    extensionName: provider-openstack
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        controllers:
+          infrastructure:
+            concurrentSyncs: 50
+            ignoreOperationAnnotation: false
+          worker:
+            concurrentSyncs: 50
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            memory: 1Gi
+    resources:
+    - kind: Infrastructure
+      type: openstack
+      primary: true
+    - kind: ControlPlane
+      type: openstack
+      primary: true
+    - kind: Worker
+      type: openstack
+      primary: true
+    - kind: BackupBucket
+      type: openstack
+      primary: true
+    - kind: BackupEntry
+      type: openstack
+      primary: true
 
 ########################################
   provider-vsphere:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: provider-vsphere
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            config:
-              etcd:
-                storage:
-                  capacity: 25Gi
-            controllers:
-              controlplane:
-                concurrentSyncs: 50
-              infrastructure:
-                concurrentSyncs: 50
-              worker:
-                concurrentSyncs: 50
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-            resources:
-              limits:
-                memory: 1Gi
-        type: helm
-      resources:
-      - kind: Infrastructure
-        type: vsphere
-      - kind: ControlPlane
-        type: vsphere
-      - kind: Worker
-        type: vsphere
+    extensionName: provider-vsphere
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        config:
+          etcd:
+            storage:
+              capacity: 25Gi
+        controllers:
+          controlplane:
+            concurrentSyncs: 50
+          infrastructure:
+            concurrentSyncs: 50
+          worker:
+            concurrentSyncs: 50
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            memory: 1Gi
+    resources:
+    - kind: Infrastructure
+      type: vsphere
+      primary: true
+    - kind: ControlPlane
+      type: vsphere
+      primary: true
+    - kind: Worker
+      type: vsphere
+      primary: true
 
 ########################################
   networking-calico:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: networking-calico
-    spec:
-      deployment:
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-        type: helm
-      resources:
-      - kind: Network
-        type: calico
+    extensionName: networking-calico
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+    resources:
+    - kind: Network
+      type: calico
+      primary: true
 
 ########################################
   shoot-cert-service:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: shoot-cert-service
-    spec:
-      deployment:
-        type: helm
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            certificateConfig:
-              defaultIssuer:
-                name: garden
-                acme:
-                  email: (( valid( landscape.dashboard.terminals.cert.email ) ? landscape.dashboard.terminals.cert.email :( landscape.cert-manager.email || landscape.identity.users[0].email ) ))
-                  server: (( valid( landscape.dashboard.terminals.cert.server ) ? landscape.dashboard.terminals.cert.server :( landscape.cert-manager.server.url == "live" ? "https://acme-v02.api.letsencrypt.org/directory" :landscape.cert-manager.server.url ) ))
-                  privateKey: (( ( valid( landscape.dashboard.terminals.cert.privateKey ) ? landscape.dashboard.terminals.cert.privateKey :( ! valid( landscape.dashboard.terminals.cert.server ) ? landscape.cert-manager.privateKey :~~ ) ) || ~~ ))
-                  propagationTimeout: (( .landscape.defaultTTL "s" ))
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-      resources:
-      - kind: Extension
-        type: shoot-cert-service
-        globallyEnabled: true
+    extensionName: shoot-cert-service
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        certificateConfig:
+          defaultIssuer:
+            name: garden
+            acme:
+              email: (( valid( landscape.dashboard.terminals.cert.email ) ? landscape.dashboard.terminals.cert.email :( landscape.cert-manager.email || landscape.identity.users[0].email ) ))
+              server: (( valid( landscape.dashboard.terminals.cert.server ) ? landscape.dashboard.terminals.cert.server :( landscape.cert-manager.server.url == "live" ? "https://acme-v02.api.letsencrypt.org/directory" :landscape.cert-manager.server.url ) ))
+              privateKey: (( ( valid( landscape.dashboard.terminals.cert.privateKey ) ? landscape.dashboard.terminals.cert.privateKey :( ! valid( landscape.dashboard.terminals.cert.server ) ? landscape.cert-manager.privateKey :~~ ) ) || ~~ ))
+              propagationTimeout: (( .landscape.defaultTTL "s" ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+    resources:
+    - kind: Extension
+      type: shoot-cert-service
+      globallyEnabled: true
+      primary: true
 
 ########################################
   shoot-dns-service:
 ########################################
     <<: (( &template ))
-    apiVersion: core.gardener.cloud/v1beta1
-    kind: ControllerRegistration
-    metadata:
-      name: shoot-dns-service
-    spec:
-      deployment:
-        type: helm
-        providerConfig:
-          chart: (( encoded_chart ))
-          values:
-            <<: (( valuesOverwrite ))
-            image:
-              repository: (( version.image_repo || ~~ ))
-              tag: (( version.image_tag || ~~ ))
-      resources:
-      - kind: Extension
-        type: shoot-dns-service
-        globallyEnabled: true
+    extensionName: shoot-dns-service
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+    resources:
+    - kind: Extension
+      type: shoot-dns-service
+      globallyEnabled: true
+      primary: true
