@@ -14,10 +14,7 @@
 
 <<: (( &template ))
 
-machineImages:
-  - name: gardenlinux
-    versions:
-    - version: 27.1.0
+machineImages: {}
 
 providerConfig:
   apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1

@@ -34,13 +34,30 @@ defaults:
       - name: gardenlinux
         versions:
         - version: 318.8.0
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
         - version: 184.0.0
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
       - name: ubuntu
         versions:
         - version: 18.4.20200228
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
       - name: suse-chost
         versions:
         - version: 15.2.20210610
+          cri:
+          - name: docker
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))
     volumeTypes:
