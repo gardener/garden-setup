@@ -144,6 +144,13 @@ landscape:
           chart_path: charts/gardener-extension-provider-vsphere
           image_tag: (( valid( provider-vsphere.tag ) ? provider-vsphere.tag :~~ ))
           image_repo: (( ~~ ))
+        runtime-gvisor:
+          <<: (( merge ))
+          tag: (( valid( runtime-gvisor.branch ) -or valid( runtime-gvisor.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.runtime-gvisor.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.runtime-gvisor.repo ))
+          chart_path: charts/gardener-extension-runtime-gvisor
+          image_tag: (( valid( runtime-gvisor.tag ) ? runtime-gvisor.tag :~~ ))
+          image_repo: (( ~~ ))
     dashboard:
       <<: (( merge ))
       repo: (( .dependency_versions.versions.dashboard.core.repo ))
