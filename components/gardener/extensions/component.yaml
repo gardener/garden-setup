@@ -37,6 +37,7 @@ default_extensions:
   - os-gardenlinux
   - dns-external
   - networking-calico
+  - runtime-gvisor
   - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))
   - (( ( .landscape.dashboard.terminals.active || false ) ? "shoot-cert-service" :~~ ))
 activated_extensions: (( valid( landscape.gardener.extensions ) ? keys(select{landscape.gardener.extensions|e|-> valid( e.active ) -and ( e.active == true )}) :[] ))

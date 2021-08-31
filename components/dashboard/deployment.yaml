@@ -58,7 +58,6 @@ dashboard:
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))
       ca: (( imports.cert-controller.export.ca.crt || ~~ ))
-      redirectUri: (( imports.identity.export.callback_url ))
       clientSecret: (( imports.identity.export.dashboardClientSecret ))
       public:
         clientId: kube-kubectl

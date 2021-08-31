@@ -34,13 +34,30 @@ defaults:
       - name: gardenlinux
         versions:
         - version: 318.8.0
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
         - version: 184.0.0
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
       - name: ubuntu
         versions:
         - version: 18.4.20200228
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
       - name: suse-chost
         versions:
         - version: 15.2.20210610
+          cri:
+          - name: docker
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))
     volumeTypes:
@@ -50,16 +67,16 @@ defaults:
     caBundle: (( values.config.caBundle || ~~ ))
   kubernetes:
     versions:
-      - classification: preview
+      - classification: supported
         version: 1.21.3
       - classification: supported
+        version: 1.20.9
+      - classification: deprecated
         version: 1.20.8
-      - classification: deprecated
-        version: 1.20.6
       - classification: supported
-        version: 1.19.12
+        version: 1.19.13
       - classification: deprecated
-        version: 1.19.10
+        version: 1.19.12
       - classification: supported
         version: 1.18.20
       - classification: deprecated
