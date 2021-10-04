@@ -383,8 +383,6 @@ ingress:
     ...
 ```
 
-You can add [annotations](https://github.com/gardener/garden-setup/blob/master/components/ingress-controller/chart/templates/00-ingress-controller.yaml#L249) for the ingress controller load balancer service. This can be used for example to deploy an internal load balancer on your cloud provider (see the example for aws above).
-
 ### landscape.cert-manager
 
 ```yaml
