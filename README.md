@@ -382,6 +382,7 @@ ingress:
     service.beta.kubernetes.io/aws-load-balancer-internal: "true"  # example for internal loadbalancers on aws
     ...
 ```
+You can add annotations for the ingress controller load balancer service. This can be used for example to deploy an internal load balancer on your cloud provider (see the example for aws above).
 
 ### landscape.cert-manager
 
