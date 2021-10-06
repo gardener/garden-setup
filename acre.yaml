@@ -553,12 +553,19 @@ validation:
           - ["optionalfield", "HVPA", ["type", "bool"]]
           - ["optionalfield", "HVPAForShootedSeed", ["type", "bool"]]
           - ["optionalfield", "ManagedIstio", ["type", "bool"]]
+          - ["optionalfield", "ManagedIstio", ["type", "bool"]]
           - ["optionalfield", "APIServerSNI", ["type", "bool"]]
-          - ["optionalfield", "KonnectivityTunnel", ["type", "bool"]]
+          - ["optionalfield", "APIServerSNI", ["type", "bool"]]
           - ["optionalfield", "CachedRuntimeClients", ["type", "bool"]]
-          - ["optionalfield", "NodeLocalDNS", ["type", "bool"]]
-          - ["optionalfield", "MountHostCADirectories", ["type", "bool"]]
+          - ["optionalfield", "SeedChange", ["type", "bool"]]
           - ["optionalfield", "SeedKubeScheduler", ["type", "bool"]]
+          - ["optionalfield", "ReversedVPN", ["type", "bool"]]
+          - ["optionalfield", "AdminKubeconfigRequest", ["type", "bool"]]
+          - ["optionalfield", "UseDNSRecords", ["type", "bool"]]
+          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
+          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
+          - ["optionalfield", "RotateSSHKeypairOnMaintenance", ["type", "bool"]]
+          - ["optionalfield", "DenyInvalidExtensionResources", ["type", "bool"]]
       - - optionalfield
         - gardenClientConnection
         - - and
@@ -643,7 +650,7 @@ validation:
       - - mapfield
         - name
         - - (( validation.length_validator ))
-          - 10
+          - 15
       - - mapfield
         - mode
         - ["valueset", ["seed", "soil"]]
