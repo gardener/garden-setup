@@ -142,10 +142,10 @@ If you want to create shoots on all IaaS providers, best practise is to configur
 A few important things to know:
 - creating shoots takes some time, thus using shooted seeds will significantly increase the time needed for a complete setup
   - the shoots are created and deleted in parallel to minimize the delay
-- all shoots for the shooted seeds will be created in the `core` project with purpose set to `production`
+- all shoots for the shooted seeds will be created in the `garden` project with purpose set to `infrastructure`
   - they use a big worker node size and are configured to scale between 1 and 100 workers depending on their load
   - **do not delete these shoots!**
-- shoots have a length restriction of 10 characters for their name - this restriction applies to the `name` fields of `seeds` entries
+- shoot names have a length restriction: project and shoot name together may not exceed 21 characters, therefore the `name` fields of `seeds` entries have a maximum length of 15 characters
 
 
 ### Example CIDRs
