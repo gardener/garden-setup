@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.32.1"
+        "version": "v1.33.1"
       },
       "extensions": {
         "dns-external": {
@@ -40,7 +40,7 @@
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
-          "version": "v1.21.0"
+          "version": "v1.22.0"
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
@@ -63,7 +63,7 @@
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.52.1"
+        "version": "1.52.2"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
