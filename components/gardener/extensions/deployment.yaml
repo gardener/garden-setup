@@ -72,6 +72,32 @@ extension_specs:
   <<: (( &temporary ))
 
 ########################################
+  os-coreos:
+########################################
+    <<: (( &template ))
+    extensionName: os-coreos
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        concurrentSyncs: 25
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 20m
+            memory: 64Mi
+    resources:
+      - kind: OperatingSystemConfig
+        type: coreos
+        primary: true
+
+########################################
   os-ubuntu:
 ########################################
     <<: (( &template ))
