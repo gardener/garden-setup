@@ -18,10 +18,19 @@ templates:
   default_scrape_configs: (( templates.parse_scrape_configs( __ctx.DIR "/manifests/scrape-configs" ) ))
   custom_scrape_configs: (( defined(templates.custom_path) ? templates.parse_scrape_configs( templates.custom_path ) :[] ))
 
+  remote_write:
+  - url: (( values.settings.monitoring.remoteWrite.url || ~~ ))
+    basic_auth:
+      username: (( values.settings.monitoring.remoteWrite.username || ~~ ))
+      password: (( values.settings.monitoring.remoteWrite.password || ~~ ))
+
   config_data:
     global:
       evaluation_interval: 30s
       scrape_interval: 30s
+      external_labels:
+        <<: (( values.settings.monitoring.externalLabels || ~~ ))
+    remote_write: (( defined(values.settings.monitoring.remoteWrite) ? templates.remote_write :~~ ))
 
     rule_files:
     - /etc/prometheus/rules/*.yaml

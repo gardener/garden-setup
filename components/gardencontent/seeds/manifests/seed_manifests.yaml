@@ -59,7 +59,18 @@ secretManifests:
   type: Opaque
   data:
     <<: (( sum[configValues.dns.credentials|{}|ss,sk,sv|-> ss { sk = base64(sv) }] ))
-
+- <<: (( defined(configValues.monitoring.remoteWrite) ? ~ :~~ ))
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: "monitoring-seed-remote-write-credentials"
+    namespace: "garden"
+    labels:
+      gardener.cloud/role: global-shoot-remote-write-monitoring
+  type: Opaque
+  data:
+    username: (( base64(configValues.monitoring.remoteWrite.username) ))
+    password: (( base64(configValues.monitoring.remoteWrite.password) ))
 seedSpec:
   <<: (( &temporary ))
   provider:
@@ -226,10 +237,21 @@ gardenletSpec:
           metadata:
             name: (( configValues.name ))
           spec: (( seedSpec ))
+        monitoring: (( defined(configValues.monitoring.remoteWrite) ? monitoringTemplate :~~ ))
     # Deployment related configuration
     deployment:
       virtualGarden:
         enabled: true
+
+monitoringTemplate:
+  <<: (( &temporary ))
+  shoot:
+    remoteWrite:
+      url: (( configValues.monitoring.remoteWrite.url || ~~ ))
+      keep: (( configValues.monitoring.remoteWrite.keep || ~~ ))
+      queueConfig: (( configValues.monitoring.remoteWrite.queueConfig || ~~ ))
+    externalLabels:
+      <<: (( configValues.monitoring.externalLabels || {} ))
 
 pluginSpecs:
   managedIstioActive: (( configValues.config.featureGates.ManagedIstio || false ))
