@@ -19,6 +19,7 @@ kubectlconfig:
 settings:
   monitoring_credentials: (( .state.monitoring_credentials.value ))
   prometheus_domain: (( "garden-prometheus." .imports.ingress-controller.export.ingress_domain ))
+  monitoring: (( landscape.monitoring ))
 
 monitoring_password:
   <<: (( &temporary ))

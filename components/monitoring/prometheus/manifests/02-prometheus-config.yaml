@@ -8,38 +8,45 @@ metadata:
     role: prometheus
     context: garden
 data:
-  config.yaml: (( asyaml( config_data ) ))
+  config.yaml: (( asyaml( templates.config_data ) ))
 
+templates:
+  <<: (( &temporary ))
 
-config_data:
-  <<: (( &temporary ))    
-  global:
-    evaluation_interval: 30s
-    scrape_interval: 30s
+  custom_path: (( values.settings.monitoring.customScrapeConfigPath || ~~ )) # to improve readability
+  parse_scrape_configs: (( lambda |folder|-> sum[list_files( folder )|[]|scrape,file|-> scrape read( folder "/" file )] ))
+  default_scrape_configs: (( templates.parse_scrape_configs( __ctx.DIR "/manifests/scrape-configs" ) ))
+  custom_scrape_configs: (( defined(templates.custom_path) ? templates.parse_scrape_configs( templates.custom_path ) :[] ))
 
-  rule_files:
-  - /etc/prometheus/rules/*.yaml
+  config_data:
+    global:
+      evaluation_interval: 30s
+      scrape_interval: 30s
 
-  alerting:
-    alertmanagers:
-    - kubernetes_sd_configs:
-      - role: endpoints
-        namespaces:
-          names:
-          - garden
-      scheme: http
-      relabel_configs:
-      - source_labels: [ __meta_kubernetes_service_label_context ]
-        action: keep
-        regex: garden
-      - source_labels: [ __meta_kubernetes_service_label_app ]
-        action: keep
-        regex: monitoring
-      - source_labels: [ __meta_kubernetes_service_label_role ]
-        action: keep
-        regex: alertmanager
-      - source_labels: [ __meta_kubernetes_endpoint_port_name ]
-        action: keep
-        regex: web
+    rule_files:
+    - /etc/prometheus/rules/*.yaml
 
-  scrape_configs: (( sum[list_files( __ctx.DIR "/manifests/scrape-configs" )|[]|scrape,sconf|-> scrape read( __ctx.DIR "/manifests/scrape-configs/" sconf )] ))
+    alerting:
+      alertmanagers:
+      - kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - garden
+        scheme: http
+        relabel_configs:
+        - source_labels: [ __meta_kubernetes_service_label_context ]
+          action: keep
+          regex: garden
+        - source_labels: [ __meta_kubernetes_service_label_app ]
+          action: keep
+          regex: monitoring
+        - source_labels: [ __meta_kubernetes_service_label_role ]
+          action: keep
+          regex: alertmanager
+        - source_labels: [ __meta_kubernetes_endpoint_port_name ]
+          action: keep
+          regex: web
+
+    scrape_configs: (( [templates.default_scrape_configs..., templates.custom_scrape_configs...] ))
+
