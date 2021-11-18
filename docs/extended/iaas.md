@@ -42,6 +42,11 @@ iaas:
         enabled: true
       verticalPodAutoscaler:
         enabled: true
+    logging:                                     # optional, configure logging settings for the gardenlet
+    # fluentBit:                                 # example for FluentBit
+    #   output: |-
+    #     [Output]
+    #         ...
       ...
   - name:                                        # see above
     mode: <seed|cloudprofile|profile|inactive>   # what should be deployed
