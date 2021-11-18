@@ -704,7 +704,6 @@ validation:
             - - optionalfield
               - privateKey
               - privatekey
-          - - optionalfield
     - - optionalfield
       - resources
       - (( validation.resources_validator ))
