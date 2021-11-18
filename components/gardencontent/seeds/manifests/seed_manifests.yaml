@@ -214,6 +214,8 @@ gardenletSpec:
           retryPeriod: 2s
           resourceLock: configmaps
         logLevel: info
+        logging:
+          <<: (( configValues.config.logging || ~~ ))
         kubernetesLogLevel: 0
         featureGates: 
           <<: (( configValues.config.featureGates || {} ))
