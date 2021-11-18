@@ -81,11 +81,11 @@ spec:
           protocol: TCP
         resources:
           requests:
-            cpu: 200m
-            memory: 500Mi
+            cpu: {{ .Values.resources.requests.cpu | default "400m" }}
+            memory: {{ .Values.resources.requests.memory | default "2000Mi" }}
           limits:
-            cpu: 750m
-            memory: 2560Mi
+            cpu: {{ .Values.resources.limits.cpu | default "1000m" }}
+            memory: {{ .Values.resources.limits.memory | default "2560Mi" }}
         volumeMounts:
         - name: {{ .Values.name }}
           mountPath: /var/etcd/data

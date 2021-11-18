@@ -704,6 +704,10 @@ validation:
             - - optionalfield
               - privateKey
               - privatekey
+          - - optionalfield
+    - - optionalfield
+      - resources
+      - (( validation.resources_validator ))
   dashboard_no_seed_strategy_validator: (( |db|-> [! defined( db.frontendConfig.seedCandidateDeterminationStrategy ), "valid", "the 'frontendConfig.seedCandidateDeterminationStrategy' value for the dashboard is derived from the Gardener config and cannot be set here - set 'landscape.gardener.seedCandidateDeterminationStrategy' instead"] ))
   dashboard_terminals_validator: (( |db,cm|-> [! (( db.terminals.active || false ) -and ( cm.server.url == "self-signed" -or cm.server.url == "staging" )), "valid", "the 'dashboard terminals' feature requires trusted certificates, please configure the cert-manager accordingly"] ))
   networks:
@@ -760,6 +764,17 @@ validation:
     - ["optionalfield", "allowProjectCreationForAll", ["type", "bool"]]
     - ["optionalfield", "useIdentityDomain", ["type", "bool"]]
 
+  resources_validator:                      # resource nodes are
+    - map                                   # maps that contain
+    - ["valueset", ["limits", "requests"]]  # the keys 'limits' or 'requests' only,
+    - - map                                 # which in turn contain a map
+      - - or                                # with the following keys:
+        - ["valueset", ["cpu", "memory"]]   # 'cpu' or 'memory' exactly, or
+        - ["match", "^hugepages-"]          # a key starting with 'hugepages-'.
+      - - or                                # these maps either contain
+        - ["type", "int"]                   # integers or
+        - ["type", "string"]                # strings
+
 
   ### VALIDATIONS ###
   # structure resembles structure of landscape where possible
@@ -779,6 +794,7 @@ validation:
     shooted_seed: (( map[validation.flatten( select[select[landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"]|elem|-> valid( elem.seeds )].[*].seeds ) |entry|-> validate( entry, validation.instantiate_validator(entry, iaas_entry_validators.basic), validation.instantiate_validator(entry, iaas_entry_validators.shooted_seed) )] ))
   ##### landscape.etcd
   etcd:
+    resources: (( defined( landscape.etcd.resources ) ? validate( landscape.etcd.resources, validation.resources_validator ) :~~ ))
     backup_active: (( validate( landscape.etcd.backup.active, ["type", "bool"] ) ))
     backup: (( landscape.etcd.backup.active == true ? validate( landscape.etcd.backup, [ "and", validation.instantiate_validator( landscape.etcd.backup, validation.types.backup_config ), validation.types.etcd_backup[landscape.etcd.backup.type].config ] ) :~~ ))
   ##### landscape.dns
@@ -789,6 +805,11 @@ validation:
     credentials: (( validate( landscape.dns, ["mapfield", "credentials", types.dns[landscape.dns.type].credentials] ) ))
   ##### landscape.gardener
   gardener:
+    resources:
+      apiserver: (( defined( landscape.gardener.resources.apiserver ) ? validate( landscape.gardener.resources.apiserver, validation.resources_validator ) :~~ ))
+      admission: (( defined( landscape.gardener.resources.admission ) ? validate( landscape.gardener.resources.admission, validation.resources_validator ) :~~ ))
+      controller: (( defined( landscape.gardener.resources.controller ) ? validate( landscape.gardener.resources.controller, validation.resources_validator ) :~~ ))
+      scheduler: (( defined( landscape.gardener.resources.scheduler ) ? validate( landscape.gardener.resources.scheduler, validation.resources_validator ) :~~ ))
     seedCandidateDeterminationStrategy: (( defined( landscape.gardener.seedCandidateDeterminationStrategy ) ? validate( landscape.gardener, ["optionalfield", "seedCandidateDeterminationStrategy", ["valueset", ["SameRegion", "MinimalDistance"]]] ) :~~ ))
     network-policies: (( defined( landscape.gardener.network-policies ) ? validate( landscape.gardener.network-policies, ["optionalfield", "active", ["type", "bool"]] ) :~~ ))
     extensions: (( defined( landscape.gardener.extensions ) ? validate( keys( landscape.gardener.extensions ), ["list", ["valueset", keys( landscape.versions.gardener.extensions )]] ) :~~ ))

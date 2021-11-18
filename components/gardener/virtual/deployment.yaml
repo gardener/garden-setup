@@ -117,11 +117,11 @@ default_resources:
       memory: 100Mi
   scheduler:
     limits:
-      cpu: (( ~~ ))
-      memory: (( ~~ ))
+      cpu: 300m
+      memory: 256Mi
     requests:
-      cpu: (( ~~ ))
-      memory: (( ~~ ))
+      cpu: 50m
+      memory: 50Mi
 
 gardener:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))

@@ -38,6 +38,14 @@ tls:
     crt: client-certificate
     key: client-key
 
+resources:
+  requests:
+    cpu: 400m
+    memory: 2000Mi
+  limits:
+    cpu: 1000m
+    memory: 2560Mi
+
 # Aws S3 storage configuration
 # Note: No volumeMounts variable needed
 # storageProvider: "S3"

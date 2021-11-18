@@ -79,6 +79,8 @@ dashboard:
         <<: (( .landscape.dashboard.frontendConfig.features || ~ ))
         terminalEnabled: (( ( .landscape.dashboard.terminals.active || false ) ))
     terminal: (( ( .landscape.dashboard.terminals.active || false ) ? *.terminal_config :~~ ))
+    resources:
+      <<: (( .landscape.dashboard.resources || ~~ ))
 
 terminal_config:
   <<: (( &temporary &template ))
