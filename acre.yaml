@@ -248,6 +248,7 @@ landscape:
     username: admin
     password: (( ~~ ))
     hash: (( ~~ ))
+    customScrapeConfigPath: (( ~~ ))
   cert-manager:
     <<: (( merge ))
     server: (( merge none // valid( stub() ) ? ( type( stub() ) == "map" ? stub() :{ "url" = stub() } ) :{"url" = "self-signed"} ))
