@@ -249,6 +249,8 @@ landscape:
     password: (( ~~ ))
     hash: (( ~~ ))
     customScrapeConfigPath: (( ~~ ))
+    remoteWrite: (( ~~ ))
+    externalLabels: (( ~~ ))
   cert-manager:
     <<: (( merge ))
     server: (( merge none // valid( stub() ) ? ( type( stub() ) == "map" ? stub() :{ "url" = stub() } ) :{"url" = "self-signed"} ))
