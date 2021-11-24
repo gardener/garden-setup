@@ -471,6 +471,7 @@ extension_specs:
         <<: (( valuesOverwrite ))
         concurrentSyncs: 25
         image:
+          <<: (( valuesOverwrite.image ))
           repository: (( version.image_repo || ~~ ))
           tag: (( version.image_tag || ~~ ))
         resources:
