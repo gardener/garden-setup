@@ -40,7 +40,7 @@
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
-          "version": "v1.19.1"
+          "version": "v1.19.2"
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
