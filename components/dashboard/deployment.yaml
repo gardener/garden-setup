@@ -51,6 +51,8 @@ dashboard:
       hosts:
         - (( imports.identity.export.dashboard_dns ))
         - (( .landscape.dashboard.cname.domain || ~~ ))
+      annotations:
+        <<: (( .landscape.dashboard.ingress.annotations || ~~ ))
     image:
       repository: (( .dashboard_version.image_repo || ~~ ))
       tag: (( .dashboard_version.image_tag || ~~ ))
