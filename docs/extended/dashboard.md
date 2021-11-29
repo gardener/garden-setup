@@ -12,6 +12,22 @@ will be given directly to the [dashboard helm chart](https://github.com/gardener
 Please note that `frontendConfig.seedCandidateDeterminationStrategy` can not be overwritten here, as that value is derived from the Gardener. You can overwrite it [here](gardener.md).
 The same is true for `frontendConfig.features.terminalEnabled`. See [below](#landscape-dashboard-terminals) on how to activate the terminals.
 
+### landscape.dashboard.ingress.annotations
+
+Via `landscape.dashboard.ingress.annotations`, an additional list of annotations can be set on the dashboard ingress.
+
+For example, when using the `nginx ingress controller` you may specify an annotation like below to alter its configuration:
+
+```yaml
+  ...
+  dashboard:
+    ...
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/24"
+        ...
+```
+
 ### landscape.dashboard.cname
 
 With `landscape.dashboard.cname`, you can provide another domain from which the dashboard will be reachable.
