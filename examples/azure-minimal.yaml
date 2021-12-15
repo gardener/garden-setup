@@ -1,0 +1,38 @@
+# This is an example for a minimal configuration for Azure.
+# Backup blob store and DNS will be defaulted, this means
+#   1. Azure blob storage will be used for etcd backups
+#   2. Azure DNS will be used for DNS
+#   3. Your Azure account needs to be able to manage the provided domain. It is recommended to specify a subdomain of the managed domain in 'landscape.domain',
+#      so if your domain managed in Azure is 'foo.bar.com', you should enter 'landscape.foo.bar.com' in this domain field.
+#   4. The credentials provided for Azure need to have the necessary permissions for blob store and DNS management (in addition to the ones needed for Gardener).
+#   5. You need to provide a name for the resource group where the blob storage should be created in. If it doesn't exist, it will be created.
+
+landscape:
+  name: my-landscape
+  domain: mydomain.example.com # ADAPT
+
+  cluster:
+    networks:
+      nodes: 10.254.0.0/19 # ADAPT to base cluster
+      pods: 10.255.0.0/17 # ADAPT to base cluster
+      services: 10.255.128.0/17 # ADAPT to base cluster
+
+  etcd:
+    backup:
+      resourceGroup: my-az-rg # ADAPT
+
+  iaas:
+    - name: azure
+      type: azure
+      region: westeurope
+      credentials:
+        clientID: "..." # ADAPT
+        clientSecret: "..." # ADAPT
+        subscriptionID: "..." # ADAPT
+        tenantID: "..." # ADAPT
+
+  identity:
+    users:
+      - email: "admin@mydomain.org"
+        username: "Admin"
+        password: "SuperHardPassword$123" # ADAPT
