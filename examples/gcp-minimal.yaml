@@ -1,0 +1,38 @@
+# This is an example for a minimal configuration for GCP.
+# Backup blob store and DNS will be defaulted, this means
+#   1. GCP blob storage will be used for etcd backups
+#   2. Google-CloudDNS will be used for DNS
+#   3. Your GCP account needs to be able to manage the provided domain. It is recommended to specify a subdomain of the managed domain in 'landscape.domain',
+#      so if your domain managed in GCP is 'foo.bar.com', you should enter 'landscape.foo.bar.com' in this domain field.
+#   4. The credentials provided for GCP need to have the necessary permissions for blob store and DNS management (in addition to the ones needed for Gardener).
+
+landscape:
+  name: my-landscape
+  domain: mydomain.example.com # ADAPT
+
+  cluster:
+    networks:
+      nodes: "10.154.0.0/16" # ADAPT to base cluster
+      pods: "10.0.0.0/14" # ADAPT to base cluster
+      services: "10.4.0.0/20" # ADAPT to base cluster
+
+  iaas:
+    - name: gcp
+      type: gcp
+      region: europe-central2
+      zones:
+        - (( region "-a"))
+        - (( region "-b"))
+        - (( region "-c"))
+      credentials:
+        serviceaccount.json: | # ADAPT
+          {
+            "type": "service_account",
+            ...
+          }
+
+  identity:
+    users:
+      - email: "admin@mydomain.org"
+        username: "Admin"
+        password: "SuperHardPassword$123" # ADAPT
