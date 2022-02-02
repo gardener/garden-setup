@@ -3,6 +3,10 @@
 Gardener uses Kubernetes to manage Kubernetes clusters. This documentation describes how to install Gardener on an existing Kubernetes cluster of your IaaS provider.
 > Where reference is made in this document to the *base cluster*, we are actually referring to the existing cluster where you will install Gardener. This helps to distinguish them from the clusters that you will create after the installation using Gardener. Once it's installed, it is also referred to as *garden cluster*. Whenever you create clusters, Gardener will create *seed clusters* and *shoot clusters*. In this documentation we will only cover the installation of clusters in one region of one IaaS provider. More information: [Architecture](https://gardener.cloud/documentation/030-architecture/).
 
+## Disclaimer: Productive Use
+
+Please be aware that garden-setup was created with the intent of providing an easy way to install Gardener for the purpose of "having a look into it". While it offers lots of configuration options and can be used to create landscapes , garden-setup lacks some features which are usually expected from a 'productive' installer. The most prominent example is that garden-setup *does not have any built-in support for upgrading an existing landscape*. You can 'deploy over' an existing landscape with a new version of garden-setup (or one of its components), but this scenario is not tested or validated in any way, and might or might not work.
+
 ## Prerequisites
 
 * The installation was tested on Linux and MacOS
