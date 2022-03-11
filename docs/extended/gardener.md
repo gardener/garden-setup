@@ -22,12 +22,13 @@ While garden-setup automatically decides which Gardener extensions to deploy, it
 Whatever is specified in `landscape.gardener.extensions.<extensionName>.valueOverwrites` will be given directly to the helm values for the extension, so you can overwrite the corresponding default values. 
 Some values are set by default (take a look in the [deployment.yaml](../../components/gardener/extensions/deployment.yaml)), this values can also overwrite with the `landscape.gardener.extensions.<extensionName>.valueOverwrites`.
 
-The following extensions are availibe in `landscape.gardener.extensions`:
+The following extensions are available in `landscape.gardener.extensions`:
 
 - dns-external: [values.yaml](https://github.com/gardener/gardener-extension-shoot-dns-service/blob/master/charts/gardener-extension-shoot-dns-service/values.yaml)
 - os-ubuntu: [values.yaml](https://github.com/gardener/gardener-extension-os-ubuntu/blob/master/charts/gardener-extension-os-ubuntu/values.yaml)
 - os-gardenlinux: [values.yaml](https://github.com/gardener/gardener-extension-os-gardenlinux/blob/master/charts/gardener-extension-os-gardenlinux/values.yaml)
 - os-suse-chost: [values.yaml](https://github.com/gardener/gardener-extension-os-suse-chost/blob/master/charts/gardener-extension-os-suse-chost/values.yaml)
+- os-coreos: [values.yaml](https://github.com/gardener/gardener-extension-os-coreos/blob/master/charts/gardener-extension-os-coreos/values.yaml)
 - provider-aws: [values.yaml](https://github.com/gardener/gardener-extension-provider-aws/blob/master/charts/gardener-extension-provider-aws/values.yaml)
 - provider-gcp: [values.yaml](https://github.com/gardener/gardener-extension-provider-gcp/blob/master/charts/gardener-extension-provider-gcp/values.yaml)
 - provider-azure: [values.yaml](https://github.com/gardener/gardener-extension-provider-azure/blob/master/charts/gardener-extension-provider-azure/values.yaml)

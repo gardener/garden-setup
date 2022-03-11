@@ -192,6 +192,13 @@ landscape:
       resourceGroup:                          # Azure resource group you would like to use for your backup
       region: (( iaas.region ))               # region of blob storage (default: same as above)
       credentials: (( iaas.credentials ))     # credentials for the blob storage's IaaS provider (default: same as above)
+    resources:                                # optional: override resource requests and limits defaults
+      requests:
+        cpu: 400m
+        memory: 2000Mi
+      limits:
+        cpu: 1
+        memory: 2560Mi
 
   <a href="#landscapedns">dns</a>:                                    # optional for gcp/aws/azure/openstack, default values based on `landscape.iaas`
     type: &lt;google-clouddns|aws-route53|azure-dns|openstack-designate|cloudflare-dns|infoblox-dns&gt;   # dns provider
@@ -382,8 +389,7 @@ ingress:
     service.beta.kubernetes.io/aws-load-balancer-internal: "true"  # example for internal loadbalancers on aws
     ...
 ```
-
-You can add [annotations](https://github.com/gardener/garden-setup/blob/master/components/ingress-controller/chart/templates/00-ingress-controller.yaml#L249) for the ingress controller load balancer service. This can be used for example to deploy an internal load balancer on your cloud provider (see the example for aws above).
+You can add annotations for the ingress controller load balancer service. This can be used for example to deploy an internal load balancer on your cloud provider (see the example for aws above).
 
 ### landscape.cert-manager
 

@@ -66,7 +66,7 @@ providerconfig:
   bootstrapToken: (( bootstrapTokens[v.name] ))
   imageVectorOverwrites:
     imageVectorOverwrite: (( v.imageVectorOverwrite || ~~ ))
-    componentImageVectorOverwrite: (( valid( v.componentImageVectorOverwrite ) ? { "components" = sum[v.componentImageVectorOverwrite.components|[]|cs,celem|-> s { "name" = celem.name, "imageVectorOverwrite" = asyaml( celem.imageVectorOverwrite ) }] } :~~ ))
+    componentImageVectorOverwrite: (( valid( v.componentImageVectorOverwrite ) ? { "components" = sum[v.componentImageVectorOverwrite.components|[]|cs,celem|-> cs { "name" = celem.name, "imageVectorOverwrite" = asyaml( celem.imageVectorOverwrite ) }] } :~~ ))
   kubeconfigs:
     virtual: (( .imports.kube_apiserver.export.kubeconfig ))
     seed: (( v.cluster.kubeconfig || read( env.ROOTDIR "/" landscape.clusters.[0].kubeconfig, "yaml" ) ))
@@ -76,5 +76,6 @@ providerconfig:
     shootDefaultNetworks: (( v.shootDefaultNetworks || ~~ ))
     settings: (( v.seedSettings || ~~ ))
   secretname: (( name "-" v.mode ))
+  monitoring: (( landscape.monitoring ))
 
 renderedPluginSpecs: (( sum[.iaasSeedsSoils|[]|s,id,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))

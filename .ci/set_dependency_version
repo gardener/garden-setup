@@ -48,6 +48,8 @@ elif dep_name == 'github.com/gardener/gardener-extension-shoot-dns-service':
     set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'shoot-dns-service', 'version')
 elif dep_name == 'github.com/gardener/gardener-extension-provider-vsphere':
     set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'provider-vsphere', 'version')
+elif dep_name == 'github.com/gardener/gardener-extension-runtime-gvisor':
+    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'runtime-gvisor', 'version')
 elif dep_name == 'github.com/gardener/dashboard':
     set_dep_version(dep_version, 'versions', 'dashboard', 'core', 'version')
 elif dep_name == 'github.com/gardener/terminal-controller-manager':

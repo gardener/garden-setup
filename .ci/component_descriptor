@@ -32,6 +32,8 @@ ${ADD_DEPENDENCIES_CMD} \
     --component-dependencies \
     '{"name": "github.com/gardener/gardener-extension-provider-vsphere", "version": "'$(jq -r ".versions.gardener.extensions[\"provider-vsphere\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
+    '{"name": "github.com/gardener/gardener-extension-runtime-gvisor", "version": "'$(jq -r ".versions.gardener.extensions[\"runtime-gvisor\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
     '{"name": "github.com/gardener/dashboard", "version": "'$(jq -r ".versions.dashboard.core.version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
     '{"name": "github.com/gardener/terminal-controller-manager", "version": "'$(jq -r ".versions.dashboard.terminals[\"terminal-controller-manager\"].version" <<< $DEP_VERSIONS)'"}' \

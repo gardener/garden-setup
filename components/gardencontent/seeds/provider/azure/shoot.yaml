@@ -21,8 +21,5 @@ infrastructureConfig:
 controlPlaneConfig:
   apiVersion: azure.provider.extensions.gardener.cloud/v1alpha1
   kind: ControlPlaneConfig
-  cloudControllerManager:
-    featureGates:
-      ServiceLoadBalancerFinalizer: true
 defaultMachineType: Standard_DS5_v2
 defaultVolumeType: standard

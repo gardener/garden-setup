@@ -51,6 +51,8 @@ dashboard:
       hosts:
         - (( imports.identity.export.dashboard_dns ))
         - (( .landscape.dashboard.cname.domain || ~~ ))
+      annotations:
+        <<: (( .landscape.dashboard.ingress.annotations || ~~ ))
     image:
       repository: (( .dashboard_version.image_repo || ~~ ))
       tag: (( .dashboard_version.image_tag || ~~ ))
@@ -58,7 +60,6 @@ dashboard:
     oidc:
       issuerUrl: (( imports.identity.export.issuer_url ))
       ca: (( imports.cert-controller.export.ca.crt || ~~ ))
-      redirectUri: (( imports.identity.export.callback_url ))
       clientSecret: (( imports.identity.export.dashboardClientSecret ))
       public:
         clientId: kube-kubectl
@@ -80,6 +81,8 @@ dashboard:
         <<: (( .landscape.dashboard.frontendConfig.features || ~ ))
         terminalEnabled: (( ( .landscape.dashboard.terminals.active || false ) ))
     terminal: (( ( .landscape.dashboard.terminals.active || false ) ? *.terminal_config :~~ ))
+    resources:
+      <<: (( .landscape.dashboard.resources || ~~ ))
 
 terminal_config:
   <<: (( &temporary &template ))

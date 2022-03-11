@@ -108,6 +108,8 @@ etcd:
           crt: (( state.client.value.cert ))
           key: (( state.client.value.key ))
 
+      resources:
+        <<: (( landscape.etcd.resources || ~~ ))
   events:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
     files:

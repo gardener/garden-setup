@@ -2,12 +2,31 @@
 
 The `landscape.dashboard` node is entirely optional. 
 Whatever is specified for
+
 - `landscape.dashboard.frontendConfig`
 - `landscape.dashboard.gitHub`
+- `landscape.dashboard.resources`
+
 will be given directly to the [dashboard helm chart](https://github.com/gardener/dashboard/blob/master/charts/gardener-dashboard/values.yaml), so you can overwrite the corresponding default values.
 
 Please note that `frontendConfig.seedCandidateDeterminationStrategy` can not be overwritten here, as that value is derived from the Gardener. You can overwrite it [here](gardener.md).
 The same is true for `frontendConfig.features.terminalEnabled`. See [below](#landscape-dashboard-terminals) on how to activate the terminals.
+
+### landscape.dashboard.ingress.annotations
+
+Via `landscape.dashboard.ingress.annotations`, an additional list of annotations can be set on the dashboard ingress.
+
+For example, when using the `nginx ingress controller` you may specify an annotation like below to alter its configuration:
+
+```yaml
+  ...
+  dashboard:
+    ...
+    ingress:
+      annotations:
+        nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/24"
+        ...
+```
 
 ### landscape.dashboard.cname
 
@@ -54,4 +73,25 @@ The terminals need trusted certificates and won't work with self-signed ones. Th
 
 Due to technical limitations, some ingresses in shoot will have a `cert-manager.io/cluster-issuer: ...` annotation despite the cert-manager not being deployed on the shoots. To avoid conflicts when valid certificates are needed on a shoot, you can either use the [shoot-cert-service](https://github.com/gardener/gardener-extensions/tree/master/controllers/extension-shoot-cert-service), which is deployed on the shoot, or, if you want to use your own cert-manager deployment, make sure you choose a different name for your clusterissuer(s).
 
-Check out the [terminal-controller-manager](https://github.com/gardener/terminal-controller-manager) for more information on the terminals.
+Check out the
+[terminal-controller-manager](https://github.com/gardener/terminal-controller-manager)
+for more information on the terminals.
+
+### landscape.dashboard.resources
+
+With the optional `resources` field, you can override the default limits and requests for the dashboard.
+
+```yaml
+  ...
+  dashboard:
+    ...
+    resources:
+      requests:
+        cpu: 400m
+        memory: 2000Mi
+      limits:
+        cpu: 800m
+        memory: 2560Mi
+```
+
+This field expects the values in the standard Kubernetes format for resource requests and limits. Refer to the [Kubernetes docs for container resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for more information.

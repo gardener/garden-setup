@@ -12,7 +12,7 @@ data:
   auth: (( base64( .imports.prometheus.export.monitoring_auth ) ))
 type: Opaque
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: garden-grafana
@@ -32,9 +32,12 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: garden-grafana
-          servicePort: 80
+          service:
+            name: garden-grafana
+            port:
+              number: 80
         path: /
+        pathType: ImplementationSpecific
   tls:
   - hosts:
     - (( .settings.grafana_domain ))

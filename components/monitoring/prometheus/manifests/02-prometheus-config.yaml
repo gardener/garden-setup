@@ -8,38 +8,54 @@ metadata:
     role: prometheus
     context: garden
 data:
-  config.yaml: (( asyaml( config_data ) ))
+  config.yaml: (( asyaml( templates.config_data ) ))
 
+templates:
+  <<: (( &temporary ))
 
-config_data:
-  <<: (( &temporary ))    
-  global:
-    evaluation_interval: 30s
-    scrape_interval: 30s
+  custom_path: (( values.settings.monitoring.customScrapeConfigPath || ~~ )) # to improve readability
+  parse_scrape_configs: (( lambda |folder|-> sum[list_files( folder )|[]|scrape,file|-> scrape read( folder "/" file )] ))
+  default_scrape_configs: (( templates.parse_scrape_configs( __ctx.DIR "/manifests/scrape-configs" ) ))
+  custom_scrape_configs: (( defined(templates.custom_path) ? templates.parse_scrape_configs( templates.custom_path ) :[] ))
 
-  rule_files:
-  - /etc/prometheus/rules/*.yaml
+  remote_write:
+  - url: (( values.settings.monitoring.remoteWrite.url || ~~ ))
+    basic_auth:
+      username: (( values.settings.monitoring.remoteWrite.username || ~~ ))
+      password: (( values.settings.monitoring.remoteWrite.password || ~~ ))
 
-  alerting:
-    alertmanagers:
-    - kubernetes_sd_configs:
-      - role: endpoints
-        namespaces:
-          names:
-          - garden
-      scheme: http
-      relabel_configs:
-      - source_labels: [ __meta_kubernetes_service_label_context ]
-        action: keep
-        regex: garden
-      - source_labels: [ __meta_kubernetes_service_label_app ]
-        action: keep
-        regex: monitoring
-      - source_labels: [ __meta_kubernetes_service_label_role ]
-        action: keep
-        regex: alertmanager
-      - source_labels: [ __meta_kubernetes_endpoint_port_name ]
-        action: keep
-        regex: web
+  config_data:
+    global:
+      evaluation_interval: 30s
+      scrape_interval: 30s
+      external_labels:
+        <<: (( values.settings.monitoring.externalLabels || ~~ ))
+    remote_write: (( defined(values.settings.monitoring.remoteWrite) ? templates.remote_write :~~ ))
 
-  scrape_configs: (( sum[list_files( __ctx.DIR "/manifests/scrape-configs" )|[]|scrape,sconf|-> scrape read( __ctx.DIR "/manifests/scrape-configs/" sconf )] ))
+    rule_files:
+    - /etc/prometheus/rules/*.yaml
+
+    alerting:
+      alertmanagers:
+      - kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - garden
+        scheme: http
+        relabel_configs:
+        - source_labels: [ __meta_kubernetes_service_label_context ]
+          action: keep
+          regex: garden
+        - source_labels: [ __meta_kubernetes_service_label_app ]
+          action: keep
+          regex: monitoring
+        - source_labels: [ __meta_kubernetes_service_label_role ]
+          action: keep
+          regex: alertmanager
+        - source_labels: [ __meta_kubernetes_endpoint_port_name ]
+          action: keep
+          regex: web
+
+    scrape_configs: (( [templates.default_scrape_configs..., templates.custom_scrape_configs...] ))
+
