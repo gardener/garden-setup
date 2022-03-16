@@ -332,6 +332,8 @@ etcd:
     resourceGroup: ...
     region: (( iaas.region ))
     credentials: (( iaas.credentials ))
+    # schedule: "0 */24 * * *"          # optional, default: 24h
+    # maxBackups: 7                     # optional, default: 7
 ```
 Configuration of what blob storage to use for the etcd key-value store. If your IaaS provider offers a blob storage you can use the same values for `etc.backup.region` and `etc.backup.credentials` as above for `iaas.region` and `iaas.credentials` correspondingly by using the [(( foo ))](https://github.com/mandelsoft/spiff/blob/master/README.md#-foo-) expression of spiff.
 If the type of `landscape.iaas[0]` is one of `gcp`, `aws`, `azure`, or `openstack`, this block can be defaulted - either partly or as a whole - based on values from `landscape.iaas`. The `resourceGroup`, which is necessary for Azure, cannot be defaulted and must be specified. Make sure that the specified `resourceGroup` is empty and unused as deleting the cluster using `sow delete all` deletes this `resourceGroup`.

@@ -89,8 +89,8 @@ etcd:
         etcd-backup-restore: (( .landscape.versions.etcd.backup_restore.image_repo ":" .landscape.versions.etcd.backup_restore.image_tag ))
 
       backup:
-        schedule: "0 */24 * * *" # cron standard schedule
-        maxBackups: 7 # Maximum number of backups to keep (may change in future)
+        schedule: (( defined(landscape.etcd.backup.schedule) ? landscape.etcd.backup.schedule :"0 */24 * * *" )) # Backup interval (default 24h)
+        maxBackups: (( defined(landscape.etcd.backup.maxBackups) ? landscape.etcd.backup.maxBackups :7 )) # Maximum number of backups to keep (default 7)
         storageProvider: (( landscape.etcd.backup.active ? spec.providertypes.[landscape.etcd.backup.type] :"" ))  # Abs,Gcs,S3,Swift empty means no backup,
         secretData: (( sum[temp.config.credentials|{}|c,k,v|->c {k=base64(v)}] ))
         storageContainer: (( landscape.etcd.backup.active ? imports.backupinfra.export.bucketname :~ ))
