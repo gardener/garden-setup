@@ -488,6 +488,8 @@ validation:
         - - valueset
           - (( keys( types.etcd_backup ) ))
       - ["mapfield", "region"]
+      - ["optionalfield", "schedule", ["type", "string"]]
+      - ["optionalfield", "maxBackups", ["type", "int"]]
       - - mapfield
         - credentials
         - (( types.etcd_backup[values.type].credentials ))
