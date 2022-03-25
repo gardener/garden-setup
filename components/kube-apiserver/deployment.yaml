@@ -36,7 +36,7 @@ spec:
 
   new:
     service_account_key: (( &template(x509genkey()) ))
-    basic_auth:          (( &template(exec( "bash", "-c", "cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1" )) ))
+    static_token:          (( &template(exec( "bash", "-c", "cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 128 | head -n 1" )) ))
 
   server:
     commonName: "garden:server:kube-apiserver"
@@ -84,7 +84,7 @@ state:
   kube_aggregator_ca:          (( utilities.certs.selfSignedCA("garden:ca:kube-aggregator", false) ))
   kube_aggregator_client:      (( utilities.certs.keyCertForCA(spec.aggregator_client, kube_aggregator_ca, false) ))
   service_account_key:         (( utilities.state.valuedata(~,spec.new.service_account_key,false) ))
-  basic_auth:                  (( utilities.state.valuedata(~,spec.new.basic_auth, false) ))
+  static_token_health_check:   (( utilities.state.valuedata(~,spec.new.static_token, false) ))
 
 
 kubeapiserver:
@@ -97,7 +97,8 @@ kubeapiserver:
   serviceName: (( name ))
   values:
     images:
-      hyperkube: (( .landscape.versions.kube-apiserver.image_repo ":" .landscape.versions.kube-apiserver.image_tag ))
+      apiserver: (( .landscape.versions.kube-apiserver.image_repo ":" .landscape.versions.kube-apiserver.image_tag ))
+      controllermanager: (( .landscape.versions.kube-controller-manager.image_repo ":" .landscape.versions.kube-controller-manager.image_tag ))
     apiServer:
       hostname: (( .settings.apiserver_dns ))
       serviceName: (( name ))
@@ -106,7 +107,8 @@ kubeapiserver:
       kubeAPIServer:
         ca: (( spec.KeyCert(.state.kube_apiserver_ca) ))
         server: (( spec.KeyCert(.state.kube_apiserver_server) )) 
-        basicAuthPassword: (( .state.basic_auth.value ))
+        staticTokens:
+          healthCheck: (( .state.static_token_health_check.value ))
       kubeAggregator:
         ca: (( spec.KeyCert(.state.kube_aggregator_ca) ))
         client: (( spec.KeyCert(.state.kube_aggregator_client) ))

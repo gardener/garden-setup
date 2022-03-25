@@ -67,6 +67,8 @@ secret_template:
           cloudprofile.garden.sapcloud.io/name: (( v.name ))
         name: (( secretname ))
         namespace: (( .settings.project_namespace ))
+      provider:
+        type: (( v.type ))
       secretRef:
         name: (( secretname ))
 
