@@ -26,8 +26,11 @@ landscape:
   components: []
   versions:
     kube-apiserver:
-      image_repo: k8s.gcr.io/hyperkube
-      image_tag: v1.18.3
+      image_repo: k8s.gcr.io/kube-apiserver
+      image_tag: v1.19.15
+    kube-controller-manager:
+      image_repo: k8s.gcr.io/kube-controller-manager
+      image_tag: (( kube-apiserver.image_tag ))
     etcd:
       etcd:
         image_repo: quay.io/coreos/etcd
