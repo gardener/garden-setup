@@ -130,6 +130,14 @@ helm:
     image:
       repository: (( .landscape.versions.cert-manager.controller.image_repo || ~~ ))
       tag: (( .landscape.versions.cert-manager.controller.image_tag || ~~ ))
+    cainjector:
+      image:
+        repository: (( .landscape.versions.cert-manager.cainjector.image_repo || ~~ ))
+        tag: (( .landscape.versions.cert-manager.cainjector.image_tag || ~~ ))
+    webhook:
+      image:
+        repository: (( .landscape.versions.cert-manager.webhook.image_repo || ~~ ))
+        tag: (( .landscape.versions.cert-manager.webhook.image_tag || ~~ ))
     serviceAccount:
       create: true
       name: (( .settings.serviceAccountName ))
