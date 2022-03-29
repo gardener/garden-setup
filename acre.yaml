@@ -206,6 +206,16 @@ landscape:
         repo: "https://github.com/jetstack/cert-manager.git"
         helm_repo: "https://charts.jetstack.io"
         helm_tag: "v1.3.1"
+      cainjector:
+        <<: (( merge ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
+        image_tag: (( valid( tag ) ? tag :~~ ))
+        image_repo: (( ~~ ))
+      webhook:
+        <<: (( merge ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
+        image_tag: (( valid( tag ) ? tag :~~ ))
+        image_repo: (( ~~ ))
       cert-dns-bridge:
         <<: (( merge ))
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.0.0" ))
