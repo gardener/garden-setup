@@ -33,6 +33,8 @@ ingresscontroller:
   source: "git/repo/charts/ingress-nginx"
   name: "nginx-ingress"
   namespace: "kube-system"
+  flags:
+    deploy: "--kube-version=1.19.0"
   values:
     fullnameOverride: (( .ingresscontroller.name ))
     controller:
