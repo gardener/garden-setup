@@ -22,16 +22,20 @@ providerConfig:
   machineImages:
   - name: gardenlinux
     versions:
+    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-576-7-7d3c7d
+      version: 576.7.0
     - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-318-8-ae20c2
       version: 318.8.0
-    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-184-0-e5a157
-      version: 184.0.0
   - name: ubuntu
     versions:
+    - image: projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20210415
+      version: 18.4.20210415
     - image: projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20200218
       version: 18.4.20200228
   - name: suse-chost
     versions:
+    - image: projects/suse-byos-cloud/global/images/sles-15-sp3-chost-byos-v20220126
+      version: 15.3.20220126
     - image: projects/suse-byos-cloud/global/images/sles-15-sp2-chost-byos-v20210610
       version: 15.2.20210610
 

@@ -251,6 +251,9 @@ extension_specs:
     - kind: BackupEntry
       type: aws
       primary: true
+    - kind: DNSRecord
+      type: aws-route53
+      primary: true
 
 ########################################
   provider-azure:
@@ -284,6 +287,9 @@ extension_specs:
     - kind: BackupEntry
       type: azure
       primary: true
+    - kind: DNSRecord
+      type: azure-dns
+      primary: true
 
 ########################################
   provider-gcp:
@@ -316,6 +322,9 @@ extension_specs:
       primary: true
     - kind: BackupEntry
       type: gcp
+      primary: true
+    - kind: DNSRecord
+      type: google-clouddns
       primary: true
 
 ########################################
@@ -355,6 +364,9 @@ extension_specs:
       primary: true
     - kind: BackupEntry
       type: openstack
+      primary: true
+    - kind: DNSRecord
+      type: openstack-designate
       primary: true
 
 ########################################

@@ -25,21 +25,11 @@ cleanup()
       deployment/gardener-external-admission-controller \
       statefulset/alertmanager \
       statefulset/prometheus \
-      service/gardener-external-admission-controller \
-      service/alertmanager \
-      service/alertmanager-client \
-      service/prometheus-web \
-      configmap/prometheus-config \
-      configmap/prometheus-rules \
-      secret/alertmanager-config \
-      secret/gardener-external-admission-controller-tls \
-      secret/prometheus-token-dg4vh \
-      serviceaccount/prometheus \
-      persistentvolumeclaim/alertmanager-db-alertmanager-0 \
-      persistentvolumeclaim/prometheus-db-prometheus-0 \
-      persistentvolumeclaim/elasticsearch-logging-elasticsearch-logging-0 \
-      persistentvolumeclaim/fluentd-fluentd-es-0 \
-      persistentvolumeclaim/prometheus-db-aggregate-prometheus-0 \
+      statefulset.apps/loki \
+      statefulset.apps/seed-prometheus \
+      statefulset.apps/aggregate-prometheus \
+      statefulset.apps/elasticsearch-logging \
+      statefulset.apps/fluentd-es \
       daemonset.apps/fluent-bit \
       deployment.apps/etcd-druid \
       deployment.apps/dependency-watchdog-endpoint \
@@ -54,15 +44,28 @@ cleanup()
       deployment.apps/vpa-recommender \
       deployment.apps/vpa-updater \
       deployment.apps/gardener-seed-admission-controller \
-      statefulset.apps/aggregate-prometheus \
-      statefulset.apps/elasticsearch-logging \
-      statefulset.apps/fluentd-es \
+      configmap/prometheus-config \
+      configmap/prometheus-rules \
+      configmap/druid-leader-election \
+      configmap/seed-prometheus-config \
+      configmap/seed-prometheus-rules \
+      secret/alertmanager-config \
+      secret/gardener-external-admission-controller-tls \
+      secret/gardener-resource-manager-server \
+      serviceaccount/prometheus \
+      persistentvolumeclaim/alertmanager-db-alertmanager-0 \
+      persistentvolumeclaim/prometheus-db-prometheus-0 \
+      persistentvolumeclaim/elasticsearch-logging-elasticsearch-logging-0 \
+      persistentvolumeclaim/fluentd-fluentd-es-0 \
+      persistentvolumeclaim/prometheus-db-aggregate-prometheus-0 \
+      persistentvolumeclaim/loki-loki-0 \
+      persistentvolumeclaim/prometheus-db-seed-prometheus-0 \
       cronjob.batch/daily-curator \
       cronjob.batch/hourly-curator \
       ingress.networking.k8s.io/kibana \
-      ingress.extensions/kibana \
-      ingress.extensions/aggregate-prometheus \
-      ingress.extensions/grafana \
+      ingress.networking.k8s.io/kibana \
+      ingress.networking.k8s.io/aggregate-prometheus \
+      ingress.networking.k8s.io/grafana \
       rolebinding.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-endpoint:role-binding \
       rolebinding.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-probe:role-binding \
       role.rbac.authorization.k8s.io/gardener.cloud:dependency-watchdog-endpoint:role \
@@ -78,6 +81,7 @@ cleanup()
       serviceaccount/etcd-druid \
       serviceaccount/fluent-bit \
       serviceaccount/kube-state-metrics \
+      serviceaccount/seed-prometheus \
       service/elasticsearch-logging \
       service/fluent-bit \
       service/fluentd-es \
@@ -87,6 +91,12 @@ cleanup()
       service/grafana \
       service/vpa-exporter \
       service/vpa-webhook \
+      service/gardener-external-admission-controller \
+      service/alertmanager \
+      service/alertmanager-client \
+      service/prometheus-web \
+      service/loki \
+      service/seed-prometheus-web \
       service/gardener-seed-admission-controller \
       configmap/aggregate-prometheus-config \
       configmap/aggregate-prometheus-rules \
@@ -121,6 +131,8 @@ cleanup()
       networkpolicy.networking.k8s.io/allow-to-public-networks \
       networkpolicy.networking.k8s.io/allow-to-seed-apiserver \
       networkpolicy.networking.k8s.io/deny-all \
+      networkpolicy.networking.k8s.io/allow-loki \
+      networkpolicy.networking.k8s.io/allow-to-loki \
       secret/aggregate-prometheus-basic-auth \
       secret/aggregate-prometheus-tls \
       secret/ca-seed \
@@ -136,7 +148,37 @@ cleanup()
       secret/kube-state-metrics-token-sc87j \
       secret/seed-logging-ingress-credentials \
       secret/vpa-tls-certs \
+      verticalpodautoscaler.autoscaling.k8s.io/aggregate-prometheus-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/kube-state-metrics-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/prometheus-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/seed-prometheus-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/vpa-admission-controller \
+      verticalpodautoscaler.autoscaling.k8s.io/vpa-exporter-vpa \
+      verticalpodautoscaler.autoscaling.k8s.io/vpa-recommender \
+      verticalpodautoscaler.autoscaling.k8s.io/vpa-updater \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/aggregate-prometheus-vpa-prometheus \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/aggregate-prometheus-vpa-prometheus-config-reloader \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/dependency-watchdog-endpoint-vpa-dependency-watchdog \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/dependency-watchdog-probe-vpa-dependency-watchdog \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/etcd-druid-vpa-etcd-druid \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/gardener-resource-manager-vpa-gardener-resource-manager \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/gardener-seed-admission-controller-vpa-gardener-seed-admission-controller \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/kube-state-metrics-vpa-kube-state-metrics \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/prometheus-vpa-prometheus \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/prometheus-vpa-prometheus-config-reloader \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/seed-prometheus-vpa-prometheus \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/seed-prometheus-vpa-prometheus-config-reloader \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/vpa-admission-controller-admission-controller \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/vpa-exporter-vpa-exporter \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/vpa-recommender-recommender \
+      verticalpodautoscalercheckpoint.autoscaling.k8s.io/vpa-updater-updater \
+      endpoints/loki \
+      endpoints/seed-prometheus-web \
       endpoints/dependency-watchdog \
       endpoints/dependency-watchdog-probe
+
+    kubectl -n $namespace delete cm -l "gardener.cloud/role=logging,resources.gardener.cloud/garbage-collectable-reference=true"
+    kubectl -n $namespace delete cm -l "component=grafana,resources.gardener.cloud/garbage-collectable-reference=true"
+    kubectl -n $namespace delete secret -l "role=seed-admission-controller,resources.gardener.cloud/garbage-collectable-reference=true"
   fi
 }
