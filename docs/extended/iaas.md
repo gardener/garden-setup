@@ -6,8 +6,9 @@ iaas:
     type: <gcp|aws|azure|alicloud|openstack>              # iaas provider
     mode: <seed|soil>                            # optional, defaults to 'seed'
     cloudprofile: <name of cloudprofile>         # optional, will deploy its own cloudprofile if not specified
-    featureGates:                                # optional, set featureGates for the gardenlet. Logging is enable by default
-      Logging: true
+    featureGates:                                # optional, set featureGates for the gardenlet
+      ManagedIstio: false
+      APIServerSNI: false
     shootDefaultNetworks:                        # optional, overwrites defaults of .spec.networks.shootDefaults in the seed manifest
       pods: 100.96.0.0/11
       services: 100.64.0.0/13
@@ -43,6 +44,7 @@ iaas:
       verticalPodAutoscaler:
         enabled: true
     logging:                                     # optional, configure logging settings for the gardenlet
+    # enabled: false
     # fluentBit:                                 # example for FluentBit
     #   output: |-
     #     [Output]
@@ -91,8 +93,11 @@ Cloudprofiles are created first, before any seed. Thus, entries of `landscape.ia
 
 ## The 'featureGates' Field
 
-The `featureGates` field enable/disable featureGates for the gardenlet. By default - that means there is no `featureGates` field or no value for `featureGates.Logging` - the `Logging` featureGate will be enabled. To diasble the `Logging` featureGate you have to set the `featureGates.Logging` to `false`.
-A list of available featureGates you can find in the gardener documentation - [Feature Gates in Gardener](https://github.com/gardener/gardener/blob/master/docs/deployment/feature_gates.md)
+The `featureGates` field enable/disable featureGates for the gardenlet. A list of available featureGates you can find in the gardener documentation - [Feature Gates in Gardener](https://github.com/gardener/gardener/blob/master/docs/deployment/feature_gates.md)
+
+## The 'logging' Field
+
+The `logging` field contains configuration for the logging behaviour of the gardenlet - [20-componentconfig-gardenlet.yaml](https://github.com/gardener/gardener/blob/master/example/20-componentconfig-gardenlet.yaml)
 
 ## The 'seedSettings' Field
 
