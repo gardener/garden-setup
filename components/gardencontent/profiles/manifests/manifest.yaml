@@ -33,13 +33,15 @@ defaults:
       - <<: (( defaults.providerspec.machineImages || ~ ))
       - name: gardenlinux
         versions:
-        - version: 318.8.0
+        - version: 576.7.0
+          classification: supported
           cri:
           - name: docker
           - containerRuntimes:
             - type: gvisor
             name: containerd
-        - version: 184.0.0
+        - version: 318.8.0
+          classification: deprecated
           cri:
           - name: docker
           - containerRuntimes:
@@ -47,7 +49,15 @@ defaults:
             name: containerd
       - name: ubuntu
         versions:
+        - version: 18.4.20210415
+          classification: supported
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
         - version: 18.4.20200228
+          classification: deprecated
           cri:
           - name: docker
           - containerRuntimes:
@@ -55,7 +65,15 @@ defaults:
             name: containerd
       - name: suse-chost
         versions:
+        - version: 15.3.20220126
+          classification: supported
+          cri:
+          - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
         - version: 15.2.20210610
+          classification: deprecated
           cri:
           - name: docker
     machineTypes:
@@ -68,23 +86,23 @@ defaults:
   kubernetes:
     versions:
       - classification: supported
+        version: 1.22.7
+      - classification: supported
+        version: 1.21.10
+      - classification: deprecated
         version: 1.21.3
       - classification: supported
+        version: 1.20.15
+      - classification: deprecated
         version: 1.20.9
       - classification: deprecated
-        version: 1.20.8
-      - classification: supported
         version: 1.19.13
       - classification: deprecated
         version: 1.19.12
-      - classification: supported
+      - classification: deprecated
         version: 1.18.20
       - classification: deprecated
         version: 1.18.18
-      - classification: supported
+      - classification: deprecated
         version: 1.17.17
-      - version: 1.16.15
-        classification: deprecated
-      - version: 1.15.12
-        classification: deprecated
   providerspec: (( *values.providerspec ))

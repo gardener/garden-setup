@@ -171,7 +171,7 @@ landscape:
       repo: https://github.com/kubernetes/ingress-nginx.git
       image_tag: (( valid( tag ) ? substr(tag, length("controller-")) :~~ ))
       image_repo: eu.gcr.io/k8s-artifacts-prod/ingress-nginx/controller
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"controller-v0.43.0" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"controller-v1.1.3" ))
     nginx-ingress-k8s-backend:
       <<: (( merge ))
       image_tag: "0.9.0"
@@ -574,12 +574,9 @@ validation:
       - - optionalfield
         - featureGates
         - - and
-          - ["optionalfield", "Logging", ["type", "bool"]]
           - ["optionalfield", "HVPA", ["type", "bool"]]
           - ["optionalfield", "HVPAForShootedSeed", ["type", "bool"]]
           - ["optionalfield", "ManagedIstio", ["type", "bool"]]
-          - ["optionalfield", "ManagedIstio", ["type", "bool"]]
-          - ["optionalfield", "APIServerSNI", ["type", "bool"]]
           - ["optionalfield", "APIServerSNI", ["type", "bool"]]
           - ["optionalfield", "CachedRuntimeClients", ["type", "bool"]]
           - ["optionalfield", "SeedChange", ["type", "bool"]]
@@ -641,6 +638,10 @@ validation:
       - - mapfield
         - credentials
         - (( types.iaas[values.type].credentials ))
+      - - optionalfield
+        - logging
+        - - and
+          - ["optionalfield", "enabled", ["type", "bool"]]
       - - optionalfield
         - seedConfig
         - - and
