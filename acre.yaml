@@ -105,6 +105,13 @@ landscape:
           chart_path: charts/gardener-extension-provider-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
+        provider-alicloud:
+          <<: (( merge ))
+          tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-alicloud.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-alicloud.repo ))
+          chart_path: charts/gardener-extension-provider-alicloud
+          image_tag: (( valid( provider-alicloud.tag ) ? provider-alicloud.tag :~~ ))
+          image_repo: (( ~~ ))
         provider-gcp:
           <<: (( merge ))
           tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-gcp.version ))
