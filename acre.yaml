@@ -342,7 +342,7 @@ validation:
         credentials:
           - and
           - ["mapfield", "accessKeyID"]
-          - ["mapfield", "secretAccessKey"]
+          - ["mapfield", "accessKeySecret"]
         config:
           - ["mapfield", "region"]
           - ["mapfield", "zones", ["list"]]
