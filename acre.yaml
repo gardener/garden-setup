@@ -338,6 +338,20 @@ validation:
           - ["mapfield", "internal", ["cidr"]]
           - ["mapfield", "public", ["cidr"]]
           - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
+      alicloud:
+        credentials:
+          - and
+          - ["mapfield", "accessKeyID"]
+          - ["mapfield", "secretAccessKey"]
+        config:
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
+        profileConfig:
+          - (( return_true ))
+        networks:
+          - ["mapfield", "internal", ["cidr"]]
+          - ["mapfield", "public", ["cidr"]]
+          - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
       azure:
         credentials:
           - and
