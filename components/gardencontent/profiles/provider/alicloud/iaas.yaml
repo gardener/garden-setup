@@ -22,6 +22,10 @@ providerConfig:
   - name: gardenlinux
     versions:
     - regions:
+      - id: m-gw8iwwd4iiln01dj646s
+        name: eu-central-1
+      version: 318.8.0
+    - regions:
       - id: m-m5e7aiscik4rabcwx4fz
         name: cn-qingdao
       - id: m-2zehtz0jxwu34gev3sh2
