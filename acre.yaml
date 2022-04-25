@@ -349,8 +349,6 @@ validation:
         profileConfig:
           - (( return_true ))
         networks:
-          - ["mapfield", "internal", ["cidr"]]
-          - ["mapfield", "public", ["cidr"]]
           - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
       azure:
         credentials:
