@@ -44,7 +44,7 @@
         },
         "provider-alicloud": {
           "repo": "https://github.com/gardener/gardener-extension-provider-alicloud.git",
-          "version": "v1.34.0"
+          "version": "v1.31.0"
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
