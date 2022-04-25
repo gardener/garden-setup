@@ -232,173 +232,180 @@ providerConfig:
         name: us-west-1
       version: 18.4.20210415
 
+machineImages:
+  - name: gardenlinux
+    versions:
+    - classification: supported
+      cri:
+      - name: docker
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      version: 576.7.0
+  - name: suse-chost
+    versions:
+    - classification: supported
+      cri:
+      - name: docker
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      version: 15.3.20220126
+    - classification: supported
+      cri:
+      - name: docker
+      version: 15.2.20220126
+  - name: ubuntu
+    versions:
+    - classification: supported
+      cri:
+      - name: docker
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      version: 18.4.20210415
+
 machineTypes:
   - cpu: "2"
     gpu: "0"
-    memory: 8Gi
-    name: ecs.g6.large
+    memory: 4Gi
+    name: ecs.t6-c1m2.large
     usable: true
   - cpu: "2"
     gpu: "0"
     memory: 8Gi
-    name: ecs.g5.large
+    name: ecs.t6-c1m4.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.t6-c1m4.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.t6-c1m4.2xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.sn2ne.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.sn2ne.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.sn2ne.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.sn2ne.4xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: ecs.t5-c1m2.large
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.t5-c1m4.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.t5-c1m4.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.t5-c1m4.2xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.g6.large
     usable: true
   - cpu: "4"
     gpu: "0"
     memory: 16Gi
     name: ecs.g6.xlarge
     usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 16Gi
-    name: ecs.g5.xlarge
-    usable: true
   - cpu: "8"
     gpu: "0"
     memory: 32Gi
     name: ecs.g6.2xlarge
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 32Gi
-    name: ecs.g5.2xlarge
-    usable: true
-  - cpu: "12"
-    gpu: "0"
-    memory: 48Gi
-    name: ecs.g6.3xlarge
     usable: true
   - cpu: "16"
     gpu: "0"
     memory: 64Gi
     name: ecs.g6.4xlarge
     usable: true
-  - cpu: "32"
-    gpu: "0"
-    memory: 128Gi
-    name: ecs.g6.8xlarge
-    usable: true
-  - cpu: "2"
-    gpu: "0"
-    memory: 16Gi
-    name: ecs.r6.large
-    usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 32Gi
-    name: ecs.r6.xlarge
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 64Gi
-    name: ecs.r6.2xlarge
-    usable: true
-  - cpu: "12"
-    gpu: "0"
-    memory: 96Gi
-    name: ecs.r6.3xlarge
-    usable: true
-  - cpu: "16"
-    gpu: "0"
-    memory: 128Gi
-    name: ecs.r6.4xlarge
-    usable: true
-  - cpu: "24"
-    gpu: "0"
-    memory: 192Gi
-    name: ecs.r6.6xlarge
-    usable: true
-  - cpu: "32"
-    gpu: "0"
-    memory: 256Gi
-    name: ecs.r6.8xlarge
-    usable: true
-  - cpu: "52"
-    gpu: "0"
-    memory: 384Gi
-    name: ecs.r6.13xlarge
-    usable: true
-  - cpu: "104"
-    gpu: "0"
-    memory: 768Gi
-    name: ecs.r6.26xlarge
-    usable: true
-  - cpu: "52"
-    gpu: "0"
-    memory: 768Gi
-    name: ecs.re6.13xlarge
-    usable: true
-  - cpu: "104"
-    gpu: "0"
-    memory: 1536Gi
-    name: ecs.re6.26xlarge
-    usable: true
-  - cpu: "2"
-    gpu: "0"
-    memory: 4Gi
-    name: ecs.c5.large
-    usable: true
-  - cpu: "64"
-    gpu: "0"
-    memory: 128Gi
-    name: ecs.c5.16xlarge
-    usable: true
-  - cpu: "4"
-    gpu: "1"
-    memory: 15Gi
-    name: ecs.gn6i-c4g1.xlarge
-    usable: true
-  - cpu: "8"
-    gpu: "1"
-    memory: 31Gi
-    name: ecs.gn6i-c8g1.2xlarge
-    usable: true
-  - cpu: "16"
-    gpu: "1"
-    memory: 62Gi
-    name: ecs.gn6i-c16g1.4xlarge
-    usable: true
-  - cpu: "2"
-    gpu: "0"
-    memory: 4Gi
-    name: ecs.c6e.large
-    usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 8Gi
-    name: ecs.c6e.xlarge
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 16Gi
-    name: ecs.c6e.2xlarge
-    usable: true
-  - cpu: "2"
-    gpu: "0"
-    memory: 8Gi
-    name: ecs.g6e.large
-    usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 16Gi
-    name: ecs.g6e.xlarge
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 32Gi
-    name: ecs.g6e.2xlarge
-    usable: true
+
+regions:
+  - name: ap-northeast-1
+    zones:
+    - name: ap-northeast-1b
+    - name: ap-northeast-1a
+  - name: ap-south-1
+    zones:
+    - name: ap-south-1b
+    - name: ap-south-1a
+  - name: ap-southeast-1
+    zones:
+    - name: ap-southeast-1c
+    - name: ap-southeast-1b
+    - name: ap-southeast-1a
+  - name: ap-southeast-2
+    zones:
+    - name: ap-southeast-2b
+    - name: ap-southeast-2a
+  - name: ap-southeast-3
+    zones:
+    - name: ap-southeast-3a
+    - name: ap-southeast-3b
+  - name: ap-southeast-5
+    zones:
+    - name: ap-southeast-5a
+    - name: ap-southeast-5b
+  - name: cn-hongkong
+    zones:
+    - name: cn-hongkong-c
+    - name: cn-hongkong-b
+    - name: cn-hongkong-a
+  - name: eu-central-1
+    zones:
+    - name: eu-central-1b
+    - name: eu-central-1a
+    - name: eu-central-1c
+  - name: eu-west-1
+    zones:
+    - name: eu-west-1b
+    - name: eu-west-1a
+  - name: me-east-1
+    zones:
+    - name: me-east-1a
+  - name: us-east-1
+    zones:
+    - name: us-east-1b
+    - name: us-east-1a
+  - name: us-west-1
+    zones:
+    - name: us-west-1b
+    - name: us-west-1a
 
 volumeTypes:
   - class: standard
+    minSize: 20Gi
     name: cloud_efficiency
     usable: true
-
-regions:
-  - name: eu-central-1
-    zones:
-    - name: eu-central-1a
-    - name: eu-central-1b
-    - name: eu-central-1c
-
+  - class: premium
+    minSize: 20Gi
+    name: cloud_ssd
+    usable: true
 
