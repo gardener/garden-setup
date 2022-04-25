@@ -19,9 +19,7 @@ infrastructureConfig:
     vpc: (( values.config.cluster.networks.vpc ))
     zones:
       - name: (( values.config.zones[0] ))
-        internal: (( values.config.cluster.networks.internal ))
-        public: (( values.config.cluster.networks.workers ))
-        workers: (( values.config.cluster.networks.public ))
+        workers: (( values.config.cluster.networks.workers ))
 controlPlaneConfig:
   apiVersion: alicloud.provider.extensions.gardener.cloud/v1alpha1
   kind: ControlPlaneConfig
