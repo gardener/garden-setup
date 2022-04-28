@@ -113,7 +113,7 @@ etcd:
         <<: (( landscape.etcd.resources || ~~ ))
       volumeClaimTemplates:
         requests:
-          storage: (( landscape.iaas.[0].cloudprofile == "alicloud" ? 20Gi :10Gi ))
+          storage: (( landscape.iaas.[0].cloudprofile == "alicloud" ? "20Gi" :"10Gi" ))
   events:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
     files:
