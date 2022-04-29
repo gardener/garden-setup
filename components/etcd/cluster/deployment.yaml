@@ -139,4 +139,7 @@ etcd:
         client:
           crt: (( state.client.value.cert ))
           key: (( state.client.value.key ))
+      volumeClaimTemplates:
+        requests:
+          storage: (( landscape.iaas.[0].type == "alicloud" ? "20Gi" :"10Gi" ))
 
