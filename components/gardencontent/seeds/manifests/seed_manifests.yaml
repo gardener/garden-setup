@@ -94,7 +94,7 @@ seedSpec:
     nodes: (( configValues.seed.networks.nodes ))
     pods: (( configValues.seed.networks.pods ))
     services: (( configValues.seed.networks.services ))
-    shootDefaults: (( configValues.seed.shootDefaultNetworks || configValues.config.type == "alicloud" ? { "pods" = "172.16.0.0/13", "services" = "172.24.0.0/13" } :{ "pods" = "100.96.0.0/11", "services" = "100.64.0.0/13" } ))
+    shootDefaults: (( configValues.seed.shootDefaultNetworks || configValues.config.type == "alicloud" ? { "pods" = "172.32.0.0/13", "services" = "172.40.0.0/13" } :{ "pods" = "100.96.0.0/11", "services" = "100.64.0.0/13" } ))
   taints: (( configValues.config.mode == "soil" ? [{ "key" = "seed.gardener.cloud/protected" }] :~~ ))
   settings: (( element( merge( seedSettingMergeTemplate, configValues.seed || {} ), "settings" ) ))
 
