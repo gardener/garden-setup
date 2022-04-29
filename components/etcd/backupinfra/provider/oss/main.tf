@@ -26,7 +26,7 @@ provider "alicloud" {
 resource "alicloud_oss_bucket" "bucket" {
   bucket      = var.BUCKETNAME
   acl         = "private"
-
+  force_destroy = true
   server_side_encryption_rule {
     sse_algorithm = "KMS"
   }
