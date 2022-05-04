@@ -284,6 +284,7 @@ dns_type_mapping:
   aws: aws-route53
   azure: azure-dns
   openstack: openstack-designate
+  alicloud: alicloud-dns
 
 backup_type_mapping:
   <<: (( &temporary ))
@@ -538,6 +539,9 @@ validation:
         config: (( return_true ))
       azure-dns:
         credentials: (( iaas.azure.credentials ))
+        config: (( return_true ))
+      alicloud-dns:
+        credentials: (( iaas.alicloud.credentials ))
         config: (( return_true ))
       openstack-designate:
         credentials:
