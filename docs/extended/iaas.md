@@ -3,7 +3,7 @@
 ```yaml
 iaas:
   - name: (( type ))                             # name of the seed (can be chosen, must be unique among iaas entries)
-    type: <gcp|aws|azure|openstack>              # iaas provider
+    type: <gcp|aws|azure|alicloud|openstack>              # iaas provider
     mode: <seed|soil>                            # optional, defaults to 'seed'
     cloudprofile: <name of cloudprofile>         # optional, will deploy its own cloudprofile if not specified
     featureGates:                                # optional, set featureGates for the gardenlet. Logging is enable by default
@@ -19,7 +19,7 @@ iaas:
     credentials:                                 # provide access to IaaS layer used for creating resources for shoot clusters
     seeds:
       - name:                                    # max. 10 characters
-        type: <gcp|aws|azure|openstack>
+        type: <gcp|aws|azure|alicloud|openstack>
         mode: <seed|soil>                        # NOT optional
         region: <major region>-<minor region>
         zones:
@@ -50,7 +50,7 @@ iaas:
       ...
   - name:                                        # see above
     mode: <seed|cloudprofile|profile|inactive>   # what should be deployed
-    type: <gcp|aws|azure|openstack>              # see above
+    type: <gcp|aws|azure|alicloud|openstack>              # see above
     shootDefaultNetworks:                        # see above
     region: <major region>-<minor region>        # region for seed
     zones:                                       # remove zones block for Azure
@@ -119,7 +119,7 @@ The `shootClientConnection.qps` and `shootClientConnection.burst` is to overwrit
     ...
     seeds:
       - name:                                    # max. 10 characters
-        type: <gcp|aws|azure|openstack>
+        type: <gcp|aws|azure|alicloud|openstack>
         mode: <seed|soil>                        # NOT optional for nested entries
         shootDefaultNetworks:                    # see above
         region: <major region>-<minor region>
@@ -164,7 +164,7 @@ networks:
   pods: 10.255.0.0/17
   services: 10.255.128.0/17
 ```
-Remember that the CIDRs of a shoot and its corresponding seed must not overlap. The base cluster is configured as initial seed, so the CIDRs for shooted seeds have to be disjunct. Furthermore, the shooted seed CIDRs should be disjunct from the dashboard's defaults. You can modify these defaults with the `iaas[*].shootDefaultNetworks` field per seed, see the example at the beginning of this page.
+Remember that the CIDRs of a shoot and its corresponding seed must not overlap. The base cluster is configured as initial seed, so the CIDRs for shooted seeds have to be disjunct. Furthermore, the shooted seed CIDRs should be disjunct from the dashboard's defaults. You can modify these defaults with the `iaas[*].shootDefaultNetworks` field per seed, see the example at the beginning of this page, for Alicloud the dedault value will be `{ "pods" = "172.32.0.0/13", "services" = "172.40.0.0/13" }` if you not modify it.
 Depending on where you get your base cluster from, you might not be able to influence its CIDRs.
 
 #### Shooted Seed CIDRs Example for AWS
@@ -194,6 +194,21 @@ networks:
 ```
 
 Regarding the `workers` and `nodes` the same as for AWS applies (see above).
+
+#### Shooted Seed CIDRs Example for Alicloud
+
+```yaml
+networks:
+  nodes: 10.242.0.0/16
+  pods: 10.243.128.0/17
+  services: 10.243.0.0/17
+  vpc:
+    cidr: 10.242.0.0/16
+  workers: 10.242.0.0/19
+```
+
+
+
 
 #### Shooted Seed CIDRs Example for Azure
 
