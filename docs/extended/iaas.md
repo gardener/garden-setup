@@ -164,7 +164,7 @@ networks:
   pods: 10.255.0.0/17
   services: 10.255.128.0/17
 ```
-Remember that the CIDRs of a shoot and its corresponding seed must not overlap. The base cluster is configured as initial seed, so the CIDRs for shooted seeds have to be disjunct. Furthermore, the shooted seed CIDRs should be disjunct from the dashboard's defaults. You can modify these defaults with the `iaas[*].shootDefaultNetworks` field per seed, see the example at the beginning of this page, for Alicloud the dedault value will be `{ "pods" = "172.32.0.0/13", "services" = "172.40.0.0/13" }` if you not modify it.
+Remember that the CIDRs of a shoot and its corresponding seed must not overlap. The base cluster is configured as initial seed, so the CIDRs for shooted seeds have to be disjunct. Furthermore, the shooted seed CIDRs should be disjunct from the dashboard's defaults. You can modify these defaults with the `iaas[*].shootDefaultNetworks` field per seed, see the example at the beginning of this page, for Alicloud the dedault value will be `{ "pods" = "172.32.0.0/13", "services" = "172.40.0.0/13" }` if you do not modify it.
 Depending on where you get your base cluster from, you might not be able to influence its CIDRs.
 
 #### Shooted Seed CIDRs Example for AWS
