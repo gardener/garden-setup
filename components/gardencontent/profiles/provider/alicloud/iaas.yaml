@@ -133,58 +133,6 @@ providerConfig:
       - id: m-rj9ful2e3wjlcf47nz2j
         name: us-west-1
       version: 15.3.20220126
-    - regions:
-      - id: m-6we87cbx9cbvo37iweyo
-        name: ap-northeast-1
-      - id: m-a2dc6r0hf797il4r7ouj
-        name: ap-south-1
-      - id: m-t4n8z5zcjj39nj89l55q
-        name: ap-southeast-1
-      - id: m-p0wek8jkvh31pxdhbcyr
-        name: ap-southeast-2
-      - id: m-8ps6k3jckriywddnwkv3
-        name: ap-southeast-3
-      - id: m-k1a832j6e199vfske2j5
-        name: ap-southeast-5
-      - id: m-5ts62hfky2cya3c7nyv9
-        name: ap-southeast-6
-      - id: m-2ze58tqup20vbmdoo1kt
-        name: cn-beijing
-      - id: m-2vc7dnltttby9njf0yxg
-        name: cn-chengdu
-      - id: m-7xvj90qvuh2uul3tme5i
-        name: cn-guangzhou
-      - id: m-bp1co0b2dkociye4bgx1
-        name: cn-hangzhou
-      - id: m-f8z3wha25o34yn8o4569
-        name: cn-heyuan
-      - id: m-j6cbrlszzz2krhy4p0yv
-        name: cn-hongkong
-      - id: m-hp3dev03ah69ibeuapeu
-        name: cn-huhehaote
-      - id: m-gc73chx6t5v19hbq2yz9
-        name: cn-nanjing
-      - id: m-m5e8waxa372s6v39nghy
-        name: cn-qingdao
-      - id: m-uf6856txcaq10ikg1ggy
-        name: cn-shanghai
-      - id: m-wz90d7tvh6us2kwv6tbi
-        name: cn-shenzhen
-      - id: m-0jl4mr5ffckpjmakn3vs
-        name: cn-wulanchabu
-      - id: m-8vbbfs51txj2cjx68w6x
-        name: cn-zhangjiakou
-      - id: m-gw887xhzjvy9easv6yg7
-        name: eu-central-1
-      - id: m-d7o3w92dle6zu98jxrvt
-        name: eu-west-1
-      - id: m-eb37bc07dkgq358mcy85
-        name: me-east-1
-      - id: m-0xi8mzg10cyxc576j861
-        name: us-east-1
-      - id: m-rj97bf33rrl4nngsdlvv
-        name: us-west-1
-      version: 15.2.20220126
   - name: ubuntu
     versions:
     - regions:
@@ -234,39 +182,6 @@ providerConfig:
         name: us-east-1
       - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
         name: us-west-1
-      version: 18.4.20210415
-
-machineImages:
-  - name: gardenlinux
-    versions:
-    - classification: supported
-      cri:
-      - name: docker
-      - containerRuntimes:
-        - type: gvisor
-        name: containerd
-      version: 576.7.0
-  - name: suse-chost
-    versions:
-    - classification: supported
-      cri:
-      - name: docker
-      - containerRuntimes:
-        - type: gvisor
-        name: containerd
-      version: 15.3.20220126
-    - classification: supported
-      cri:
-      - name: docker
-      version: 15.2.20220126
-  - name: ubuntu
-    versions:
-    - classification: supported
-      cri:
-      - name: docker
-      - containerRuntimes:
-        - type: gvisor
-        name: containerd
       version: 18.4.20210415
 
 machineTypes:
