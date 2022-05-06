@@ -289,6 +289,9 @@ extension_specs:
     - kind: BackupEntry
       type: alicloud
       primary: true
+    - kind: DNSRecord
+      type: alicloud-dns
+      primary: true
 
 
 
