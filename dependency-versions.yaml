@@ -76,7 +76,7 @@
       "terminals": {
         "terminal-controller-manager": {
           "repo": "https://github.com/gardener/terminal-controller-manager.git",
-          "version": "v0.18.0"
+          "version": "v0.19.0"
         }
       }
     }
