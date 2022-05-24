@@ -7,8 +7,8 @@ iaas:
     mode: <seed|soil>                            # optional, defaults to 'seed'
     cloudprofile: <name of cloudprofile>         # optional, will deploy its own cloudprofile if not specified
     featureGates:                                # optional, set featureGates for the gardenlet
-      ManagedIstio: false
-      APIServerSNI: false
+      ManagedIstio: true
+      APIServerSNI: true
     shootDefaultNetworks:                        # optional, overwrites defaults of .spec.networks.shootDefaults in the seed manifest
       pods: 100.96.0.0/11
       services: 100.64.0.0/13
