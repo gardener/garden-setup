@@ -1,0 +1,330 @@
+# Copyright 2019 Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, v. 2 except as noted otherwise in the LICENSE file.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+<<: (( &template ))
+
+providerConfig:
+  apiVersion: alicloud.provider.extensions.gardener.cloud/v1alpha1
+  kind: CloudProfileConfig
+
+  machineImages:
+  - name: gardenlinux
+    versions:
+    - regions:
+      - id: m-gw8iwwd4iiln01dj646s
+        name: eu-central-1
+      version: 318.8.0
+    - regions:
+      - id: m-m5e7aiscik4rabcwx4fz
+        name: cn-qingdao
+      - id: m-2zehtz0jxwu34gev3sh2
+        name: cn-beijing
+      - id: m-8vb3utiuaoeehqkr4np9
+        name: cn-zhangjiakou
+      - id: m-hp3dvl4kw8kfbum87eyx
+        name: cn-huhehaote
+      - id: m-0jl4ray3d4znybk1j0tc
+        name: cn-wulanchabu
+      - id: m-bp14t8c66khuemk5u54p
+        name: cn-hangzhou
+      - id: m-uf6fupn2ry6xollho26r
+        name: cn-shanghai
+      - id: m-wz99qnoiwgmlg5wi0laf
+        name: cn-shenzhen
+      - id: m-f8zacjnvpijmwd9mv7qy
+        name: cn-heyuan
+      - id: m-7xv0xr6v5axprrqn8jsq
+        name: cn-guangzhou
+      - id: m-2vc3ur805jr42j423yvf
+        name: cn-chengdu
+      - id: m-j6ccocoeqphlwj8zqkf7
+        name: cn-hongkong
+      - id: m-6weh7vpbpxdmtdvp1osu
+        name: ap-northeast-1
+      - id: m-mj7apw595wewqu7n3s33
+        name: ap-northeast-2
+      - id: m-t4nehjno701ulflza54c
+        name: ap-southeast-1
+      - id: m-p0w11gmo6dioc029pcbc
+        name: ap-southeast-2
+      - id: m-8ps4hf4puk18x1ya2lje
+        name: ap-southeast-3
+      - id: m-5tsayo4c85w949ngmco3
+        name: ap-southeast-6
+      - id: m-k1a5608o0ttawm4u8sms
+        name: ap-southeast-5
+      - id: m-a2dfxgb4asri9xobwsq2
+        name: ap-south-1
+      - id: m-0xi54f4yez3dgagz1ftl
+        name: us-east-1
+      - id: m-rj9e4eponxs7ix0gicka
+        name: us-west-1
+      - id: m-d7o17ri87z8p1fzhz9f6
+        name: eu-west-1
+      - id: m-eb30a8xffkzgtx75ef5e
+        name: me-east-1
+      - id: m-gc7fh8uhktqyklxoy9qq
+        name: cn-nanjing
+      - id: m-gw8c0xubbgzol4shx1nk
+        name: eu-central-1
+      version: 576.7.0
+  - name: suse-chost
+    versions:
+    - regions:
+      - id: m-6weirxjv2yybfvmn1s38
+        name: ap-northeast-1
+      - id: m-a2d84tl84r7x7n5fz8ks
+        name: ap-south-1
+      - id: m-t4n01qvc3uijk4d3t7v9
+        name: ap-southeast-1
+      - id: m-p0wb72s792wiwx0orybl
+        name: ap-southeast-2
+      - id: m-8ps9tippq6zkb99i8zmr
+        name: ap-southeast-3
+      - id: m-k1a3myj9t5hgq6zn9tr0
+        name: ap-southeast-5
+      - id: m-5tsify3i9qmf381nzzw7
+        name: ap-southeast-6
+      - id: m-2zeg64ipjaz0nnl4ed1a
+        name: cn-beijing
+      - id: m-2vc8m76xr4p5n61csymo
+        name: cn-chengdu
+      - id: m-7xvdgoxh9f9wpjhmyfz3
+        name: cn-guangzhou
+      - id: m-bp116lrux5ws9f7nzaap
+        name: cn-hangzhou
+      - id: m-f8zaiz4qdu9if960qkmu
+        name: cn-heyuan
+      - id: m-j6cf4cxml194i4l94i4y
+        name: cn-hongkong
+      - id: m-hp308d9cobhqnk79iv59
+        name: cn-huhehaote
+      - id: m-gc7f991g40ljrzqi3yd8
+        name: cn-nanjing
+      - id: m-m5ebt0jncnu6tm1zhytb
+        name: cn-qingdao
+      - id: m-uf6azfd8576lvtd1tvpx
+        name: cn-shanghai
+      - id: m-wz94ixqackh1t5azjenq
+        name: cn-shenzhen
+      - id: m-0jlg4yrt9d8hnihisopq
+        name: cn-wulanchabu
+      - id: m-8vb2zqmrxexznvcc60xu
+        name: cn-zhangjiakou
+      - id: m-gw83fp2r07o9zrklrpph
+        name: eu-central-1
+      - id: m-d7ohro7rj9t2i18vio89
+        name: eu-west-1
+      - id: m-eb33589hbqpbnncg9yyh
+        name: me-east-1
+      - id: m-0xi7bf33rrl26n6lghx8
+        name: us-east-1
+      - id: m-rj9ful2e3wjlcf47nz2j
+        name: us-west-1
+      version: 15.3.20220126
+  - name: ubuntu
+    versions:
+    - regions:
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: ap-northeast-1
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: ap-south-1
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: ap-southeast-1
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: ap-southeast-2
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: ap-southeast-3
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: ap-southeast-5
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-beijing
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-chengdu
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-guangzhou
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-hangzhou
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-heyuan
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-hongkong
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-huhehaote
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-qingdao
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-shanghai
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-shenzhen
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-wulanchabu
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: cn-zhangjiakou
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: eu-central-1
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: eu-west-1
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: me-east-1
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: us-east-1
+      - id: ubuntu_18_04_x64_20G_alibase_20210420.vhd
+        name: us-west-1
+      version: 18.4.20210415
+
+machineTypes:
+  - cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: ecs.t6-c1m2.large
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.t6-c1m4.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.t6-c1m4.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.t6-c1m4.2xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.sn2ne.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.sn2ne.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.sn2ne.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.sn2ne.4xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: ecs.t5-c1m2.large
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.t5-c1m4.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.t5-c1m4.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.t5-c1m4.2xlarge
+    usable: true
+  - cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: ecs.g6.large
+    usable: true
+  - cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: ecs.g6.xlarge
+    usable: true
+  - cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: ecs.g6.2xlarge
+    usable: true
+  - cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: ecs.g6.4xlarge
+    usable: true
+
+regions:
+  - name: ap-northeast-1
+    zones:
+    - name: ap-northeast-1b
+    - name: ap-northeast-1a
+  - name: ap-south-1
+    zones:
+    - name: ap-south-1b
+    - name: ap-south-1a
+  - name: ap-southeast-1
+    zones:
+    - name: ap-southeast-1c
+    - name: ap-southeast-1b
+    - name: ap-southeast-1a
+  - name: ap-southeast-2
+    zones:
+    - name: ap-southeast-2b
+    - name: ap-southeast-2a
+  - name: ap-southeast-3
+    zones:
+    - name: ap-southeast-3a
+    - name: ap-southeast-3b
+  - name: ap-southeast-5
+    zones:
+    - name: ap-southeast-5a
+    - name: ap-southeast-5b
+  - name: cn-hongkong
+    zones:
+    - name: cn-hongkong-c
+    - name: cn-hongkong-b
+    - name: cn-hongkong-a
+  - name: eu-central-1
+    zones:
+    - name: eu-central-1b
+    - name: eu-central-1a
+    - name: eu-central-1c
+  - name: eu-west-1
+    zones:
+    - name: eu-west-1b
+    - name: eu-west-1a
+  - name: me-east-1
+    zones:
+    - name: me-east-1a
+  - name: us-east-1
+    zones:
+    - name: us-east-1b
+    - name: us-east-1a
+  - name: us-west-1
+    zones:
+    - name: us-west-1b
+    - name: us-west-1a
+
+volumeTypes:
+  - class: standard
+    minSize: 20Gi
+    name: cloud_efficiency
+    usable: true
+  - class: premium
+    minSize: 20Gi
+    name: cloud_ssd
+    usable: true
+
