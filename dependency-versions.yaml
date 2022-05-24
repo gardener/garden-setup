@@ -67,7 +67,7 @@
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.55.1"
+        "version": "1.58.0"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
