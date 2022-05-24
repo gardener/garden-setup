@@ -17,7 +17,7 @@ infrastructureConfig:
   kind: InfrastructureConfig
   networks:
     workers: (( values.config.cluster.networks.workers ))
-  floatingPoolName: (( values.config.floatingPools[0].name))
+  floatingPoolName: (( values.config.floatingPoolName || values.config.floatingPools[0].name ))
 controlPlaneConfig:
   apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
   kind: ControlPlaneConfig

@@ -400,6 +400,8 @@ All of the Openstack-specific nodes go into the [cloudprofile](https://github.co
 
 The version inside the ``machineImageDefinitions`` and ``machineImages`` sections has to be specified using the [semantic versioning](https://semver.org) format.
 
+For nested Openstack entries, the floating pool name which should be used for the shoot for the shooted seed can be specified by setting `floatingPoolName` in the nested iaas entry. If not specified, the first entry of the `floatingPools` list will be used.
+
 > Keep in mind that you can reference cloudprofiles created by other iaas entries (see [cloudprofile](#the-cloudprofile-field)). If you reference another cloudprofile, none will be created for the current iaas entry and you can leave out all of the provider-specific configuration. You can also use [spiff++ templating](https://github.com/mandelsoft/spiff) to reduce redundancy.
 
 
