@@ -40,7 +40,7 @@
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
-          "version": "v1.21.3"
+          "version": "v1.22.1"
         },
         "provider-alicloud": {
           "repo": "https://github.com/gardener/gardener-extension-provider-alicloud.git",
