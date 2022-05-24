@@ -46,6 +46,10 @@ resources:
     cpu: 1000m
     memory: 2560Mi
 
+volumeClaimTemplates:
+  requests:
+    storage: 10Gi
+
 # Aws S3 storage configuration
 # Note: No volumeMounts variable needed
 # storageProvider: "S3"

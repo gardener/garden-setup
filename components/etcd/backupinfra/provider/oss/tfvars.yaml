@@ -12,15 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-infrastructureConfig:
-  apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
-  kind: InfrastructureConfig
-  networks:
-    workers: (( values.config.cluster.networks.workers ))
-  floatingPoolName: (( values.config.floatingPoolName || values.config.floatingPools[0].name ))
-controlPlaneConfig:
-  apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
-  kind: ControlPlaneConfig
-  zone: (( values.config.zones[0] ))
-  loadBalancerProvider: (( values.config.loadBalancerProviders[0].name ))
-defaultMachineType: (( values.config.machineTypes[0].name ))
+ACCESS_KEY: (( config.credentials.accessKeyID ))
+SECRET_KEY: (( config.credentials.accessKeySecret ))
+LANDSCAPE: (( landscape.name ))
