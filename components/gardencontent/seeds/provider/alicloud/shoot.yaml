@@ -13,14 +13,15 @@
 # limitations under the License.
 
 infrastructureConfig:
-  apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
+  apiVersion: alicloud.provider.extensions.gardener.cloud/v1alpha1
   kind: InfrastructureConfig
   networks:
-    workers: (( values.config.cluster.networks.workers ))
-  floatingPoolName: (( values.config.floatingPoolName || values.config.floatingPools[0].name ))
+    vpc: (( values.config.cluster.networks.vpc ))
+    zones:
+      - name: (( values.config.zones[0] ))
+        workers: (( values.config.cluster.networks.workers ))
 controlPlaneConfig:
-  apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
+  apiVersion: alicloud.provider.extensions.gardener.cloud/v1alpha1
   kind: ControlPlaneConfig
-  zone: (( values.config.zones[0] ))
-  loadBalancerProvider: (( values.config.loadBalancerProviders[0].name ))
-defaultMachineType: (( values.config.machineTypes[0].name ))
+defaultMachineType: ecs.sn2ne.4xlarge
+defaultVolumeType: cloud_efficiency
