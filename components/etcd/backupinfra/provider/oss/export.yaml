@@ -1,0 +1,1 @@
+bucketname: (( data.terraform.outputs.bucketName.value ))

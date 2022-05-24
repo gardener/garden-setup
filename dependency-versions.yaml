@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.41.8"
+        "version": "v1.42.6"
       },
       "extensions": {
         "dns-external": {
@@ -41,6 +41,10 @@
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
           "version": "v1.21.3"
+        },
+        "provider-alicloud": {
+          "repo": "https://github.com/gardener/gardener-extension-provider-alicloud.git",
+          "version": "v1.35.0"
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
