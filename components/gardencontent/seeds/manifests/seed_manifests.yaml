@@ -94,7 +94,7 @@ seedSpec:
     nodes: (( configValues.seed.networks.nodes ))
     pods: (( configValues.seed.networks.pods ))
     services: (( configValues.seed.networks.services ))
-    shootDefaults: (( configValues.seed.shootDefaultNetworks || { "pods" = "100.96.0.0/11", "services" = "100.64.0.0/13" } ))
+    shootDefaults: (( configValues.seed.shootDefaultNetworks || configValues.config.type == "alicloud" ? { "pods" = "172.32.0.0/13", "services" = "172.40.0.0/13" } :{ "pods" = "100.96.0.0/11", "services" = "100.64.0.0/13" } ))
   taints: (( configValues.config.mode == "soil" ? [{ "key" = "seed.gardener.cloud/protected" }] :~~ ))
   settings: (( element( merge( seedSettingMergeTemplate, configValues.seed || {} ), "settings" ) ))
 
@@ -230,9 +230,8 @@ gardenletSpec:
         kubernetesLogLevel: 0
         featureGates: 
           <<: (( configValues.config.featureGates || {} ))
-          Logging: (( configValues.config.featureGates.Logging || true ))
           ManagedIstio: (( pluginSpecs.managedIstioActive ))
-          APIServerSNI: (( configValues.config.featureGates.APIServerSNI || false ))
+          APIServerSNI: (( configValues.config.featureGates.APIServerSNI || true ))
         seedConfig:
           metadata:
             name: (( configValues.name ))
@@ -254,7 +253,7 @@ monitoringTemplate:
       <<: (( configValues.monitoring.externalLabels || {} ))
 
 pluginSpecs:
-  managedIstioActive: (( configValues.config.featureGates.ManagedIstio || false ))
+  managedIstioActive: (( configValues.config.featureGates.ManagedIstio || true ))
   deploySecrets:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     manifests: (( secretManifests ))

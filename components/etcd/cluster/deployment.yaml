@@ -43,6 +43,7 @@ spec:
     s3: S3
     abs: ABS
     swift: Swift
+    oss: OSS
 
   server:
     commonName: garden:etcd-server:etcd
@@ -89,9 +90,9 @@ etcd:
         etcd-backup-restore: (( .landscape.versions.etcd.backup_restore.image_repo ":" .landscape.versions.etcd.backup_restore.image_tag ))
 
       backup:
-        schedule: "0 */24 * * *" # cron standard schedule
-        maxBackups: 7 # Maximum number of backups to keep (may change in future)
-        storageProvider: (( landscape.etcd.backup.active ? spec.providertypes.[landscape.etcd.backup.type] :"" ))  # Abs,Gcs,S3,Swift empty means no backup,
+        schedule: (( defined(landscape.etcd.backup.schedule) ? landscape.etcd.backup.schedule :"0 */24 * * *" )) # Backup interval (default 24h)
+        maxBackups: (( defined(landscape.etcd.backup.maxBackups) ? landscape.etcd.backup.maxBackups :7 )) # Maximum number of backups to keep (default 7)
+        storageProvider: (( landscape.etcd.backup.active ? spec.providertypes.[landscape.etcd.backup.type] :"" ))  # Abs,Gcs,S3,Swift,OSS empty means no backup,
         secretData: (( sum[temp.config.credentials|{}|c,k,v|->c {k=base64(v)}] ))
         storageContainer: (( landscape.etcd.backup.active ? imports.backupinfra.export.bucketname :~ ))
         env: (( temp.addon.env ))
@@ -110,6 +111,9 @@ etcd:
 
       resources:
         <<: (( landscape.etcd.resources || ~~ ))
+      volumeClaimTemplates:
+        requests:
+          storage: (( landscape.iaas.[0].type == "alicloud" ? "20Gi" :"10Gi" ))
   events:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
     files:
@@ -135,4 +139,7 @@ etcd:
         client:
           crt: (( state.client.value.cert ))
           key: (( state.client.value.key ))
+      volumeClaimTemplates:
+        requests:
+          storage: (( landscape.iaas.[0].type == "alicloud" ? "20Gi" :"10Gi" ))
 

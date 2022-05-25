@@ -63,3 +63,10 @@ landscape:
 #    # MII...
 #    # ...
 #    # -----END RSA PRIVATE KEY-----
+
+#  gardener:
+#    controller:
+#      config:                            
+#        controllers:                     # provide arbitrary values for the
+#          project:                       # Gardener controller manager Helm
+#            concurrentSyncs: 20          # chart config.controllers field here

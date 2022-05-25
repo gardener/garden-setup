@@ -105,6 +105,13 @@ landscape:
           chart_path: charts/gardener-extension-provider-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
+        provider-alicloud:
+          <<: (( merge ))
+          tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-alicloud.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-alicloud.repo ))
+          chart_path: charts/gardener-extension-provider-alicloud
+          image_tag: (( valid( provider-alicloud.tag ) ? provider-alicloud.tag :~~ ))
+          image_repo: (( ~~ ))
         provider-gcp:
           <<: (( merge ))
           tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-gcp.version ))
@@ -171,7 +178,7 @@ landscape:
       repo: https://github.com/kubernetes/ingress-nginx.git
       image_tag: (( valid( tag ) ? substr(tag, length("controller-")) :~~ ))
       image_repo: eu.gcr.io/k8s-artifacts-prod/ingress-nginx/controller
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"controller-v0.43.0" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"controller-v1.1.3" ))
     nginx-ingress-k8s-backend:
       <<: (( merge ))
       image_tag: "0.9.0"
@@ -206,6 +213,16 @@ landscape:
         repo: "https://github.com/jetstack/cert-manager.git"
         helm_repo: "https://charts.jetstack.io"
         helm_tag: "v1.3.1"
+      cainjector:
+        <<: (( merge ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
+        image_tag: (( valid( tag ) ? tag :~~ ))
+        image_repo: (( ~~ ))
+      webhook:
+        <<: (( merge ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
+        image_tag: (( valid( tag ) ? tag :~~ ))
+        image_repo: (( ~~ ))
       cert-dns-bridge:
         <<: (( merge ))
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.0.0" ))
@@ -267,6 +284,7 @@ dns_type_mapping:
   aws: aws-route53
   azure: azure-dns
   openstack: openstack-designate
+  alicloud: alicloud-dns
 
 backup_type_mapping:
   <<: (( &temporary ))
@@ -274,6 +292,7 @@ backup_type_mapping:
   aws: s3
   azure: abs
   openstack: swift
+  alicloud: oss
 
 
 ######################
@@ -320,6 +339,18 @@ validation:
         networks:
           - ["mapfield", "internal", ["cidr"]]
           - ["mapfield", "public", ["cidr"]]
+          - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
+      alicloud:
+        credentials:
+          - and
+          - ["mapfield", "accessKeyID"]
+          - ["mapfield", "accessKeySecret"]
+        config:
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
+        profileConfig:
+          - (( return_true ))
+        networks:
           - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
       azure:
         credentials:
@@ -483,6 +514,9 @@ validation:
       swift:
         credentials: (( iaas.openstack.credentials ))
         config: (( return_true ))
+      oss:
+        credentials: (( iaas.alicloud.credentials ))
+        config: (( return_true ))
     backup_config:
       - <<: (( &template ))
       - and
@@ -491,6 +525,8 @@ validation:
         - - valueset
           - (( keys( types.etcd_backup ) ))
       - ["mapfield", "region"]
+      - ["optionalfield", "schedule", ["type", "string"]]
+      - ["optionalfield", "maxBackups", ["type", "int"]]
       - - mapfield
         - credentials
         - (( types.etcd_backup[values.type].credentials ))
@@ -503,6 +539,9 @@ validation:
         config: (( return_true ))
       azure-dns:
         credentials: (( iaas.azure.credentials ))
+        config: (( return_true ))
+      alicloud-dns:
+        credentials: (( iaas.alicloud.credentials ))
         config: (( return_true ))
       openstack-designate:
         credentials:
@@ -562,12 +601,9 @@ validation:
       - - optionalfield
         - featureGates
         - - and
-          - ["optionalfield", "Logging", ["type", "bool"]]
           - ["optionalfield", "HVPA", ["type", "bool"]]
           - ["optionalfield", "HVPAForShootedSeed", ["type", "bool"]]
           - ["optionalfield", "ManagedIstio", ["type", "bool"]]
-          - ["optionalfield", "ManagedIstio", ["type", "bool"]]
-          - ["optionalfield", "APIServerSNI", ["type", "bool"]]
           - ["optionalfield", "APIServerSNI", ["type", "bool"]]
           - ["optionalfield", "CachedRuntimeClients", ["type", "bool"]]
           - ["optionalfield", "SeedChange", ["type", "bool"]]
@@ -629,6 +665,10 @@ validation:
       - - mapfield
         - credentials
         - (( types.iaas[values.type].credentials ))
+      - - optionalfield
+        - logging
+        - - and
+          - ["optionalfield", "enabled", ["type", "bool"]]
       - - optionalfield
         - seedConfig
         - - and

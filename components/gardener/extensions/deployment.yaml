@@ -251,6 +251,49 @@ extension_specs:
     - kind: BackupEntry
       type: aws
       primary: true
+    - kind: DNSRecord
+      type: aws-route53
+      primary: true
+
+
+
+########################################
+  provider-alicloud:
+########################################
+    <<: (( &template ))
+    extensionName: provider-alicloud
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            memory: 1Gi
+    resources:
+    - kind: Infrastructure
+      type: alicloud
+      primary: true
+    - kind: ControlPlane
+      type: alicloud
+      primary: true
+    - kind: Worker
+      type: alicloud
+      primary: true
+    - kind: BackupBucket
+      type: alicloud
+      primary: true
+    - kind: BackupEntry
+      type: alicloud
+      primary: true
+    - kind: DNSRecord
+      type: alicloud-dns
+      primary: true
+
+
 
 ########################################
   provider-azure:
@@ -284,6 +327,9 @@ extension_specs:
     - kind: BackupEntry
       type: azure
       primary: true
+    - kind: DNSRecord
+      type: azure-dns
+      primary: true
 
 ########################################
   provider-gcp:
@@ -316,6 +362,9 @@ extension_specs:
       primary: true
     - kind: BackupEntry
       type: gcp
+      primary: true
+    - kind: DNSRecord
+      type: google-clouddns
       primary: true
 
 ########################################
@@ -355,6 +404,9 @@ extension_specs:
       primary: true
     - kind: BackupEntry
       type: openstack
+      primary: true
+    - kind: DNSRecord
+      type: openstack-designate
       primary: true
 
 ########################################
