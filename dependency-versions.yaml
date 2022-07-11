@@ -60,7 +60,7 @@
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
-          "version": "v0.13.0"
+          "version": "v0.16.0"
         },
         "runtime-gvisor": {
           "repo": "https://github.com/gardener/gardener-extension-runtime-gvisor.git",
