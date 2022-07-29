@@ -105,6 +105,13 @@ landscape:
           chart_path: charts/gardener-extension-provider-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
+        provider-alicloud:
+          <<: (( merge ))
+          tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-alicloud.version ))
+          repo: (( .dependency_versions.versions.gardener.extensions.provider-alicloud.repo ))
+          chart_path: charts/gardener-extension-provider-alicloud
+          image_tag: (( valid( provider-alicloud.tag ) ? provider-alicloud.tag :~~ ))
+          image_repo: (( ~~ ))
         provider-gcp:
           <<: (( merge ))
           tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-gcp.version ))
@@ -145,6 +152,7 @@ landscape:
           tag: (( valid( shoot-dns-service.branch ) -or valid( shoot-dns-service.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.shoot-dns-service.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.shoot-dns-service.repo ))
           chart_path: charts/gardener-extension-shoot-dns-service
+          admission_chart_path: charts/gardener-extension-admission-shoot-dns-service
           image_tag: (( valid( shoot-dns-service.tag ) ? shoot-dns-service.tag :~~ ))
           image_repo: (( ~~ ))
         provider-vsphere:
@@ -205,7 +213,7 @@ landscape:
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :helm_tag )) # only used for CRDs
         repo: "https://github.com/jetstack/cert-manager.git"
         helm_repo: "https://charts.jetstack.io"
-        helm_tag: "v1.3.1"
+        helm_tag: "v1.8.1"
       cainjector:
         <<: (( merge ))
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
@@ -218,7 +226,7 @@ landscape:
         image_repo: (( ~~ ))
       cert-dns-bridge:
         <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.0.0" ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.1.0" ))
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
         repo: "https://github.com/gardener/certificate-dns-bridge.git"
@@ -277,6 +285,7 @@ dns_type_mapping:
   aws: aws-route53
   azure: azure-dns
   openstack: openstack-designate
+  alicloud: alicloud-dns
 
 backup_type_mapping:
   <<: (( &temporary ))
@@ -284,6 +293,7 @@ backup_type_mapping:
   aws: s3
   azure: abs
   openstack: swift
+  alicloud: oss
 
 
 ######################
@@ -330,6 +340,18 @@ validation:
         networks:
           - ["mapfield", "internal", ["cidr"]]
           - ["mapfield", "public", ["cidr"]]
+          - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
+      alicloud:
+        credentials:
+          - and
+          - ["mapfield", "accessKeyID"]
+          - ["mapfield", "accessKeySecret"]
+        config:
+          - ["mapfield", "region"]
+          - ["mapfield", "zones", ["list"]]
+        profileConfig:
+          - (( return_true ))
+        networks:
           - ["mapfield", "vpc", ["or", ["mapfield", "id"], ["mapfield", "cidr", ["cidr"]]]]
       azure:
         credentials:
@@ -493,6 +515,9 @@ validation:
       swift:
         credentials: (( iaas.openstack.credentials ))
         config: (( return_true ))
+      oss:
+        credentials: (( iaas.alicloud.credentials ))
+        config: (( return_true ))
     backup_config:
       - <<: (( &template ))
       - and
@@ -515,6 +540,9 @@ validation:
         config: (( return_true ))
       azure-dns:
         credentials: (( iaas.azure.credentials ))
+        config: (( return_true ))
+      alicloud-dns:
+        credentials: (( iaas.alicloud.credentials ))
         config: (( return_true ))
       openstack-designate:
         credentials:
