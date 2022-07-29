@@ -152,6 +152,7 @@ landscape:
           tag: (( valid( shoot-dns-service.branch ) -or valid( shoot-dns-service.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.shoot-dns-service.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.shoot-dns-service.repo ))
           chart_path: charts/gardener-extension-shoot-dns-service
+          admission_chart_path: charts/gardener-extension-admission-shoot-dns-service
           image_tag: (( valid( shoot-dns-service.tag ) ? shoot-dns-service.tag :~~ ))
           image_repo: (( ~~ ))
         provider-vsphere:
