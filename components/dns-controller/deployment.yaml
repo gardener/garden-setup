@@ -62,6 +62,7 @@ typeToProvider:
   openstack-designate: openstack
   cloudflare-dns: cloudflare
   infoblox-dns: infoblox
+  alicloud-dns: alicloud
 
 spec:
   <<: (( &temporary ))

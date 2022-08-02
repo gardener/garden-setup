@@ -2,16 +2,20 @@
 imports: (( &temporary ))
 landscape: (( &temporary ))
 env: (( &temporary ))
+utilities: (( &temporary ))
 
 plugins:
   - kubectl
+  - (( ( length(.admissionControllers) > 0 ) -and ( .landscape.gardener.network-policies.active == true ) ? { "kubectl" = "kubectl_admission_netpols" } :~~ )) # network policies for admission controllers
+  - <<: (( length(.admissionControllers) > 0 ? sum[.admissionControllers|[]|s,n|-> *.admission.plugin_template] :~ )) # admission controllers
   - shoot-check
 
 shoot-check:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
 
-# list of extensions taken from component.yaml (deployment.extensions)
+# list of extensions/admissionControllers taken from component.yaml (deployment.extensions)
 extensions: (( &temporary ))
+admissionControllers: (( &temporary ))
 
 # instantiated manifest templates
 rendered_extension_manifests: (( &temporary( sum[extensions|{}|s,n|-> s { n = *.spec_template }] ) ))
@@ -28,6 +32,10 @@ extension_controllers_func:
 kubectl:
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
   manifests: (( sum[rendered_extension_manifests.[*].manifests|[]|s,e|->s e.[*]] ))
+
+kubectl_admission_netpols:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  manifests: (( sum[.admissionControllers|[]|s,n|-> s *.admission.netpol_template] ))
 
 # this template gets evaluated for each entry in extension_manifests
 spec_template:
@@ -67,6 +75,108 @@ manifest_templates:
         policy: OnDemand
       resources: (( data.resources ))
 
+state:
+  <<: (( &state(merge none) ))
+  admissionCertificates: (( sum[.admissionControllers|{}|s,n|-> s { n = *.admission.cert_data.state_template }] ))
+
+rendered_admission_templates:
+  helm_virtual: (( sum[.admissionControllers|{}|s,n|-> s { n = *admission.helm_template_virtual }] ))
+  kubectl_virtual: (( sum[.admissionControllers|{}|s,n|-> s { n = *admission.kubectl_template_virtual }] ))
+  helm_runtime: (( sum[.admissionControllers|{}|s,n|-> s { n = *admission.helm_template_runtime }] ))
+
+# stuff required for the extension admission controllers
+admission:
+  <<: (( &temporary ))
+
+  fullName: (( |n|-> "gardener-extension-admission-" n ))
+
+  # virtual cluster deployment
+  helm_template_virtual:
+    <<: (( &template ))
+    kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))
+    source: (( "extensions." n "/repo/charts/" admission.fullName(n) "/charts/application" ))
+    name: (( admission.fullName(n) ))
+    namespace: (( .landscape.namespace ))
+    values: (( *admission.values_template ))
+  helm_template_runtime:
+    <<: (( &template ))
+    kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
+    source: (( "extensions." n "/repo/charts/" admission.fullName(n) "/charts/runtime" ))
+    name: (( admission.fullName(n) ))
+    namespace: (( .landscape.namespace ))
+    values: (( *admission.values_template ))
+  kubectl_template_virtual:
+    <<: (( &template ))
+    kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))
+    files:
+      - (( "rendered_admission_templates.helm_virtual." n "/rendered_charts.yaml" ))
+  plugin_template:
+    - <<: (( &template ))
+    - pinned:
+      - helm:
+        - (( "rendered_admission_templates.helm_virtual." n ))
+        - template
+      - kubectl: (( "rendered_admission_templates.kubectl_virtual." n ))
+    - helm: (( "rendered_admission_templates.helm_runtime." n ))
+
+  # certificate stuff
+  cert_data:
+    <<: (( &temporary ))
+    server:
+      <<: (( &template ))
+      commonName: (( admission.fullName(n) ".garden.svc.cluster.local" ))
+      validity: 87600
+      usage:
+        - ServerAuth
+        - Signature
+        - KeyEncipherment
+      hosts:
+        - (( admission.fullName(n) ))
+        - (( admission.fullName(n) ".garden" ))
+        - (( admission.fullName(n) ".garden.svc" ))
+        - (( admission.fullName(n) ".garden.svc.cluster" ))
+        - (( admission.fullName(n) ".garden.svc.cluster.local" ))
+      
+    state_template:
+      <<: (( &template ))
+      ca: (( utilities.certs.selfSignedCA(admission.fullName(n), false) ))
+      server: (( utilities.certs.keyCertForCA(*.admission.cert_data.server, ca, false) ))
+
+  # admission controller values template
+  values_template:
+    <<: (( &template ))
+    global:
+      virtualGarden:
+        enabled: true
+      kubeconfig: (( asyaml( .imports.kube_apiserver.export.kubeconfig ) ))
+      image:
+        repository: (( .landscape.versions.gardener.extensions[n].image_repo || ~~ ))
+        tag: (( .landscape.versions.gardener.extensions[n].image_tag || ~~ ))
+      replicaCount: 3
+      webhookConfig:
+        caBundle: (( .state.admissionCertificates[n].ca.value.cert ))
+        tls:
+          crt: (( .state.admissionCertificates[n].server.value.cert ))
+          key: (( .state.admissionCertificates[n].server.value.key ))
+
+  netpol_template:
+    <<: (( &template ))
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: (( "to-" n "-admission-controller" ))
+      namespace: (( .landscape.namespace ))
+    spec:
+      podSelector:
+        matchLabels:
+          networking.gardener.cloud/to-gardener-extension-admission-controllers: allowed
+      policyTypes:
+      - Egress
+      egress:
+      - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: (( admission.fullName(n) ))
 
 extension_specs:
   <<: (( &temporary ))
@@ -254,6 +364,46 @@ extension_specs:
     - kind: DNSRecord
       type: aws-route53
       primary: true
+
+
+
+########################################
+  provider-alicloud:
+########################################
+    <<: (( &template ))
+    extensionName: provider-alicloud
+    type: helm
+    providerConfig:
+      chart: (( encoded_chart ))
+      values:
+        <<: (( valuesOverwrite ))
+        image:
+          repository: (( version.image_repo || ~~ ))
+          tag: (( version.image_tag || ~~ ))
+        resources:
+          limits:
+            memory: 1Gi
+    resources:
+    - kind: Infrastructure
+      type: alicloud
+      primary: true
+    - kind: ControlPlane
+      type: alicloud
+      primary: true
+    - kind: Worker
+      type: alicloud
+      primary: true
+    - kind: BackupBucket
+      type: alicloud
+      primary: true
+    - kind: BackupEntry
+      type: alicloud
+      primary: true
+    - kind: DNSRecord
+      type: alicloud-dns
+      primary: true
+
+
 
 ########################################
   provider-azure:
