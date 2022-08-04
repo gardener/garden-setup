@@ -17,6 +17,12 @@ The `landscape.gardener.extensions` is optional.
 
 While garden-setup automatically decides which Gardener extensions to deploy, it is possible to overwrite this decision manually. By setting `landscape.gardener.<extension_name>.active` to `true`, the extension will be deployed, independently of whether it is needed or not. Similarly, setting the flag to `false` will deactivate the extension and it won't be deployed. You should handle the latter one with care, as most extensions which are deployed by default are needed and deactivating them will result in a broken Gardener landscape.
 
+#### Admission Controllers
+
+Some extensions come with admission controllers which can be deployed into the base cluster optionally. For chosen extensions, garden-setup is able to deploy the admission controller. To do this, it needs to be activated manually by setting `landscape.gardener.<extension_name>.admissionController` to `true`.
+
+Currently, this feature is only enabled for the `shoot-dns-service` extension.
+
 #### valueOverwrites for Extensions
 
 Whatever is specified in `landscape.gardener.extensions.<extensionName>.valueOverwrites` will be given directly to the helm values for the extension, so you can overwrite the corresponding default values. 
