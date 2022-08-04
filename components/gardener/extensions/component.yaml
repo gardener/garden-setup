@@ -7,7 +7,10 @@ component:
     - kube_apiserver: "kube-apiserver"
     - namespace
 
-  stubs: []
+  stubs:
+    - lib/templates/utilities.yaml
+    - lib/templates/state.yaml
+    - lib/templates/certs.yaml
 
   plugins:
     - <<: (( sum[.extensions|[]|s,n,v|-> s [{ "-echo" = "--------------------------------------------------" }, { "-echo" = "checking out charts for extension '" n "'" }, { "git" = "extensions." n }]] ))
@@ -24,12 +27,14 @@ spec_template:
   commit: (( version.commit || ~~ ))
   files:
     - (( version.chart_path ))
+    - (( contains( deployment.admissionControllers, n ) ? version.admission_chart_path :~~ ))
 
 deployment:
   # which extensions should be deployed
   # all need a matching node in landscape.versions.gardener.extensions in the acre.yaml file
   # and a manifest template in extension_manifests in this component's deployment.yaml
   extensions: (( uniq( sum[.default_extensions|[]|s,e|->s ( contains(.deactivated_extensions, e) ? ~ :e )] .activated_extensions ) ))
+  admissionControllers: (( uniq( intersect( extensions, .admissionControllers ) ) ))
 
 default_extensions:
   - os-ubuntu
@@ -42,5 +47,7 @@ default_extensions:
   - (( ( .landscape.dashboard.terminals.active || false ) ? "shoot-cert-service" :~~ ))
 activated_extensions: (( valid( landscape.gardener.extensions ) ? keys(select{landscape.gardener.extensions|e|-> valid( e.active ) -and ( e.active == true )}) :[] ))
 deactivated_extensions: (( valid( landscape.gardener.extensions ) ? keys(select{landscape.gardener.extensions|e|-> valid( e.active ) -and ( e.active == false )}) :[] ))
+
+admissionControllers: (( &temporary ( valid( landscape.gardener.extensions ) ? sum[landscape.gardener.extensions|[]|s,k,v|-> valid( v.admissionController ) -and ( v.admissionController == true ) -and valid( landscape.versions.gardener.extensions[k].admission_chart_path ) ? s k :s] :[] ) ))
 
 infrastructures: (( &temporary ( uniq( sum[.landscape.iaas|[]|s,e|-> s e.type ( e.seeds.[*].type || ~ ) ] ) ) ))
