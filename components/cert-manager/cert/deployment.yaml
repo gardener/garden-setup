@@ -18,7 +18,7 @@ plugins:
 cert:
   kubeconfig: (( .landscape.clusters[0].kubeconfig ))
   manifests:
-    - apiVersion: cert-manager.io/v1alpha2
+    - apiVersion: cert-manager.io/v1
       kind: Certificate
       metadata:
         name: (( .settings.certificate.name ))
