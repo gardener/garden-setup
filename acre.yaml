@@ -152,6 +152,7 @@ landscape:
           tag: (( valid( shoot-dns-service.branch ) -or valid( shoot-dns-service.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.shoot-dns-service.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.shoot-dns-service.repo ))
           chart_path: charts/gardener-extension-shoot-dns-service
+          admission_chart_path: charts/gardener-extension-admission-shoot-dns-service
           image_tag: (( valid( shoot-dns-service.tag ) ? shoot-dns-service.tag :~~ ))
           image_repo: (( ~~ ))
         provider-vsphere:
@@ -212,7 +213,7 @@ landscape:
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :helm_tag )) # only used for CRDs
         repo: "https://github.com/jetstack/cert-manager.git"
         helm_repo: "https://charts.jetstack.io"
-        helm_tag: "v1.3.1"
+        helm_tag: "v1.8.1"
       cainjector:
         <<: (( merge ))
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
@@ -225,7 +226,7 @@ landscape:
         image_repo: (( ~~ ))
       cert-dns-bridge:
         <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.0.0" ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.1.0" ))
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
         repo: "https://github.com/gardener/certificate-dns-bridge.git"
@@ -605,16 +606,29 @@ validation:
           - ["optionalfield", "HVPAForShootedSeed", ["type", "bool"]]
           - ["optionalfield", "ManagedIstio", ["type", "bool"]]
           - ["optionalfield", "APIServerSNI", ["type", "bool"]]
-          - ["optionalfield", "CachedRuntimeClients", ["type", "bool"]]
           - ["optionalfield", "SeedChange", ["type", "bool"]]
           - ["optionalfield", "SeedKubeScheduler", ["type", "bool"]]
           - ["optionalfield", "ReversedVPN", ["type", "bool"]]
+          - ["optionalfield", "CopyEtcdBackupsDuringControlPlaneMigration", ["type", "bool"]]
+          - ["optionalfield", "ForceRestore", ["type", "bool"]]
+          - ["optionalfield", "ShootCARotation", ["type", "bool"]]
+          - ["optionalfield", "ShootSARotation", ["type", "bool"]]
+          - ["optionalfield", "HAControlPlanes", ["type", "bool"]]
+          - ["optionalfield", "NodeLocalDNS", ["type", "bool"]]
+          - ["optionalfield", "KonnectivityTunnel", ["type", "bool"]]
+          - ["optionalfield", "MountHostCADirectories", ["type", "bool"]]
+          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
+          - ["optionalfield", "Logging", ["type", "bool"]]
           - ["optionalfield", "AdminKubeconfigRequest", ["type", "bool"]]
           - ["optionalfield", "UseDNSRecords", ["type", "bool"]]
-          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
-          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
-          - ["optionalfield", "RotateSSHKeypairOnMaintenance", ["type", "bool"]]
+          - ["optionalfield", "CachedRuntimeClients", ["type", "bool"]]
           - ["optionalfield", "DenyInvalidExtensionResources", ["type", "bool"]]
+          - ["optionalfield", "RotateSSHKeypairOnMaintenance", ["type", "bool"]]
+          - ["optionalfield", "ShootMaxTokenExpirationOverwrite", ["type", "bool"]]
+          - ["optionalfield", "ShootMaxTokenExpirationValidation", ["type", "bool"]]
+          - ["optionalfield", "WorkerPoolKubernetesVersion", ["type", "bool"]]
+          - ["optionalfield", "DisableDNSProviderManagement", ["type", "bool"]]
+          - ["optionalfield", "SecretBindingProviderValidation", ["type", "bool"]]
       - - optionalfield
         - gardenClientConnection
         - - and
