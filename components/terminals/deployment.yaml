@@ -37,7 +37,7 @@ kubectl_sa:
     - apiVersion: v1
       kind: ServiceAccount
       metadata:
-        name: default
+        name: terminal-controller-manager
         namespace: terminal-system
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
@@ -101,7 +101,7 @@ settings:
   namespace: terminal-system                                                                              # terminal controller manager namespace
   kubeconfig_secret_name: garden-kubeconfig-for-admin                                                     # name of admin kubeconfig secret
   kubeconfig_path: (( env.GENDIR "/" kubeconfig_secret_name ".kubeconfig" ))                              # path to admin kubeconfig
-  kubeconfig_secret_path_sa: (( env.GENDIR "/kubectl_sa/sa_default.kubeconfig" ))                         # path to secret manifest for sa kubeconfig
+  kubeconfig_secret_path_sa: (( env.GENDIR "/kubectl_sa/sa_terminal-controller-manager.kubeconfig" ))     # path to secret manifest for sa kubeconfig
   kubeconfig_secret_path_admin: (( env.GENDIR "/kcfg_admin/secret_" kubeconfig_secret_name ".yaml" ))     # path to secret manifest for admin kubeconfig
   repo_path: (( env.GENDIR "/git/repo" ))                                                                 # path to checked-out git repo for easy access
   cert_path: (( repo_path "/config/secret/tls" ))                                                         # path to tls folder in checked-out git repo
