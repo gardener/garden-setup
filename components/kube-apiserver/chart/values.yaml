@@ -21,6 +21,7 @@ images:
 replicas: 3
 apiServer:
   hostname: 127.0.0.1
+  externalHostname: api.foo.com
   serviceName: garden-kube-apiserver
   oidcIssuerURL: https://identity.URL
 
