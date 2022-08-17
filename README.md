@@ -86,7 +86,7 @@ Which version of `sow` is compatible with this version of garden-setup is specif
       gcloud container clusters update <your-cluster> --enable-basic-auth
       ```
 
-    - If you are not using GKE and don't know how to get a kubeconfig with standard authentication, you can also create a serviceaccount, grant it cluster-admin privileges by adding it to the corresponding `ClusterRoleBinding`, and construct a kubeconfig using that serviceaccount's token.
+    - If you are not using GKE and don't know how to get a kubeconfig with standard authentication, you can also create a serviceaccount, grant it cluster-admin privileges by adding it to the corresponding `ClusterRoleBinding`, and construct a kubeconfig using that serviceaccount's token. [Look at an example here](https://github.com/jguipi/garden-setup/edit/master/README.md#adding-a-service-account-authentication-token-to-a-kubeconfig-file)
 
 1. Open a second terminal window which current directory is your `landscape` directory. Set the `KUBECONFIG` environment variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
 
@@ -433,6 +433,43 @@ If the given email address is already registers at letsencrypt, you can specify 
 
 1. During the deletion, the corresponding contents in directories `gen`, `export`, and `state` in your `landscape` directory are deleted automatically as well.
 
+## Adding a Service Account Authentication Token to a Kubeconfig File
+
+1. create a new service account in the kube-system namespace
+    ```bash
+    kubectl -n kube-system create serviceaccount <service-account-name>
+    ```
+2. Create a new clusterrolebinding with cluster administration permissions and bind it to the service account you just created 
+    ```bash
+    kubectl create clusterrolebinding <binding-name> --clusterrole=cluster-admin --serviceaccount=kube-system:<service-account-name>
+    ```
+3. Obtain the name of the service account authentication token and assign its value to an environment variable
+    ```bash
+    TOKENNAME=`kubectl -n kube-system get serviceaccount/<service-account-name> -o jsonpath='{.secrets[0].name}'`
+    ```
+4. Obtain the value of the service account authentication token and assign its value (decoded from base64) to an environment variable. These instructions assume you specify TOKEN as the name of the environment variable.
+    ```bash
+    TOKEN=`kubectl -n kube-system get secret $TOKENNAME -o jsonpath='{.data.token}'| base64 --decode`
+    ```
+5. Add the service account (and its authentication token) as a new user definition in the kubeconfig file
+    ```bash
+    kubectl config set-credentials <service-account-name> --token=$TOKEN
+    ```   
+6. Set the user specified in the kubeconfig file for the current context to be the new service account user you created
+    ```bash
+    kubectl config set-context --current --user=<service-account-name>
+    ```
+7. Your Kubeconfig should now contain the token to authenticate the Service Account
+
+Example of the SA user in the `kubeconfig`:
+
+```yaml
+users:
+- name: <service-account-name>
+  user:
+    token: <service-account-token>
+```
+
 ## Most Important Commands and Directories
 
 ### Commands
@@ -464,3 +501,5 @@ After using sow to deploy the components, you will notice that there are new dir
 | `gen`     | Temporary files that are created during the deployment of components, for example, generated manifests.                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `export`  | Allows communication (exports and imports) between components. It also contains the kubeconfig for the virtual cluster that handles the Gardener resources.                                                                                                                                                                                                                                                                                                                                                                        |
 | `state`   | Important state information of the components is stored here, for example, the terraform state and generated certificates. It is crucial that this directory is not deleted while the landscape is active. While the contents of the *export* and *gen* directorys will be overwritten when a component is deployed again, the contents of *state* will be reused instead. In some cases, it is necessary to delete the state of a component before deploying it again, for example if you want to create new certificates for it. |
+
+
