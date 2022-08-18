@@ -86,7 +86,7 @@ Which version of `sow` is compatible with this version of garden-setup is specif
       gcloud container clusters update <your-cluster> --enable-basic-auth
       ```
 
-    - If you are not using GKE and don't know how to get a kubeconfig with standard authentication, you can also create a serviceaccount, grant it cluster-admin privileges by adding it to the corresponding `ClusterRoleBinding`, and construct a kubeconfig using that serviceaccount's token. [Look at an example here](https://github.com/jguipi/garden-setup/edit/master/README.md#adding-a-service-account-authentication-token-to-a-kubeconfig-file)
+    - If you are not using GKE and don't know how to get a kubeconfig with standard authentication, you can also create a serviceaccount, grant it cluster-admin privileges by adding it to the corresponding `ClusterRoleBinding`, and construct a kubeconfig using that serviceaccount's token. [Look at an example here](README.md#adding-a-service-account-authentication-token-to-a-kubeconfig-file)
 
 1. Open a second terminal window which current directory is your `landscape` directory. Set the `KUBECONFIG` environment variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
 
