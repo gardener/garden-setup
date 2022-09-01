@@ -224,7 +224,7 @@ gardener:
             leaderElect: true
             leaseDuration: 15s
             renewDeadline: 10s
-            resourceLock: configmaps
+            resourceLock: configmapsleases
             retryPeriod: 2s
           logLevel: info
           server:

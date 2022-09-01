@@ -34,7 +34,7 @@ ingresscontroller:
   name: "nginx-ingress"
   namespace: "kube-system"
   flags:
-    deploy: "--kube-version=1.19.0"
+    deploy: "--kube-version=1.20.0"
   values:
     fullnameOverride: (( .ingresscontroller.name ))
     controller:

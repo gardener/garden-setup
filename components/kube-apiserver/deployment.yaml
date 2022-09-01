@@ -103,6 +103,8 @@ kubeapiserver:
       hostname: (( .settings.apiserver_dns ))
       serviceName: (( name ))
       oidcIssuerURL: (( .imports.identity.export.issuer_url ))
+      externalHostname: (( .settings.apiserver_dns ))
+      serviceAccountIssuer: (( "https://" externalHostname ))
     tls:
       kubeAPIServer:
         ca: (( spec.KeyCert(.state.kube_apiserver_ca) ))

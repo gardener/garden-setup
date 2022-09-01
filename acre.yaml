@@ -27,7 +27,7 @@ landscape:
   versions:
     kube-apiserver:
       image_repo: k8s.gcr.io/kube-apiserver
-      image_tag: v1.19.15
+      image_tag: v1.20.15
     kube-controller-manager:
       image_repo: k8s.gcr.io/kube-controller-manager
       image_tag: (( kube-apiserver.image_tag ))
@@ -179,7 +179,7 @@ landscape:
       repo: https://github.com/kubernetes/ingress-nginx.git
       image_tag: (( valid( tag ) ? substr(tag, length("controller-")) :~~ ))
       image_repo: eu.gcr.io/k8s-artifacts-prod/ingress-nginx/controller
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"controller-v1.1.3" ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :"controller-v1.3.0" ))
     nginx-ingress-k8s-backend:
       <<: (( merge ))
       image_tag: "0.9.0"
@@ -606,16 +606,29 @@ validation:
           - ["optionalfield", "HVPAForShootedSeed", ["type", "bool"]]
           - ["optionalfield", "ManagedIstio", ["type", "bool"]]
           - ["optionalfield", "APIServerSNI", ["type", "bool"]]
-          - ["optionalfield", "CachedRuntimeClients", ["type", "bool"]]
           - ["optionalfield", "SeedChange", ["type", "bool"]]
           - ["optionalfield", "SeedKubeScheduler", ["type", "bool"]]
           - ["optionalfield", "ReversedVPN", ["type", "bool"]]
+          - ["optionalfield", "CopyEtcdBackupsDuringControlPlaneMigration", ["type", "bool"]]
+          - ["optionalfield", "ForceRestore", ["type", "bool"]]
+          - ["optionalfield", "ShootCARotation", ["type", "bool"]]
+          - ["optionalfield", "ShootSARotation", ["type", "bool"]]
+          - ["optionalfield", "HAControlPlanes", ["type", "bool"]]
+          - ["optionalfield", "NodeLocalDNS", ["type", "bool"]]
+          - ["optionalfield", "KonnectivityTunnel", ["type", "bool"]]
+          - ["optionalfield", "MountHostCADirectories", ["type", "bool"]]
+          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
+          - ["optionalfield", "Logging", ["type", "bool"]]
           - ["optionalfield", "AdminKubeconfigRequest", ["type", "bool"]]
           - ["optionalfield", "UseDNSRecords", ["type", "bool"]]
-          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
-          - ["optionalfield", "DisallowKubeconfigRotationForShootInDeletion", ["type", "bool"]]
-          - ["optionalfield", "RotateSSHKeypairOnMaintenance", ["type", "bool"]]
+          - ["optionalfield", "CachedRuntimeClients", ["type", "bool"]]
           - ["optionalfield", "DenyInvalidExtensionResources", ["type", "bool"]]
+          - ["optionalfield", "RotateSSHKeypairOnMaintenance", ["type", "bool"]]
+          - ["optionalfield", "ShootMaxTokenExpirationOverwrite", ["type", "bool"]]
+          - ["optionalfield", "ShootMaxTokenExpirationValidation", ["type", "bool"]]
+          - ["optionalfield", "WorkerPoolKubernetesVersion", ["type", "bool"]]
+          - ["optionalfield", "DisableDNSProviderManagement", ["type", "bool"]]
+          - ["optionalfield", "SecretBindingProviderValidation", ["type", "bool"]]
       - - optionalfield
         - gardenClientConnection
         - - and
