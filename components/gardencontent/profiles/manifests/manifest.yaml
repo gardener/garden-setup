@@ -86,23 +86,23 @@ defaults:
   kubernetes:
     versions:
       - classification: supported
-        version: 1.22.7
+        version: 1.24.2
       - classification: supported
+        version: 1.23.8
+      - classification: supported
+        version: 1.22.11
+      - classification: deprecated
+        version: 1.22.7
+      - classification: deprecated
+        version: 1.21.14
+      - classification: deprecated
         version: 1.21.10
       - classification: deprecated
-        version: 1.21.3
-      - classification: supported
         version: 1.20.15
       - classification: deprecated
-        version: 1.20.9
-      - classification: deprecated
-        version: 1.19.13
-      - classification: deprecated
-        version: 1.19.12
+        version: 1.19.16
       - classification: deprecated
         version: 1.18.20
-      - classification: deprecated
-        version: 1.18.18
       - classification: deprecated
         version: 1.17.17
   providerspec: (( *values.providerspec ))
