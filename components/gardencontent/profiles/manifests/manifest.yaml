@@ -33,15 +33,19 @@ defaults:
       - <<: (( defaults.providerspec.machineImages || ~ ))
       - name: gardenlinux
         versions:
-        - version: 576.7.0
+        - version: 576.11.0
           classification: supported
+          architectures:
+          - amd64
           cri:
           - name: docker
           - containerRuntimes:
             - type: gvisor
             name: containerd
-        - version: 318.8.0
+        - version: 576.7.0
           classification: deprecated
+          architectures:
+          - amd64
           cri:
           - name: docker
           - containerRuntimes:
@@ -51,13 +55,8 @@ defaults:
         versions:
         - version: 18.4.20210415
           classification: supported
-          cri:
-          - name: docker
-          - containerRuntimes:
-            - type: gvisor
-            name: containerd
-        - version: 18.4.20200228
-          classification: deprecated
+          architectures:
+          - amd64
           cri:
           - name: docker
           - containerRuntimes:
@@ -65,17 +64,24 @@ defaults:
             name: containerd
       - name: suse-chost
         versions:
-        - version: 15.3.20220126
+        - version: 15.3.20220411
           classification: supported
+          architectures:
+          - amd64
           cri:
           - name: docker
           - containerRuntimes:
             - type: gvisor
             name: containerd
-        - version: 15.2.20210610
+        - version: 15.3.20220126
           classification: deprecated
+          architectures:
+          - amd64
           cri:
           - name: docker
+          - containerRuntimes:
+            - type: gvisor
+            name: containerd
     machineTypes:
       - <<: (( defaults.providerspec.machineTypes || ~ ))
     volumeTypes:
