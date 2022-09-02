@@ -3,7 +3,7 @@ provider "azurerm" {
   client_secret   = var.CLIENT_SECRET
   tenant_id       = var.TENANT_ID
   subscription_id = var.SUBSCRIPTION_ID
-  version         = "=2.8"
+  version         = "=2.48"
   features          {}
 }
 
@@ -24,6 +24,7 @@ resource "azurerm_storage_account" "storageAccount" {
   access_tier              = "Hot"
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  min_tls_version          = "TLS1_2"
 }
 
 resource "azurerm_storage_container" "container" {

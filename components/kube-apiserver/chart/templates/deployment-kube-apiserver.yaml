@@ -53,6 +53,7 @@ spec:
         networking.gardener.cloud/to-terminal-controller-manager: allowed # needed for webhooks
         networking.gardener.cloud/to-world: allowed # necessary, except for GCP because GCP puts IP table rules on the nodes that allow in-cluster routing
         networking.gardener.cloud/to-gardener-admission-controller: allowed # needed for webhooks
+        networking.gardener.cloud/to-gardener-extension-admission-controllers: allowed # needed for extension admission controllers, if activated
         {{- end }}
     spec:
       affinity:
@@ -93,6 +94,7 @@ spec:
         - --etcd-certfile=/srv/kubernetes/etcd/client/tls.crt
         - --etcd-keyfile=/srv/kubernetes/etcd/client/tls.key
         - --etcd-servers={{ .Values.etcd.main.endpoints }}
+        - --external-hostname={{ .Values.apiServer.externalHostname }}
 {{ if .Values.etcd.events.endpoints }}
 {{ end }}
         - --kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP
@@ -115,7 +117,9 @@ spec:
         - --requestheader-username-headers=X-Remote-User
         - --secure-port=443
         - --service-cluster-ip-range=100.64.0.0/13
+        - --service-account-issuer={{ .Values.apiServer.serviceAccountIssuer }}
         - --service-account-key-file=/srv/kubernetes/service-account-key/service_account.key
+        - --service-account-signing-key-file=/srv/kubernetes/service-account-key/service_account.key
         - --tls-cert-file=/srv/kubernetes/apiserver/tls.crt
         - --tls-private-key-file=/srv/kubernetes/apiserver/tls.key
         - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
