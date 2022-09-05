@@ -3,12 +3,12 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.50.2"
+        "version": "v1.51.0"
       },
       "extensions": {
         "dns-external": {
           "repo": "https://github.com/gardener/external-dns-management.git",
-          "version": "v0.13.0"
+          "version": "v0.13.1"
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
@@ -52,7 +52,7 @@
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
-          "version": "v1.23.0"
+          "version": "v1.24.0"
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
@@ -60,7 +60,7 @@
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
-          "version": "v0.17.0"
+          "version": "v0.18.0"
         },
         "runtime-gvisor": {
           "repo": "https://github.com/gardener/gardener-extension-runtime-gvisor.git",
