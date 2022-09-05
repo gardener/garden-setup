@@ -56,7 +56,7 @@
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
-          "version": "v1.22.0"
+          "version": "v1.23.0"
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
