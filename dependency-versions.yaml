@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.51.0"
+        "version": "v1.52.3"
       },
       "extensions": {
         "dns-external": {
@@ -12,7 +12,7 @@
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.25.0"
+          "version": "v1.26.0"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
@@ -56,7 +56,7 @@
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
-          "version": "v1.21.0"
+          "version": "v1.24.0"
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
