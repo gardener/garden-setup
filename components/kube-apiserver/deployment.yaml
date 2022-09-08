@@ -23,12 +23,21 @@ plugins:
       - kubeapiserver
       - template
     - kubectl: kubeapiserver
+  - finalize
 
 settings:
   apiserver_dns: (( "api." imports.ingress_controller.export.ingress_domain ))
   gardener_dns: (( "gardener." imports.ingress_controller.export.ingress_domain ))
   apiserver_url_internal: (( "https://" .kubeapiserver.serviceName "." .kubeapiserver.namespace ".svc:443" ))
-  
+
+finalize:
+  kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+  type: ingress
+  name: apiserver-ingress
+  namespace: (( .landscape.namespace ))
+  finalizers:
+  - "garden-setup.gardener.cloud/prevent-deletion"
+
 spec:
   <<: (( &temporary ))
 
