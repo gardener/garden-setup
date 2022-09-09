@@ -18,6 +18,8 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     kubernetes.io/ingress.class: "nginx"
+  finalizers:
+  - "garden-setup.gardener.cloud/prevent-deletion"
   name: apiserver-ingress
   namespace: {{ .Release.Namespace }}
 spec:
