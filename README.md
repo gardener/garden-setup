@@ -69,24 +69,13 @@ Which version of `sow` is compatible with this version of garden-setup is specif
 
 1. The Gardener itself, but also garden-setup can only handle kubeconfigs with standard authentication methods (basic auth, token, ...). Authentication methods that require a third party tool, e.g. the `aws` or `gcloud` CLI, are not supported.
 
-    - If you created the base cluster using GKE, you can convert your `kubeconfig` file to one that uses basic authentication by using the `sow convertkubeconfig` command:
+    If you don't have a kubeconfig with a supported method of authentication, you can use this workaround: create a serviceaccount, grant it cluster-admin privileges by adding it to the corresponding `ClusterRoleBinding`, and construct a kubeconfig using that serviceaccount's token. [Here](README.md#adding-a-service-account-authentication-token-to-a-kubeconfig-file) is an example on how to do it manually. Alternatively, you can use the following command:
 
-      ```bash
-      sow convertkubeconfig
-      ```
-      When asked for credentials, enter the ones that the GKE dashboard shows when clicking on `show credentials`.
+    ```bash
+    sow convertkubeconfig
+    ```
 
-      `sow` will replace the file specified in `landscape.cluster.kubeconfig` of your `acre.yaml` file by a kubeconfig file that uses basic authentication.
-
-      The basic autentication is disabled by default starting with Kubernetes `1.12`, [see more details here](https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster#restrict_authn_methods).
-
-      In case it is disabled on your cluster, the following command can be used to enable it:
-
-      ```bash
-      gcloud container clusters update <your-cluster> --enable-basic-auth
-      ```
-
-    - If you are not using GKE and don't know how to get a kubeconfig with standard authentication, you can also create a serviceaccount, grant it cluster-admin privileges by adding it to the corresponding `ClusterRoleBinding`, and construct a kubeconfig using that serviceaccount's token. [Look at an example here](README.md#adding-a-service-account-authentication-token-to-a-kubeconfig-file)
+    It will create a namespace with a serviceaccount in it and a clusterrolebinding which binds this serviceaccount to the `cluster-admin` role. Note that this replaces the kubeconfig which is referenced in the acre.yaml file. Also, there is currently no command to cleanup the resources created by this command, you will have to remove the namespace as well as the clusterrolebinding named `garden-setup-auth` manually if you want them cleaned up (the kubeconfig will then stop working).
 
 1. Open a second terminal window which current directory is your `landscape` directory. Set the `KUBECONFIG` environment variable as specified in `landscape.cluster.kubeconfig`, and watch the progress of the Gardener installation:
 

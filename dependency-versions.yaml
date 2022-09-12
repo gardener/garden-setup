@@ -3,12 +3,12 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.53.4"
+        "version": "v1.54.1"
       },
       "extensions": {
         "dns-external": {
           "repo": "https://github.com/gardener/external-dns-management.git",
-          "version": "v0.13.1"
+          "version": "v0.13.2"
         },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
@@ -56,7 +56,7 @@
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
-          "version": "v1.24.0"
+          "version": "v1.25.0"
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
@@ -71,7 +71,7 @@
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.60.0"
+        "version": "1.61.0"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
