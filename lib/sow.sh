@@ -96,7 +96,7 @@ HELP_exec()
   echo ":when using the sow docker wrapper"
 }
 
-# convert GCP kubeconfig to basic auth format
+# convert kubeconfig to one using serviceaccount token
 # replaces(!) the kubeconfig specified in acre.yaml
 # optional argument: which kubeconfig, if several are given in acre.yaml
 CMD_convertkubeconfig() {
@@ -115,18 +115,80 @@ CMD_convertkubeconfig() {
     kubeconfig="$ROOT/$data"
   fi
 
-  echo -n "Username: "
-  read username
+  local ns="garden-setup-auth"
+  local sa="garden-setup"
+  local crb="garden-setup-auth"
+  # create namespace, if it doesn't exist
+  verbose "Creating namespace '$ns', if it doesn't exist ..."
+  exec_cmd kubectl --kubeconfig "$kubeconfig" get namespace $ns &>/dev/null || exec_cmd kubectl --kubeconfig "$kubeconfig" create namespace $ns
 
-  echo -n "Password: "
-  read -s password
+  # create serviceaccount, if it doesn't exist
+  verbose "Creating serviceaccount '$sa', if it doesn't exist ..."
+  exec_cmd kubectl --kubeconfig "$kubeconfig" -n $ns get serviceaccount $sa &>/dev/null || exec_cmd kubectl --kubeconfig "$kubeconfig" -n $ns create serviceaccount $sa
 
-  local tmp=$(spiff merge --json "$kubeconfig" | jq -r '.users[0].user={username:"'"$username"'",password:"'"$password"'"}')
-  echo -n "$tmp" > "$kubeconfig"
+  # wait for serviceaccount to get token
+  local timeout=180
+  local sleep_time=5
+  local start_time=$(date +%s)
+  local token=
+  local secret=
+  verbose "Fetching serviceaccount token. This might take few seconds."
+  while true; do
+    debug "kubectl --kubeconfig \"$kubeconfig\" -n $ns get serviceaccount $sa -o jsonpath='{.secrets[0].name}'"
+    if secret=$(kubectl --kubeconfig "$kubeconfig" -n $ns get serviceaccount $sa -o jsonpath='{.secrets[0].name}' 2>/dev/null); then
+      # secret name found, fetch token
+      debug "kubectl --kubeconfig \"$kubeconfig\" -n $ns get secret $secret -o jsonpath='{.data.token}'"
+      if token=$(kubectl --kubeconfig "$kubeconfig" -n $ns get secret $secret -o jsonpath='{.data.token}' 2>/dev/null | base64 -d) && [[ -n "$token" ]]; then
+        debug "found token"
+        break
+      else
+        echo "token cannot be retrieved from secret, retrying in $sleep_time seconds ..."
+      fi
+    else
+      echo "secret name cannot be retrieved from serviceaccount, retrying in $sleep_time seconds ..."
+    fi
+    local now=$(date +%s)
+    if [[ $(($now - $start_time)) -gt $timeout ]]; then
+      fail "timeout reached while retrying"
+    fi
+    sleep 5
+  done
+
+  local tmp=$(mktemp)
+  spiff merge --json "$kubeconfig" | jq -r '.users[0].user={token: $token}' --arg token "$token" > "$tmp"
+
+  # adding clusterrolebinding
+  verbose "Creating clusterrolebinding '$crb' ..."
+crb_template=$(cat << EOF
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: $crb
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: $sa
+  namespace: $ns
+EOF
+)
+  kubectl --kubeconfig "$kubeconfig" apply -f - <<< $crb_template
+
+  # validating kubeconfig
+  verbose "Validating new kubeconfig ..."
+  debug "kubectl --kubeconfig "$tmp" get ns >/dev/null"
+  if ! kubectl --kubeconfig "$tmp" get ns >/dev/null; then
+    fail "Validation of the newly generated kubeconfig failed. For debugging purposes, you can check the new kubeconfig at $tmp."
+  fi
+
+  cp "$tmp" "$kubeconfig"
 }
 
 HELP_convertkubeconfig()
 {
-  echo "convertkubeconfig:convert kubeconfig of GKE clusters"
+  echo "convertkubeconfig:convert kubeconfig to serviceaccount token one"
+  echo ":this will create a serviceaccount and replace the kubeconfig with one using that serviceaccount's token"
 }
 
