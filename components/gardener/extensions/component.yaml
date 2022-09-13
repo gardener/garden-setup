@@ -27,7 +27,7 @@ spec_template:
   commit: (( version.commit || ~~ ))
   files:
     - (( version.chart_path ))
-    - (( contains( deployment.admissionControllers, n ) ? version.admission_chart_path :~~ ))
+    - (( contains( deployment.admissionControllers, n ) ? ( "charts/" version.admission_controller_name ) :~~ ))
 
 deployment:
   # which extensions should be deployed
@@ -48,6 +48,6 @@ default_extensions:
 activated_extensions: (( valid( landscape.gardener.extensions ) ? keys(select{landscape.gardener.extensions|e|-> valid( e.active ) -and ( e.active == true )}) :[] ))
 deactivated_extensions: (( valid( landscape.gardener.extensions ) ? keys(select{landscape.gardener.extensions|e|-> valid( e.active ) -and ( e.active == false )}) :[] ))
 
-admissionControllers: (( &temporary ( valid( landscape.gardener.extensions ) ? sum[landscape.gardener.extensions|[]|s,k,v|-> valid( v.admissionController ) -and ( v.admissionController == true ) -and valid( landscape.versions.gardener.extensions[k].admission_chart_path ) ? s k :s] :[] ) ))
+admissionControllers: (( &temporary ( valid( landscape.gardener.extensions ) ? sum[landscape.gardener.extensions|[]|s,k,v|-> valid( v.admissionController ) -and ( v.admissionController == true ) -and valid( landscape.versions.gardener.extensions[k].admission_controller_name ) ? s k :s] :[] ) ))
 
 infrastructures: (( &temporary ( uniq( sum[.landscape.iaas|[]|s,e|-> s e.type ( e.seeds.[*].type || ~ ) ] ) ) ))

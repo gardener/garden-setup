@@ -7,7 +7,7 @@ utilities: (( &temporary ))
 plugins:
   - kubectl
   - (( ( length(.admissionControllers) > 0 ) -and ( .landscape.gardener.network-policies.active == true ) ? { "kubectl" = "kubectl_admission_netpols" } :~~ )) # network policies for admission controllers
-  - <<: (( length(.admissionControllers) > 0 ? sum[.admissionControllers|[]|s,n|-> *.admission.plugin_template] :~ )) # admission controllers
+  - <<: (( length(.admissionControllers) > 0 ? sum[.admissionControllers|[]|s,n|-> s *.admission.plugin_template] :~ )) # admission controllers
   - shoot-check
 
 shoot-check:
@@ -88,20 +88,20 @@ rendered_admission_templates:
 admission:
   <<: (( &temporary ))
 
-  fullName: (( |n|-> "gardener-extension-admission-" n ))
+  fullName: (( |n|-> .landscape.versions.gardener.extensions[n].admission_controller_name ))
 
   # virtual cluster deployment
   helm_template_virtual:
     <<: (( &template ))
     kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))
-    source: (( "extensions." n "/repo/charts/" admission.fullName(n) "/charts/application" ))
+    source: (( "extensions." n "/repo/charts/" name "/charts/application" ))
     name: (( admission.fullName(n) ))
     namespace: (( .landscape.namespace ))
     values: (( *admission.values_template ))
   helm_template_runtime:
     <<: (( &template ))
     kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
-    source: (( "extensions." n "/repo/charts/" admission.fullName(n) "/charts/runtime" ))
+    source: (( "extensions." n "/repo/charts/" name "/charts/runtime" ))
     name: (( admission.fullName(n) ))
     namespace: (( .landscape.namespace ))
     values: (( *admission.values_template ))
