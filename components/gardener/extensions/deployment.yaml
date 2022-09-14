@@ -286,50 +286,6 @@ extension_specs:
       primary: true
 
 ########################################
-  dns-external:
-########################################
-    <<: (( &template ))
-    extensionName: dns-external
-    type: helm
-    providerConfig:
-      chart: (( encoded_chart ))
-      values:
-        <<: (( valuesOverwrite ))
-        createCRDs: false
-        fullnameOverride: seed-dns-controller-manager
-        image:
-          repository: (( version.image_repo || ~~ ))
-          tag: (( version.image_tag || ~~ ))
-        configuration:
-          poolSize: 20
-          controllers: dnscontrollers
-          identifier: ""
-          serverPortHttp: 8080
-          ttl: (( .landscape.defaultTTL ))
-    resources:
-    - kind: DNSProvider
-      type: aws-route53
-      primary: true
-    - kind: DNSProvider
-      type: alicloud-dns
-      primary: true
-    - kind: DNSProvider
-      type: azure-dns
-      primary: true
-    - kind: DNSProvider
-      type: google-clouddns
-      primary: true
-    - kind: DNSProvider
-      type: openstack-designate
-      primary: true
-    - kind: DNSProvider
-      type: cloudflare-dns
-      primary: true
-    - kind: DNSProvider
-      type: infoblox-dns
-      primary: true
-
-########################################
   provider-aws:
 ########################################
     <<: (( &template ))
@@ -615,6 +571,18 @@ extension_specs:
         image:
           repository: (( version.image_repo || ~~ ))
           tag: (( version.image_tag || ~~ ))
+        dnsControllerManager:
+          image:
+            repository: (( version.dns-controller-manager.image_repo || ~~ ))
+            tag: (( version.dns-controller-manager.image_tag || ~~ ))
+          configuration:
+            cacheTtl: 300
+            controllers: dnscontrollers
+            dnsPoolResyncPeriod: 30m
+            serverPortHttp: 8080
+          createCRDs: false
+          deploy: true
+          replicaCount: 1
     resources:
     - kind: Extension
       type: shoot-dns-service

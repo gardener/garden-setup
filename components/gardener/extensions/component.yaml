@@ -40,7 +40,6 @@ default_extensions:
   - os-ubuntu
   - os-suse-chost
   - os-gardenlinux
-  - dns-external
   - networking-calico
   - runtime-gvisor
   - <<: (( sum[.infrastructures|[]|s,e|-> s [ "provider-" e ]] ))

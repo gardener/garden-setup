@@ -24,8 +24,6 @@ dep_version = os.getenv('DEPENDENCY_VERSION')
 
 if dep_name == 'github.com/gardener/gardener':
     set_dep_version(dep_version, 'versions', 'gardener', 'core', 'version')
-elif dep_name == 'github.com/gardener/external-dns-management':
-    set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'dns-external', 'version')
 elif dep_name == 'github.com/gardener/gardener-extension-networking-calico':
     set_dep_version(dep_version, 'versions', 'gardener', 'extensions', 'networking-calico', 'version')
 elif dep_name == 'github.com/gardener/gardener-extension-os-suse-chost':
@@ -54,6 +52,8 @@ elif dep_name == 'github.com/gardener/dashboard':
     set_dep_version(dep_version, 'versions', 'dashboard', 'core', 'version')
 elif dep_name == 'github.com/gardener/terminal-controller-manager':
     set_dep_version(dep_version, 'versions', 'dashboard', 'terminals', 'terminal-controller-manager', 'version')
+elif dep_name == 'github.com/gardener/external-dns-management':
+    set_dep_version(dep_version, 'versions', 'dns-controller-manager', 'version')
 elif dep_name == 'github.com/gardener/sow':
     with sow_version_file.open(mode='w') as f:
         f.write(dep_version)

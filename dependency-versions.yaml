@@ -6,10 +6,6 @@
         "version": "v1.54.1"
       },
       "extensions": {
-        "dns-external": {
-          "repo": "https://github.com/gardener/external-dns-management.git",
-          "version": "v0.13.2"
-        },
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
           "version": "v1.26.0"
@@ -83,6 +79,10 @@
           "version": "v0.21.0"
         }
       }
+    },
+    "dns-controller-manager": {
+      "repo": "https://github.com/gardener/external-dns-management.git",
+      "version": "v0.13.2"
     }
   }
 }

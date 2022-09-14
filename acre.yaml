@@ -63,13 +63,6 @@ landscape:
         image_repo: "eu.gcr.io/gardener-project/gardener/gardenlet"
         image_tag: (( valid( tag ) ? tag :~~ ))
       extensions:
-        dns-external:
-          <<: (( merge ))
-          tag: (( valid( dns-external.branch ) -or valid( dns-external.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
-          image_tag: (( valid( dns-external.tag ) ? dns-external.tag :~~ ))
-          image_repo: (( ~~ ))
-          repo: (( .dependency_versions.versions.gardener.extensions.dns-external.repo ))
-          chart_path: charts/external-dns-management
         os-coreos:
           <<: (( merge ))
           tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-coreos.version ))
@@ -161,6 +154,9 @@ landscape:
           admission_controller_name: gardener-extension-admission-shoot-dns-service
           image_tag: (( valid( shoot-dns-service.tag ) ? shoot-dns-service.tag :~~ ))
           image_repo: (( ~~ ))
+          dns-controller-manager:
+            image_tag: (( valid( versions.dns-controller-manager.image_tag ) ? versions.dns-controller-manager.image_tag :~~ ))
+            image_repo: (( valid( versions.dns-controller-manager.image_repo ) ? versions.dns-controller-manager.image_repo :~~ ))
         provider-vsphere:
           <<: (( merge ))
           tag: (( valid( provider-vsphere.branch ) -or valid( provider-vsphere.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-vsphere.version ))
@@ -207,12 +203,12 @@ landscape:
       # to overwrite:
       # set image_repo here (mandatory)
       # set image_tag here (defaults to latest, if image_repo is set and image_tag is not given)
-    dns-controller:
+    dns-controller-manager:
       <<: (( merge ))
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dns-controller-manager.version ))
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
-      repo: "https://github.com/gardener/external-dns-management.git"
+      repo: (( .dependency_versions.versions.dns-controller-manager.repo ))
     cert-manager:
       controller:
         <<: (( merge ))
