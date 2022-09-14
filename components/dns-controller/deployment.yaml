@@ -96,8 +96,8 @@ spec:
     nameOverride: (( settings.fullname ))
     fullnameOverride: (( settings.fullname ))
     image:
-      tag: (( .landscape.versions.dns-controller.image_tag || ~~ ))
-      repository: (( .landscape.versions.dns-controller.image_repo || ~~ ))
+      tag: (( .landscape.versions.dns-controller-manager.image_tag || ~~ ))
+      repository: (( .landscape.versions.dns-controller-manager.image_repo || ~~ ))
     createCRDs: true
     configuration:
       dnsClass: (( common.dns_class ))

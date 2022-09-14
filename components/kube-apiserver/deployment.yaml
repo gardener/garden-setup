@@ -44,8 +44,8 @@ spec:
   KeyCert: (( |cert|->{$crt=cert.value.cert, $key=cert.value.key} ))
 
   new:
-    service_account_key: (( &template(x509genkey()) ))
-    static_token:          (( &template(exec( "bash", "-c", "cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 128 | head -n 1" )) ))
+    service_account_key: (( &template( x509genkey() ) ))
+    static_token: (( &template( rand("[:alnum:]", 128) ) ))
 
   server:
     commonName: "garden:server:kube-apiserver"

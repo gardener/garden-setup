@@ -21,7 +21,7 @@ While garden-setup automatically decides which Gardener extensions to deploy, it
 
 Some extensions come with admission controllers which can be deployed into the base cluster optionally. For chosen extensions, garden-setup is able to deploy the admission controller. To do this, it needs to be activated manually by setting `landscape.gardener.<extension_name>.admissionController` to `true`.
 
-Currently, this feature is only enabled for the `shoot-dns-service` extension.
+Currently, this feature can be used for the provider extensions (except vsphere) as well as the `networking-calico` and `shoot-dns-service` extensions.
 
 #### valueOverwrites for Extensions
 
@@ -30,7 +30,6 @@ Some values are set by default (take a look in the [deployment.yaml](../../compo
 
 The following extensions are available in `landscape.gardener.extensions`:
 
-- dns-external: [values.yaml](https://github.com/gardener/gardener-extension-shoot-dns-service/blob/master/charts/gardener-extension-shoot-dns-service/values.yaml)
 - os-ubuntu: [values.yaml](https://github.com/gardener/gardener-extension-os-ubuntu/blob/master/charts/gardener-extension-os-ubuntu/values.yaml)
 - os-gardenlinux: [values.yaml](https://github.com/gardener/gardener-extension-os-gardenlinux/blob/master/charts/gardener-extension-os-gardenlinux/values.yaml)
 - os-suse-chost: [values.yaml](https://github.com/gardener/gardener-extension-os-suse-chost/blob/master/charts/gardener-extension-os-suse-chost/values.yaml)
@@ -39,8 +38,11 @@ The following extensions are available in `landscape.gardener.extensions`:
 - provider-gcp: [values.yaml](https://github.com/gardener/gardener-extension-provider-gcp/blob/master/charts/gardener-extension-provider-gcp/values.yaml)
 - provider-azure: [values.yaml](https://github.com/gardener/gardener-extension-provider-azure/blob/master/charts/gardener-extension-provider-azure/values.yaml)
 - provider-openstack: [values.yaml](https://github.com/gardener/gardener-extension-provider-openstack/blob/master/charts/gardener-extension-provider-openstack/values.yaml)
+- provider-alicloud: [values.yaml](https://github.com/gardener/gardener-extension-provider-alicloud/blob/master/charts/gardener-extension-provider-alicloud/values.yaml)
+- provider-vsphere: [values.yaml](https://github.com/gardener/gardener-extension-provider-vsphere/blob/master/charts/gardener-extension-provider-vsphere/values.yaml)
 - networking-calico: [values.yaml](https://github.com/gardener/gardener-extension-networking-calico/blob/master/charts/gardener-extension-networking-calico/values.yaml)
 - shoot-cert-service: [values.yaml](https://github.com/gardener/gardener-extension-shoot-cert-service/blob/master/charts/gardener-extension-shoot-cert-service/values.yaml)
+- shoot-dns-service: [values.yaml](https://github.com/gardener/gardener-extension-shoot-dns-service/blob/master/charts/gardener-extension-shoot-dns-service/values.yaml)
 
 Example to set the `imageVectorOverwrite` (see [values.yaml](https://github.com/gardener/gardener-extension-networking-calico/blob/master/charts/gardener-extension-networking-calico/values.yaml#L14-L26)) for `gardener-extension-networking-calico`:
 

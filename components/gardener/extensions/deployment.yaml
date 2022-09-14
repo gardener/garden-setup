@@ -7,7 +7,7 @@ utilities: (( &temporary ))
 plugins:
   - kubectl
   - (( ( length(.admissionControllers) > 0 ) -and ( .landscape.gardener.network-policies.active == true ) ? { "kubectl" = "kubectl_admission_netpols" } :~~ )) # network policies for admission controllers
-  - <<: (( length(.admissionControllers) > 0 ? sum[.admissionControllers|[]|s,n|-> *.admission.plugin_template] :~ )) # admission controllers
+  - <<: (( length(.admissionControllers) > 0 ? sum[.admissionControllers|[]|s,n|-> s *.admission.plugin_template] :~ )) # admission controllers
   - shoot-check
 
 shoot-check:
@@ -88,20 +88,20 @@ rendered_admission_templates:
 admission:
   <<: (( &temporary ))
 
-  fullName: (( |n|-> "gardener-extension-admission-" n ))
+  fullName: (( |n|-> .landscape.versions.gardener.extensions[n].admission_controller_name ))
 
   # virtual cluster deployment
   helm_template_virtual:
     <<: (( &template ))
     kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))
-    source: (( "extensions." n "/repo/charts/" admission.fullName(n) "/charts/application" ))
+    source: (( "extensions." n "/repo/charts/" name "/charts/application" ))
     name: (( admission.fullName(n) ))
     namespace: (( .landscape.namespace ))
     values: (( *admission.values_template ))
   helm_template_runtime:
     <<: (( &template ))
     kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
-    source: (( "extensions." n "/repo/charts/" admission.fullName(n) "/charts/runtime" ))
+    source: (( "extensions." n "/repo/charts/" name "/charts/runtime" ))
     name: (( admission.fullName(n) ))
     namespace: (( .landscape.namespace ))
     values: (( *admission.values_template ))
@@ -283,50 +283,6 @@ extension_specs:
     resources:
     - kind: OperatingSystemConfig
       type: suse-chost
-      primary: true
-
-########################################
-  dns-external:
-########################################
-    <<: (( &template ))
-    extensionName: dns-external
-    type: helm
-    providerConfig:
-      chart: (( encoded_chart ))
-      values:
-        <<: (( valuesOverwrite ))
-        createCRDs: false
-        fullnameOverride: seed-dns-controller-manager
-        image:
-          repository: (( version.image_repo || ~~ ))
-          tag: (( version.image_tag || ~~ ))
-        configuration:
-          poolSize: 20
-          controllers: dnscontrollers
-          identifier: ""
-          serverPortHttp: 8080
-          ttl: (( .landscape.defaultTTL ))
-    resources:
-    - kind: DNSProvider
-      type: aws-route53
-      primary: true
-    - kind: DNSProvider
-      type: alicloud-dns
-      primary: true
-    - kind: DNSProvider
-      type: azure-dns
-      primary: true
-    - kind: DNSProvider
-      type: google-clouddns
-      primary: true
-    - kind: DNSProvider
-      type: openstack-designate
-      primary: true
-    - kind: DNSProvider
-      type: cloudflare-dns
-      primary: true
-    - kind: DNSProvider
-      type: infoblox-dns
       primary: true
 
 ########################################
@@ -615,6 +571,18 @@ extension_specs:
         image:
           repository: (( version.image_repo || ~~ ))
           tag: (( version.image_tag || ~~ ))
+        dnsControllerManager:
+          image:
+            repository: (( version.dns-controller-manager.image_repo || ~~ ))
+            tag: (( version.dns-controller-manager.image_tag || ~~ ))
+          configuration:
+            cacheTtl: 300
+            controllers: dnscontrollers
+            dnsPoolResyncPeriod: 30m
+            serverPortHttp: 8080
+          createCRDs: false
+          deploy: true
+          replicaCount: 1
     resources:
     - kind: Extension
       type: shoot-dns-service
