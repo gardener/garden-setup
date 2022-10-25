@@ -63,13 +63,6 @@ landscape:
         image_repo: "eu.gcr.io/gardener-project/gardener/gardenlet"
         image_tag: (( valid( tag ) ? tag :~~ ))
       extensions:
-        dns-external:
-          <<: (( merge ))
-          tag: (( valid( dns-external.branch ) -or valid( dns-external.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
-          image_tag: (( valid( dns-external.tag ) ? dns-external.tag :~~ ))
-          image_repo: (( ~~ ))
-          repo: (( .dependency_versions.versions.gardener.extensions.dns-external.repo ))
-          chart_path: charts/external-dns-management
         os-coreos:
           <<: (( merge ))
           tag: (( valid( os-coreos.branch ) -or valid( os-coreos.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.os-coreos.version ))
@@ -103,6 +96,7 @@ landscape:
           tag: (( valid( provider-aws.branch ) -or valid( provider-aws.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-aws.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-aws.repo ))
           chart_path: charts/gardener-extension-provider-aws
+          admission_controller_name: gardener-extension-admission-aws
           image_tag: (( valid( provider-aws.tag ) ? provider-aws.tag :~~ ))
           image_repo: (( ~~ ))
         provider-alicloud:
@@ -110,6 +104,7 @@ landscape:
           tag: (( valid( provider-alicloud.branch ) -or valid( provider-alicloud.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-alicloud.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-alicloud.repo ))
           chart_path: charts/gardener-extension-provider-alicloud
+          admission_controller_name: gardener-extension-admission-alicloud
           image_tag: (( valid( provider-alicloud.tag ) ? provider-alicloud.tag :~~ ))
           image_repo: (( ~~ ))
         provider-gcp:
@@ -117,6 +112,7 @@ landscape:
           tag: (( valid( provider-gcp.branch ) -or valid( provider-gcp.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-gcp.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-gcp.repo ))
           chart_path: charts/gardener-extension-provider-gcp
+          admission_controller_name: gardener-extension-admission-gcp
           image_tag: (( valid( provider-gcp.tag ) ? provider-gcp.tag :~~ ))
           image_repo: (( ~~ ))
         provider-azure:
@@ -124,6 +120,7 @@ landscape:
           tag: (( valid( provider-azure.branch ) -or valid( provider-azure.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-azure.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-azure.repo ))
           chart_path: charts/gardener-extension-provider-azure
+          admission_controller_name: gardener-extension-admission-azure
           image_tag: (( valid( provider-azure.tag ) ? provider-azure.tag :~~ ))
           image_repo: (( ~~ ))
         provider-openstack:
@@ -131,6 +128,7 @@ landscape:
           tag: (( valid( provider-openstack.branch ) -or valid( provider-openstack.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-openstack.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.provider-openstack.repo ))
           chart_path: charts/gardener-extension-provider-openstack
+          admission_controller_name: gardener-extension-admission-openstack
           image_tag: (( valid( provider-openstack.tag ) ? provider-openstack.tag :~~ ))
           image_repo: (( ~~ ))
         networking-calico:
@@ -138,6 +136,7 @@ landscape:
           tag: (( valid( networking-calico.branch ) -or valid( networking-calico.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.networking-calico.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.networking-calico.repo ))
           chart_path: charts/gardener-extension-networking-calico
+          admission_controller_name: gardener-extension-admission-calico
           image_tag: (( valid( networking-calico.tag ) ? networking-calico.tag :~~ ))
           image_repo: (( ~~ ))
         shoot-cert-service:
@@ -152,9 +151,12 @@ landscape:
           tag: (( valid( shoot-dns-service.branch ) -or valid( shoot-dns-service.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.shoot-dns-service.version ))
           repo: (( .dependency_versions.versions.gardener.extensions.shoot-dns-service.repo ))
           chart_path: charts/gardener-extension-shoot-dns-service
-          admission_chart_path: charts/gardener-extension-admission-shoot-dns-service
+          admission_controller_name: gardener-extension-admission-shoot-dns-service
           image_tag: (( valid( shoot-dns-service.tag ) ? shoot-dns-service.tag :~~ ))
           image_repo: (( ~~ ))
+          dns-controller-manager:
+            image_tag: (( valid( versions.dns-controller-manager.image_tag ) ? versions.dns-controller-manager.image_tag :~~ ))
+            image_repo: (( valid( versions.dns-controller-manager.image_repo ) ? versions.dns-controller-manager.image_repo :~~ ))
         provider-vsphere:
           <<: (( merge ))
           tag: (( valid( provider-vsphere.branch ) -or valid( provider-vsphere.commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.provider-vsphere.version ))
@@ -201,12 +203,12 @@ landscape:
       # to overwrite:
       # set image_repo here (mandatory)
       # set image_tag here (defaults to latest, if image_repo is set and image_tag is not given)
-    dns-controller:
+    dns-controller-manager:
       <<: (( merge ))
-      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.gardener.extensions.dns-external.version ))
+      tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dns-controller-manager.version ))
       image_tag: (( valid( tag ) ? tag :~~ ))
       image_repo: (( ~~ ))
-      repo: "https://github.com/gardener/external-dns-management.git"
+      repo: (( .dependency_versions.versions.dns-controller-manager.repo ))
     cert-manager:
       controller:
         <<: (( merge ))

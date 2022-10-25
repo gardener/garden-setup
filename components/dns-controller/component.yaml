@@ -22,6 +22,6 @@ component:
     - git
 
 git:
-  <<: (( .landscape.versions.dns-controller ))
+  <<: (( .landscape.versions.dns-controller-manager ))
   files:
     - "charts"
