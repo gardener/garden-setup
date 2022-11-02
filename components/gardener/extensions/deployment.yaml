@@ -583,6 +583,8 @@ extension_specs:
           createCRDs: false
           deploy: true
           replicaCount: 1
+        dnsProviderManagement:
+          enabled: true
     resources:
     - kind: Extension
       type: shoot-dns-service

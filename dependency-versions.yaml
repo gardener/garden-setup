@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.54.1"
+        "version": "v1.56.1"
       },
       "extensions": {
         "networking-calico": {
@@ -28,7 +28,7 @@
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
-          "version": "v1.37.0"
+          "version": "v1.38.2"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
@@ -36,7 +36,7 @@
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
-          "version": "v1.24.0"
+          "version": "v1.25.1"
         },
         "provider-alicloud": {
           "repo": "https://github.com/gardener/gardener-extension-provider-alicloud.git",
@@ -44,7 +44,7 @@
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
-          "version": "v1.28.0"
+          "version": "v1.29.0"
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
@@ -52,11 +52,11 @@
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
-          "version": "v1.25.0"
+          "version": "v1.26.0"
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
-          "version": "v0.18.0"
+          "version": "v0.21.0"
         },
         "runtime-gvisor": {
           "repo": "https://github.com/gardener/gardener-extension-runtime-gvisor.git",
@@ -82,7 +82,7 @@
     },
     "dns-controller-manager": {
       "repo": "https://github.com/gardener/external-dns-management.git",
-      "version": "v0.13.2"
+      "version": "v0.13.3"
     }
   }
 }
