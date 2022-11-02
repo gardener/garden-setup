@@ -16,7 +16,7 @@
         },
         "os-suse-chost": {
           "repo": "https://github.com/gardener/gardener-extension-os-suse-chost.git",
-          "version": "v1.18.0"
+          "version": "v1.19.0"
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
