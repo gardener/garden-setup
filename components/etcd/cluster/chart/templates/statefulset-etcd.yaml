@@ -112,8 +112,8 @@ spec:
         - --insecure-transport=false
         - --insecure-skip-tls-verify=false
         - --endpoints=https://{{ .Values.name }}-0:2379
-        - --etcd-connection-timeout=300
-        - --delta-snapshot-period-seconds=300
+        - --etcd-connection-timeout=300s
+        - --delta-snapshot-period=300s
         image: {{ index .Values.images "etcd-backup-restore" }}
         imagePullPolicy: IfNotPresent
         ports:
