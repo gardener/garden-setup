@@ -8,7 +8,7 @@
       "extensions": {
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.26.0"
+          "version": "v1.27.0"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
@@ -67,7 +67,7 @@
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.61.2"
+        "version": "1.62.0"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
@@ -76,13 +76,13 @@
       "terminals": {
         "terminal-controller-manager": {
           "repo": "https://github.com/gardener/terminal-controller-manager.git",
-          "version": "v0.21.0"
+          "version": "v0.22.0"
         }
       }
     },
     "dns-controller-manager": {
       "repo": "https://github.com/gardener/external-dns-management.git",
-      "version": "v0.13.3"
+      "version": "v0.14.1"
     }
   }
 }
