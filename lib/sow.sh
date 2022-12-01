@@ -126,6 +126,18 @@ CMD_convertkubeconfig() {
   verbose "Creating serviceaccount '$sa', if it doesn't exist ..."
   exec_cmd kubectl --kubeconfig "$kubeconfig" -n $ns get serviceaccount $sa &>/dev/null || exec_cmd kubectl --kubeconfig "$kubeconfig" -n $ns create serviceaccount $sa
 
+  # create serviceaccount secret manually (required for clusters >=1.24)
+  verbose "Creating serviceaccount secret '$sa', if it doesn't exist ..."
+  exec_cmd kubectl --kubeconfig "$kubeconfig" -n $ns get secret $sa &>/dev/null || exec_cmd kubectl --kubeconfig "$kubeconfig" -n $ns apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: $sa
+  annotations:
+    kubernetes.io/service-account.name: $sa
+type: kubernetes.io/service-account-token
+EOF
+
   # wait for serviceaccount to get token
   local timeout=180
   local sleep_time=5
@@ -134,18 +146,12 @@ CMD_convertkubeconfig() {
   local secret=
   verbose "Fetching serviceaccount token. This might take few seconds."
   while true; do
-    debug "kubectl --kubeconfig \"$kubeconfig\" -n $ns get serviceaccount $sa -o jsonpath='{.secrets[0].name}'"
-    if secret=$(kubectl --kubeconfig "$kubeconfig" -n $ns get serviceaccount $sa -o jsonpath='{.secrets[0].name}' 2>/dev/null); then
-      # secret name found, fetch token
-      debug "kubectl --kubeconfig \"$kubeconfig\" -n $ns get secret $secret -o jsonpath='{.data.token}'"
-      if token=$(kubectl --kubeconfig "$kubeconfig" -n $ns get secret $secret -o jsonpath='{.data.token}' 2>/dev/null | base64 -d) && [[ -n "$token" ]]; then
-        debug "found token"
-        break
-      else
-        echo "token cannot be retrieved from secret, retrying in $sleep_time seconds ..."
-      fi
+    debug "kubectl --kubeconfig \"$kubeconfig\" -n $ns get secret $sa -o jsonpath='{.data.token}'"
+    if token=$(kubectl --kubeconfig "$kubeconfig" -n $ns get secret $sa -o jsonpath='{.data.token}' 2>/dev/null | base64 -d) && [[ -n "$token" ]]; then
+      debug "found token"
+      break
     else
-      echo "secret name cannot be retrieved from serviceaccount, retrying in $sleep_time seconds ..."
+      echo "token cannot be retrieved from secret, retrying in $sleep_time seconds ..."
     fi
     local now=$(date +%s)
     if [[ $(($now - $start_time)) -gt $timeout ]]; then
