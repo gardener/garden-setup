@@ -27,7 +27,7 @@ landscape:
   versions:
     kube-apiserver:
       image_repo: k8s.gcr.io/kube-apiserver
-      image_tag: v1.20.15
+      image_tag: v1.23.13
     kube-controller-manager:
       image_repo: k8s.gcr.io/kube-controller-manager
       image_tag: (( kube-apiserver.image_tag ))
@@ -37,7 +37,7 @@ landscape:
         image_tag: "v3.3.13"
       backup_restore:
         image_repo: eu.gcr.io/gardener-project/gardener/etcdbrctl
-        image_tag: "0.6.4"
+        image_tag: "v0.15.1"
     gardener:
       <<: (( merge ))
       repo: "https://github.com/gardener/gardener.git"
