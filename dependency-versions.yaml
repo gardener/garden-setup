@@ -3,12 +3,12 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.58.3"
+        "version": "v1.59.2"
       },
       "extensions": {
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.27.0"
+          "version": "v1.27.1"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
@@ -28,15 +28,15 @@
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
-          "version": "v1.39.1"
+          "version": "v1.40.3"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
-          "version": "v1.31.0"
+          "version": "v1.32.0"
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
-          "version": "v1.25.1"
+          "version": "v1.26.1"
         },
         "provider-alicloud": {
           "repo": "https://github.com/gardener/gardener-extension-provider-alicloud.git",
@@ -44,30 +44,30 @@
         },
         "provider-openstack": {
           "repo": "https://github.com/gardener/gardener-extension-provider-openstack.git",
-          "version": "v1.29.0"
+          "version": "v1.30.3"
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
-          "version": "v1.25.0"
+          "version": "v1.26.0"
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
-          "version": "v1.26.0"
+          "version": "v1.27.0"
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
-          "version": "v0.21.0"
+          "version": "v0.22.0"
         },
         "runtime-gvisor": {
           "repo": "https://github.com/gardener/gardener-extension-runtime-gvisor.git",
-          "version": "v0.6.0"
+          "version": "v0.7.0"
         }
       }
     },
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.62.0"
+        "version": "1.63.0"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
