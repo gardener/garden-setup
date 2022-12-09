@@ -143,104 +143,102 @@ gardenletBootstrapKubeconfig:
       token: (( configValues.bootstrapToken.id "." configValues.bootstrapToken.secret ))
 
 gardenletSpec:
-  global:
-    gardenlet:
+  enabled: true
+  replicaCount: 1
+  serviceAccountName: gardenlet
+  image:
+    repository: (( .landscape.versions.gardener.gardenlet.image_repo ))
+    tag: (( .landscape.versions.gardener.gardenlet.image_tag ))
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 750m
+      memory: 512Mi
+  additionalVolumes: []
+  additionalVolumeMounts: []
+  env: []
+  vpa: false
+  imageVectorOverwrite: (( asyaml( configValues.imageVectorOverwrites.imageVectorOverwrite ) || ~~ ))
+  componentImageVectorOverwrites: (( asyaml( configValues.imageVectorOverwrites.componentImageVectorOverwrite ) || ~~ ))
+  config:
+    gardenClientConnection:
+      acceptContentTypes: application/json
+      contentType: application/json
+      qps: (( configValues.config.gardenClientConnection.qps || 100 ))
+      burst: (( configValues.config.gardenClientConnection.burst || 130 ))
+      gardenClusterAddress: (( .imports.kube_apiserver.export.apiserver_url ))
+      gardenClusterCACert: (( base64( .imports.kube_apiserver.export.kube_apiserver_ca.cert ) ))
+      bootstrapKubeconfig:
+        name: gardenlet-kubeconfig-bootstrap
+        namespace: garden
+        kubeconfig: (( asyaml( gardenletBootstrapKubeconfig ) ))
+      kubeconfigSecret:
+        name: gardenlet-kubeconfig
+        namespace: garden
+    seedClientConnection:
+      acceptContentTypes: application/json
+      contentType: application/json
+      qps: (( configValues.config.seedClientConnection.qps || 25 ))
+      burst: (( configValues.config.seedClientConnection.burst || 50 ))
+    shootClientConnection:
+      acceptContentTypes: application/json
+      contentType: application/json
+      qps: (( configValues.config.shootClientConnection.qps || 25 ))
+      burst: (( configValues.config.shootClientConnection.burst || 50 ))
+    controllers:
+      backupBucket:
+        concurrentSyncs: 20
+      backupEntry:
+        concurrentSyncs: 20
+        deletionGracePeriodHours: 0
+      seed:
+        concurrentSyncs: 5
+        syncPeriod: 1m
+        heartBeatPeriod: 20s
+        reserveExcessCapacity: true
+      shoot:
+        concurrentSyncs: 20
+        syncPeriod: 1h
+        retryDuration: 24h
+        respectSyncPeriodOverwrite: false
+        reconcileInMaintenanceOnly: false
+      shootCare:
+        concurrentSyncs: 5
+        syncPeriod: 30s
+        conditionThresholds:
+        - type: APIServerAvailable
+          duration: 1m
+        - type: ControlPlaneHealthy
+          duration: 1m
+        - type: SystemComponentsHealthy
+          duration: 1m
+        - type: EveryNodeReady
+          duration: 5m
+    leaderElection:
+      leaderElect: true
+      leaseDuration: 15s
+      renewDeadline: 10s
+      retryPeriod: 2s
+      resourceLock: configmapsleases
+    logLevel: info
+    logging:
+      <<: (( configValues.config.logging || ~~ ))
+    kubernetesLogLevel: 0
+    featureGates: 
+      <<: (( configValues.config.featureGates || {} ))
+      ManagedIstio: (( pluginSpecs.managedIstioActive ))
+      APIServerSNI: (( configValues.config.featureGates.APIServerSNI || true ))
+    seedConfig:
+      metadata:
+        name: (( configValues.name ))
+      spec: (( seedSpec ))
+    monitoring: (( defined(configValues.monitoring.remoteWrite) ? monitoringTemplate :~~ ))
+  # Deployment related configuration
+  deployment:
+    virtualGarden:
       enabled: true
-      replicaCount: 1
-      serviceAccountName: gardenlet
-      image:
-        repository: (( .landscape.versions.gardener.gardenlet.image_repo ))
-        tag: (( .landscape.versions.gardener.gardenlet.image_tag ))
-      resources:
-        requests:
-          cpu: 100m
-          memory: 100Mi
-        limits:
-          cpu: 750m
-          memory: 512Mi
-      additionalVolumes: []
-      additionalVolumeMounts: []
-      env: []
-      vpa: false
-      imageVectorOverwrite: (( asyaml( configValues.imageVectorOverwrites.imageVectorOverwrite ) || ~~ ))
-      componentImageVectorOverwrites: (( asyaml( configValues.imageVectorOverwrites.componentImageVectorOverwrite ) || ~~ ))
-      config:
-        gardenClientConnection:
-          acceptContentTypes: application/json
-          contentType: application/json
-          qps: (( configValues.config.gardenClientConnection.qps || 100 ))
-          burst: (( configValues.config.gardenClientConnection.burst || 130 ))
-          gardenClusterAddress: (( .imports.kube_apiserver.export.apiserver_url ))
-          gardenClusterCACert: (( base64( .imports.kube_apiserver.export.kube_apiserver_ca.cert ) ))
-          bootstrapKubeconfig:
-            name: gardenlet-kubeconfig-bootstrap
-            namespace: garden
-            kubeconfig: (( asyaml( gardenletBootstrapKubeconfig ) ))
-          kubeconfigSecret:
-            name: gardenlet-kubeconfig
-            namespace: garden
-        seedClientConnection:
-          acceptContentTypes: application/json
-          contentType: application/json
-          qps: (( configValues.config.seedClientConnection.qps || 25 ))
-          burst: (( configValues.config.seedClientConnection.burst || 50 ))
-        shootClientConnection:
-          acceptContentTypes: application/json
-          contentType: application/json
-          qps: (( configValues.config.shootClientConnection.qps || 25 ))
-          burst: (( configValues.config.shootClientConnection.burst || 50 ))
-        controllers:
-          backupBucket:
-            concurrentSyncs: 20
-          backupEntry:
-            concurrentSyncs: 20
-            deletionGracePeriodHours: 0
-          seed:
-            concurrentSyncs: 5
-            syncPeriod: 1m
-            heartBeatPeriod: 20s
-            reserveExcessCapacity: true
-          shoot:
-            concurrentSyncs: 20
-            syncPeriod: 1h
-            retryDuration: 24h
-            respectSyncPeriodOverwrite: false
-            reconcileInMaintenanceOnly: false
-          shootCare:
-            concurrentSyncs: 5
-            syncPeriod: 30s
-            conditionThresholds:
-            - type: APIServerAvailable
-              duration: 1m
-            - type: ControlPlaneHealthy
-              duration: 1m
-            - type: SystemComponentsHealthy
-              duration: 1m
-            - type: EveryNodeReady
-              duration: 5m
-        leaderElection:
-          leaderElect: true
-          leaseDuration: 15s
-          renewDeadline: 10s
-          retryPeriod: 2s
-          resourceLock: configmapsleases
-        logLevel: info
-        logging:
-          <<: (( configValues.config.logging || ~~ ))
-        kubernetesLogLevel: 0
-        featureGates: 
-          <<: (( configValues.config.featureGates || {} ))
-          ManagedIstio: (( pluginSpecs.managedIstioActive ))
-          APIServerSNI: (( configValues.config.featureGates.APIServerSNI || true ))
-        seedConfig:
-          metadata:
-            name: (( configValues.name ))
-          spec: (( seedSpec ))
-        monitoring: (( defined(configValues.monitoring.remoteWrite) ? monitoringTemplate :~~ ))
-    # Deployment related configuration
-    deployment:
-      virtualGarden:
-        enabled: true
 
 monitoringTemplate:
   <<: (( &temporary ))
@@ -270,7 +268,7 @@ pluginSpecs:
     kubeconfig: (( configValues.kubeconfigs.seed ))
     files:
       - (( "renderedPluginSpecs[" id "].gardenlet/rendered_charts.yaml" ))
-    source: "git/repo/charts/gardener/gardenlet/charts/runtime"
+    source: "git/repo/charts/gardener/gardenlet"
     name: gardenlet
     namespace: garden
     values: (( gardenletSpec ))
