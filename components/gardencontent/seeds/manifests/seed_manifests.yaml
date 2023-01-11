@@ -36,7 +36,7 @@ secretManifests:
     namespace: (( configValues.namespace ))
   type: Opaque
   data:
-    <<: (( sum[(configValues.config.seedConfig.backup.credentials || configValues.config.credentials)|{}|ss,sk,sv|-> ss { sk = base64(sv) }] ))
+    <<: (( sum[(configValues.config.seedConfig.backup.credentials || configValues.config.credentials)|{}|ss,sk,sv|-> ss { sk = base64(string(sv)) }] ))
 - apiVersion: v1
   kind: Secret
   name: (( &temporary ( "bootstrap" ) ))
@@ -58,7 +58,7 @@ secretManifests:
     namespace: (( configValues.namespace ))
   type: Opaque
   data:
-    <<: (( sum[configValues.dns.credentials|{}|ss,sk,sv|-> ss { sk = base64(sv) }] ))
+    <<: (( sum[configValues.dns.credentials|{}|ss,sk,sv|-> ss { sk = base64(string(sv)) }] ))
 - <<: (( defined(configValues.monitoring.remoteWrite) ? ~ :~~ ))
   apiVersion: v1
   kind: Secret
