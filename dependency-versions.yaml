@@ -60,7 +60,7 @@
         },
         "runtime-gvisor": {
           "repo": "https://github.com/gardener/gardener-extension-runtime-gvisor.git",
-          "version": "v0.7.0"
+          "version": "v0.8.0"
         }
       }
     },
