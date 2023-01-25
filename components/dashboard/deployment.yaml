@@ -61,6 +61,7 @@ dashboard:
       oidc:
         issuerUrl: (( imports.identity.export.issuer_url ))
         ca: (( imports.cert-controller.export.ca.crt || ~~ ))
+        clientId: "dashboard"
         clientSecret: (( imports.identity.export.dashboardClientSecret ))
         public:
           clientId: kube-kubectl
