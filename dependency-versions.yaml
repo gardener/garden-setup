@@ -3,12 +3,12 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.60.3"
+        "version": "v1.61.5"
       },
       "extensions": {
         "networking-calico": {
           "repo": "https://github.com/gardener/gardener-extension-networking-calico.git",
-          "version": "v1.27.1"
+          "version": "v1.28.0"
         },
         "os-coreos": {
           "repo": "https://github.com/gardener/gardener-extension-os-coreos.git",
@@ -28,11 +28,11 @@
         },
         "provider-aws": {
           "repo": "https://github.com/gardener/gardener-extension-provider-aws.git",
-          "version": "v1.40.3"
+          "version": "v1.41.0"
         },
         "provider-azure": {
           "repo": "https://github.com/gardener/gardener-extension-provider-azure.git",
-          "version": "v1.32.0"
+          "version": "v1.33.0"
         },
         "provider-gcp": {
           "repo": "https://github.com/gardener/gardener-extension-provider-gcp.git",
@@ -48,26 +48,26 @@
         },
         "shoot-cert-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-cert-service.git",
-          "version": "v1.26.0"
+          "version": "v1.27.0"
         },
         "shoot-dns-service": {
           "repo": "https://github.com/gardener/gardener-extension-shoot-dns-service.git",
-          "version": "v1.27.0"
+          "version": "v1.28.1"
         },
         "provider-vsphere": {
           "repo": "https://github.com/gardener/gardener-extension-provider-vsphere.git",
-          "version": "v0.22.0"
+          "version": "v0.23.0"
         },
         "runtime-gvisor": {
           "repo": "https://github.com/gardener/gardener-extension-runtime-gvisor.git",
-          "version": "v0.7.0"
+          "version": "v0.8.0"
         }
       }
     },
     "dashboard": {
       "core": {
         "repo": "https://github.com/gardener/dashboard.git",
-        "version": "1.64.0"
+        "version": "1.66.0"
       },
       "identity": {
         "repo": "(( dashboard.core.repo ))",
@@ -76,13 +76,13 @@
       "terminals": {
         "terminal-controller-manager": {
           "repo": "https://github.com/gardener/terminal-controller-manager.git",
-          "version": "v0.22.0"
+          "version": "v0.23.0"
         }
       }
     },
     "dns-controller-manager": {
       "repo": "https://github.com/gardener/external-dns-management.git",
-      "version": "v0.14.1"
+      "version": "v0.14.2"
     }
   }
 }
