@@ -96,7 +96,7 @@ spec:
         - --etcd-servers={{ .Values.etcd.main.endpoints }}
         - --external-hostname={{ .Values.apiServer.externalHostname }}
 {{ if .Values.etcd.events.endpoints }}
-        - --etcd-servers-overrides=/events#{{ .Values.etcd.events.endpoints }}
+        - --etcd-servers-overrides=/events#{{ .Values.etcd.events.endpoints }},coordination.k8s.io/leases#{{ .Values.etcd.events.endpoints }}
 {{ end }}
         - --kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP
         - --insecure-port=0
