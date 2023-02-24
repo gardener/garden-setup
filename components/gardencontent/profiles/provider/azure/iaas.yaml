@@ -296,10 +296,10 @@ providerConfig:
   machineImages:
   - name: gardenlinux
     versions:
+    - urn: sap:gardenlinux:greatest:576.12.0
+      version: 576.12.0
     - urn: sap:gardenlinux:greatest:576.11.0
       version: 576.11.0
-    - urn: sap:gardenlinux:greatest:576.7.0
-      version: 576.7.0
   - name: ubuntu
     versions:
     - acceleratedNetworking: true
@@ -308,11 +308,11 @@ providerConfig:
   - name: suse-chost
     versions:
     - acceleratedNetworking: true
+      urn: suse:sles-15-sp4-chost-byos:gen1:2022.12.15
+      version: 15.4.20221215
+    - acceleratedNetworking: true
       urn: suse:sles-15-sp3-chost-byos:gen1:2022.04.11
       version: 15.3.20220411
-    - acceleratedNetworking: true
-      urn: suse:sles-15-sp3-chost-byos:gen1:2022.01.26
-      version: 15.3.20220126
   machineTypes:
     - acceleratedNetworking: true
       name: Standard_D4_v3
