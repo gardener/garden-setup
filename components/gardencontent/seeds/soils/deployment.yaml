@@ -25,7 +25,6 @@ pluginTemplate:
   - <<: (( &temporary &template ))
   - kubectl: (( "renderedPluginSpecs[" id "].deploySecrets" ))
   - parallel:
-    - <<: (( renderedPluginSpecs[id].managedIstioActive == true ? ~ :~~ ))
     - delete: (( "renderedPluginSpecs[" id "].deleteIstioIngressNamespace" ))
     - delete: (( "renderedPluginSpecs[" id "].deleteIstioSystemNamespace" ))
   - (( valid( renderedPluginSpecs[id].namespace ) ? { "kubectl" = "renderedPluginSpecs[" id "].namespace" } :~~ ))
