@@ -17,11 +17,28 @@ spec:
     rawWorkersConfig: (( &temporary ( values.values.config.shootMachines || {} ) ))
   kubernetes:
     version: (( values.values.k8sVersion ))
-    allowPrivilegedContainers: true # 'true' means that all authenticated users can use the "gardener.privileged" PodSecurityPolicy, allowing full unrestricted access to Pod features.
+    tmpBaseVersion: (( &temporary ( substr( values.values.k8sVersion, 0, 4 ) ) ))
+    allowPrivilegedContainers: (( tmpBaseVersion != "1.25" ? true :~~ ))
     verticalPodAutoscaler:
       enabled: true
     kubeAPIServer:
-      tmpBaseVersion: (( &temporary ( substr( values.values.k8sVersion, 0, 4 ) ) ))
+      admissionPlugins:
+      - <<: (( tmpBaseVersion == "1.25" ? ~ :~~ ))
+      - name: PodSecurity
+        config:
+          apiVersion: pod-security.admission.config.k8s.io/v1
+          kind: PodSecurityConfiguration
+          defaults:
+            enforce: "privileged"
+            enforce-version: "latest"
+            audit: "privileged"
+            audit-version: "latest"
+            warn: "privileged"
+            warn-version: "latest"
+          exemptions:
+            usernames: []
+            runtimeClasses: []
+            namespaces: []
     kubeControllerManager:
       horizontalPodAutoscaler:
         downscaleStabilization: 24h0m0s
