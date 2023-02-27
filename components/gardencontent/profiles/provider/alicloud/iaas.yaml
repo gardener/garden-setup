@@ -22,6 +22,66 @@ providerConfig:
   - name: gardenlinux
     versions:
     - regions:
+      - id: m-m5e5kbguje9tnswog4j1
+        name: cn-qingdao
+      - id: m-2ze1szvkdjxk226jkrg7
+        name: cn-beijing
+      - id: m-8vb4f0lj77iifm2sgn6x
+        name: cn-zhangjiakou
+      - id: m-hp35psbwgf9cw4de0qqj
+        name: cn-huhehaote
+      - id: m-0jl73kn1zl353yqeqaqz
+        name: cn-wulanchabu
+      - id: m-bp1iee3htb4ksieuo41o
+        name: cn-hangzhou
+      - id: m-uf66zblhrf134rewdxb0
+        name: cn-shanghai
+      - id: m-gc76jod5bn9we6mi1dzr
+        name: cn-nanjing
+      - id: m-wz98qsj38motlr9rb0g2
+        name: cn-shenzhen
+      - id: m-f8zbpzw3l1shu5usdfi8
+        name: cn-heyuan
+      - id: m-7xvineisc1crhpuoeqm7
+        name: cn-guangzhou
+      - id: m-gw0hrvw7kfqdwkr6hior
+        name: cn-fuzhou
+      - id: m-2vcfylu6disgate7tqme
+        name: cn-chengdu
+      - id: m-j6c1332sqszqmyopczmn
+        name: cn-hongkong
+      - id: m-6weavscqmkyi9klhuw18
+        name: ap-northeast-1
+      - id: m-mj7axplk5g8qnz482oul
+        name: ap-northeast-2
+      - id: m-t4nbu5o2i5z5izd8jiuj
+        name: ap-southeast-1
+      - id: m-p0w8bu89u8qcg9fs3lvs
+        name: ap-southeast-2
+      - id: m-8ps8j7jajxn8kh4rnpnv
+        name: ap-southeast-3
+      - id: m-5ts6dt01n6nzbjdlhdsu
+        name: ap-southeast-6
+      - id: m-k1a6hast4xw7g8glnqw3
+        name: ap-southeast-5
+      - id: m-a2dc1ba83thd8lwqzrc0
+        name: ap-south-1
+      - id: m-0jo8ln65w81aodovbsrx
+        name: ap-southeast-7
+      - id: m-0xieyz5c5djdbw4brdw1
+        name: us-east-1
+      - id: m-rj91l76sif4wch20afso
+        name: us-west-1
+      - id: m-d7oce0hkwx0v1250jc8o
+        name: eu-west-1
+      - id: m-eb351fo5koz1q11k5mu4
+        name: me-east-1
+      - id: m-l4vgv5rl7j1e63hfz2mp
+        name: me-central-1
+      - id: m-gw89j7a9ws9vr4mv25on
+        name: eu-central-1
+      version: 576.12.0
+    - regions:
       - id: m-m5e7x5x9wt8ojuuqw90u
         name: cn-qingdao
       - id: m-2ze3zigvzdzeqt53ovxx
@@ -81,62 +141,66 @@ providerConfig:
       - id: m-gw8bpyksj3c7libpt6cq
         name: eu-central-1
       version: 576.11.0
-    - regions:
-      - id: m-m5e7aiscik4rabcwx4fz
-        name: cn-qingdao
-      - id: m-2zehtz0jxwu34gev3sh2
-        name: cn-beijing
-      - id: m-8vb3utiuaoeehqkr4np9
-        name: cn-zhangjiakou
-      - id: m-hp3dvl4kw8kfbum87eyx
-        name: cn-huhehaote
-      - id: m-0jl4ray3d4znybk1j0tc
-        name: cn-wulanchabu
-      - id: m-bp14t8c66khuemk5u54p
-        name: cn-hangzhou
-      - id: m-uf6fupn2ry6xollho26r
-        name: cn-shanghai
-      - id: m-wz99qnoiwgmlg5wi0laf
-        name: cn-shenzhen
-      - id: m-f8zacjnvpijmwd9mv7qy
-        name: cn-heyuan
-      - id: m-7xv0xr6v5axprrqn8jsq
-        name: cn-guangzhou
-      - id: m-2vc3ur805jr42j423yvf
-        name: cn-chengdu
-      - id: m-j6ccocoeqphlwj8zqkf7
-        name: cn-hongkong
-      - id: m-6weh7vpbpxdmtdvp1osu
-        name: ap-northeast-1
-      - id: m-mj7apw595wewqu7n3s33
-        name: ap-northeast-2
-      - id: m-t4nehjno701ulflza54c
-        name: ap-southeast-1
-      - id: m-p0w11gmo6dioc029pcbc
-        name: ap-southeast-2
-      - id: m-8ps4hf4puk18x1ya2lje
-        name: ap-southeast-3
-      - id: m-5tsayo4c85w949ngmco3
-        name: ap-southeast-6
-      - id: m-k1a5608o0ttawm4u8sms
-        name: ap-southeast-5
-      - id: m-a2dfxgb4asri9xobwsq2
-        name: ap-south-1
-      - id: m-0xi54f4yez3dgagz1ftl
-        name: us-east-1
-      - id: m-rj9e4eponxs7ix0gicka
-        name: us-west-1
-      - id: m-d7o17ri87z8p1fzhz9f6
-        name: eu-west-1
-      - id: m-eb30a8xffkzgtx75ef5e
-        name: me-east-1
-      - id: m-gc7fh8uhktqyklxoy9qq
-        name: cn-nanjing
-      - id: m-gw8c0xubbgzol4shx1nk
-        name: eu-central-1
-      version: 576.7.0
   - name: suse-chost
     versions:
+    - regions:
+      - id: m-m5e82wzb5x0c9a4nlvnw
+        name: cn-qingdao
+      - id: m-2ze85vftf3uettyowety
+        name: cn-beijing
+      - id: m-8vbd5sje8iotqbyywhop
+        name: cn-zhangjiakou
+      - id: m-hp3hqou3jb4fvgmgsh2x
+        name: cn-huhehaote
+      - id: m-0jle2acx8y8u6wnm2ewn
+        name: cn-wulanchabu
+      - id: m-bp14z07dg3451y1d5aqi
+        name: cn-hangzhou
+      - id: m-uf6fw94i35tam5dq551y
+        name: cn-shanghai
+      - id: m-gc72ocyshbcuzwf64ovt
+        name: cn-nanjing
+      - id: m-wz96n3iikkawskaab53o
+        name: cn-shenzhen
+      - id: m-f8z6bxjx4obyvel930bs
+        name: cn-heyuan
+      - id: m-7xv39d1mm2mbhstzug0b
+        name: cn-guangzhou
+      - id: m-gw02ocyshbcuzwf64ovu
+        name: cn-fuzhou
+      - id: m-2vc0bqrkinh2t0kqjaeg
+        name: cn-chengdu
+      - id: m-j6cdy3378nifvmcr4q5n
+        name: cn-hongkong
+      - id: m-6we84mbluxc7qjruh5oz
+        name: ap-northeast-1
+      - id: m-mj7djef4a1g8lxp4gqgi
+        name: ap-northeast-2
+      - id: m-t4nc9f44bzp3kdrqycth
+        name: ap-southeast-1
+      - id: m-p0w1c64zl8nxce086l52
+        name: ap-southeast-2
+      - id: m-8ps5df36ty044vjmp53b
+        name: ap-southeast-3
+      - id: m-5tsj1yxloi3shrfjlulz
+        name: ap-southeast-6
+      - id: m-k1ac5mmdi5kdhgdeyjei
+        name: ap-southeast-5
+      - id: m-a2dcun47mahxmrb6q96k
+        name: ap-south-1
+      - id: m-0jod1und9ze8xgxq9zi4
+        name: ap-southeast-7
+      - id: m-0xigjdatfp32oj6isb43
+        name: us-east-1
+      - id: m-rj9bhd8xjxiwv45r7uu9
+        name: us-west-1
+      - id: m-d7obcztg6wgqt53tky1u
+        name: eu-west-1
+      - id: m-eb3jd06mcxv4r9z3y0cj
+        name: me-east-1
+      - id: m-gw8hm6kg77a3gdjydotl
+        name: eu-central-1
+      version: 15.4.20221215
     - regions:
       - id: m-6we95u9euuzkdborulpo
         name: ap-northeast-1
@@ -193,58 +257,6 @@ providerConfig:
       - id: m-rj91nkclfup1hdvvq9pu
         name: us-west-1
       version: 15.3.20220411
-    - regions:
-      - id: m-6weirxjv2yybfvmn1s38
-        name: ap-northeast-1
-      - id: m-a2d84tl84r7x7n5fz8ks
-        name: ap-south-1
-      - id: m-t4n01qvc3uijk4d3t7v9
-        name: ap-southeast-1
-      - id: m-p0wb72s792wiwx0orybl
-        name: ap-southeast-2
-      - id: m-8ps9tippq6zkb99i8zmr
-        name: ap-southeast-3
-      - id: m-k1a3myj9t5hgq6zn9tr0
-        name: ap-southeast-5
-      - id: m-5tsify3i9qmf381nzzw7
-        name: ap-southeast-6
-      - id: m-2zeg64ipjaz0nnl4ed1a
-        name: cn-beijing
-      - id: m-2vc8m76xr4p5n61csymo
-        name: cn-chengdu
-      - id: m-7xvdgoxh9f9wpjhmyfz3
-        name: cn-guangzhou
-      - id: m-bp116lrux5ws9f7nzaap
-        name: cn-hangzhou
-      - id: m-f8zaiz4qdu9if960qkmu
-        name: cn-heyuan
-      - id: m-j6cf4cxml194i4l94i4y
-        name: cn-hongkong
-      - id: m-hp308d9cobhqnk79iv59
-        name: cn-huhehaote
-      - id: m-gc7f991g40ljrzqi3yd8
-        name: cn-nanjing
-      - id: m-m5ebt0jncnu6tm1zhytb
-        name: cn-qingdao
-      - id: m-uf6azfd8576lvtd1tvpx
-        name: cn-shanghai
-      - id: m-wz94ixqackh1t5azjenq
-        name: cn-shenzhen
-      - id: m-0jlg4yrt9d8hnihisopq
-        name: cn-wulanchabu
-      - id: m-8vb2zqmrxexznvcc60xu
-        name: cn-zhangjiakou
-      - id: m-gw83fp2r07o9zrklrpph
-        name: eu-central-1
-      - id: m-d7ohro7rj9t2i18vio89
-        name: eu-west-1
-      - id: m-eb33589hbqpbnncg9yyh
-        name: me-east-1
-      - id: m-0xi7bf33rrl26n6lghx8
-        name: us-east-1
-      - id: m-rj9ful2e3wjlcf47nz2j
-        name: us-west-1
-      version: 15.3.20220126
   - name: ubuntu
     versions:
     - regions:

@@ -21,6 +21,46 @@ providerConfig:
   - name: gardenlinux
     versions:
     - regions:
+      - ami: ami-03a5b5ed7b8a2a466
+        name: cn-north-1
+      - ami: ami-05b3dd7abf504bf5d
+        name: cn-northwest-1
+      - ami: ami-04389fca41267b16d
+        name: eu-north-1
+      - ami: ami-008c1bfb23be42cc3
+        name: ap-south-1
+      - ami: ami-048c1548447d311e6
+        name: eu-west-3
+      - ami: ami-0c95dd47343787be5
+        name: eu-west-2
+      - ami: ami-02fe00c0afb75bbd3
+        name: eu-west-1
+      - ami: ami-0e83671cfc702ca8b
+        name: ap-northeast-3
+      - ami: ami-058a818dcd9b82eae
+        name: ap-northeast-2
+      - ami: ami-0baec4f8ef9b32963
+        name: ap-northeast-1
+      - ami: ami-00d1f5864677dfc69
+        name: sa-east-1
+      - ami: ami-08b04197b5c11f23d
+        name: ca-central-1
+      - ami: ami-0f6cc1b1450a68b61
+        name: ap-southeast-1
+      - ami: ami-05cc1c890c04e40b0
+        name: ap-southeast-2
+      - ami: ami-044d9400ad5c18502
+        name: us-east-1
+      - ami: ami-0b6c1e4a5a0f93df5
+        name: us-east-2
+      - ami: ami-011c23b86785d6993
+        name: us-west-1
+      - ami: ami-04671d3b52e7547b3
+        name: us-west-2
+      - ami: ami-04cc4a091b072bb3d
+        name: eu-central-1
+      version: 576.12.0
+    - regions:
       - ami: ami-0503ef76bc2bc5d6a
         name: eu-north-1
       - ami: ami-06106ccac73f00f18
@@ -56,44 +96,196 @@ providerConfig:
       - ami: ami-04af71f80061a34cc
         name: eu-central-1
       version: 576.11.0
-    - regions:
-      - ami: ami-0f05e0c0bdbbfb5ba
-        name: eu-north-1
-      - ami: ami-0acb838262a18e8b5
-        name: ap-south-1
-      - ami: ami-0f3c08aa3a40606d6
-        name: eu-west-3
-      - ami: ami-0793260990ef4df1f
-        name: eu-west-2
-      - ami: ami-01676b13f360d62d2
-        name: eu-west-1
-      - ami: ami-0e536b6950f8a4a0b
-        name: ap-northeast-3
-      - ami: ami-044d798118b9011f8
-        name: ap-northeast-2
-      - ami: ami-0220a5b93e5d5eca9
-        name: ap-northeast-1
-      - ami: ami-0c28cda827884990c
-        name: sa-east-1
-      - ami: ami-0e3861617b9cb8768
-        name: ca-central-1
-      - ami: ami-0833d77530455e0e5
-        name: ap-southeast-1
-      - ami: ami-02f4929c17a22d829
-        name: ap-southeast-2
-      - ami: ami-0fa6b0556b5005bae
-        name: us-east-1
-      - ami: ami-0f6da008b628b6fc6
-        name: us-east-2
-      - ami: ami-07594fc9570450806
-        name: us-west-1
-      - ami: ami-05b005fa8ab02b28f
-        name: us-west-2
-      - ami: ami-0b6f475046f5f3240
-        name: eu-central-1
-      version: 576.7.0
   - name: suse-chost
     versions:
+    - regions:
+      - ami: ami-0987205c22a3d804c
+        architecture: amd64
+        name: cn-north-1
+      - ami: ami-0931c1505068ca9fe
+        architecture: amd64
+        name: us-east-2
+      - ami: ami-0c4159fb70c04be0c
+        architecture: amd64
+        name: ap-northeast-3
+      - ami: ami-0fe00aed62764a276
+        architecture: amd64
+        name: eu-west-1
+      - ami: ami-017a8e2f656999bcf
+        architecture: amd64
+        name: ap-southeast-1
+      - ami: ami-05d298f57901531d0
+        architecture: amd64
+        name: ap-south-2
+      - ami: ami-052745676467af166
+        architecture: amd64
+        name: ap-northeast-2
+      - ami: ami-0d3b24849fd51b540
+        architecture: amd64
+        name: us-gov-east-1
+      - ami: ami-0557bc6de9590a284
+        architecture: amd64
+        name: eu-west-3
+      - ami: ami-0b1988244cc0d5fee
+        architecture: amd64
+        name: sa-east-1
+      - ami: ami-0ca6e7d9d5822c708
+        architecture: amd64
+        name: cn-northwest-1
+      - ami: ami-05c7f09f3a40ac887
+        architecture: amd64
+        name: eu-south-2
+      - ami: ami-09d2b8063b9638c01
+        architecture: amd64
+        name: ap-southeast-2
+      - ami: ami-0be9dfd9f6b8e0381
+        architecture: amd64
+        name: eu-central-1
+      - ami: ami-037a2e638c44cd695
+        architecture: amd64
+        name: us-west-2
+      - ami: ami-03e0ae031e518452e
+        architecture: amd64
+        name: eu-south-1
+      - ami: ami-040b4ad5f434495c3
+        architecture: amd64
+        name: ap-southeast-3
+      - ami: ami-07aae880ad882b4aa
+        architecture: amd64
+        name: eu-west-2
+      - ami: ami-014793cd19d7d90a3
+        architecture: amd64
+        name: us-gov-west-1
+      - ami: ami-0d0c2046996a28947
+        architecture: amd64
+        name: me-central-1
+      - ami: ami-0d9e17f0dab1aaec7
+        architecture: amd64
+        name: us-west-1
+      - ami: ami-00a966b51c68e1e8f
+        architecture: amd64
+        name: af-south-1
+      - ami: ami-014fa586c18e78286
+        architecture: amd64
+        name: ap-south-1
+      - ami: ami-0cf85339e997bf16f
+        architecture: amd64
+        name: ap-east-1
+      - ami: ami-0a62774d4d5e1b37f
+        architecture: amd64
+        name: me-south-1
+      - ami: ami-0f161df180e16fe56
+        architecture: amd64
+        name: eu-north-1
+      - ami: ami-0cee72bf86aaa8a92
+        architecture: amd64
+        name: eu-central-2
+      - ami: ami-098b2e0324b5cc1e8
+        architecture: amd64
+        name: ca-central-1
+      - ami: ami-0ecc99161639df3da
+        architecture: amd64
+        name: us-east-1
+      - ami: ami-04bfddf41d109c828
+        architecture: amd64
+        name: ap-northeast-1
+      - ami: ami-073c85c79922eef71
+        architecture: amd64
+        name: ap-southeast-4
+      - ami: ami-0d30a54779ff4912d
+        architecture: arm64
+        name: ap-southeast-2
+      - ami: ami-0faa3937cf0875aca
+        architecture: arm64
+        name: ap-southeast-1
+      - ami: ami-06057e32e0c1e7bb8
+        architecture: arm64
+        name: eu-west-3
+      - ami: ami-0bf6bc4f5123b10c5
+        architecture: arm64
+        name: sa-east-1
+      - ami: ami-070302ec8cc14b11f
+        architecture: arm64
+        name: ap-south-2
+      - ami: ami-08dd54f1e21bb79b7
+        architecture: arm64
+        name: ap-northeast-3
+      - ami: ami-0785ef6ab1865e619
+        architecture: arm64
+        name: eu-north-1
+      - ami: ami-05ef2408c99c86c11
+        architecture: arm64
+        name: cn-north-1
+      - ami: ami-0383ef26a4b7d06ae
+        architecture: arm64
+        name: us-gov-west-1
+      - ami: ami-079110206f877f098
+        architecture: arm64
+        name: me-central-1
+      - ami: ami-0cecca181407ff288
+        architecture: arm64
+        name: cn-northwest-1
+      - ami: ami-056a7a24732e922f8
+        architecture: arm64
+        name: ap-northeast-1
+      - ami: ami-0c061ef94e3ddd94b
+        architecture: arm64
+        name: eu-west-2
+      - ami: ami-06307feed7b9051fe
+        architecture: arm64
+        name: af-south-1
+      - ami: ami-08245f4b17f5f2e1e
+        architecture: arm64
+        name: eu-central-2
+      - ami: ami-064508bcee24e8231
+        architecture: arm64
+        name: eu-south-1
+      - ami: ami-01b2777eca6528a74
+        architecture: arm64
+        name: us-west-1
+      - ami: ami-025cc3f22560c04f1
+        architecture: arm64
+        name: ca-central-1
+      - ami: ami-0657ebe12cb831e19
+        architecture: arm64
+        name: us-west-2
+      - ami: ami-044eec80158578c44
+        architecture: arm64
+        name: us-east-2
+      - ami: ami-0ba00a279f8f88e24
+        architecture: arm64
+        name: ap-northeast-2
+      - ami: ami-0ad15e60fd70f95d9
+        architecture: arm64
+        name: me-south-1
+      - ami: ami-0e32423c7709a269e
+        architecture: arm64
+        name: us-east-1
+      - ami: ami-0ee95ba0ef632ed02
+        architecture: arm64
+        name: us-gov-east-1
+      - ami: ami-0b22e5a1ed149f60f
+        architecture: arm64
+        name: ap-southeast-3
+      - ami: ami-0a24e1f430285d742
+        architecture: arm64
+        name: eu-central-1
+      - ami: ami-0f8cbeda2454ecb88
+        architecture: arm64
+        name: eu-south-2
+      - ami: ami-09120ba55bde5c1fc
+        architecture: arm64
+        name: ap-east-1
+      - ami: ami-064b0d0c6d55cb1df
+        architecture: arm64
+        name: eu-west-1
+      - ami: ami-010a34767404d8c88
+        architecture: arm64
+        name: ap-south-1
+      - ami: ami-00184ec63bc2dfd8f
+        architecture: arm64
+        name: ap-southeast-4
+      version: 15.4.20221215
     - regions:
       - ami: ami-0e43b27395a4aae97
         name: eu-north-1
@@ -134,46 +326,6 @@ providerConfig:
       - ami: ami-0696da5ddf04aec00
         name: us-gov-east-1
       version: 15.3.20220411
-    - regions:
-      - ami: ami-09f83d6f9fd85332a
-        name: eu-north-1
-      - ami: ami-089f7c6e990c2b815
-        name: ap-south-1
-      - ami: ami-00d146c8773ead8a9
-        name: eu-west-3
-      - ami: ami-0eca868234be53e71
-        name: eu-west-2
-      - ami: ami-0dfc9d3f1f8611008
-        name: eu-west-1
-      - ami: ami-049829c26376327b6
-        name: ap-northeast-3
-      - ami: ami-0d660f678c2b2fa1d
-        name: ap-northeast-2
-      - ami: ami-0ad0d9b59dbdb6334
-        name: ap-northeast-1
-      - ami: ami-02a1afaa3361097f8
-        name: sa-east-1
-      - ami: ami-0681d57221f41e260
-        name: ca-central-1
-      - ami: ami-0b02a3a4ad5900f01
-        name: ap-southeast-1
-      - ami: ami-0719b7ca57c6204ee
-        name: ap-southeast-2
-      - ami: ami-03e8da90f43e98e15
-        name: eu-central-1
-      - ami: ami-029b9bac98b618b71
-        name: us-east-1
-      - ami: ami-0976b8be3db265cfd
-        name: us-east-2
-      - ami: ami-0f4a7ff0d21ae615a
-        name: us-west-1
-      - ami: ami-0a9d260a5733a5d00
-        name: us-west-2
-      - ami: ami-08362985c90bf753c
-        name: us-gov-west-1
-      - ami: ami-059c5924d74afbd58
-        name: us-gov-east-1
-      version: 15.3.20220126
   - name: ubuntu
     versions:
     - regions:

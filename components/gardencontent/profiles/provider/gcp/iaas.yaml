@@ -22,20 +22,21 @@ providerConfig:
   machineImages:
   - name: gardenlinux
     versions:
+    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-576-12-b10a46
+      version: 576.12.0
     - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-576-11-80ca44
       version: 576.11.0
-    - image: projects/sap-se-gcp-gardenlinux/global/images/gardenlinux-gcp-cloud-gardener--prod-576-7-7d3c7d
-      version: 576.7.0
   - name: ubuntu
     versions:
     - image: projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20210415
       version: 18.4.20210415
   - name: suse-chost
     versions:
+    - architecture: amd64
+      image: projects/suse-byos-cloud/global/images/sles-15-sp4-chost-byos-v20221215-x86-64
+      version: 15.4.20221215
     - image: projects/suse-byos-cloud/global/images/sles-15-sp3-chost-byos-v20220411-x86-64
       version: 15.3.20220411
-    - image: projects/suse-byos-cloud/global/images/sles-15-sp3-chost-byos-v20220126
-      version: 15.3.20220126
 
 machineTypes:
   - cpu: "2"

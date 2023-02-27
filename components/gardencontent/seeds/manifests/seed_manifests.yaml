@@ -228,8 +228,6 @@ gardenletSpec:
     kubernetesLogLevel: 0
     featureGates: 
       <<: (( configValues.config.featureGates || {} ))
-      ManagedIstio: (( pluginSpecs.managedIstioActive ))
-      APIServerSNI: (( configValues.config.featureGates.APIServerSNI || true ))
     seedConfig:
       metadata:
         name: (( configValues.name ))
@@ -251,7 +249,6 @@ monitoringTemplate:
       <<: (( configValues.monitoring.externalLabels || {} ))
 
 pluginSpecs:
-  managedIstioActive: (( configValues.config.featureGates.ManagedIstio || true ))
   deploySecrets:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     manifests: (( secretManifests ))
