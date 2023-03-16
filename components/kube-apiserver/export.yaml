@@ -31,6 +31,17 @@ temp:
     - garden-kubeconfig-for-admin
     - "-o"
     - "jsonpath={.data.kubeconfig}"
+  get_apiserver_deployment_command:
+    - kubectl
+    - --kubeconfig
+    - (( lookup_file(landscape.clusters.[0].kubeconfig, env.ROOTDIR).[0] ))
+    - "-n"
+    - (( landscape.namespace ))
+    - get
+    - deployment
+    - garden-kube-apiserver
+    - "-o"
+    - "jsonpath={.status}"
   get_k8s_version_command:
     - kubectl
     - --kubeconfig
@@ -38,6 +49,7 @@ temp:
     - version
     - -o
     - yaml
+  wait_for_readiness_and_get_k8s_version: (( sync[exec_uncached( temp.get_apiserver_deployment_command )|s|-> defined(s.readyReplicas) -and s.readyReplicas == 3, .temp.get_k8s_version_command] )) # dirty hack to ensure the apiserver is ready before trying to fetch its version
 
 export:
   gardener_dns: (( .settings.gardener_dns ))
@@ -47,7 +59,7 @@ export:
   kube_apiserver_ca: (( .state.kube_apiserver_ca.value ))
   kubeconfig: (( parse(base64_decode(exec( temp.get_kubeconfig_command ))) || "" ))
   kubeconfig_internal_merge_snippet: (( .files.kubeconfig_internal_merge_snippet.data ))
-  k8sVersion: (( ( "raw_version" = exec( temp.get_k8s_version_command ) ) raw_version.serverVersion.major "." raw_version.serverVersion.minor ))
+  k8sVersion: (( ( "serverVersion" = sync[exec_uncached( temp.wait_for_readiness_and_get_k8s_version )|v|-> defined(v.serverVersion), v.serverVersion] ) serverVersion.major "." serverVersion.minor ))
 
 files:
   kubeconfig:
