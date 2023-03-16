@@ -21,6 +21,8 @@ helm:
   source: "git/repo/charts/certificate-dns-bridge"
   name: certificate-dns-bridge
   namespace: (( imports.cert-controller.export.namespace ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values:
     groupName: (( imports.cert-controller.export.groupName ))
     solverName: (( imports.cert-controller.export.solverName ))

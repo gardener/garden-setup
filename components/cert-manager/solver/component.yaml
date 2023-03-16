@@ -4,6 +4,7 @@ component:
   imports:
     - dns-controller
     - cert-controller: cert-manager/controller
+    - k8sversion
 
   stubs: []
 

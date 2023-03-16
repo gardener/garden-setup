@@ -128,6 +128,8 @@ gardener:
   source: "git/repo/charts/gardener/controlplane/charts/application"
   name: "gardener"
   namespace: "garden"
+  flags:
+    deploy: (( "--kube-version=" .imports.kube_apiserver.export.k8sVersion ))
   values:
     global:
       apiserver:

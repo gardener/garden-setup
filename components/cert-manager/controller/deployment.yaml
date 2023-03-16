@@ -126,6 +126,8 @@ helm:
   source: "chart-checkout/charts/cert-manager"
   name: cert-manager
   namespace: (( .namespace.name ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values:
     image:
       repository: (( .landscape.versions.cert-manager.controller.image_repo || ~~ ))

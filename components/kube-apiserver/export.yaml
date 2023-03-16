@@ -20,7 +20,7 @@ env: (( &temporary ))
 
 temp:
   <<: (( &temporary ))
-  command:
+  get_kubeconfig_command:
     - kubectl
     - --kubeconfig
     - (( lookup_file(landscape.clusters.[0].kubeconfig, env.ROOTDIR).[0] ))
@@ -31,6 +31,13 @@ temp:
     - garden-kubeconfig-for-admin
     - "-o"
     - "jsonpath={.data.kubeconfig}"
+  get_k8s_version_command:
+    - kubectl
+    - --kubeconfig
+    - (( tempfile(asyaml(export.kubeconfig)) ))
+    - version
+    - -o
+    - yaml
 
 export:
   gardener_dns: (( .settings.gardener_dns ))
@@ -38,8 +45,9 @@ export:
   apiserver_url: (( "https://" apiserver_dns ))
   apiserver_url_internal: (( .settings.apiserver_url_internal ))
   kube_apiserver_ca: (( .state.kube_apiserver_ca.value ))
-  kubeconfig: (( parse(base64_decode(exec( temp.command ))) || "" ))
+  kubeconfig: (( parse(base64_decode(exec( temp.get_kubeconfig_command ))) || "" ))
   kubeconfig_internal_merge_snippet: (( .files.kubeconfig_internal_merge_snippet.data ))
+  k8sVersion: (( ( "raw_version" = exec( temp.get_k8s_version_command ) ) raw_version.serverVersion.major "." raw_version.serverVersion.minor ))
 
 files:
   kubeconfig:

@@ -19,6 +19,7 @@ component:
   imports:
     - (( landscape.etcd.backup.active ? { "backupinfra" = "etcd/backupinfra" } :~~ ))
     - namespace
+    - k8sversion
 
   stubs:
     - lib/templates/utilities.yaml

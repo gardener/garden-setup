@@ -64,3 +64,6 @@ providerconfig:
     shootDefaultNetworks: (( v.shootDefaultNetworks || ~~ ))
     settings: (( v.seedSettings || ~~ ))
   secretname: (( name "-" v.mode ))
+  cloudprofile: (( v.cloudprofile || v.name ))
+  k8sVersion: (( .imports.shoots.export.shoots[v.name].k8sVersion ))
+
