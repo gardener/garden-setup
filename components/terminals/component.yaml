@@ -19,4 +19,4 @@ component:
 git:
   <<: (( .landscape.versions.terminal-controller-manager ))
   files:
-    - config
+    - charts

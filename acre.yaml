@@ -203,6 +203,15 @@ landscape:
       # to overwrite:
       # set image_repo here (mandatory)
       # set image_tag here (defaults to latest, if image_repo is set and image_tag is not given)
+    terminal-image:
+      container:
+        <<: (( merge ))
+        image_tag: 0.22.0
+        image_repo: eu.gcr.io/gardener-project/gardener/ops-toolbelt
+      containerOperator:
+        <<: (( merge ))
+        image_tag: (( container.image_tag ))
+        image_repo: (( container.image_repo ))
     dns-controller-manager:
       <<: (( merge ))
       tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.dns-controller-manager.version ))

@@ -6,128 +6,91 @@ env: (( &temporary ))
 
 plugins:
   - pinned:
-    - kustomize: kustomize.virtual.render
-    - kubectl: kustomize.virtual.apply
+    - helm:
+      - terminals.virtual
+      - template
+    - kubectl: terminals.virtual
   - pinned:
-    - kubectl: kubectl_sa # create serviceaccount and clusterrole
-    - create_kubeconfig_secret: kcfg_admin # create secret manifest for admin kubeconfig
-    - create_kubeconfig_secret: kcfg_sa # create secret manifest for sa kubeconfig (directly overrides checked-out charts)
-    - kubectl: kubectl_admin_kubeconfig # apply admin kubeconfig secret
-  - pinned:
-    - kustomize-edit: kustomize.runtime.edit-tcm-image
-    - (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? { "kustomize-edit" = "kustomize.runtime.edit-rbac-image" } :~~ ))
-    - kustomize: kustomize.runtime.render
-    - kubectl: kustomize.runtime.apply
+    - helm:
+      - terminals.runtime
+      - template
+    - kubectl: terminals.runtime
 
-kcfg_admin:
-  name: (( settings.kubeconfig_secret_name ))
-  namespace: (( .landscape.namespace ))
-  kubeconfig_path: (( .settings.kubeconfig_path ))
-
-kcfg_sa:
-  name: kubeconfig
-  namespace: terminal-system
-  kubeconfig_path: (( .settings.kubeconfig_secret_path_sa ))
-  write_to: (( .settings.repo_path "/config/overlay/multi-cluster/runtime/manager/kubeconfig-secret.yaml" ))
-  server: (( .imports.kube-apiserver.export.apiserver_url_internal ))
-
-kubectl_sa:
-  kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
-  manifests:
-    - apiVersion: v1
-      kind: ServiceAccount
-      metadata:
-        name: terminal-controller-manager
-        namespace: terminal-system
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRole
-      metadata:
-        name: dashboard.gardener.cloud:system:project-member
-        labels:
-          rbac.gardener.cloud/aggregate-to-project-member: "true"
-      rules:
-      - apiGroups:
-        - dashboard.gardener.cloud
-        resources:
-        - terminals
-        verbs:
-        - create
-        - delete
-        - deletecollection
-        - get
-        - list
-        - patch
-        - update
-        - watch
-
-kubectl_admin_kubeconfig:
-  kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
-  files:
-    - (( .settings.kubeconfig_secret_path_admin ))
-
-kustomize:
+terminals:
+  common:
+    values:
+      global:
+        admission:
+          config:
+            server:
+              webhooks:
+                caBundle: (( .state.ca.value.cert ))
+                tls:
+                  crt: (( .state.cert.value.cert ))
+                  key: (( .state.cert.value.key ))
+        controller:
+          serviceAccountName: terminal-controller-manager
+          manager:
+            image:
+              repository: (( .landscape.versions.terminal-controller-manager.image_repo || ~~ ))
+              tag: (( .landscape.versions.terminal-controller-manager.image_tag || ~~ ))
+              pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
+            kubeconfig: (( asyaml(.imports.kube-apiserver.export.kubeconfig) ))
+          kubeRBACProxy:
+            image:
+              repository: (( .landscape.versions.terminal-kube-rbac-proxy.image_repo || ~~ ))
+              tag: (( .landscape.versions.terminal-kube-rbac-proxy.image_tag || ~~ ))
+              pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
+            kubeconfig: (( asyaml(.kube-rbac-proxy.kubeconfig) ))
+        deployment:
+          virtualGarden:
+            enabled: true
+          createNamespace: true
+          createCRD: true
   virtual:
-    render:
-      path: (( .settings.repo_path ))
-      kustomization: "config/overlay/multi-cluster/virtual-garden"
-    apply:
-      kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
-      files:
-        - (( env.GENDIR "/kustomize.virtual.render/manifest.yaml" ))
+    kubeconfig: (( .imports.kube-apiserver.export.kubeconfig ))
+    files:
+      - "terminals.virtual/rendered_charts.yaml"
+    source: "git/repo/charts/terminal/charts/application"
+    name: "terminals"
+    namespace: (( .settings.namespace ))
+    values: (( common.values ))
   runtime:
-    edit-tcm-image:
-      path: (( .settings.repo_path ))
-      kustomization: "config/manager"
-      args:
-        - set
-        - image
-        - (( "controller=" .landscape.versions.terminal-controller-manager.image_repo ":" ( .landscape.versions.terminal-controller-manager.image_tag || "latest" ) ))
-    edit-rbac-image:
-      path: (( env.GENDIR "/kustomize.runtime.edit-tcm-image/edit" ))
-      kustomization: "config/default"
-      args:
-        - set
-        - image
-        - (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? ( "quay.io/brancz/kube-rbac-proxy=" .landscape.versions.terminal-kube-rbac-proxy.image_repo ":" ( .landscape.versions.terminal-kube-rbac-proxy.image_tag || "latest" ) ) :~~ ))
-    render:
-      path: (( valid( .landscape.versions.terminal-kube-rbac-proxy.image_repo ) ? env.GENDIR "/kustomize.runtime.edit-rbac-image/edit" :env.GENDIR "/kustomize.runtime.edit-tcm-image/edit" ))
-      kustomization: "config/overlay/multi-cluster/runtime"
-    apply:
-      kubeconfig: (( .landscape.clusters[0].kubeconfig ))
-      files:
-        - (( env.GENDIR "/kustomize.runtime.render/manifest.yaml" ))
+    kubeconfig: (( landscape.clusters.[0].kubeconfig ))
+    files:
+      - "terminals.runtime/rendered_charts.yaml"
+    source: "git/repo/charts/terminal/charts/runtime"
+    name: "terminals"
+    namespace: (( .settings.namespace ))
+    values: (( common.values ))
+
+kube-rbac-proxy:
+  template:
+    <<: (( &template(merge) ))
+    users:
+    - name: (( stub() ))
+      user:
+        tokenfile: "/var/run/secrets/projected/serviceaccount/token"
+  kubeconfig: (( merge(template, read(lookup_file(landscape.clusters.[0].kubeconfig, env.ROOTDIR).[0], "yaml")) ))
 
 settings:
   namespace: terminal-system                                                                              # terminal controller manager namespace
-  kubeconfig_secret_name: garden-kubeconfig-for-admin                                                     # name of admin kubeconfig secret
-  kubeconfig_path: (( env.GENDIR "/" kubeconfig_secret_name ".kubeconfig" ))                              # path to admin kubeconfig
-  kubeconfig_secret_path_sa: (( env.GENDIR "/kubectl_sa/sa_terminal-controller-manager.kubeconfig" ))     # path to secret manifest for sa kubeconfig
-  kubeconfig_secret_path_admin: (( env.GENDIR "/kcfg_admin/secret_" kubeconfig_secret_name ".yaml" ))     # path to secret manifest for admin kubeconfig
-  repo_path: (( env.GENDIR "/git/repo" ))                                                                 # path to checked-out git repo for easy access
-  cert_path: (( repo_path "/config/secret/tls" ))                                                         # path to tls folder in checked-out git repo
-
-writefiles:
-  <<: (( &temporary ))
-  admin_kubeconfig: (( write( .settings.kubeconfig_path, .imports.kube-apiserver.export.kubeconfig ) )) # 'copy' admin kubeconfig to GENDIR
-  cert:
-    crt: (( write( .settings.cert_path "/terminal-controller-manager-tls.pem", .state.cert.value.cert ) ))
-    key: (( write( .settings.cert_path "/terminal-controller-manager-tls-key.pem", .state.cert.value.key ) ))
 
 spec:
   <<: (( &temporary ))
   cert:
-    commonName: "terminal-webhook-service.terminal-system.svc.cluster.local"
+    commonName: "terminal-admission-controller.terminal-system.svc.cluster.local"
     validity: 87600
     usage:
       - ServerAuth
       - ClientAuth
       - KeyEncipherment
     hosts:
-      - "terminal-webhook-service"
-      - "terminal-webhook-service.terminal-system"
-      - "terminal-webhook-service.terminal-system.svc"
-      - "terminal-webhook-service.terminal-system.svc.cluster"
-      - "terminal-webhook-service.terminal-system.svc.cluster.local"
+      - "terminal-admission-controller"
+      - "terminal-admission-controller.terminal-system"
+      - "terminal-admission-controller.terminal-system.svc"
+      - "terminal-admission-controller.terminal-system.svc.cluster"
+      - "terminal-admission-controller.terminal-system.svc.cluster.local"
 
 state:
   <<: (( &state(merge none) ))
