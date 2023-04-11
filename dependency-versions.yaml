@@ -3,7 +3,7 @@
     "gardener": {
       "core": {
         "repo": "https://github.com/gardener/gardener.git",
-        "version": "v1.65.2"
+        "version": "v1.66.2"
       },
       "extensions": {
         "networking-calico": {
