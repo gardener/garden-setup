@@ -10,10 +10,10 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          component: terminal-manager
+          app.kubernetes.io/name: terminal
       podSelector:
         matchLabels:
-          component: terminal-manager
+          app.kubernetes.io/name: terminal
   podSelector:
     matchLabels:
       networking.gardener.cloud/to-terminal-controller-manager: allowed
