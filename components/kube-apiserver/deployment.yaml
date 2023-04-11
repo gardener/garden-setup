@@ -104,6 +104,8 @@ kubeapiserver:
   name: "garden-kube-apiserver"
   namespace: (( .landscape.namespace ))
   serviceName: (( name ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values:
     images:
       apiserver: (( .landscape.versions.kube-apiserver.image_repo ":" .landscape.versions.kube-apiserver.image_tag ))

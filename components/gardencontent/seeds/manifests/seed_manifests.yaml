@@ -258,6 +258,8 @@ pluginSpecs:
     source: "git/repo/charts/gardener/gardenlet"
     name: gardenlet
     namespace: garden
+    flags:
+      deploy: (( "--kube-version=" configValues.k8sVersion ))
     values: (( gardenletSpec ))
   seedReady:
     kubeconfig: (( configValues.kubeconfigs.virtual ))

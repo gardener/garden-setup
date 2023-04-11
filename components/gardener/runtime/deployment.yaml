@@ -82,6 +82,8 @@ gardener:
   values: (( merge(.imports.gardener_virtual.export.gardener.values, spec) ))
   name: gardener
   namespace: (( landscape.namespace ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   spec:
     global:
       apiserver:

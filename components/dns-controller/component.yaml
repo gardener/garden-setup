@@ -15,6 +15,9 @@
 ---
 landscape: (( &temporary ))
 component:
+  imports:
+  - k8sversion
+
   stubs:
     - plugins/kubectl/utilities.yaml
 

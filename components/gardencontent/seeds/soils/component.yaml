@@ -22,6 +22,7 @@ component:
     - gardener_runtime: gardener/extensions
     - ingress_dns: ingress-controller
     - kube_apiserver: kube-apiserver
+    - k8sversion
 
   stubs:
     - plugins/kubectl/utilities.yaml

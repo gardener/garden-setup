@@ -7,6 +7,7 @@ component:
     - grafana: monitoring/grafana
     - kube-apiserver
     - namespace
+    - k8sversion
 
   plugins:
     - git

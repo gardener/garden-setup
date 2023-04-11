@@ -76,5 +76,6 @@ providerconfig:
     settings: (( v.seedSettings || ~~ ))
   secretname: (( name "-" v.mode ))
   monitoring: (( landscape.monitoring ))
+  k8sVersion: (( .imports.k8sversion.export.k8sVersions.soils[v.name] ))
 
 renderedPluginSpecs: (( sum[.iaasSeedsSoils|[]|s,id,v|-> s [ ( "configValues" = *providerconfig ) read( __ctx.DIR "/../manifests/seed_manifests.yaml", "yaml" ).pluginSpecs ]] ))

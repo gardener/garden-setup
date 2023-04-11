@@ -64,6 +64,8 @@ identity:
   source: "git/repo/charts/identity"
   name: "identity"
   namespace: (( .landscape.namespace ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values:
     image:
       repository: (( .identity_version.image_repo || ~~ ))

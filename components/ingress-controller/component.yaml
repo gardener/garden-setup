@@ -17,6 +17,7 @@ landscape: (( &temporary ))
 component:
   imports:
     - dns-controller
+    - k8sversion
   
   plugins:
     - git
