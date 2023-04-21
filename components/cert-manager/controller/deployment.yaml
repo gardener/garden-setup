@@ -4,14 +4,12 @@ landscape: (( &temporary ))
 utilities: (( &temporary ))
 
 settings:
-  groupName: cert-bridge.gardener.cloud
-  solverName: certificate-dns-bridge
   namespace: cert-manager # will be created - don't choose an existing one!
-  serviceAccountName: cert-manager
   self-signed: (( .caSpec.url == "self-signed" ))
   issuerName: (( .settings.self-signed ? "ca-issuer" :"acme-issuer" ))
   issuerPrivateKey: (( .settings.self-signed -or (! valid( .landscape.cert-manager.privateKey ) ) ? ~ :.landscape.cert-manager.privateKey ))
   caSecret: "self-signed-ca"
+  certClass: "garden-setup"
   ca:
     given: (( &temporary ( valid( .caSpec.ca.crt ) -and ( ( ! .settings.self-signed ) -or valid( .caSpec.ca.key ) ) ) )) # a given CA needs crt and key for self-signed mode
     crt: (( given ? .caSpec.ca.crt :( .state.ca.value.cert || ~~ ) ))
@@ -31,9 +29,8 @@ plugins:
       - helm
       - template
     - kubectl: helm
-  - webhookready
-  - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
   - kubectl: issuer
+  - -echo: (( .settings.self-signed ? ( .settings.ca.given ? "Using provided CA" :"Using self-signed CA" ) :"Using ACME server at " .caSpec.url ))
 
 namespace:
   name: (( settings.namespace ))
@@ -42,13 +39,7 @@ namespace:
     - apiVersion: v1
       kind: Namespace
       metadata:
-        labels:
-          cert-manager.io/disable-validation: "true"
         name: (( .namespace.name ))
-
-webhookready:
-  kubeconfig: (( .landscape.clusters.[0].kubeconfig ))
-  namespace: (( .settings.namespace ))
 
 issuer: (( .settings.self-signed ? *ca_issuer :*acme_issuer ))
 
@@ -61,32 +52,26 @@ issuer-secret:
       name: (( settings.issuerName "-secret" ))
       namespace: (( .settings.namespace ))
     data:
-      tls.key: (( base64(settings.issuerPrivateKey) ))
+      privateKey: (( base64(settings.issuerPrivateKey) ))
 
 acme_issuer:
   <<: (( &template &temporary ))
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   manifests:
     - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :~ ))
-    - apiVersion: cert-manager.io/v1
-      kind: ClusterIssuer
+    - apiVersion: cert.gardener.cloud/v1alpha1
+      kind: Issuer
       metadata:
-        name: (( settings.issuerName ))
+        name: (( .settings.issuerName ))
+        namespace: (( .settings.namespace ))
       spec:
         acme:
           server: (( .caSpec.url ))
           email: (( .landscape.cert-manager.email || .landscape.identity.users[0].email ))
+          autoRegistration: (( ! valid( .settings.issuerPrivateKey ) ))
           privateKeySecretRef:
-            name: (( settings.issuerName "-secret" ))
-          solvers:
-            - dns01:
-                webhook:
-                  groupName: (( settings.groupName ))
-                  solverName: (( settings.solverName ))
-                  config:
-                    dns-class: (( .imports.dns-controller.export.dns-class ))
-                    namespace: (( .imports.dns-controller.export.namespace ))
-                    ttl: (( .landscape.defaultTTL ))
+            name: (( .settings.issuerName "-secret" ))
+            namespace: (( .settings.namespace ))
 
 ca_issuer:
   <<: (( &template &temporary ))
@@ -101,13 +86,16 @@ ca_issuer:
       data:
         tls.crt: (( base64( .settings.ca.crt ) ))
         tls.key: (( base64( .settings.ca.key ) ))
-    - apiVersion: cert-manager.io/v1
-      kind: ClusterIssuer
+    - apiVersion: cert.gardener.cloud/v1alpha1
+      kind: Issuer
       metadata:
-        name: (( settings.issuerName ))
+        name: (( .settings.issuerName ))
+        namespace: (( .settings.namespace ))
       spec:
         ca:
-          secretName: (( .settings.caSecret ))
+          privateKeySecretRef:
+            name: (( .settings.caSecret ))
+            namespace: (( .settings.namespace ))
 
 
 servers:
@@ -123,7 +111,7 @@ helm:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   files:
     - "helm/rendered_charts.yaml"
-  source: "chart-checkout/charts/cert-manager"
+  source: "git/repo/charts/cert-management"
   name: cert-manager
   namespace: (( .namespace.name ))
   flags:
@@ -132,18 +120,15 @@ helm:
     image:
       repository: (( .landscape.versions.cert-manager.controller.image_repo || ~~ ))
       tag: (( .landscape.versions.cert-manager.controller.image_tag || ~~ ))
-    cainjector:
-      image:
-        repository: (( .landscape.versions.cert-manager.cainjector.image_repo || ~~ ))
-        tag: (( .landscape.versions.cert-manager.cainjector.image_tag || ~~ ))
-    webhook:
-      image:
-        repository: (( .landscape.versions.cert-manager.webhook.image_repo || ~~ ))
-        tag: (( .landscape.versions.cert-manager.webhook.image_tag || ~~ ))
-    serviceAccount:
-      create: true
-      name: (( .settings.serviceAccountName ))
-    installCRDs: true
+    createCRDs:
+      issuers: true
+      certificates: true
+    configuration:
+      dnsClass: (( .imports.dns-controller.export.dns-class ))
+      dnsNamespace: (( .settings.namespace ))
+      certClass: (( .settings.certClass ))
+      defaultIssuer: (( .settings.issuerName ))
+      issuerNamespace: (( .settings.namespace ))
 
 state:
   <<: (( &state(merge none) ))

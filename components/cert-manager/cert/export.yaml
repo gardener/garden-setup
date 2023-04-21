@@ -12,12 +12,11 @@ wait_for_certificate:
     - "-n"
     - (( .settings.certificate.namespace ))
     - "get"
-    - "certificate.cert-manager.io"
+    - "certificates.cert.gardener.cloud"
     - (( .settings.certificate.name ))
     - "-o"
     - "json"
-  result: (( sync( exec_uncached( check_command ), defined( value.status.conditions[0].status ) -and value.status.conditions[0].status == "True", value, 600 ) ))
-  b64dall: (( |x|-> sum[x|{}|s,k,v|-> s {k=base64_decode(v)}] ))
+  result: (( sync( exec_uncached( check_command ), defined( value.status.state ) -and value.status.state == "Ready", value, 600 ) ))
 
 export:
   <<: (( .settings ))

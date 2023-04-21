@@ -107,3 +107,4 @@ spec:
       kubeconfigId: (( .landscape.name ))
       controllers: "dnssources,compound"
       ttl: (( .landscape.dns.ttl || ~~ ))
+      disableNamespaceRestriction: true

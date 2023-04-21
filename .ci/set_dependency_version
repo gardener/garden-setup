@@ -54,6 +54,8 @@ elif dep_name == 'github.com/gardener/terminal-controller-manager':
     set_dep_version(dep_version, 'versions', 'dashboard', 'terminals', 'terminal-controller-manager', 'version')
 elif dep_name == 'github.com/gardener/external-dns-management':
     set_dep_version(dep_version, 'versions', 'dns-controller-manager', 'version')
+elif dep_name == 'github.com/gardener/cert-management':
+    set_dep_version(dep_version, 'versions', 'cert-management', 'version')
 elif dep_name == 'github.com/gardener/sow':
     with sow_version_file.open(mode='w') as f:
         f.write(dep_version)
