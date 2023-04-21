@@ -24,6 +24,7 @@ component:
     - cert: cert-manager/cert
     - cert-controller: cert-manager/controller
     - dns-controller
+    - k8sversion
     - (( ( .landscape.gardener.network-policies.active || false ) ? "network-policies" :~~ ))
     - (( ( .landscape.dashboard.terminals.active || false ) ? "terminals" :~~ ))
 

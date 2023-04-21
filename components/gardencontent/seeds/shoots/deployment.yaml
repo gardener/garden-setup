@@ -65,5 +65,6 @@ shoot_template:
   <<: (( &template &temporary ))
   name: (( e.metadata.name ))
   namespace: (( e.metadata.namespace ))
+  k8sVersion: (( e.spec.kubernetes.version ))
 
 shoots: (( sum[.kubectl.[*].manifests[0]|[]|s,e|-> s *.shoot_template] ))

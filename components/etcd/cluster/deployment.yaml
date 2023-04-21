@@ -81,6 +81,8 @@ etcd:
     source: chart
     name: garden-etcd-main
     namespace: (( .landscape.namespace ))
+    flags:
+      deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
     values:
       name: (( main.name ))
       replicas: 1
@@ -121,6 +123,8 @@ etcd:
     source: chart
     name: garden-etcd-events
     namespace: (( .landscape.namespace ))
+    flags:
+      deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
     values:
       name: (( events.name ))
       replicas: 1

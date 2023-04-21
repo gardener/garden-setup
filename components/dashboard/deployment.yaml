@@ -41,6 +41,8 @@ dashboard:
   source: "git/repo/charts/gardener-dashboard"
   name: "dashboard"
   namespace: (( .landscape.namespace ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values:
     global:
       apiServerUrl: (( imports.kube_apiserver.export.apiserver_url ))

@@ -19,6 +19,7 @@ component:
     - gardener_virtual: gardener/virtual
     - kube_apiserver: "kube-apiserver"
     - namespace
+    - k8sversion
 
   stubs:
     - plugins/kubectl/utilities.yaml

@@ -221,20 +221,10 @@ landscape:
     cert-manager:
       controller:
         <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :helm_tag )) # only used for CRDs
-        repo: "https://github.com/jetstack/cert-manager.git"
-        helm_repo: "https://charts.jetstack.io"
-        helm_tag: "v1.8.1"
-      cainjector:
-        <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
+        tag: (( valid( branch ) -or valid( commit ) ? ~~ :.dependency_versions.versions.cert-management.version ))
         image_tag: (( valid( tag ) ? tag :~~ ))
         image_repo: (( ~~ ))
-      webhook:
-        <<: (( merge ))
-        tag: (( valid( branch ) -or valid( commit ) ? ~~ :cert-manager.controller.helm_tag ))
-        image_tag: (( valid( tag ) ? tag :~~ ))
-        image_repo: (( ~~ ))
+        repo: (( .dependency_versions.versions.cert-management.repo ))
       cert-dns-bridge:
         <<: (( merge ))
         tag: (( valid( branch ) -or valid( commit ) ? ~~ :"2.1.0" ))

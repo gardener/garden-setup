@@ -19,6 +19,7 @@ component:
     - ingress-controller
     - namespace
     - cert: cert-manager/cert
+    - k8sversion
 
   stubs:
     - lib/templates/utilities.yaml

@@ -1,7 +1,6 @@
 ---
 component:
   imports:
-    - cert-manager/solver
     - cert-controller: cert-manager/controller
     - namespace
     - ingress-controller

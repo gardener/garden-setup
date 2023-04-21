@@ -42,6 +42,8 @@ helm:
   source: "git/repo/charts/external-dns-management"
   name: (( settings.fullname ))
   namespace: (( .spec.common.namespace ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values: (( .spec.helm ))
 
 kubectl:
@@ -105,3 +107,4 @@ spec:
       kubeconfigId: (( .landscape.name ))
       controllers: "dnssources,compound"
       ttl: (( .landscape.dns.ttl || ~~ ))
+      disableNamespaceRestriction: true

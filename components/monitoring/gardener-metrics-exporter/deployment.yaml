@@ -71,6 +71,8 @@ helm:
   source: "git/repo/charts/gardener-metrics-exporter"
   name: gardener-metrics-exporter
   namespace: (( .landscape.namespace ))
+  flags:
+    deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values:
     image:
       repository: (( .landscape.versions.monitoring.gardener-metrics-exporter.image_repo || ~~ ))

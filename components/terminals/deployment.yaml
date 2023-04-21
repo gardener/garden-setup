@@ -54,6 +54,8 @@ terminals:
     source: "git/repo/charts/terminal/charts/application"
     name: "terminals"
     namespace: (( .settings.namespace ))
+    flags:
+      deploy: (( "--kube-version=" .imports.kube-apiserver.export.k8sVersion ))
     values: (( common.values ))
   runtime:
     kubeconfig: (( landscape.clusters.[0].kubeconfig ))
@@ -62,6 +64,8 @@ terminals:
     source: "git/repo/charts/terminal/charts/runtime"
     name: "terminals"
     namespace: (( .settings.namespace ))
+    flags:
+      deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
     values: (( common.values ))
 
 kube-rbac-proxy:
