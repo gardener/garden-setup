@@ -38,6 +38,8 @@ ${ADD_DEPENDENCIES_CMD} \
     --component-dependencies \
     '{"name": "github.com/gardener/external-dns-management", "version": "'$(jq -r ".versions[\"dns-controller-manager\"].version" <<< $DEP_VERSIONS)'"}' \
     --component-dependencies \
+    '{"name": "github.com/gardener/cert-management", "version": "'$(jq -r ".versions[\"cert-management\"].version" <<< $DEP_VERSIONS)'"}' \
+    --component-dependencies \
     '{"name": "github.com/gardener/sow", "version": "'$SOW_VERSION'"}' \
     --container-image-dependencies \
     '{"image_reference": "eu.gcr.io/gardener-project/sow:'$SOW_VERSION'", "version": "'$SOW_VERSION'", "name": "sow"}'

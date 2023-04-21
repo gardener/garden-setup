@@ -12,9 +12,9 @@ component:
     - lib/templates/state.yaml
 
   plugins:
-    - chart-checkout
+    - git
 
-chart-checkout:
-  repo: (( landscape.versions.cert-manager.controller.helm_repo ))
-  name: cert-manager
-  version: (( landscape.versions.cert-manager.controller.helm_tag ))
+git:
+  <<: (( landscape.versions.cert-manager.controller ))
+  files:
+    - charts
