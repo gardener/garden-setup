@@ -21,30 +21,7 @@ metadata:
   labels:
     app: etcd
 data:
-  bootstrap.sh: |-
-    #!/bin/sh
-    if [ ! -d /var/etcd/data/new.etcd ]; then
-        mkdir /var/etcd/data/new.etcd
-    fi
-
-    while true;
-    do
-      wget http://localhost:8080/initialization/status -S -O status;
-      STATUS=`cat status`;
-      case $STATUS in
-      "New")
-            wget http://localhost:8080/initialization/start -S -O - ;;
-      "Progress")
-            sleep 1;
-            continue;;
-      "Failed")
-            continue;;
-      "Successful")
-            exec etcd --config-file /bootstrap/etcd.conf.yml
-            ;;
-      esac;
-    done
-  etcd.conf.yml: |-
+  etcd.conf.yaml: |-
       # This is the configuration file for the etcd server.
 
       # Human-readable name for this member.
@@ -52,16 +29,16 @@ data:
 
       client-transport-security:
         # Path to the client server TLS cert file.
-        cert-file: /var/etcd/ssl/server/tls.crt
+        cert-file: /var/etcd/ssl/client/server/tls.crt
 
         # Path to the client server TLS key file.
-        key-file: /var/etcd/ssl/server/tls.key
+        key-file: /var/etcd/ssl/client/server/tls.key
 
         # Enable client cert authentication.
         client-cert-auth: true
 
         # Path to the client server TLS trusted CA cert file.
-        trusted-ca-file: /var/etcd/ssl/ca/ca.crt
+        trusted-ca-file: /var/etcd/ssl/client/ca/bundle.crt
 
         # Client TLS using generated certificates
         auto-tls: false
@@ -81,6 +58,9 @@ data:
 
       # Initial cluster state ('new' or 'existing').
       initial-cluster-state: 'new'
+
+      # Initial cluster
+      initial-cluster: {{ .Values.name }}-0=https://{{ .Values.name }}.garden.svc:2380
 
       # Number of committed transactions to trigger a snapshot to disk.
       snapshot-count: 75000

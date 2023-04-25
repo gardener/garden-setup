@@ -50,28 +50,26 @@ spec:
         image: {{ index .Values.images "etcd" }}
         imagePullPolicy: IfNotPresent
         command:
-        - /bootstrap/bootstrap.sh
+        - /var/etcd/bin/bootstrap.sh
+        env:
+        - name: ENABLE_TLS
+          value: "true"
+        - name: BACKUP_ENDPOINT
+          value: https://{{ .Values.name }}:8080
         readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 8080
-          initialDelaySeconds: 15
-          periodSeconds: 5
-        livenessProbe:
           exec:
             command:
             - /bin/sh
             - -ec
             - ETCDCTL_API=3
             - etcdctl
-            - --cert=/var/etcd/ssl/client/tls.crt
-            - --key=/var/etcd/ssl/client/tls.key
-            - --cacert=/var/etcd/ssl/ca/ca.crt
+            - --cacert=/var/etcd/ssl/client/ca/bundle.crt
+            - --cert=/var/etcd/ssl/client/client/tls.crt
+            - --key=/var/etcd/ssl/client/client/tls.key
             - --endpoints=https://{{ .Values.name }}-0:2379
             - get
             - foo
-          initialDelaySeconds: 15
-          periodSeconds: 5
+            - --consistency=l
         ports:
         - containerPort: 2380
           name: serverport
@@ -90,13 +88,13 @@ spec:
         - name: {{ .Values.name }}
           mountPath: /var/etcd/data
         - name: etcd-bootstrap
-          mountPath: /bootstrap
-        - name: ca-etcd
-          mountPath: /var/etcd/ssl/ca
-        - name: etcd-server-tls
-          mountPath: /var/etcd/ssl/server
-        - name: etcd-client-tls
-          mountPath: /var/etcd/ssl/client
+          mountPath: /var/etcd/config
+        - name: client-url-ca-etcd
+          mountPath: /var/etcd/ssl/client/ca
+        - name: client-url-etcd-server-tls
+          mountPath: /var/etcd/ssl/client/server
+        - name: client-url-etcd-client-tls
+          mountPath: /var/etcd/ssl/client/client
       - name: backup-restore
         command:
         - etcdbrctl
@@ -106,9 +104,9 @@ spec:
         - --data-dir=/var/etcd/data/new.etcd
         - --storage-provider={{ .Values.backup.storageProvider }}
         - --store-prefix={{ .Values.name }}
-        - --cert=/var/etcd/ssl/client/tls.crt
-        - --key=/var/etcd/ssl/client/tls.key
-        - --cacert=/var/etcd/ssl/ca/ca.crt
+        - --cert=/var/etcd/ssl/client/client/tls.crt
+        - --key=/var/etcd/ssl/client/client/tls.key
+        - --cacert=/var/etcd/ssl/client/ca/ca.crt
         - --insecure-transport=false
         - --insecure-skip-tls-verify=false
         - --endpoints=https://{{ .Values.name }}-0:2379
@@ -130,16 +128,28 @@ spec:
         env:
         - name: STORAGE_CONTAINER
           value: {{ .Values.backup.storageContainer }}
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
 {{- if .Values.backup.env }}
 {{ toYaml .Values.backup.env | indent 8 }}
 {{- end }}
         volumeMounts:
         - name: {{ .Values.name }}
           mountPath: /var/etcd/data
-        - name: ca-etcd
-          mountPath: /var/etcd/ssl/ca
-        - name: etcd-client-tls
-          mountPath: /var/etcd/ssl/client
+        - name: etcd-bootstrap
+          mountPath: /var/etcd/config
+        - name: client-url-ca-etcd
+          mountPath: /var/etcd/ssl/client/ca
+        - name: client-url-etcd-client-tls
+          mountPath: /var/etcd/ssl/client/client
 {{- if .Values.backup.volumeMounts }}
 {{ toYaml .Values.backup.volumeMounts | indent 8 }}
 {{- end }}
@@ -148,13 +158,13 @@ spec:
         configMap:
           name: {{ .Values.name }}-bootstrap
           defaultMode: 356
-      - name: etcd-server-tls
+      - name: client-url-etcd-server-tls
         secret:
           secretName: {{ .Values.name }}-server
-      - name: etcd-client-tls
+      - name: client-url-etcd-client-tls
         secret:
           secretName: {{ .Values.name }}-client
-      - name: ca-etcd
+      - name: client-url-ca-etcd
         secret:
           secretName: {{ .Values.name }}-ca
 {{- if .Values.backup.storageProvider }}

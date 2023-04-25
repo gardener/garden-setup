@@ -33,11 +33,11 @@ landscape:
       image_tag: (( kube-apiserver.image_tag ))
     etcd:
       etcd:
-        image_repo: quay.io/coreos/etcd
-        image_tag: "v3.3.13"
+        image_repo: eu.gcr.io/gardener-project/gardener/etcd
+        image_tag: "v3.4.13-bootstrap-10"
       backup_restore:
         image_repo: eu.gcr.io/gardener-project/gardener/etcdbrctl
-        image_tag: "v0.15.1"
+        image_tag: "v0.23.0"
     gardener:
       <<: (( merge ))
       repo: "https://github.com/gardener/gardener.git"

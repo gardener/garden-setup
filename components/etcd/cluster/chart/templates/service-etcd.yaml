@@ -31,3 +31,11 @@ spec:
     protocol: TCP
     port: 2379
     targetPort: 2379
+  - name: server
+    port: 2380
+    protocol: TCP
+    targetPort: 2380
+  - name: backuprestore
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
