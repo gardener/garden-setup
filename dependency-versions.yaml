@@ -82,7 +82,7 @@
     },
     "dns-controller-manager": {
       "repo": "https://github.com/gardener/external-dns-management.git",
-      "version": "v0.15.2"
+      "version": "v0.15.8"
     },
     "cert-management": {
       "repo": "https://github.com/gardener/cert-management.git",
