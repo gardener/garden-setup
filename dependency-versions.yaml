@@ -86,7 +86,7 @@
     },
     "cert-management": {
       "repo": "https://github.com/gardener/cert-management.git",
-      "version": "v0.10.4"
+      "version": "v0.10.10"
     }
   }
 }
