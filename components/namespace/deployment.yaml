@@ -26,3 +26,16 @@ kubectl:
       metadata:
         labels:
         name: (( .landscape.namespace ))
+    - apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      metadata:
+        name: (( ( .landscape.gardener.network-policies.active || false ) ? "allow-all-ingress" :"allow-all" ))
+        namespace: (( .landscape.namespace ))
+      spec:
+        egress: (( ( .landscape.gardener.network-policies.active || false ) ? ~~ :[{}] ))
+        ingress:
+        - {}
+        podSelector: {}
+        policyTypes:
+        - Ingress
+        - (( ( .landscape.gardener.network-policies.active || false ) ? ~~ :"Egress" ))

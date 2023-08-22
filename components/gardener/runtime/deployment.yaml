@@ -20,43 +20,40 @@ utilities: (( &temporary ))
 spec:
   <<: (( &temporary ))
   kubeconfig: (( imports.kube_apiserver.export.kubeconfig ))
-  apiserver_secret: (( utilities.kubectl.getField(kubeconfig,"sa","gardener-apiserver","{.secrets[0].name}") ))
 
-  apiserver_token: (( base64_decode( utilities.kubectl.getField( kubeconfig, "secret", apiserver_secret, "{.data.token}")) ))
-  controller_secret: (( utilities.kubectl.getField(kubeconfig,"sa","gardener-controller-manager", "{.secrets[0].name}") ))
-  controller_token: (( base64_decode( utilities.kubectl.getField( kubeconfig, "secret", controller_secret, "{.data.token}")) ))
-  cluster_endpoint: (( imports.kube_apiserver.export.apiserver_url_internal ))
-  apiserver_ca: (( base64( imports.kube_apiserver.export.kube_apiserver_ca.cert ) ))
+  apiserver:
+    username: (( imports.gardener_virtual.export.gardener.values.global.apiserver.serviceAccountName ))
+    secret: (( utilities.kubectl.getField(kubeconfig, "sa", username, "{.secrets[0].name}") ))
+    token: (( base64_decode( utilities.kubectl.getField(kubeconfig, "secret", secret, "{.data.token}")) ))
+    apiServerUrl: (( imports.kube_apiserver.export.apiserver_url_internal ))
+    cacert: (( imports.kube_apiserver.export.kube_apiserver_ca.cert ))
 
-kubeconfig_scheme:
-  <<: (( &temporary &template ))
-  apiVersion: v1
-  kind: Config
-  current-context: cluster
-  contexts:
-  - context:
-      cluster: cluster
-      user: (( username ))
-    name: cluster
-  clusters:
-  - cluster:
-      certificate-authority-data: (( .spec.apiserver_ca ))
-      server: (( .spec.cluster_endpoint ))
-    name: cluster
-  users:
-  - name: (( username ))
-    user:
-      token: (( usertoken ))
+  controller:
+    username: (( imports.gardener_virtual.export.gardener.values.global.controller.serviceAccountName ))
+    secret: (( utilities.kubectl.getField(kubeconfig, "sa", username, "{.secrets[0].name}") ))
+    token: (( base64_decode( utilities.kubectl.getField(kubeconfig, "secret", secret, "{.data.token}")) ))
+    apiServerUrl: (( imports.kube_apiserver.export.apiserver_url_internal ))
+    cacert: (( imports.kube_apiserver.export.kube_apiserver_ca.cert ))
+
+  admission:
+    username: (( imports.gardener_virtual.export.gardener.values.global.admission.serviceAccountName ))
+    secret: (( utilities.kubectl.getField(kubeconfig, "sa", username, "{.secrets[0].name}") ))
+    token: (( base64_decode( utilities.kubectl.getField(kubeconfig, "secret", secret, "{.data.token}")) ))
+    apiServerUrl: (( imports.kube_apiserver.export.apiserver_url_internal ))
+    cacert: (( imports.kube_apiserver.export.kube_apiserver_ca.cert ))
+
+  scheduler:
+    username: (( imports.gardener_virtual.export.gardener.values.global.scheduler.serviceAccountName ))
+    secret: (( utilities.kubectl.getField(kubeconfig, "sa", username, "{.secrets[0].name}") ))
+    token: (( base64_decode( utilities.kubectl.getField(kubeconfig, "secret", secret, "{.data.token}")) ))
+    apiServerUrl: (( imports.kube_apiserver.export.apiserver_url_internal ))
+    cacert: (( imports.kube_apiserver.export.kube_apiserver_ca.cert ))
 
 kubeconfigs:
-  apiserver:
-    username: (( &temporary ( "gardener-apiserver" ) ))
-    usertoken: (( &temporary ( .spec.apiserver_token ) ))
-    config: (( *kubeconfig_scheme ))
-  controller:
-    username: (( &temporary ( "gardener-controller-manager" ) ))
-    usertoken: (( &temporary ( .spec.controller_token ) ))
-    config: (( *kubeconfig_scheme ))
+  apiserver: (( utilities.kubectl.kubeconfig(spec.apiserver) ))
+  controller: (( utilities.kubectl.kubeconfig(spec.controller) ))
+  admission: (( utilities.kubectl.kubeconfig(spec.admission) ))
+  scheduler: (( utilities.kubectl.kubeconfig(spec.scheduler) ))
 
 plugins:
   - pinned:
@@ -87,6 +84,10 @@ gardener:
   spec:
     global:
       apiserver:
-        kubeconfig: (( asjson(.kubeconfigs.apiserver.config) ))
+        kubeconfig: (( asjson(.kubeconfigs.apiserver) ))
       controller:
-        kubeconfig: (( asjson(.kubeconfigs.controller.config) ))
+        kubeconfig: (( asjson(.kubeconfigs.controller) ))
+      admission:
+        kubeconfig: (( asjson(.kubeconfigs.admission) ))
+      scheduler:
+        kubeconfig: (( asjson(.kubeconfigs.scheduler) ))

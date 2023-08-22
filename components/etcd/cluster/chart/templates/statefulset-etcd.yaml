@@ -44,6 +44,10 @@ spec:
       labels:
         app: {{ .Values.name }}
         component: etcd
+        networking.gardener.cloud/to-world: allowed
+        networking.gardener.cloud/to-inside: allowed
+        networking.gardener.cloud/to-gardener-apiserver: allowed
+        networking.gardener.cloud/to-dns: allowed
     spec:
       containers:
       - name: etcd

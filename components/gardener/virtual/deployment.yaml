@@ -83,7 +83,7 @@ garden_secret:
         name: garden-secret-runtime
         namespace: (( .landscape.namespace ))
         labels:
-            runtime: garden
+          runtime: garden
         annotations:
           clusterName: (( .landscape.name ))
       type: Opaque
@@ -123,6 +123,14 @@ default_resources:
       cpu: 50m
       memory: 50Mi
 
+netpol_labels:
+  networking.gardener.cloud/to-dns: allowed
+  networking.gardener.cloud/to-etcd: allowed
+  networking.gardener.cloud/to-inside: allowed
+  networking.gardener.cloud/to-gardener-apiserver: allowed
+  networking.gardener.cloud/to-gardener-controller-manager: allowed
+  networking.gardener.cloud/to-identity: allowed
+
 gardener:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   source: "git/repo/charts/gardener/controlplane/charts/application"
@@ -158,6 +166,7 @@ gardener:
           crt: (( .state.gardener_apiserver.value.cert ))
           key: (( .state.gardener_apiserver.value.key ))
         versionPriority: 20
+        podLabels: (( .netpol_labels ))
       admission:
         enabled: true
         replicaCount: 3
@@ -184,6 +193,7 @@ gardener:
                 crt: (( .state.gardener_admission_controller.value.cert ))
                 key: (( .state.gardener_admission_controller.value.key ))
           resourceAdmissionConfiguration: (( .landscape.gardener.resourceAdmissionConfiguration || ~~ ))
+        podLabels: (( .netpol_labels ))
       controller:
         kubeconfig: dummy
         additionalVolumeMounts: []
@@ -248,6 +258,7 @@ gardener:
         replicaCount: 1
         resources: (( merge( default_resources.controller, ( landscape.gardener.resources.controller || {} ) ) ))
         serviceAccountName: gardener-controller-manager
+        podLabels: (( .netpol_labels ))
       scheduler:
         image:
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
@@ -261,7 +272,9 @@ gardener:
               retrySyncPeriod: 15s
               concurrentSyncs: 5
               candidateDeterminationStrategy: (( .settings.seedCandidateDeterminationStrategy ))
-        # kubeconfig: is only needed for the runtime chart and will be added in export step
+        enabled: true
+        kubeconfig: dummy
+        podLabels: (( .netpol_labels ))
       defaultDomains:
         - credentials: (( .settings.dns_credentials ))
           domain: (( defined( .landscape.gardener.shootDomainPrefix ) ? .landscape.gardener.shootDomainPrefix "." .landscape.domain :"shoot." .landscape.domain ))
