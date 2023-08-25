@@ -26,8 +26,8 @@ cert:
         annotations:
           cert.gardener.cloud/class: (( imports.cert-controller.export.certClass ))
       spec:
-        commonName: (( .settings.certificate.domains[0] ))
-        dnsNames: (( .settings.certificate.domains[1..] ))
+        commonName: (( "dummy." imports.ingress-controller.export.ingress_domain ))
+        dnsNames: (( .settings.certificate.domains ))
         secretRef:
           name: (( .settings.certificate.secret_name ))
           namespace: (( .settings.certificate.namespace ))
