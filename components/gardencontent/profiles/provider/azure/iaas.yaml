@@ -15,453 +15,6231 @@
 <<: (( &template ))
 
 machineTypes:
-  - cpu: "2"
-    gpu: "0"
-    memory: 8Gi
-    name: Standard_D2_v3
-    usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 16Gi
-    name: Standard_D4_v3
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 32Gi
-    name: Standard_D8_v3
-    usable: true
-  - cpu: "16"
-    gpu: "0"
-    memory: 64Gi
-    name: Standard_D16_v3
-    usable: true
-  - cpu: "32"
-    gpu: "0"
-    memory: 128Gi
-    name: Standard_D32_v3
-    usable: true
-  - cpu: "2"
-    gpu: "0"
-    memory: 8Gi
-    name: Standard_D2s_v3
-    usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 16Gi
-    name: Standard_D4s_v3
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 32Gi
-    name: Standard_D8s_v3
-    usable: true
-  - cpu: "16"
-    gpu: "0"
-    memory: 64Gi
-    name: Standard_D16s_v3
-    usable: true
-  - cpu: "32"
-    gpu: "0"
-    memory: 128Gi
-    name: Standard_D32s_v3
-    usable: true
-  - cpu: "2"
-    gpu: "0"
-    memory: 7Gi
-    name: Standard_DS2_v2
-    usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 14Gi
-    name: Standard_DS3_v2
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 28Gi
-    name: Standard_DS4_v2
-    usable: true
-  - cpu: "16"
-    gpu: "0"
-    memory: 56Gi
-    name: Standard_DS5_v2
-    usable: true
-  - cpu: "1"
-    gpu: "0"
-    memory: 2Gi
-    name: Standard_F1s
-    usable: true
-  - cpu: "2"
-    gpu: "0"
-    memory: 4Gi
-    name: Standard_F2s
-    usable: true
-  - cpu: "4"
-    gpu: "0"
-    memory: 8Gi
-    name: Standard_F4s
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 16Gi
-    name: Standard_F8s
-    usable: true
-  - cpu: "16"
-    gpu: "0"
-    memory: 32Gi
-    name: Standard_F16s
-    usable: true
-  - cpu: "8"
-    gpu: "0"
-    memory: 16Gi
-    name: Standard_F8s_v2
-    usable: true
-  - cpu: "16"
-    gpu: "0"
-    memory: 32Gi
-    name: Standard_F16s_v2
-    usable: true
-  - cpu: "32"
-    gpu: "0"
-    memory: 64Gi
-    name: Standard_F32s_v2
-    usable: true
-  - cpu: "64"
-    gpu: "0"
-    memory: 128Gi
-    name: Standard_F64s_v2
-    usable: true
-  - cpu: "32"
-    gpu: "0"
-    memory: 256Gi
-    name: Standard_M32ls
-    usable: true
-  - cpu: "32"
-    gpu: "0"
-    memory: 875Gi
-    name: Standard_M32ms
-    usable: true
-  - cpu: "64"
-    gpu: "0"
-    memory: 512Gi
-    name: Standard_M64ls
-    usable: true
-  - cpu: "64"
-    gpu: "0"
-    memory: 1Ti
-    name: Standard_M64s
-    usable: true
-  - cpu: "128"
-    gpu: "0"
-    memory: 2Ti
-    name: Standard_M128
-    usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_A4_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 7Gi
+  name: Basic_A3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 14Gi
+  name: Basic_A4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_A2_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_A2m_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 7Gi
+  name: Standard_A3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_A4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_A4m_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_A5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_A6
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_A7
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_A8_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_A8m_v2
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "0"
+  memory: 48Gi
+  name: Standard_B12ms
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_B16als_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_B16as_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_B16ls_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_B16ms
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_B16pls_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_B16ps_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_B16s_v2
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 80Gi
+  name: Standard_B20ms
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_B2als_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_B2as_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_B2ls_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_B2ms
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_B2pls_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_B2ps_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_B2s
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_B2s_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_B32als_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_B32as_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_B32ls_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_B32s_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_B4als_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_B4as_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_B4ls_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_B4ms
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_B4pls_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_B4ps_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_B4s_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_B8als_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_B8as_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_B8ls_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_B8ms
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_B8pls_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_B8ps_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_B8s_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_D11
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_D11_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_D11_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_D12
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_D12_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_D12_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_D13
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_D13_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_D13_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_D14
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_D14_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_D14_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 140Gi
+  name: Standard_D15_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16a_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16as_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16as_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16d_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16d_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D16lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D16ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D16plds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D16pls_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16s_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16s_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D16s_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 7Gi
+  name: Standard_D2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 7Gi
+  name: Standard_D2_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 7Gi
+  name: Standard_D2_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2_v3
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2a_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2as_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2as_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2d_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2d_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_D2lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_D2ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_D2plds_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_D2pls_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2s_v3
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2s_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D2s_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_D3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32a_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32as_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32as_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32d_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32d_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D32lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D32ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D32plds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_D32pls_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32s_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D32s_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_D3_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_D3_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_D4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48a_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48as_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48as_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48d_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48d_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 96Gi
+  name: Standard_D48lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 96Gi
+  name: Standard_D48ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 96Gi
+  name: Standard_D48plds_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 96Gi
+  name: Standard_D48pls_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48s_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48s_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D48s_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_D4_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_D4_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4a_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4as_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4as_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4d_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4d_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D4lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D4ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D4plds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_D4pls_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4s_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4s_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D4s_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_D5_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_D5_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64a_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64as_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64as_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64d_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64d_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D64lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D64ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 208Gi
+  name: Standard_D64pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D64plds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_D64pls_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 208Gi
+  name: Standard_D64ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64s_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64s_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_D64s_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8a_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8as_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8as_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8d_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8d_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D8lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D8ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D8plds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_D8pls_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8s_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8s_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_D8s_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96a_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96as_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96as_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96d_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D96lds_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_D96ls_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_D96s_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_DC16ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_DC16ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_DC16as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_DC16as_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_DC16ds_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_DC16s_v3
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_DC24ds_v3
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_DC24s_v3
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_DC2ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_DC2as_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC2ds_v3
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_DC2s
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_DC2s_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC2s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_DC32ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_DC32ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_DC32as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_DC32as_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_DC32ds_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_DC32s_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_DC48ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_DC48ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_DC48as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_DC48as_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_DC48ds_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_DC48s_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC4ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC4ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC4as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC4as_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_DC4ds_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC4s
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_DC4s_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_DC4s_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_DC64ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_DC64ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_DC64as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_DC64as_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_DC8_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_DC8ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_DC8ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_DC8as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_DC8as_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_DC8ds_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_DC8s_v3
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_DC96ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_DC96ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_DC96as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_DC96as_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_DS11
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_DS11-1_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_DS11_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_DS11_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS12
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS12-1_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS12-2_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS12_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS12_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_DS13
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_DS13-2_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_DS13-4_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_DS13_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_DS13_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_DS14
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_DS14-4_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_DS14-8_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_DS14_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_DS14_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 140Gi
+  name: Standard_DS15_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 7Gi
+  name: Standard_DS2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 7Gi
+  name: Standard_DS2_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 7Gi
+  name: Standard_DS2_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_DS3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_DS3_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 14Gi
+  name: Standard_DS3_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS4_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_DS4_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_DS5_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_DS5_v2_Promo
+  usable: true
+- architecture: amd64
+  cpu: "104"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E104i_v5
+  usable: true
+- architecture: amd64
+  cpu: "104"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E104id_v5
+  usable: true
+- architecture: amd64
+  cpu: "104"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E104ids_v5
+  usable: true
+- architecture: amd64
+  cpu: "104"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E104is_v5
+  usable: true
+- architecture: amd64
+  cpu: "112"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E112iads_v5
+  usable: true
+- architecture: amd64
+  cpu: "112"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E112ias_v5
+  usable: true
+- architecture: amd64
+  cpu: "112"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E112ibds_v5
+  usable: true
+- architecture: amd64
+  cpu: "112"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E112ibs_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4as_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4as_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4s_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4s_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-4s_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8as_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8as_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8s_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8s_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16-8s_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16a_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16as_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16as_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16d_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16d_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16s_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16s_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_E16s_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20_v3
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20_v4
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20a_v4
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20as_v4
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20as_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20d_v4
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20d_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20s_v3
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20s_v4
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_E20s_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2_v3
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2a_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2as_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2as_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2d_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2d_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2s_v3
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2s_v4
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_E2s_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16as_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16as_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16s_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-16s_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8as_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8as_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8s_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32-8s_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32a_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32as_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32as_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32d_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32d_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 208Gi
+  name: Standard_E32pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 208Gi
+  name: Standard_E32ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32s_v4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_E32s_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2as_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2as_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2s_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2s_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4-2s_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48a_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48as_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48as_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48d_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48d_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48s_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48s_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_E48s_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4a_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4as_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4as_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4d_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4d_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4s_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4s_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_E4s_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-16ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-16as_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-16as_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64-16ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-16ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 432Gi
+  name: Standard_E64-16s_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64-16s_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-16s_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-32ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-32as_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-32as_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64-32ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-32ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 432Gi
+  name: Standard_E64-32s_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64-32s_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64-32s_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 432Gi
+  name: Standard_E64_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64a_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64as_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64as_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64d_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64d_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 432Gi
+  name: Standard_E64i_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 432Gi
+  name: Standard_E64is_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 432Gi
+  name: Standard_E64s_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E64s_v4
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_E64s_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2as_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2as_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2s_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2s_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-2s_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4as_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4as_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4s_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4s_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8-4s_v5
+  usable: true
+- architecture: amd64
+  cpu: "80"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E80ids_v4
+  usable: true
+- architecture: amd64
+  cpu: "80"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_E80is_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8a_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8as_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8as_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8d_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8d_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8ds_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8pds_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8ps_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8s_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8s_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_E8s_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-24ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-24as_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-24as_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-24ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-24s_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-48ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-48as_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-48as_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-48ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96-48s_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96a_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96as_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96as_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96bds_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96bs_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96d_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96ds_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96ias_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_E96s_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_EC16ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_EC16ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_EC16as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_EC16as_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_EC20ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_EC20ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_EC20as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "0"
+  memory: 160Gi
+  name: Standard_EC20as_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_EC2ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_EC2as_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_EC32ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_EC32ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_EC32as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_EC32as_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_EC48ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_EC48ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_EC48as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_EC48as_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_EC4ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_EC4ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_EC4as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_EC4as_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_EC64ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_EC64ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_EC64as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_EC64as_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_EC8ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_EC8ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_EC8as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_EC8as_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_EC96ads_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_EC96ads_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_EC96as_cc_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_EC96as_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_EC96iads_v5
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "0"
+  memory: 672Gi
+  name: Standard_EC96ias_v5
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_F16
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_F16s
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_F16s_v2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_F2
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_F2s
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 4Gi
+  name: Standard_F2s_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_F32s_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_F4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 96Gi
+  name: Standard_F48s_v2
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_F4s
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 8Gi
+  name: Standard_F4s_v2
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_F64s_v2
+  usable: true
+- architecture: amd64
+  cpu: "72"
+  gpu: "0"
+  memory: 144Gi
+  name: Standard_F72s_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_F8
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_F8s
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 16Gi
+  name: Standard_F8s_v2
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "0"
+  memory: 252Gi
+  name: Standard_FX12mds
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "0"
+  memory: 504Gi
+  name: Standard_FX24mds
+  usable: true
+- architecture: amd64
+  cpu: "36"
+  gpu: "0"
+  memory: 756Gi
+  name: Standard_FX36mds
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 1008Gi
+  name: Standard_FX48mds
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 84Gi
+  name: Standard_FX4mds
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_G1
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_G2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_G3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 224Gi
+  name: Standard_G4
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_G5
+  usable: true
+- architecture: amd64
+  cpu: "2"
+  gpu: "0"
+  memory: 28Gi
+  name: Standard_GS1
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 56Gi
+  name: Standard_GS2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_GS3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 224Gi
+  name: Standard_GS4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 224Gi
+  name: Standard_GS4-4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 224Gi
+  name: Standard_GS4-8
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_GS5
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_GS5-16
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_GS5-8
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 456Gi
+  name: Standard_HB120-16rs_v2
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_HB120-16rs_v3
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 456Gi
+  name: Standard_HB120-32rs_v2
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_HB120-32rs_v3
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 456Gi
+  name: Standard_HB120-64rs_v2
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_HB120-64rs_v3
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 456Gi
+  name: Standard_HB120-96rs_v2
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_HB120-96rs_v3
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 456Gi
+  name: Standard_HB120rs_v2
+  usable: true
+- architecture: amd64
+  cpu: "120"
+  gpu: "0"
+  memory: 448Gi
+  name: Standard_HB120rs_v3
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 704Gi
+  name: Standard_HB176-144rs_v4
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 704Gi
+  name: Standard_HB176-24rs_v4
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 704Gi
+  name: Standard_HB176-48rs_v4
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 704Gi
+  name: Standard_HB176-96rs_v4
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 704Gi
+  name: Standard_HB176rs_v4
+  usable: true
+- architecture: amd64
+  cpu: "60"
+  gpu: "0"
+  memory: 228Gi
+  name: Standard_HB60-15rs
+  usable: true
+- architecture: amd64
+  cpu: "60"
+  gpu: "0"
+  memory: 228Gi
+  name: Standard_HB60-30rs
+  usable: true
+- architecture: amd64
+  cpu: "60"
+  gpu: "0"
+  memory: 228Gi
+  name: Standard_HB60-45rs
+  usable: true
+- architecture: amd64
+  cpu: "60"
+  gpu: "0"
+  memory: 228Gi
+  name: Standard_HB60rs
+  usable: true
+- architecture: amd64
+  cpu: "44"
+  gpu: "0"
+  memory: 352Gi
+  name: Standard_HC44-16rs
+  usable: true
+- architecture: amd64
+  cpu: "44"
+  gpu: "0"
+  memory: 352Gi
+  name: Standard_HC44-32rs
+  usable: true
+- architecture: amd64
+  cpu: "44"
+  gpu: "0"
+  memory: 352Gi
+  name: Standard_HC44rs
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 1472Gi
+  name: Standard_HX176-144rs
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 1472Gi
+  name: Standard_HX176-24rs
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 1472Gi
+  name: Standard_HX176-48rs
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 1472Gi
+  name: Standard_HX176-96rs
+  usable: true
+- architecture: amd64
+  cpu: "176"
+  gpu: "0"
+  memory: 1472Gi
+  name: Standard_HX176rs
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_L16as_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_L16s
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_L16s_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 128Gi
+  name: Standard_L16s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_L32as_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_L32s
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_L32s_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_L32s_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_L48as_v3
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_L48s_v2
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "0"
+  memory: 384Gi
+  name: Standard_L48s_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "0"
+  memory: 32Gi
+  name: Standard_L4s
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_L64as_v3
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_L64s_v2
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_L64s_v3
+  usable: true
+- architecture: amd64
+  cpu: "80"
+  gpu: "0"
+  memory: 640Gi
+  name: Standard_L80as_v3
+  usable: true
+- architecture: amd64
+  cpu: "80"
+  gpu: "0"
+  memory: 640Gi
+  name: Standard_L80s_v2
+  usable: true
+- architecture: amd64
+  cpu: "80"
+  gpu: "0"
+  memory: 640Gi
+  name: Standard_L80s_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_L8as_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_L8s
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_L8s_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 64Gi
+  name: Standard_L8s_v3
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 2000Gi
+  name: Standard_M128
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 3800Gi
+  name: Standard_M128-32ms
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 3800Gi
+  name: Standard_M128-64ms
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 3892Gi
+  name: Standard_M128dms_v2
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 2Ti
+  name: Standard_M128ds_v2
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 3800Gi
+  name: Standard_M128m
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 3800Gi
+  name: Standard_M128ms
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 3892Gi
+  name: Standard_M128ms_v2
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 2000Gi
+  name: Standard_M128s
+  usable: true
+- architecture: amd64
+  cpu: "128"
+  gpu: "0"
+  memory: 2Ti
+  name: Standard_M128s_v2
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 448000Mi
+  name: Standard_M16-4ms
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 448000Mi
+  name: Standard_M16-8ms
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "0"
+  memory: 448000Mi
+  name: Standard_M16ms
+  usable: true
+- architecture: amd64
+  cpu: "192"
+  gpu: "0"
+  memory: 4Ti
+  name: Standard_M192idms_v2
+  usable: true
+- architecture: amd64
+  cpu: "192"
+  gpu: "0"
+  memory: 2Ti
+  name: Standard_M192ids_v2
+  usable: true
+- architecture: amd64
+  cpu: "192"
+  gpu: "0"
+  memory: 4Ti
+  name: Standard_M192ims_v2
+  usable: true
+- architecture: amd64
+  cpu: "192"
+  gpu: "0"
+  memory: 2Ti
+  name: Standard_M192is_v2
+  usable: true
+- architecture: amd64
+  cpu: "208"
+  gpu: "0"
+  memory: 5700Gi
+  name: Standard_M208ms_v2
+  usable: true
+- architecture: amd64
+  cpu: "208"
+  gpu: "0"
+  memory: 2850Gi
+  name: Standard_M208s_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 875Gi
+  name: Standard_M32-16ms
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 875Gi
+  name: Standard_M32-8ms
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 875Gi
+  name: Standard_M32dms_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 256Gi
+  name: Standard_M32ls
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 875Gi
+  name: Standard_M32ms
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 875Gi
+  name: Standard_M32ms_v2
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "0"
+  memory: 192Gi
+  name: Standard_M32ts
+  usable: true
+- architecture: amd64
+  cpu: "416"
+  gpu: "0"
+  memory: 11400Gi
+  name: Standard_M416-208ms_v2
+  usable: true
+- architecture: amd64
+  cpu: "416"
+  gpu: "0"
+  memory: 5700Gi
+  name: Standard_M416-208s_v2
+  usable: true
+- architecture: amd64
+  cpu: "416"
+  gpu: "0"
+  memory: 11400Gi
+  name: Standard_M416ms_v2
+  usable: true
+- architecture: amd64
+  cpu: "416"
+  gpu: "0"
+  memory: 7600Gi
+  name: Standard_M416s_8_v2
+  usable: true
+- architecture: amd64
+  cpu: "416"
+  gpu: "0"
+  memory: 5700Gi
+  name: Standard_M416s_v2
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1000Gi
+  name: Standard_M64
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1750Gi
+  name: Standard_M64-16ms
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1750Gi
+  name: Standard_M64-32ms
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1792Gi
+  name: Standard_M64dms_v2
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1Ti
+  name: Standard_M64ds_v2
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 512Gi
+  name: Standard_M64ls
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1750Gi
+  name: Standard_M64m
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1750Gi
+  name: Standard_M64ms
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1792Gi
+  name: Standard_M64ms_v2
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1Ti
+  name: Standard_M64s
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "0"
+  memory: 1Ti
+  name: Standard_M64s_v2
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 224000Mi
+  name: Standard_M8-2ms
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 224000Mi
+  name: Standard_M8-4ms
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "0"
+  memory: 224000Mi
+  name: Standard_M8ms
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 112Gi
+  name: Standard_NC12
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 112Gi
+  name: Standard_NC12_Promo
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 224Gi
+  name: Standard_NC12s_v2
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 224Gi
+  name: Standard_NC12s_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "1"
+  memory: 200Gi
+  name: Standard_NC16ads_A10_v4
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "1"
+  memory: 110Gi
+  name: Standard_NC16as_T4_v3
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 224Gi
+  name: Standard_NC24
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 224Gi
+  name: Standard_NC24_Promo
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "1"
+  memory: 220Gi
+  name: Standard_NC24ads_A100_v4
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 224Gi
+  name: Standard_NC24r
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 224Gi
+  name: Standard_NC24r_Promo
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_NC24rs_v2
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_NC24rs_v3
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_NC24s_v2
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_NC24s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "2"
+  memory: 400Gi
+  name: Standard_NC32ads_A10_v4
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "2"
+  memory: 440Gi
+  name: Standard_NC48ads_A100_v4
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "1"
+  memory: 28Gi
+  name: Standard_NC4as_T4_v3
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 56Gi
+  name: Standard_NC6
+  usable: true
+- architecture: amd64
+  cpu: "64"
+  gpu: "4"
+  memory: 440Gi
+  name: Standard_NC64as_T4_v3
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 56Gi
+  name: Standard_NC6_Promo
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 112Gi
+  name: Standard_NC6s_v2
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 112Gi
+  name: Standard_NC6s_v3
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "1"
+  memory: 100Gi
+  name: Standard_NC8ads_A10_v4
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "1"
+  memory: 56Gi
+  name: Standard_NC8as_T4_v3
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "4"
+  memory: 880Gi
+  name: Standard_NC96ads_A100_v4
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 224Gi
+  name: Standard_ND12s
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_ND24rs
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_ND24s
+  usable: true
+- architecture: amd64
+  cpu: "40"
+  gpu: "8"
+  memory: 672Gi
+  name: Standard_ND40rs_v2
+  usable: true
+- architecture: amd64
+  cpu: "40"
+  gpu: "8"
+  memory: 672Gi
+  name: Standard_ND40s_v3
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 112Gi
+  name: Standard_ND6s
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "8"
+  memory: 1924Gi
+  name: Standard_ND96amsr_A100_v4
+  usable: true
+- architecture: amd64
+  cpu: "96"
+  gpu: "8"
+  memory: 900Gi
+  name: Standard_ND96asr_v4
+  usable: true
+- architecture: amd64
+  cpu: "10"
+  gpu: "1"
+  memory: 168Gi
+  name: Standard_NP10s
+  usable: true
+- architecture: amd64
+  cpu: "20"
+  gpu: "2"
+  memory: 336Gi
+  name: Standard_NP20s
+  usable: true
+- architecture: amd64
+  cpu: "40"
+  gpu: "4"
+  memory: 672Gi
+  name: Standard_NP40s
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 112Gi
+  name: Standard_NV12
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 112Gi
+  name: Standard_NV12_Promo
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "1"
+  memory: 110Gi
+  name: Standard_NV12ads_A10_v5
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "2"
+  memory: 224Gi
+  name: Standard_NV12s_v2
+  usable: true
+- architecture: amd64
+  cpu: "12"
+  gpu: "1"
+  memory: 112Gi
+  name: Standard_NV12s_v3
+  usable: true
+- architecture: amd64
+  cpu: "16"
+  gpu: "1"
+  memory: 56Gi
+  name: Standard_NV16as_v4
+  usable: true
+- architecture: amd64
+  cpu: "18"
+  gpu: "1"
+  memory: 220Gi
+  name: Standard_NV18ads_A10_v5
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 224Gi
+  name: Standard_NV24
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 224Gi
+  name: Standard_NV24_Promo
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_NV24s_v2
+  usable: true
+- architecture: amd64
+  cpu: "24"
+  gpu: "2"
+  memory: 224Gi
+  name: Standard_NV24s_v3
+  usable: true
+- architecture: amd64
+  cpu: "32"
+  gpu: "1"
+  memory: 112Gi
+  name: Standard_NV32as_v4
+  usable: true
+- architecture: amd64
+  cpu: "36"
+  gpu: "1"
+  memory: 880Gi
+  name: Standard_NV36adms_A10_v5
+  usable: true
+- architecture: amd64
+  cpu: "36"
+  gpu: "1"
+  memory: 440Gi
+  name: Standard_NV36ads_A10_v5
+  usable: true
+- architecture: amd64
+  cpu: "48"
+  gpu: "4"
+  memory: 448Gi
+  name: Standard_NV48s_v3
+  usable: true
+- architecture: amd64
+  cpu: "4"
+  gpu: "1"
+  memory: 14Gi
+  name: Standard_NV4as_v4
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 56Gi
+  name: Standard_NV6
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 56Gi
+  name: Standard_NV6_Promo
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 55Gi
+  name: Standard_NV6ads_A10_v5
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "1"
+  memory: 112Gi
+  name: Standard_NV6s_v2
+  usable: true
+- architecture: amd64
+  cpu: "72"
+  gpu: "2"
+  memory: 880Gi
+  name: Standard_NV72ads_A10_v5
+  usable: true
+- architecture: amd64
+  cpu: "8"
+  gpu: "1"
+  memory: 28Gi
+  name: Standard_NV8as_v4
+  usable: true
+- architecture: amd64
+  cpu: "6"
+  gpu: "0"
+  memory: 112Gi
+  name: Standard_PB6s
+  usable: true
+- architecture: amd64
+  cpu: "832"
+  gpu: "0"
+  memory: 24Ti
+  name: Standard_M832ixs_v2
+  usable: true
+
 
 volumeTypes:
-  - class: standard
-    name: standard
-    usable: true
-  - class: premium
-    name: premium
-    usable: true
+- class: standard
+  minSize: 20Gi
+  name: Standard_LRS
+  usable: true
+- class: premium
+  minSize: 20Gi
+  name: StandardSSD_LRS
+  usable: true
+- class: premium
+  minSize: 20Gi
+  name: Premium_LRS
+  usable: true
 
 providerConfig:
   apiVersion: azure.provider.extensions.gardener.cloud/v1alpha1
   kind: CloudProfileConfig
   countFaultDomains:
-    - count: 2
-      region: australiacentral
-    - count: 2
-      region: australiaeast
-    - count: 2
-      region: australiasoutheast
-    - count: 3
-      region: brazilsouth
-    - count: 3
-      region: canadacentral
-    - count: 2
-      region: canadaeast
-    - count: 3
-      region: centralindia
-    - count: 3
-      region: centralus
-    - count: 2
-      region: eastasia
-    - count: 3
-      region: eastus
-    - count: 3
-      region: eastus2
-    - count: 3
-      region: francecentral
-    - count: 2
-      region: germanywestcentral
-    - count: 2
-      region: japaneast
-    - count: 2
-      region: japanwest
-    - count: 2
-      region: koreacentral
-    - count: 2
-      region: koreasouth
-    - count: 3
-      region: northcentralus
-    - count: 3
-      region: northeurope
-    - count: 2
-      region: southafricanorth
-    - count: 3
-      region: southcentralus
-    - count: 2
-      region: southeastasia
-    - count: 2
-      region: southindia
-    - count: 2
-      region: uaenorth
-    - count: 2
-      region: uksouth
-    - count: 2
-      region: ukwest
-    - count: 2
-      region: westcentralus
-    - count: 3
-      region: westeurope
-    - count: 2
-      region: westindia
-    - count: 3
-      region: westus
-    - count: 3
-      region: westus2
+  - count: 2
+    region: australiacentral
+  - count: 2
+    region: australiaeast
+  - count: 2
+    region: australiasoutheast
+  - count: 3
+    region: brazilsouth
+  - count: 3
+    region: canadacentral
+  - count: 2
+    region: canadaeast
+  - count: 3
+    region: centralindia
+  - count: 3
+    region: centralus
+  - count: 2
+    region: eastasia
+  - count: 3
+    region: eastus
+  - count: 3
+    region: eastus2
+  - count: 3
+    region: francecentral
+  - count: 2
+    region: germanywestcentral
+  - count: 3
+    region: japaneast
+  - count: 2
+    region: japanwest
+  - count: 2
+    region: koreacentral
+  - count: 2
+    region: koreasouth
+  - count: 3
+    region: northcentralus
+  - count: 3
+    region: northeurope
+  - count: 2
+    region: southafricanorth
+  - count: 3
+    region: southcentralus
+  - count: 2
+    region: southeastasia
+  - count: 2
+    region: switzerlandnorth
+  - count: 2
+    region: switzerlandwest
+  - count: 2
+    region: southindia
+  - count: 2
+    region: uaecentral
+  - count: 2
+    region: uaenorth
+  - count: 2
+    region: uksouth
+  - count: 2
+    region: ukwest
+  - count: 2
+    region: westcentralus
+  - count: 3
+    region: westeurope
+  - count: 2
+    region: westindia
+  - count: 3
+    region: westus
+  - count: 3
+    region: westus2
   countUpdateDomains:
-    - count: 5
-      region: australiacentral
-    - count: 5
-      region: australiaeast
-    - count: 5
-      region: australiasoutheast
-    - count: 5
-      region: brazilsouth
-    - count: 5
-      region: canadacentral
-    - count: 5
-      region: canadaeast
-    - count: 5
-      region: centralindia
-    - count: 5
-      region: centralus
-    - count: 5
-      region: eastasia
-    - count: 5
-      region: eastus
-    - count: 5
-      region: eastus2
-    - count: 5
-      region: francecentral
-    - count: 5
-      region: germanywestcentral
-    - count: 5
-      region: japaneast
-    - count: 5
-      region: japanwest
-    - count: 5
-      region: koreacentral
-    - count: 5
-      region: koreasouth
-    - count: 5
-      region: northcentralus
-    - count: 5
-      region: northeurope
-    - count: 5
-      region: southafricanorth
-    - count: 5
-      region: southcentralus
-    - count: 5
-      region: southeastasia
-    - count: 5
-      region: southindia
-    - count: 5
-      region: uaenorth
-    - count: 5
-      region: uksouth
-    - count: 5
-      region: ukwest
-    - count: 5
-      region: westcentralus
-    - count: 5
-      region: westeurope
-    - count: 5
-      region: westindia
-    - count: 5
-      region: westus
-    - count: 5
-      region: westus2
+  - count: 5
+    region: australiacentral
+  - count: 5
+    region: australiaeast
+  - count: 5
+    region: australiasoutheast
+  - count: 5
+    region: brazilsouth
+  - count: 5
+    region: canadacentral
+  - count: 5
+    region: canadaeast
+  - count: 5
+    region: centralindia
+  - count: 5
+    region: centralus
+  - count: 5
+    region: eastasia
+  - count: 5
+    region: eastus
+  - count: 5
+    region: eastus2
+  - count: 5
+    region: francecentral
+  - count: 5
+    region: germanywestcentral
+  - count: 5
+    region: japaneast
+  - count: 5
+    region: japanwest
+  - count: 5
+    region: koreacentral
+  - count: 5
+    region: koreasouth
+  - count: 5
+    region: northcentralus
+  - count: 5
+    region: northeurope
+  - count: 5
+    region: southafricanorth
+  - count: 5
+    region: southcentralus
+  - count: 5
+    region: southeastasia
+  - count: 5
+    region: switzerlandnorth
+  - count: 5
+    region: switzerlandwest
+  - count: 5
+    region: southindia
+  - count: 5
+    region: uaecentral
+  - count: 5
+    region: uaenorth
+  - count: 5
+    region: uksouth
+  - count: 5
+    region: ukwest
+  - count: 5
+    region: westcentralus
+  - count: 5
+    region: westeurope
+  - count: 5
+    region: westindia
+  - count: 5
+    region: westus
+  - count: 5
+    region: westus2
   machineImages:
   - name: gardenlinux
     versions:
+    - acceleratedNetworking: true
+      urn: sap:gardenlinux:greatest:934.9.0
+      version: 934.9.0
     - urn: sap:gardenlinux:greatest:576.12.0
       version: 576.12.0
-    - urn: sap:gardenlinux:greatest:576.11.0
-      version: 576.11.0
-  - name: ubuntu
-    versions:
-    - acceleratedNetworking: true
-      urn: Canonical:UbuntuServer:18.04-LTS:18.04.202104150
-      version: 18.4.20210415
   - name: suse-chost
     versions:
     - acceleratedNetworking: true
+      architecture: amd64
+      urn: suse:sles-15-sp4-chost-byos:gen1:2023.04.10
+      version: 15.4.20230410
+    - acceleratedNetworking: true
+      architecture: amd64
+      urn: suse:sles-15-sp4-chost-byos:gen2:2023.04.10
+      version: 15.4.20230410-gen2
+    - acceleratedNetworking: true
+      architecture: arm64
+      urn: suse:sles-15-sp4-chost-byos-arm64:gen2:2023.04.10
+      version: 15.4.20230410-gen2
+    - acceleratedNetworking: true
       urn: suse:sles-15-sp4-chost-byos:gen1:2022.12.15
       version: 15.4.20221215
-    - acceleratedNetworking: true
-      urn: suse:sles-15-sp3-chost-byos:gen1:2022.04.11
-      version: 15.3.20220411
   machineTypes:
-    - acceleratedNetworking: true
-      name: Standard_D4_v3
-    - acceleratedNetworking: true
-      name: Standard_D8_v3
-    - acceleratedNetworking: true
-      name: Standard_D16_v3
-    - acceleratedNetworking: true
-      name: Standard_D32_v3
-    - acceleratedNetworking: true
-      name: Standard_D4s_v3
-    - acceleratedNetworking: true
-      name: Standard_D8s_v3
-    - acceleratedNetworking: true
-      name: Standard_D16s_v3
-    - acceleratedNetworking: true
-      name: Standard_D32s_v3
-    - acceleratedNetworking: true
-      name: Standard_DS2_v2
-    - acceleratedNetworking: true
-      name: Standard_DS3_v2
-    - acceleratedNetworking: true
-      name: Standard_DS4_v2
-    - acceleratedNetworking: true
-      name: Standard_DS5_v2
-    - acceleratedNetworking: true
-      name: Standard_F2s
-    - acceleratedNetworking: true
-      name: Standard_F4s
-    - acceleratedNetworking: true
-      name: Standard_F8s
-    - acceleratedNetworking: true
-      name: Standard_F8s_v2
-    - acceleratedNetworking: true
-      name: Standard_F16s
-    - acceleratedNetworking: true
-      name: Standard_F16s_v2
-    - acceleratedNetworking: true
-      name: Standard_F32s_v2
-    - acceleratedNetworking: true
-      name: Standard_F64s_v2
-    - acceleratedNetworking: true
-      name: Standard_M32ls
-    - acceleratedNetworking: true
-      name: Standard_M32ms
-    - acceleratedNetworking: true
-      name: Standard_M64ls
-    - acceleratedNetworking: true
-      name: Standard_M64s
-    - acceleratedNetworking: true
-      name: Standard_M128
+  - acceleratedNetworking: true
+    name: Standard_B12ms
+  - acceleratedNetworking: true
+    name: Standard_B16als_v2
+  - acceleratedNetworking: true
+    name: Standard_B16as_v2
+  - acceleratedNetworking: true
+    name: Standard_B16ls_v2
+  - acceleratedNetworking: true
+    name: Standard_B16ms
+  - acceleratedNetworking: true
+    name: Standard_B16pls_v2
+  - acceleratedNetworking: true
+    name: Standard_B16ps_v2
+  - acceleratedNetworking: true
+    name: Standard_B16s_v2
+  - acceleratedNetworking: true
+    name: Standard_B20ms
+  - acceleratedNetworking: true
+    name: Standard_B2als_v2
+  - acceleratedNetworking: true
+    name: Standard_B2as_v2
+  - acceleratedNetworking: true
+    name: Standard_B2ls_v2
+  - acceleratedNetworking: true
+    name: Standard_B2pls_v2
+  - acceleratedNetworking: true
+    name: Standard_B2ps_v2
+  - acceleratedNetworking: true
+    name: Standard_B2s_v2
+  - acceleratedNetworking: true
+    name: Standard_B32als_v2
+  - acceleratedNetworking: true
+    name: Standard_B32as_v2
+  - acceleratedNetworking: true
+    name: Standard_B32ls_v2
+  - acceleratedNetworking: true
+    name: Standard_B32s_v2
+  - acceleratedNetworking: true
+    name: Standard_B4als_v2
+  - acceleratedNetworking: true
+    name: Standard_B4as_v2
+  - acceleratedNetworking: true
+    name: Standard_B4ls_v2
+  - acceleratedNetworking: true
+    name: Standard_B4pls_v2
+  - acceleratedNetworking: true
+    name: Standard_B4ps_v2
+  - acceleratedNetworking: true
+    name: Standard_B4s_v2
+  - acceleratedNetworking: true
+    name: Standard_B8als_v2
+  - acceleratedNetworking: true
+    name: Standard_B8as_v2
+  - acceleratedNetworking: true
+    name: Standard_B8ls_v2
+  - acceleratedNetworking: true
+    name: Standard_B8pls_v2
+  - acceleratedNetworking: true
+    name: Standard_B8ps_v2
+  - acceleratedNetworking: true
+    name: Standard_B8s_v2
+  - acceleratedNetworking: true
+    name: Standard_D11_v2
+  - acceleratedNetworking: true
+    name: Standard_D11_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D12_v2
+  - acceleratedNetworking: true
+    name: Standard_D12_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D13_v2
+  - acceleratedNetworking: true
+    name: Standard_D13_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D14_v2
+  - acceleratedNetworking: true
+    name: Standard_D14_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D15_v2
+  - acceleratedNetworking: true
+    name: Standard_D16_v3
+  - acceleratedNetworking: true
+    name: Standard_D16_v4
+  - acceleratedNetworking: true
+    name: Standard_D16_v5
+  - acceleratedNetworking: true
+    name: Standard_D16a_v4
+  - acceleratedNetworking: true
+    name: Standard_D16ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D16as_v4
+  - acceleratedNetworking: true
+    name: Standard_D16as_v5
+  - acceleratedNetworking: true
+    name: Standard_D16d_v4
+  - acceleratedNetworking: true
+    name: Standard_D16d_v5
+  - acceleratedNetworking: true
+    name: Standard_D16ds_v4
+  - acceleratedNetworking: true
+    name: Standard_D16ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D16lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D16ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D16pds_v5
+  - acceleratedNetworking: true
+    name: Standard_D16plds_v5
+  - acceleratedNetworking: true
+    name: Standard_D16pls_v5
+  - acceleratedNetworking: true
+    name: Standard_D16ps_v5
+  - acceleratedNetworking: true
+    name: Standard_D16s_v3
+  - acceleratedNetworking: true
+    name: Standard_D16s_v4
+  - acceleratedNetworking: true
+    name: Standard_D16s_v5
+  - acceleratedNetworking: true
+    name: Standard_D2_v2
+  - acceleratedNetworking: true
+    name: Standard_D2_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D2_v3
+  - acceleratedNetworking: true
+    name: Standard_D2_v4
+  - acceleratedNetworking: true
+    name: Standard_D2_v5
+  - acceleratedNetworking: true
+    name: Standard_D2a_v4
+  - acceleratedNetworking: true
+    name: Standard_D2ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D2as_v4
+  - acceleratedNetworking: true
+    name: Standard_D2as_v5
+  - acceleratedNetworking: true
+    name: Standard_D2d_v4
+  - acceleratedNetworking: true
+    name: Standard_D2d_v5
+  - acceleratedNetworking: true
+    name: Standard_D2ds_v4
+  - acceleratedNetworking: true
+    name: Standard_D2ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D2lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D2ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D2pds_v5
+  - acceleratedNetworking: true
+    name: Standard_D2plds_v5
+  - acceleratedNetworking: true
+    name: Standard_D2pls_v5
+  - acceleratedNetworking: true
+    name: Standard_D2ps_v5
+  - acceleratedNetworking: true
+    name: Standard_D2s_v3
+  - acceleratedNetworking: true
+    name: Standard_D2s_v4
+  - acceleratedNetworking: true
+    name: Standard_D2s_v5
+  - acceleratedNetworking: true
+    name: Standard_D32_v3
+  - acceleratedNetworking: true
+    name: Standard_D32_v4
+  - acceleratedNetworking: true
+    name: Standard_D32_v5
+  - acceleratedNetworking: true
+    name: Standard_D32a_v4
+  - acceleratedNetworking: true
+    name: Standard_D32ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D32as_v4
+  - acceleratedNetworking: true
+    name: Standard_D32as_v5
+  - acceleratedNetworking: true
+    name: Standard_D32d_v4
+  - acceleratedNetworking: true
+    name: Standard_D32d_v5
+  - acceleratedNetworking: true
+    name: Standard_D32ds_v4
+  - acceleratedNetworking: true
+    name: Standard_D32ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D32lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D32ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D32pds_v5
+  - acceleratedNetworking: true
+    name: Standard_D32plds_v5
+  - acceleratedNetworking: true
+    name: Standard_D32pls_v5
+  - acceleratedNetworking: true
+    name: Standard_D32ps_v5
+  - acceleratedNetworking: true
+    name: Standard_D32s_v3
+  - acceleratedNetworking: true
+    name: Standard_D32s_v4
+  - acceleratedNetworking: true
+    name: Standard_D32s_v5
+  - acceleratedNetworking: true
+    name: Standard_D3_v2
+  - acceleratedNetworking: true
+    name: Standard_D3_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D48_v3
+  - acceleratedNetworking: true
+    name: Standard_D48_v4
+  - acceleratedNetworking: true
+    name: Standard_D48_v5
+  - acceleratedNetworking: true
+    name: Standard_D48a_v4
+  - acceleratedNetworking: true
+    name: Standard_D48ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D48as_v4
+  - acceleratedNetworking: true
+    name: Standard_D48as_v5
+  - acceleratedNetworking: true
+    name: Standard_D48d_v4
+  - acceleratedNetworking: true
+    name: Standard_D48d_v5
+  - acceleratedNetworking: true
+    name: Standard_D48ds_v4
+  - acceleratedNetworking: true
+    name: Standard_D48ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D48lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D48ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D48pds_v5
+  - acceleratedNetworking: true
+    name: Standard_D48plds_v5
+  - acceleratedNetworking: true
+    name: Standard_D48pls_v5
+  - acceleratedNetworking: true
+    name: Standard_D48ps_v5
+  - acceleratedNetworking: true
+    name: Standard_D48s_v3
+  - acceleratedNetworking: true
+    name: Standard_D48s_v4
+  - acceleratedNetworking: true
+    name: Standard_D48s_v5
+  - acceleratedNetworking: true
+    name: Standard_D4_v2
+  - acceleratedNetworking: true
+    name: Standard_D4_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D4_v3
+  - acceleratedNetworking: true
+    name: Standard_D4_v4
+  - acceleratedNetworking: true
+    name: Standard_D4_v5
+  - acceleratedNetworking: true
+    name: Standard_D4a_v4
+  - acceleratedNetworking: true
+    name: Standard_D4ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D4as_v4
+  - acceleratedNetworking: true
+    name: Standard_D4as_v5
+  - acceleratedNetworking: true
+    name: Standard_D4d_v4
+  - acceleratedNetworking: true
+    name: Standard_D4d_v5
+  - acceleratedNetworking: true
+    name: Standard_D4ds_v4
+  - acceleratedNetworking: true
+    name: Standard_D4ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D4lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D4ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D4pds_v5
+  - acceleratedNetworking: true
+    name: Standard_D4plds_v5
+  - acceleratedNetworking: true
+    name: Standard_D4pls_v5
+  - acceleratedNetworking: true
+    name: Standard_D4ps_v5
+  - acceleratedNetworking: true
+    name: Standard_D4s_v3
+  - acceleratedNetworking: true
+    name: Standard_D4s_v4
+  - acceleratedNetworking: true
+    name: Standard_D4s_v5
+  - acceleratedNetworking: true
+    name: Standard_D5_v2
+  - acceleratedNetworking: true
+    name: Standard_D5_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_D64_v3
+  - acceleratedNetworking: true
+    name: Standard_D64_v4
+  - acceleratedNetworking: true
+    name: Standard_D64_v5
+  - acceleratedNetworking: true
+    name: Standard_D64a_v4
+  - acceleratedNetworking: true
+    name: Standard_D64ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D64as_v4
+  - acceleratedNetworking: true
+    name: Standard_D64as_v5
+  - acceleratedNetworking: true
+    name: Standard_D64d_v4
+  - acceleratedNetworking: true
+    name: Standard_D64d_v5
+  - acceleratedNetworking: true
+    name: Standard_D64ds_v4
+  - acceleratedNetworking: true
+    name: Standard_D64ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D64lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D64ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D64pds_v5
+  - acceleratedNetworking: true
+    name: Standard_D64plds_v5
+  - acceleratedNetworking: true
+    name: Standard_D64pls_v5
+  - acceleratedNetworking: true
+    name: Standard_D64ps_v5
+  - acceleratedNetworking: true
+    name: Standard_D64s_v3
+  - acceleratedNetworking: true
+    name: Standard_D64s_v4
+  - acceleratedNetworking: true
+    name: Standard_D64s_v5
+  - acceleratedNetworking: true
+    name: Standard_D8_v3
+  - acceleratedNetworking: true
+    name: Standard_D8_v4
+  - acceleratedNetworking: true
+    name: Standard_D8_v5
+  - acceleratedNetworking: true
+    name: Standard_D8a_v4
+  - acceleratedNetworking: true
+    name: Standard_D8ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D8as_v4
+  - acceleratedNetworking: true
+    name: Standard_D8as_v5
+  - acceleratedNetworking: true
+    name: Standard_D8d_v4
+  - acceleratedNetworking: true
+    name: Standard_D8d_v5
+  - acceleratedNetworking: true
+    name: Standard_D8ds_v4
+  - acceleratedNetworking: true
+    name: Standard_D8ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D8lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D8ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D8pds_v5
+  - acceleratedNetworking: true
+    name: Standard_D8plds_v5
+  - acceleratedNetworking: true
+    name: Standard_D8pls_v5
+  - acceleratedNetworking: true
+    name: Standard_D8ps_v5
+  - acceleratedNetworking: true
+    name: Standard_D8s_v3
+  - acceleratedNetworking: true
+    name: Standard_D8s_v4
+  - acceleratedNetworking: true
+    name: Standard_D8s_v5
+  - acceleratedNetworking: true
+    name: Standard_D96_v5
+  - acceleratedNetworking: true
+    name: Standard_D96a_v4
+  - acceleratedNetworking: true
+    name: Standard_D96ads_v5
+  - acceleratedNetworking: true
+    name: Standard_D96as_v4
+  - acceleratedNetworking: true
+    name: Standard_D96as_v5
+  - acceleratedNetworking: true
+    name: Standard_D96d_v5
+  - acceleratedNetworking: true
+    name: Standard_D96ds_v5
+  - acceleratedNetworking: true
+    name: Standard_D96lds_v5
+  - acceleratedNetworking: true
+    name: Standard_D96ls_v5
+  - acceleratedNetworking: true
+    name: Standard_D96s_v5
+  - acceleratedNetworking: true
+    name: Standard_DC16ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC16as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC16ds_v3
+  - acceleratedNetworking: true
+    name: Standard_DC16s_v3
+  - acceleratedNetworking: true
+    name: Standard_DC24ds_v3
+  - acceleratedNetworking: true
+    name: Standard_DC24s_v3
+  - acceleratedNetworking: true
+    name: Standard_DC2ds_v3
+  - acceleratedNetworking: true
+    name: Standard_DC2s_v2
+  - acceleratedNetworking: true
+    name: Standard_DC2s_v3
+  - acceleratedNetworking: true
+    name: Standard_DC32ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC32as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC32ds_v3
+  - acceleratedNetworking: true
+    name: Standard_DC32s_v3
+  - acceleratedNetworking: true
+    name: Standard_DC48ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC48as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC48ds_v3
+  - acceleratedNetworking: true
+    name: Standard_DC48s_v3
+  - acceleratedNetworking: true
+    name: Standard_DC4ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC4as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC4ds_v3
+  - acceleratedNetworking: true
+    name: Standard_DC4s_v2
+  - acceleratedNetworking: true
+    name: Standard_DC4s_v3
+  - acceleratedNetworking: true
+    name: Standard_DC64ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC64as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC8_v2
+  - acceleratedNetworking: true
+    name: Standard_DC8ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC8as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC8ds_v3
+  - acceleratedNetworking: true
+    name: Standard_DC8s_v3
+  - acceleratedNetworking: true
+    name: Standard_DC96ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DC96as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_DS11-1_v2
+  - acceleratedNetworking: true
+    name: Standard_DS11_v2
+  - acceleratedNetworking: true
+    name: Standard_DS11_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_DS12-1_v2
+  - acceleratedNetworking: true
+    name: Standard_DS12-2_v2
+  - acceleratedNetworking: true
+    name: Standard_DS12_v2
+  - acceleratedNetworking: true
+    name: Standard_DS12_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_DS13-2_v2
+  - acceleratedNetworking: true
+    name: Standard_DS13-4_v2
+  - acceleratedNetworking: true
+    name: Standard_DS13_v2
+  - acceleratedNetworking: true
+    name: Standard_DS13_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_DS14-4_v2
+  - acceleratedNetworking: true
+    name: Standard_DS14-8_v2
+  - acceleratedNetworking: true
+    name: Standard_DS14_v2
+  - acceleratedNetworking: true
+    name: Standard_DS14_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_DS15_v2
+  - acceleratedNetworking: true
+    name: Standard_DS2_v2
+  - acceleratedNetworking: true
+    name: Standard_DS2_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_DS3_v2
+  - acceleratedNetworking: true
+    name: Standard_DS3_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_DS4_v2
+  - acceleratedNetworking: true
+    name: Standard_DS4_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_DS5_v2
+  - acceleratedNetworking: true
+    name: Standard_DS5_v2_Promo
+  - acceleratedNetworking: true
+    name: Standard_E104i_v5
+  - acceleratedNetworking: true
+    name: Standard_E104id_v5
+  - acceleratedNetworking: true
+    name: Standard_E104ids_v5
+  - acceleratedNetworking: true
+    name: Standard_E104is_v5
+  - acceleratedNetworking: true
+    name: Standard_E112iads_v5
+  - acceleratedNetworking: true
+    name: Standard_E112ias_v5
+  - acceleratedNetworking: true
+    name: Standard_E112ibds_v5
+  - acceleratedNetworking: true
+    name: Standard_E112ibs_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-4ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-4as_v4
+  - acceleratedNetworking: true
+    name: Standard_E16-4as_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-4ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E16-4ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-4s_v3
+  - acceleratedNetworking: true
+    name: Standard_E16-4s_v4
+  - acceleratedNetworking: true
+    name: Standard_E16-4s_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-8ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-8as_v4
+  - acceleratedNetworking: true
+    name: Standard_E16-8as_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-8ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E16-8ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E16-8s_v3
+  - acceleratedNetworking: true
+    name: Standard_E16-8s_v4
+  - acceleratedNetworking: true
+    name: Standard_E16-8s_v5
+  - acceleratedNetworking: true
+    name: Standard_E16_v3
+  - acceleratedNetworking: true
+    name: Standard_E16_v4
+  - acceleratedNetworking: true
+    name: Standard_E16_v5
+  - acceleratedNetworking: true
+    name: Standard_E16a_v4
+  - acceleratedNetworking: true
+    name: Standard_E16ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E16as_v4
+  - acceleratedNetworking: true
+    name: Standard_E16as_v5
+  - acceleratedNetworking: true
+    name: Standard_E16bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E16bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E16d_v4
+  - acceleratedNetworking: true
+    name: Standard_E16d_v5
+  - acceleratedNetworking: true
+    name: Standard_E16ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E16ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E16pds_v5
+  - acceleratedNetworking: true
+    name: Standard_E16ps_v5
+  - acceleratedNetworking: true
+    name: Standard_E16s_v3
+  - acceleratedNetworking: true
+    name: Standard_E16s_v4
+  - acceleratedNetworking: true
+    name: Standard_E16s_v5
+  - acceleratedNetworking: true
+    name: Standard_E20_v3
+  - acceleratedNetworking: true
+    name: Standard_E20_v4
+  - acceleratedNetworking: true
+    name: Standard_E20_v5
+  - acceleratedNetworking: true
+    name: Standard_E20a_v4
+  - acceleratedNetworking: true
+    name: Standard_E20ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E20as_v4
+  - acceleratedNetworking: true
+    name: Standard_E20as_v5
+  - acceleratedNetworking: true
+    name: Standard_E20d_v4
+  - acceleratedNetworking: true
+    name: Standard_E20d_v5
+  - acceleratedNetworking: true
+    name: Standard_E20ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E20ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E20pds_v5
+  - acceleratedNetworking: true
+    name: Standard_E20ps_v5
+  - acceleratedNetworking: true
+    name: Standard_E20s_v3
+  - acceleratedNetworking: true
+    name: Standard_E20s_v4
+  - acceleratedNetworking: true
+    name: Standard_E20s_v5
+  - acceleratedNetworking: true
+    name: Standard_E2_v3
+  - acceleratedNetworking: true
+    name: Standard_E2_v4
+  - acceleratedNetworking: true
+    name: Standard_E2_v5
+  - acceleratedNetworking: true
+    name: Standard_E2a_v4
+  - acceleratedNetworking: true
+    name: Standard_E2ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E2as_v4
+  - acceleratedNetworking: true
+    name: Standard_E2as_v5
+  - acceleratedNetworking: true
+    name: Standard_E2bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E2bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E2d_v4
+  - acceleratedNetworking: true
+    name: Standard_E2d_v5
+  - acceleratedNetworking: true
+    name: Standard_E2ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E2ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E2pds_v5
+  - acceleratedNetworking: true
+    name: Standard_E2ps_v5
+  - acceleratedNetworking: true
+    name: Standard_E2s_v3
+  - acceleratedNetworking: true
+    name: Standard_E2s_v4
+  - acceleratedNetworking: true
+    name: Standard_E2s_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-16ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-16as_v4
+  - acceleratedNetworking: true
+    name: Standard_E32-16as_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-16ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E32-16ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-16s_v3
+  - acceleratedNetworking: true
+    name: Standard_E32-16s_v4
+  - acceleratedNetworking: true
+    name: Standard_E32-16s_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-8ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-8as_v4
+  - acceleratedNetworking: true
+    name: Standard_E32-8as_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-8ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E32-8ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E32-8s_v3
+  - acceleratedNetworking: true
+    name: Standard_E32-8s_v4
+  - acceleratedNetworking: true
+    name: Standard_E32-8s_v5
+  - acceleratedNetworking: true
+    name: Standard_E32_v3
+  - acceleratedNetworking: true
+    name: Standard_E32_v4
+  - acceleratedNetworking: true
+    name: Standard_E32_v5
+  - acceleratedNetworking: true
+    name: Standard_E32a_v4
+  - acceleratedNetworking: true
+    name: Standard_E32ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E32as_v4
+  - acceleratedNetworking: true
+    name: Standard_E32as_v5
+  - acceleratedNetworking: true
+    name: Standard_E32bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E32bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E32d_v4
+  - acceleratedNetworking: true
+    name: Standard_E32d_v5
+  - acceleratedNetworking: true
+    name: Standard_E32ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E32ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E32pds_v5
+  - acceleratedNetworking: true
+    name: Standard_E32ps_v5
+  - acceleratedNetworking: true
+    name: Standard_E32s_v3
+  - acceleratedNetworking: true
+    name: Standard_E32s_v4
+  - acceleratedNetworking: true
+    name: Standard_E32s_v5
+  - acceleratedNetworking: true
+    name: Standard_E4-2ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E4-2as_v4
+  - acceleratedNetworking: true
+    name: Standard_E4-2as_v5
+  - acceleratedNetworking: true
+    name: Standard_E4-2ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E4-2ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E4-2s_v3
+  - acceleratedNetworking: true
+    name: Standard_E4-2s_v4
+  - acceleratedNetworking: true
+    name: Standard_E4-2s_v5
+  - acceleratedNetworking: true
+    name: Standard_E48_v3
+  - acceleratedNetworking: true
+    name: Standard_E48_v4
+  - acceleratedNetworking: true
+    name: Standard_E48_v5
+  - acceleratedNetworking: true
+    name: Standard_E48a_v4
+  - acceleratedNetworking: true
+    name: Standard_E48ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E48as_v4
+  - acceleratedNetworking: true
+    name: Standard_E48as_v5
+  - acceleratedNetworking: true
+    name: Standard_E48bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E48bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E48d_v4
+  - acceleratedNetworking: true
+    name: Standard_E48d_v5
+  - acceleratedNetworking: true
+    name: Standard_E48ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E48ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E48s_v3
+  - acceleratedNetworking: true
+    name: Standard_E48s_v4
+  - acceleratedNetworking: true
+    name: Standard_E48s_v5
+  - acceleratedNetworking: true
+    name: Standard_E4_v3
+  - acceleratedNetworking: true
+    name: Standard_E4_v4
+  - acceleratedNetworking: true
+    name: Standard_E4_v5
+  - acceleratedNetworking: true
+    name: Standard_E4a_v4
+  - acceleratedNetworking: true
+    name: Standard_E4ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E4as_v4
+  - acceleratedNetworking: true
+    name: Standard_E4as_v5
+  - acceleratedNetworking: true
+    name: Standard_E4bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E4bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E4d_v4
+  - acceleratedNetworking: true
+    name: Standard_E4d_v5
+  - acceleratedNetworking: true
+    name: Standard_E4ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E4ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E4pds_v5
+  - acceleratedNetworking: true
+    name: Standard_E4ps_v5
+  - acceleratedNetworking: true
+    name: Standard_E4s_v3
+  - acceleratedNetworking: true
+    name: Standard_E4s_v4
+  - acceleratedNetworking: true
+    name: Standard_E4s_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-16ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-16as_v4
+  - acceleratedNetworking: true
+    name: Standard_E64-16as_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-16ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E64-16ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-16s_v3
+  - acceleratedNetworking: true
+    name: Standard_E64-16s_v4
+  - acceleratedNetworking: true
+    name: Standard_E64-16s_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-32ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-32as_v4
+  - acceleratedNetworking: true
+    name: Standard_E64-32as_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-32ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E64-32ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E64-32s_v3
+  - acceleratedNetworking: true
+    name: Standard_E64-32s_v4
+  - acceleratedNetworking: true
+    name: Standard_E64-32s_v5
+  - acceleratedNetworking: true
+    name: Standard_E64_v3
+  - acceleratedNetworking: true
+    name: Standard_E64_v4
+  - acceleratedNetworking: true
+    name: Standard_E64_v5
+  - acceleratedNetworking: true
+    name: Standard_E64a_v4
+  - acceleratedNetworking: true
+    name: Standard_E64ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E64as_v4
+  - acceleratedNetworking: true
+    name: Standard_E64as_v5
+  - acceleratedNetworking: true
+    name: Standard_E64bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E64bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E64d_v4
+  - acceleratedNetworking: true
+    name: Standard_E64d_v5
+  - acceleratedNetworking: true
+    name: Standard_E64ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E64ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E64i_v3
+  - acceleratedNetworking: true
+    name: Standard_E64is_v3
+  - acceleratedNetworking: true
+    name: Standard_E64s_v3
+  - acceleratedNetworking: true
+    name: Standard_E64s_v4
+  - acceleratedNetworking: true
+    name: Standard_E64s_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-2ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-2as_v4
+  - acceleratedNetworking: true
+    name: Standard_E8-2as_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-2ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E8-2ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-2s_v3
+  - acceleratedNetworking: true
+    name: Standard_E8-2s_v4
+  - acceleratedNetworking: true
+    name: Standard_E8-2s_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-4ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-4as_v4
+  - acceleratedNetworking: true
+    name: Standard_E8-4as_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-4ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E8-4ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E8-4s_v3
+  - acceleratedNetworking: true
+    name: Standard_E8-4s_v4
+  - acceleratedNetworking: true
+    name: Standard_E8-4s_v5
+  - acceleratedNetworking: true
+    name: Standard_E80ids_v4
+  - acceleratedNetworking: true
+    name: Standard_E80is_v4
+  - acceleratedNetworking: true
+    name: Standard_E8_v3
+  - acceleratedNetworking: true
+    name: Standard_E8_v4
+  - acceleratedNetworking: true
+    name: Standard_E8_v5
+  - acceleratedNetworking: true
+    name: Standard_E8a_v4
+  - acceleratedNetworking: true
+    name: Standard_E8ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E8as_v4
+  - acceleratedNetworking: true
+    name: Standard_E8as_v5
+  - acceleratedNetworking: true
+    name: Standard_E8bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E8bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E8d_v4
+  - acceleratedNetworking: true
+    name: Standard_E8d_v5
+  - acceleratedNetworking: true
+    name: Standard_E8ds_v4
+  - acceleratedNetworking: true
+    name: Standard_E8ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E8pds_v5
+  - acceleratedNetworking: true
+    name: Standard_E8ps_v5
+  - acceleratedNetworking: true
+    name: Standard_E8s_v3
+  - acceleratedNetworking: true
+    name: Standard_E8s_v4
+  - acceleratedNetworking: true
+    name: Standard_E8s_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-24ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-24as_v4
+  - acceleratedNetworking: true
+    name: Standard_E96-24as_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-24ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-24s_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-48ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-48as_v4
+  - acceleratedNetworking: true
+    name: Standard_E96-48as_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-48ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E96-48s_v5
+  - acceleratedNetworking: true
+    name: Standard_E96_v5
+  - acceleratedNetworking: true
+    name: Standard_E96a_v4
+  - acceleratedNetworking: true
+    name: Standard_E96ads_v5
+  - acceleratedNetworking: true
+    name: Standard_E96as_v4
+  - acceleratedNetworking: true
+    name: Standard_E96as_v5
+  - acceleratedNetworking: true
+    name: Standard_E96bds_v5
+  - acceleratedNetworking: true
+    name: Standard_E96bs_v5
+  - acceleratedNetworking: true
+    name: Standard_E96d_v5
+  - acceleratedNetworking: true
+    name: Standard_E96ds_v5
+  - acceleratedNetworking: true
+    name: Standard_E96ias_v4
+  - acceleratedNetworking: true
+    name: Standard_E96s_v5
+  - acceleratedNetworking: true
+    name: Standard_EC16as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC20as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC32as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC48as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC4ads_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC4as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC64as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC8as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_EC96as_cc_v5
+  - acceleratedNetworking: true
+    name: Standard_F16
+  - acceleratedNetworking: true
+    name: Standard_F16s
+  - acceleratedNetworking: true
+    name: Standard_F16s_v2
+  - acceleratedNetworking: true
+    name: Standard_F2
+  - acceleratedNetworking: true
+    name: Standard_F2s
+  - acceleratedNetworking: true
+    name: Standard_F2s_v2
+  - acceleratedNetworking: true
+    name: Standard_F32s_v2
+  - acceleratedNetworking: true
+    name: Standard_F4
+  - acceleratedNetworking: true
+    name: Standard_F48s_v2
+  - acceleratedNetworking: true
+    name: Standard_F4s
+  - acceleratedNetworking: true
+    name: Standard_F4s_v2
+  - acceleratedNetworking: true
+    name: Standard_F64s_v2
+  - acceleratedNetworking: true
+    name: Standard_F72s_v2
+  - acceleratedNetworking: true
+    name: Standard_F8
+  - acceleratedNetworking: true
+    name: Standard_F8s
+  - acceleratedNetworking: true
+    name: Standard_F8s_v2
+  - acceleratedNetworking: true
+    name: Standard_FX12mds
+  - acceleratedNetworking: true
+    name: Standard_FX24mds
+  - acceleratedNetworking: true
+    name: Standard_FX36mds
+  - acceleratedNetworking: true
+    name: Standard_FX48mds
+  - acceleratedNetworking: true
+    name: Standard_FX4mds
+  - acceleratedNetworking: true
+    name: Standard_HB120-16rs_v2
+  - acceleratedNetworking: true
+    name: Standard_HB120-16rs_v3
+  - acceleratedNetworking: true
+    name: Standard_HB120-32rs_v2
+  - acceleratedNetworking: true
+    name: Standard_HB120-32rs_v3
+  - acceleratedNetworking: true
+    name: Standard_HB120-64rs_v2
+  - acceleratedNetworking: true
+    name: Standard_HB120-64rs_v3
+  - acceleratedNetworking: true
+    name: Standard_HB120-96rs_v2
+  - acceleratedNetworking: true
+    name: Standard_HB120-96rs_v3
+  - acceleratedNetworking: true
+    name: Standard_HB120rs_v2
+  - acceleratedNetworking: true
+    name: Standard_HB120rs_v3
+  - acceleratedNetworking: true
+    name: Standard_HB176-144rs_v4
+  - acceleratedNetworking: true
+    name: Standard_HB176-24rs_v4
+  - acceleratedNetworking: true
+    name: Standard_HB176-48rs_v4
+  - acceleratedNetworking: true
+    name: Standard_HB176-96rs_v4
+  - acceleratedNetworking: true
+    name: Standard_HB176rs_v4
+  - acceleratedNetworking: true
+    name: Standard_HB60-15rs
+  - acceleratedNetworking: true
+    name: Standard_HB60-30rs
+  - acceleratedNetworking: true
+    name: Standard_HB60-45rs
+  - acceleratedNetworking: true
+    name: Standard_HB60rs
+  - acceleratedNetworking: true
+    name: Standard_HC44-16rs
+  - acceleratedNetworking: true
+    name: Standard_HC44-32rs
+  - acceleratedNetworking: true
+    name: Standard_HC44rs
+  - acceleratedNetworking: true
+    name: Standard_HX176-144rs
+  - acceleratedNetworking: true
+    name: Standard_HX176-24rs
+  - acceleratedNetworking: true
+    name: Standard_HX176-48rs
+  - acceleratedNetworking: true
+    name: Standard_HX176-96rs
+  - acceleratedNetworking: true
+    name: Standard_HX176rs
+  - acceleratedNetworking: true
+    name: Standard_L16as_v3
+  - acceleratedNetworking: true
+    name: Standard_L16s_v2
+  - acceleratedNetworking: true
+    name: Standard_L16s_v3
+  - acceleratedNetworking: true
+    name: Standard_L32as_v3
+  - acceleratedNetworking: true
+    name: Standard_L32s_v2
+  - acceleratedNetworking: true
+    name: Standard_L32s_v3
+  - acceleratedNetworking: true
+    name: Standard_L48as_v3
+  - acceleratedNetworking: true
+    name: Standard_L48s_v2
+  - acceleratedNetworking: true
+    name: Standard_L48s_v3
+  - acceleratedNetworking: true
+    name: Standard_L64as_v3
+  - acceleratedNetworking: true
+    name: Standard_L64s_v2
+  - acceleratedNetworking: true
+    name: Standard_L64s_v3
+  - acceleratedNetworking: true
+    name: Standard_L80as_v3
+  - acceleratedNetworking: true
+    name: Standard_L80s_v2
+  - acceleratedNetworking: true
+    name: Standard_L80s_v3
+  - acceleratedNetworking: true
+    name: Standard_L8as_v3
+  - acceleratedNetworking: true
+    name: Standard_L8s_v2
+  - acceleratedNetworking: true
+    name: Standard_L8s_v3
+  - acceleratedNetworking: true
+    name: Standard_M128
+  - acceleratedNetworking: true
+    name: Standard_M128-32ms
+  - acceleratedNetworking: true
+    name: Standard_M128-64ms
+  - acceleratedNetworking: true
+    name: Standard_M128dms_v2
+  - acceleratedNetworking: true
+    name: Standard_M128ds_v2
+  - acceleratedNetworking: true
+    name: Standard_M128m
+  - acceleratedNetworking: true
+    name: Standard_M128ms
+  - acceleratedNetworking: true
+    name: Standard_M128ms_v2
+  - acceleratedNetworking: true
+    name: Standard_M128s
+  - acceleratedNetworking: true
+    name: Standard_M128s_v2
+  - acceleratedNetworking: true
+    name: Standard_M16-4ms
+  - acceleratedNetworking: true
+    name: Standard_M16-8ms
+  - acceleratedNetworking: true
+    name: Standard_M16ms
+  - acceleratedNetworking: true
+    name: Standard_M192idms_v2
+  - acceleratedNetworking: true
+    name: Standard_M192ids_v2
+  - acceleratedNetworking: true
+    name: Standard_M192ims_v2
+  - acceleratedNetworking: true
+    name: Standard_M192is_v2
+  - acceleratedNetworking: true
+    name: Standard_M208ms_v2
+  - acceleratedNetworking: true
+    name: Standard_M208s_v2
+  - acceleratedNetworking: true
+    name: Standard_M32-16ms
+  - acceleratedNetworking: true
+    name: Standard_M32-8ms
+  - acceleratedNetworking: true
+    name: Standard_M32dms_v2
+  - acceleratedNetworking: true
+    name: Standard_M32ls
+  - acceleratedNetworking: true
+    name: Standard_M32ms
+  - acceleratedNetworking: true
+    name: Standard_M32ms_v2
+  - acceleratedNetworking: true
+    name: Standard_M32ts
+  - acceleratedNetworking: true
+    name: Standard_M416-208ms_v2
+  - acceleratedNetworking: true
+    name: Standard_M416-208s_v2
+  - acceleratedNetworking: true
+    name: Standard_M416ms_v2
+  - acceleratedNetworking: true
+    name: Standard_M416s_8_v2
+  - acceleratedNetworking: true
+    name: Standard_M416s_v2
+  - acceleratedNetworking: true
+    name: Standard_M64
+  - acceleratedNetworking: true
+    name: Standard_M64-16ms
+  - acceleratedNetworking: true
+    name: Standard_M64-32ms
+  - acceleratedNetworking: true
+    name: Standard_M64dms_v2
+  - acceleratedNetworking: true
+    name: Standard_M64ds_v2
+  - acceleratedNetworking: true
+    name: Standard_M64ls
+  - acceleratedNetworking: true
+    name: Standard_M64m
+  - acceleratedNetworking: true
+    name: Standard_M64ms
+  - acceleratedNetworking: true
+    name: Standard_M64ms_v2
+  - acceleratedNetworking: true
+    name: Standard_M64s
+  - acceleratedNetworking: true
+    name: Standard_M64s_v2
+  - acceleratedNetworking: true
+    name: Standard_M8-2ms
+  - acceleratedNetworking: true
+    name: Standard_M8-4ms
+  - acceleratedNetworking: true
+    name: Standard_M8ms
+  - acceleratedNetworking: true
+    name: Standard_NC12s_v2
+  - acceleratedNetworking: true
+    name: Standard_NC12s_v3
+  - acceleratedNetworking: true
+    name: Standard_NC16ads_A10_v4
+  - acceleratedNetworking: true
+    name: Standard_NC24ads_A100_v4
+  - acceleratedNetworking: true
+    name: Standard_NC24s_v2
+  - acceleratedNetworking: true
+    name: Standard_NC24s_v3
+  - acceleratedNetworking: true
+    name: Standard_NC32ads_A10_v4
+  - acceleratedNetworking: true
+    name: Standard_NC48ads_A100_v4
+  - acceleratedNetworking: true
+    name: Standard_NC6s_v2
+  - acceleratedNetworking: true
+    name: Standard_NC6s_v3
+  - acceleratedNetworking: true
+    name: Standard_NC8ads_A10_v4
+  - acceleratedNetworking: true
+    name: Standard_NC96ads_A100_v4
+  - acceleratedNetworking: true
+    name: Standard_ND12s
+  - acceleratedNetworking: true
+    name: Standard_ND24s
+  - acceleratedNetworking: true
+    name: Standard_ND40rs_v2
+  - acceleratedNetworking: true
+    name: Standard_ND40s_v3
+  - acceleratedNetworking: true
+    name: Standard_ND6s
+  - acceleratedNetworking: true
+    name: Standard_ND96amsr_A100_v4
+  - acceleratedNetworking: true
+    name: Standard_ND96asr_v4
+  - acceleratedNetworking: true
+    name: Standard_NP10s
+  - acceleratedNetworking: true
+    name: Standard_NP20s
+  - acceleratedNetworking: true
+    name: Standard_NP40s
+  - acceleratedNetworking: true
+    name: Standard_NV12ads_A10_v5
+  - acceleratedNetworking: true
+    name: Standard_NV12s_v3
+  - acceleratedNetworking: true
+    name: Standard_NV18ads_A10_v5
+  - acceleratedNetworking: true
+    name: Standard_NV24s_v3
+  - acceleratedNetworking: true
+    name: Standard_NV36adms_A10_v5
+  - acceleratedNetworking: true
+    name: Standard_NV36ads_A10_v5
+  - acceleratedNetworking: true
+    name: Standard_NV48s_v3
+  - acceleratedNetworking: true
+    name: Standard_NV6ads_A10_v5
+  - acceleratedNetworking: true
+    name: Standard_NV72ads_A10_v5
+  - acceleratedNetworking: true
+    name: Standard_PB6s
+  - acceleratedNetworking: true
+    name: Standard_M832ixs_v2
+
 
 regions:
-  - name: australiacentral
-  - name: australiaeast
-    zones:
+- name: australiacentral
+- name: australiaeast
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: australiasoutheast
-  - name: brazilsouth
-    zones:
+- name: australiasoutheast
+- name: brazilsouth
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: canadacentral
-    zones:
+- name: canadacentral
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: canadaeast
-  - name: centralindia
-  - name: centralus
-    zones:
+- name: canadaeast
+- name: centralindia
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: eastasia
-  - name: eastus
-    zones:
+- name: centralus
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: eastus2
-    zones:
+- name: eastasia
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - labels:
-      seed.gardener.cloud/eu-access: "true"
-    name: francecentral
-    zones:
+- name: eastus
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - labels:
-      seed.gardener.cloud/eu-access: "true"
-    name: germanywestcentral
-    zones:
+- name: eastus2
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: japaneast
-    zones:
+- name: francecentral
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: japanwest
-  - name: koreacentral
-  - name: koreasouth
-  - name: northcentralus
-  - labels:
-      seed.gardener.cloud/eu-access: "true"
-    name: northeurope
-    zones:
+- name: germanywestcentral
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: southafricanorth
-  - name: southcentralus
-    zones:
+- name: japaneast
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: southeastasia
-    zones:
+- name: japanwest
+- name: koreacentral
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: southindia
-  - name: uaenorth
-  - name: uksouth
-    zones:
+- name: koreasouth
+- name: northcentralus
+- name: northeurope
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: ukwest
-  - name: westcentralus
-  - labels:
-      seed.gardener.cloud/eu-access: "true"
-    name: westeurope
-    zones:
+- name: southafricanorth
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"
-  - name: westindia
-  - name: westus
-  - name: westus2
-    zones:
+- name: southcentralus
+  zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+- name: southeastasia
+  zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+- name: switzerlandnorth
+  zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+- name: switzerlandwest
+- name: southindia
+- name: uaecentral
+- name: uaenorth
+  zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+- name: uksouth
+  zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+- name: ukwest
+- name: westcentralus
+- name: westeurope
+  zones:
+    - name: "1"
+    - name: "2"
+    - name: "3"
+- name: westindia
+- name: westus
+- name: westus2
+  zones:
     - name: "1"
     - name: "2"
     - name: "3"

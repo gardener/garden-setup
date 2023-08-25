@@ -33,30 +33,19 @@ defaults:
       - <<: (( defaults.providerspec.machineImages || ~ ))
       - name: gardenlinux
         versions:
-        - version: 576.12.0
+        - version: 934.9.0
           classification: supported
-          kubeletVersionConstraint: < 1.26
           architectures:
-          - amd64
+            - amd64
+            - arm64
           cri:
-          - name: docker
-          - containerRuntimes:
-            - type: gvisor
-            name: containerd
-        - version: 576.11.0
+            - name: docker
+            - containerRuntimes:
+                - type: gvisor
+              name: containerd
+        - version: 576.12.0
           classification: deprecated
           kubeletVersionConstraint: < 1.26
-          architectures:
-          - amd64
-          cri:
-          - name: docker
-          - containerRuntimes:
-            - type: gvisor
-            name: containerd
-      - name: ubuntu
-        versions:
-        - version: 18.4.20210415
-          classification: deprecated
           architectures:
           - amd64
           cri:
@@ -66,16 +55,17 @@ defaults:
             name: containerd
       - name: suse-chost
         versions:
-        - version: 15.4.20221215
+        - version: 15.4.20230410
           classification: supported
           architectures:
-          - amd64
+            - amd64
+            - arm64
           cri:
-          - name: docker
-          - containerRuntimes:
-            - type: gvisor
-            name: containerd
-        - version: 15.3.20220411
+            - name: docker
+            - containerRuntimes:
+                - type: gvisor
+              name: containerd
+        - version: 15.4.20221215
           classification: deprecated
           architectures:
           - amd64
@@ -94,17 +84,11 @@ defaults:
   kubernetes:
     versions:
       - classification: supported
-        version: 1.25.5
+        version: 1.26.6
       - classification: supported
-        version: 1.24.9
+        version: 1.25.11
       - classification: supported
-        version: 1.23.15
+        version: 1.24.15
       - classification: deprecated
-        version: 1.22.17
-      - classification: deprecated
-        version: 1.21.14
-      - classification: deprecated
-        version: 1.21.10
-      - classification: deprecated
-        version: 1.20.15
+        version: 1.23.17
   providerspec: (( *values.providerspec ))
