@@ -20,7 +20,7 @@
         },
         "os-ubuntu": {
           "repo": "https://github.com/gardener/gardener-extension-os-ubuntu.git",
-          "version": "v1.21.0"
+          "version": "v1.22.0"
         },
         "os-gardenlinux": {
           "repo": "https://github.com/gardener/gardener-extension-os-gardenlinux.git",
