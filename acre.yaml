@@ -280,6 +280,18 @@ landscape:
     <<: (( merge ))
     type: (( .dns_type_mapping[iaas[0].type] ))
     credentials: (( iaas[0].credentials ))
+  domains:
+    <<: (( merge none ))
+    wildcard_ingress_dns: (( "*." ingress_dns ))
+    ingress_dns: (( "ing." landscape.domain ))
+    issuer_url: (( .landscape.identity.issuerUrl || "https://" identity_dns "/oidc" ))
+    callback_url: (( dashboard_url "/auth/callback" ))
+    connector_callback_url: (( dashboard_url "/oidc/callback" ))
+    dashboard_url: (( "https://" dashboard_dns ))
+    identity_url: (( "https://" identity_dns ))
+    identity_dns: (( ( .landscape.identity.useIdentityDomain || false ) ? "identity." ingress_dns :dashboard_dns ))
+    dashboard_dns: (( "gardener." ingress_dns ))
+
 dns_type_mapping:
   <<: (( &temporary ))
   gcp: google-clouddns

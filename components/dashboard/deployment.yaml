@@ -53,7 +53,7 @@ dashboard:
           tls:
             secretName: (( imports.cert.export.certificate.secret_name ))
           hosts:
-            - (( imports.identity.export.dashboard_dns ))
+            - (( .landscape.domains.dashboard_dns ))
             - (( .landscape.dashboard.cname.domain || ~~ ))
           annotations:
             <<: (( .landscape.dashboard.ingress.annotations || ~~ ))
@@ -62,7 +62,7 @@ dashboard:
           tag: (( .dashboard_version.image_tag || ~~ ))
           pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
         oidc:
-          issuerUrl: (( imports.identity.export.issuer_url ))
+          issuerUrl: (( .landscape.domains.issuer_url ))
           ca: (( imports.cert-controller.export.ca.crt || ~~ ))
           clientId: "dashboard"
           clientSecret: (( imports.identity.export.dashboardClientSecret ))
@@ -132,7 +132,7 @@ cname_dnsentry:
       spec:
         dnsName: (( .landscape.dashboard.cname.domain || ~~ ))
         targets:
-        - (( .imports.identity.export.dashboard_dns ))
+        - (( .landscape.domains.dashboard_dns ))
         ttl: 120
 
 util:
@@ -141,7 +141,7 @@ util:
 
 settings:
   serviceaccount_name: gardener-dashboard
-  dashboard_url: (( .imports.identity.export.dashboard_url ))
+  dashboard_url: (( .landscape.domains.dashboard_url ))
 
 kubectl_sa:
   kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))

@@ -18,7 +18,7 @@ spec:
   kubernetes:
     version: (( values.values.k8sVersion ))
     tmpBaseVersion: (( &temporary ( substr( values.values.k8sVersion, 0, 4 ) ) ))
-    allowPrivilegedContainers: (( tmpBaseVersion != "1.25" ? true :~~ ))
+    allowPrivilegedContainers: (( tmpBaseVersion == "1.23" -or tmpBaseVersion == "1.24" ? true :~~ ))
     verticalPodAutoscaler:
       enabled: true
     kubeAPIServer:

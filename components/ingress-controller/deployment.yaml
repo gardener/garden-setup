@@ -23,9 +23,6 @@ plugins:
       - template
     - kubectl: ingresscontroller
 
-settings:
-  ingress_domain: (( "ing." landscape.domain ))
-
 ingresscontroller:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   files:
@@ -73,7 +70,7 @@ ingresscontroller:
         enabled: true
         annotations:
           "dns.gardener.cloud/class": (( imports.dns-controller.export.dns-class ))
-          "dns.gardener.cloud/dnsnames": (( "*." .settings.ingress_domain ))
+          "dns.gardener.cloud/dnsnames": (( "*." .landscape.domains.ingress_dns ))
           "dns.gardener.cloud/ttl": (( landscape.defaultTTL ))
           <<: (( landscape.ingress.annotations || ~ ))
       admissionWebhooks:

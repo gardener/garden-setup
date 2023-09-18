@@ -6,7 +6,7 @@ settings:
   certificate:
     name: dashboard-identity-ingress
     domains:
-      - (( "*." imports.ingress-controller.export.ingress_domain ))
+      - (( .landscape.domains.wildcard_ingress_dns ))
       - (( .landscape.dashboard.cname.domain || ~~ ))
     secret_name: identity-dashboard-tls
     namespace: (( landscape.namespace ))
@@ -26,7 +26,7 @@ cert:
         annotations:
           cert.gardener.cloud/class: (( imports.cert-controller.export.certClass ))
       spec:
-        commonName: (( "dummy." imports.ingress-controller.export.ingress_domain ))
+        commonName: (( .landscape.domains.identity_dns ))
         dnsNames: (( .settings.certificate.domains ))
         secretRef:
           name: (( .settings.certificate.secret_name ))

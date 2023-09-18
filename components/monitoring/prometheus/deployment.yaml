@@ -13,12 +13,12 @@ kubectlconfig:
   namespace: (( .landscape.namespace ))
   monitoring_versions: (( .landscape.versions.monitoring ))
   apiserver_cert: (( .imports.kube_apiserver.export.kube_apiserver_ca ))
-  ingress_domain: (( .imports.ingress-controller.export.ingress_domain ))
+  ingress_domain: (( .landscape.domains.ingress_dns ))
   settings: (( .settings ))
 
 settings:
   monitoring_credentials: (( .state.monitoring_credentials.value ))
-  prometheus_domain: (( "garden-prometheus." .imports.ingress-controller.export.ingress_domain ))
+  prometheus_domain: (( "garden-prometheus." .landscape.domains.ingress_dns ))
   monitoring: (( landscape.monitoring ))
 monitoring_password:
   <<: (( &temporary ))

@@ -26,8 +26,8 @@ plugins:
   - finalize
 
 settings:
-  apiserver_dns: (( "api." imports.ingress_controller.export.ingress_domain ))
-  gardener_dns: (( "gardener." imports.ingress_controller.export.ingress_domain ))
+  apiserver_dns: (( "api." .landscape.domains.ingress_dns ))
+  gardener_dns: (( "gardener." .landscape.domains.ingress_dns ))
   apiserver_url_internal: (( "https://" .kubeapiserver.serviceName "." .kubeapiserver.namespace ".svc:443" ))
 
 finalize:
@@ -113,7 +113,7 @@ kubeapiserver:
     apiServer:
       hostname: (( .settings.apiserver_dns ))
       serviceName: (( name ))
-      oidcIssuerURL: (( .imports.identity.export.issuer_url ))
+      oidcIssuerURL: (( .landscape.domains.issuer_url ))
       externalHostname: (( .settings.apiserver_dns ))
       serviceAccountIssuer: (( "https://" externalHostname ))
     tls:

@@ -28,12 +28,17 @@ commands:
     - "kubectl"
     - "--kubeconfig"
     - (( _.kubeconfig ))
-    - "-n"
-    - (( sh.namespace ))
-    - "get"
-    - "secret"
-    - (( sh.name ".kubeconfig" ))
-    - "-o"
-    - "json"
+    - create
+    - -f
+    - (( tempfile(asjson(.request)) ))
+    - --raw
+    - (( "/apis/core.gardener.cloud/v1beta1/namespaces/" sh.namespace "/shoots/" sh.name "/adminkubeconfig" ))
   get_kubeconfig: (( |sh|-> exec( *_.get_kubeconfig_command ) ))
-  extract_kubeconfig: (( |sec|-> parse( base64_decode( sec.data.kubeconfig ) ) ))
+  extract_kubeconfig: (( |sec|-> parse( base64_decode( sec.status.kubeconfig ) ) ))
+
+request:
+  <<: (( &temporary ))
+  apiVersion: authentication.gardener.cloud/v1alpha1
+  kind: AdminKubeconfigRequest
+  spec:
+    expirationSeconds: 31536000
