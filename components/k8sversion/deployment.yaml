@@ -16,9 +16,12 @@
 landscape: (( &temporary ))
 env: (( &temporary ))
 
+funcs:
+  remove_trailing_plus: (( |x|-> substr(x, -1) == "+" ? substr(x, 0, -1) :x ))
+
 commands:
   <<: (( &temporary ))
-  get_k8s_version: (( |kcfg_path|-> ("raw_version" = .commands.get_raw_version(kcfg_path)) raw_version.serverVersion.major "." raw_version.serverVersion.minor ))
+  get_k8s_version: (( |kcfg_path|-> ("raw_version" = .commands.get_raw_version(kcfg_path)) raw_version.serverVersion.major "." .funcs.remove_trailing_plus(raw_version.serverVersion.minor) ))
   get_raw_version: (( |kcfg_path|-> exec(["kubectl", "--kubeconfig", kcfg_path, "version", "-o", "yaml"]) ))
 
 iaasSeedsSoils: (( &temporary ( select[.landscape.iaas|elem|-> elem.mode == "seed" -or elem.mode == "soil"] ) ))
