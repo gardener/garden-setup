@@ -31,7 +31,7 @@ injector:
   injectall: (( |list|->map[list|c|-> valid( c.config.redirectURI ) ? c :merge(c, _.stub)] ))
   stub:
     config:
-      redirectURI: (( &inject(settings.connectorCallbackUrl) ))
+      redirectURI: (( &inject(.landscape.domains.connector_callback_url) ))
 
 spec:
   <<: (( &temporary ))
@@ -41,15 +41,6 @@ spec:
     value:
       <<: (( &template ))
       state: (( map[input|v|->{ "email"=v.email, "username"=v.username, "hash"=( v.hash || bcrypt(v.password) ) }] ))
-
-settings:
-  issuerUrl: (( .landscape.identity.issuerUrl || "https://" identity_dns "/oidc" ))
-  callbackUrl: (( dashboardUrl "/auth/callback" ))
-  connectorCallbackUrl: (( dashboardUrl "/oidc/callback" ))
-  dashboardUrl: (( "https://" dashboard_dns ))
-  identityUrl: (( "https://" identity_dns ))
-  identity_dns: (( ( .landscape.identity.useIdentityDomain || false ) ? "identity." .imports.ingress-controller.export.ingress_domain :dashboard_dns ))
-  dashboard_dns: (( "gardener." .imports.ingress-controller.export.ingress_domain ))
 
 state:
   <<: (( &state(merge none) ))
@@ -74,12 +65,18 @@ identity:
     dashboardClientSecret: (( .state.dashboardClientSecret.value ))
     kubectlClientSecret: (( .state.kubectlClientSecret.value ))
     dashboardOrigins:
-      - (( .settings.dashboardUrl ))
-      - (( .settings.issuerUrl ))
+      - (( .landscape.domains.dashboard_url ))
+      - (( .landscape.domains.issuer_url ))
     hosts:
-      - (( .settings.identity_dns ))
-    issuerUrl: (( .settings.issuerUrl ))
+      - (( .landscape.domains.identity_dns ))
+    issuerUrl: (( .landscape.domains.issuer_url ))
     connectors: (( injector.injectall(.landscape.identity.connectors || []) ))
     staticPasswords: (( state.staticPasswords.value ))
     tlsSecretName: (( imports.cert.export.certificate.secret_name ))
     tls: ~
+    podLabels:
+      networking.gardener.cloud/to-dns: allowed
+      networking.gardener.cloud/to-inside: allowed
+      networking.gardener.cloud/to-gardener-apiserver: allowed
+      networking.gardener.cloud/to-world: allowed
+

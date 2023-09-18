@@ -36,4 +36,3 @@ temp:
 export:
   type: (( defined( .temp.target.ip ) ? "A" :"CNAME" ))
   address: (( .temp.target.ip || .temp.target.hostname ))
-  ingress_domain: (( .settings.ingress_domain ))

@@ -45,48 +45,51 @@ dashboard:
     deploy: (( "--kube-version=" .imports.k8sversion.export.k8sVersions.base ))
   values:
     global:
-      apiServerUrl: (( imports.kube_apiserver.export.apiserver_url ))
-      apiServerCa: (( imports.kube_apiserver.export.kube_apiserver_ca.cert ))
-      sessionSecret: (( rand("[:alnum:]", 30) ))
-      ingress:
-        tls:
-          secretName: (( imports.cert.export.certificate.secret_name ))
-        hosts:
-          - (( imports.identity.export.dashboard_dns ))
-          - (( .landscape.dashboard.cname.domain || ~~ ))
-        annotations:
-          <<: (( .landscape.dashboard.ingress.annotations || ~~ ))
-      image:
-        repository: (( .dashboard_version.image_repo || ~~ ))
-        tag: (( .dashboard_version.image_tag || ~~ ))
-        pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
-      oidc:
-        issuerUrl: (( imports.identity.export.issuer_url ))
-        ca: (( imports.cert-controller.export.ca.crt || ~~ ))
-        clientId: "dashboard"
-        clientSecret: (( imports.identity.export.dashboardClientSecret ))
-        public:
-          clientId: kube-kubectl
-          clientSecret: (( imports.identity.export.kubectlClientSecret ))
-      kubeconfig: (( format( "((!!! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
-      podLabels:
-        <<: (( ( .landscape.gardener.network-policies.active || false ) ? ~ :~~ ))
-        networking.gardener.cloud/to-dns: allowed
-        networking.gardener.cloud/to-garden-kube-apiserver: allowed
-        networking.gardener.cloud/to-identity: allowed
-        networking.gardener.cloud/to-ingress: allowed
-        networking.gardener.cloud/to-world: allowed
-        networking.gardener.cloud/to-inside: allowed
-      gitHub: (( .landscape.dashboard.gitHub || ~~ ))
-      frontendConfig:
-        <<: (( .landscape.dashboard.frontendConfig || ~ ))
-        seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
-        features:
-          <<: (( .landscape.dashboard.frontendConfig.features || ~ ))
-          terminalEnabled: (( ( .landscape.dashboard.terminals.active || false ) ))
+      dashboard:
+        apiServerUrl: (( imports.kube_apiserver.export.apiserver_url ))
+        apiServerCa: (( imports.kube_apiserver.export.kube_apiserver_ca.cert ))
+        sessionSecret: (( rand("[:alnum:]", 30) ))
+        ingress:
+          tls:
+            secretName: (( imports.cert.export.certificate.secret_name ))
+          hosts:
+            - (( .landscape.domains.dashboard_dns ))
+            - (( .landscape.dashboard.cname.domain || ~~ ))
+          annotations:
+            <<: (( .landscape.dashboard.ingress.annotations || ~~ ))
+        image:
+          repository: (( .dashboard_version.image_repo || ~~ ))
+          tag: (( .dashboard_version.image_tag || ~~ ))
+          pullPolicy: (( defined( tag ) -and tag != "latest" ? "IfNotPresent" :"Always" ))
+        oidc:
+          issuerUrl: (( .landscape.domains.issuer_url ))
+          ca: (( imports.cert-controller.export.ca.crt || ~~ ))
+          clientId: "dashboard"
+          clientSecret: (( imports.identity.export.dashboardClientSecret ))
+          public:
+            clientId: kube-kubectl
+            clientSecret: (( imports.identity.export.kubectlClientSecret ))
+        kubeconfig: (( format( "((!!! asyaml( merge( read( \"%s/export/kube-apiserver/kubeconfig_internal_merge_snippet\", \"yaml\" ), read( \"%s/kubectl_sa/sa_%s.kubeconfig\" , \"yaml\") ) ) ))", env.ROOTDIR, env.GENDIR, .settings.serviceaccount_name ) ))
+        podLabels:
+          <<: (( ( .landscape.gardener.network-policies.active || false ) ? ~ :~~ ))
+          networking.gardener.cloud/to-dns: allowed
+          networking.gardener.cloud/to-garden-kube-apiserver: allowed
+          networking.gardener.cloud/to-identity: allowed
+          networking.gardener.cloud/to-ingress: allowed
+          networking.gardener.cloud/to-world: allowed
+          networking.gardener.cloud/to-inside: allowed
+        gitHub: (( .landscape.dashboard.gitHub || ~~ ))
+        frontendConfig:
+          <<: (( .landscape.dashboard.frontendConfig || ~ ))
+          seedCandidateDeterminationStrategy: (( .imports.gardener_virtual.export.gardener.seedCandidateDeterminationStrategy ))
+          features:
+            <<: (( .landscape.dashboard.frontendConfig.features || ~ ))
+            terminalEnabled: (( ( .landscape.dashboard.terminals.active || false ) ))
+        resources:
+          <<: (( .landscape.dashboard.resources || ~~ ))
       terminal: (( ( .landscape.dashboard.terminals.active || false ) ? *.terminal_config :~~ ))
-      resources:
-        <<: (( .landscape.dashboard.resources || ~~ ))
+      virtualGarden:
+        enabled: true
 
 terminal_config:
   <<: (( &temporary &template ))
@@ -129,7 +132,7 @@ cname_dnsentry:
       spec:
         dnsName: (( .landscape.dashboard.cname.domain || ~~ ))
         targets:
-        - (( .imports.identity.export.dashboard_dns ))
+        - (( .landscape.domains.dashboard_dns ))
         ttl: 120
 
 util:
@@ -138,7 +141,7 @@ util:
 
 settings:
   serviceaccount_name: gardener-dashboard
-  dashboard_url: (( .imports.identity.export.dashboard_url ))
+  dashboard_url: (( .landscape.domains.dashboard_url ))
 
 kubectl_sa:
   kubeconfig: (( .imports.kube_apiserver.export.kubeconfig ))

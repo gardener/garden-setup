@@ -150,7 +150,7 @@ admission:
     global:
       virtualGarden:
         enabled: true
-      kubeconfig: (( asyaml( .imports.kube_apiserver.export.kubeconfig ) ))
+      kubeconfig: (( asyaml( .imports.kube_apiserver.export.kubeconfig_internal ) )) # this is a workaround, because the serviceaccount tokens, which should actually be used for the kubeconfigs, cannot be fetched as they don't exist when this file is rendered
       image:
         repository: (( .landscape.versions.gardener.extensions[n].image_repo || ~~ ))
         tag: (( .landscape.versions.gardener.extensions[n].image_tag || ~~ ))

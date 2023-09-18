@@ -6,6 +6,7 @@ component:
     - gardener: gardener/runtime
     - kube_apiserver: "kube-apiserver"
     - namespace
+    - (( (.landscape.gardener.network-policies.active || false) ? "network-policies" :~~ ))
 
   stubs:
     - lib/templates/utilities.yaml

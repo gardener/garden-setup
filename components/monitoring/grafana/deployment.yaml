@@ -7,7 +7,7 @@ plugins:
   - kubectl: grafana
 
 settings:
-  grafana_domain: (( "garden-grafana." .imports.ingress-controller.export.ingress_domain ))
+  grafana_domain: (( "garden-grafana." .landscape.domains.ingress_dns ))
   grafana_dashboards_configmap: "garden-grafana-dashboards"
 
 grafana: (( sum[list_files( __ctx.DIR "/manifests" )|[]|s,f|-> s .utilities.kubectl.generate( __ctx.DIR "/manifests/" f, .landscape.clusters[0].kubeconfig, .kubectlconfig )] ))

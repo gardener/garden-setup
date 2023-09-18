@@ -8,7 +8,7 @@ metrics_path: /probe
 scheme: http
 static_configs:
 - targets:
-  - (( .imports.identity.export.dashboard_url "/healthz" ))
+  - (( .landscape.domains.dashboard_url "/healthz" ))
   labels:
     purpose: availability
 relabel_configs:

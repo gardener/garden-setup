@@ -17,11 +17,5 @@ state: (( &temporary ))
 settings: (( &temporary ))
 
 export:
-  issuer_url: (( .settings.issuerUrl ))
-  callback_url: (( .settings.callbackUrl ))
-  dashboard_url: (( .settings.dashboardUrl ))
   dashboardClientSecret: (( .state.dashboardClientSecret.value ))
   kubectlClientSecret: (( .state.kubectlClientSecret.value ))
-  dashboard_dns: (( .settings.dashboard_dns ))
-  identity_dns: (( .settings.identity_dns ))
-  identity_url: (( .settings.identityUrl ))

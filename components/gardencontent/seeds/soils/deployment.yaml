@@ -70,7 +70,7 @@ providerconfig:
     virtual: (( .imports.kube_apiserver.export.kubeconfig ))
     seed: (( v.cluster.kubeconfig || read( env.ROOTDIR "/" landscape.clusters.[0].kubeconfig, "yaml" ) ))
   seed:
-    ingressdomain: (( name "." .imports.ingress_dns.export.ingress_domain ))
+    ingressdomain: (( name "." .landscape.domains.ingress_dns ))
     networks: (( v.cluster.networks || landscape.clusters.[0].networks ))
     shootDefaultNetworks: (( v.shootDefaultNetworks || ~~ ))
     settings: (( v.seedSettings || ~~ ))

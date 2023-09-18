@@ -21,5 +21,5 @@ infrastructureConfig:
 controlPlaneConfig:
   apiVersion: azure.provider.extensions.gardener.cloud/v1alpha1
   kind: ControlPlaneConfig
-defaultMachineType: Standard_DS5_v2
-defaultVolumeType: standard
+defaultMachineType: Standard_A4_v2
+defaultVolumeType: Standard_LRS
