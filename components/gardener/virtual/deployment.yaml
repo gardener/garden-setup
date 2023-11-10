@@ -167,6 +167,7 @@ gardener:
           key: (( .state.gardener_apiserver.value.key ))
         versionPriority: 20
         podLabels: (( .netpol_labels ))
+        shootAdminKubeconfigMaxExpiration: 8760h
       admission:
         enabled: true
         replicaCount: 3
