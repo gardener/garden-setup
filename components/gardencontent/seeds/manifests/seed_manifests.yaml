@@ -264,7 +264,7 @@ pluginSpecs:
   seedReady:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     seed: (( configValues.name ))
-    timeout: 600
+    timeout: 1800
   deleteSeed:
     kubeconfig: (( configValues.kubeconfigs.virtual ))
     step: delete
