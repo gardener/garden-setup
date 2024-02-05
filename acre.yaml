@@ -798,7 +798,7 @@ validation:
             - url
             - - or
               - ["valueset", ["self-signed", "staging", "live"]]
-              - dnsdomain
+              - ["match", '(https:\/\/)?[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*(\/[a-zA-Z0-9]+)*(\/)?']
           - - optionalfield
             - ca
             - ["and", [(( cert-manager_validators.selfsigned )), (( landscape.cert-manager.server.url ))], [(( cert-manager_validators.acme )), (( landscape.cert-manager.server.url ))]]
