@@ -16,6 +16,9 @@ Internally, if `landscape.cert-manager.server` is a string, it is converted into
       ca:
         crt:
         key:
+      eab:
+        keyID:
+        keySecret:
 ```
 
 It is also possible to use this structure directly in the `acre.yaml` file, with the following effects:
@@ -26,3 +29,5 @@ If `url` is `self-signed` and `ca.crt` and `ca.key` contain a CA certificate and
 If `url` points to an ACME server that produces untrusted certificates (as the letsencrypt staging server, for example), *the root CA and all intermediate CAs that are used by that ACME server to sign certificates* have to be given in `ca.crt` (simply appended to each other). Otherwise, the deployed kube-apiserver won't be able to verify the dashboard certificate and thus won't accept it. There is one exception to this - if `server.url` is set to `staging`, the required letsencrypt certificates (root CA and intermediate CA) are automatically downloaded and do not have to be provided.
 
 If `url` is `live` or points to an ACME server generating publicly trusted certificates, the `ca` node must not be there at all. You can just use the simplified notation and put the acme server URL directly into `landscape.cert-manager.server`.
+
+If your ACME server requires you to specify an EAB, you have to use the extended notation and specify its id and secret as shown above.
