@@ -21,7 +21,7 @@ caSpec:
   instantiateIfNeeded: (( |x|-> type( x ) == "template" ? *x :x ))
   server: (( caSpec.instantiateIfNeeded( .servers[.landscape.cert-manager.server.url] || .landscape.cert-manager.server ) ))
   url: (( server.url || server ))
-  eab: (( server.eab || ~~ ))
+  eab: (( .landscape.cert-manager.server.eab || ~~ ))
   ca: (( server.ca || ~~ ))
 
 plugins:
@@ -57,13 +57,15 @@ issuer-secret:
       privateKey: (( base64(settings.issuerPrivateKey) ))
 
 eab:
-  <<: (( &template &temporary ))
+  <<: (( &temporary ))
   issuerSnippet:
+    <<: (( &template ))
     keyID: (( .caSpec.eab.keyID ))
     keySecretRef:
       name: (( .settings.issuerEABSecretName ))
       namespace: (( .settings.namespace ))
   manifests:
+  - <<: (( &template ))
   - apiVersion: v1
     kind: Secret
     type: Opaque
@@ -92,7 +94,7 @@ acme_issuer:
           privateKeySecretRef:
             name: (( .settings.issuerName "-secret" ))
             namespace: (( .settings.namespace ))
-          externalAccountBinding: (( valid( .caSpec.eab ) ? *eab.issuerSnippet :~~ ))
+          externalAccountBinding: (( valid( .caSpec.eab ) ? *.eab.issuerSnippet :~~ ))
 
 ca_issuer:
   <<: (( &template &temporary ))
