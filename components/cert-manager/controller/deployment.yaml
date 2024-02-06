@@ -78,7 +78,7 @@ acme_issuer:
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   manifests:
     - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :~ ))
-    - <<: (( valid( .caSpec.eab ) ? *eab.manifests :~ ))
+    - <<: (( valid( .caSpec.eab ) ? *.eab.manifests :~ ))
     - apiVersion: cert.gardener.cloud/v1alpha1
       kind: Issuer
       metadata:
