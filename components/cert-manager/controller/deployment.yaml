@@ -8,6 +8,7 @@ settings:
   self-signed: (( .caSpec.url == "self-signed" ))
   issuerName: (( .settings.self-signed ? "ca-issuer" :"acme-issuer" ))
   issuerPrivateKey: (( .settings.self-signed -or (! valid( .landscape.cert-manager.privateKey ) ) ? ~ :.landscape.cert-manager.privateKey ))
+  issuerEABSecretName: "acme-issuer-eab"
   caSecret: "self-signed-ca"
   certClass: "garden-setup"
   ca:
@@ -20,6 +21,7 @@ caSpec:
   instantiateIfNeeded: (( |x|-> type( x ) == "template" ? *x :x ))
   server: (( caSpec.instantiateIfNeeded( .servers[.landscape.cert-manager.server.url] || .landscape.cert-manager.server ) ))
   url: (( server.url || server ))
+  eab: (( .landscape.cert-manager.server.eab || ~~ ))
   ca: (( server.ca || ~~ ))
 
 plugins:
@@ -54,11 +56,31 @@ issuer-secret:
     data:
       privateKey: (( base64(settings.issuerPrivateKey) ))
 
+eab:
+  <<: (( &temporary ))
+  issuerSnippet:
+    <<: (( &template ))
+    keyID: (( .caSpec.eab.keyID ))
+    keySecretRef:
+      name: (( .settings.issuerEABSecretName ))
+      namespace: (( .settings.namespace ))
+  manifests:
+  - <<: (( &template ))
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+      name: (( .settings.issuerEABSecretName ))
+      namespace: (( .settings.namespace ))
+    data:
+      hmacKey: (( base64(.caSpec.eab.keySecret) ))
+
 acme_issuer:
   <<: (( &template &temporary ))
   kubeconfig: (( landscape.clusters.[0].kubeconfig ))
   manifests:
     - <<: (( valid( .settings.issuerPrivateKey ) ? *issuer-secret :~ ))
+    - <<: (( valid( .caSpec.eab ) ? *.eab.manifests :~ ))
     - apiVersion: cert.gardener.cloud/v1alpha1
       kind: Issuer
       metadata:
@@ -72,6 +94,7 @@ acme_issuer:
           privateKeySecretRef:
             name: (( .settings.issuerName "-secret" ))
             namespace: (( .settings.namespace ))
+          externalAccountBinding: (( valid( .caSpec.eab ) ? *.eab.issuerSnippet :~~ ))
 
 ca_issuer:
   <<: (( &template &temporary ))
