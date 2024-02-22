@@ -1,3 +1,5 @@
+### This repo is not actively maintained. We are working on a documentation for setting up a Gardener landscape based on the Gardener Operator
+
 # Install Gardener on your Kubernetes Landscape
 
 Gardener uses Kubernetes to manage Kubernetes clusters. This documentation describes how to install Gardener on an existing Kubernetes cluster of your IaaS provider.
