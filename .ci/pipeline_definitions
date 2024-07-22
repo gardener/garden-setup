@@ -1,3 +1,0 @@
-garden-setup:
-  template: 'default'
-  jobs: {}
